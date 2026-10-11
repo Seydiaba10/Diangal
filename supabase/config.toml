@@ -1,0 +1,97 @@
+# Configuration du CLI Supabase (développement local : `supabase start`).
+project_id = "diangal"
+
+[api]
+enabled = true
+port = 54321
+# Le schéma « private » (corrigés, fonctions RLS, file SMS) n'est jamais exposé.
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[studio]
+enabled = true
+port = 54323
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://diangal.sn"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = true
+
+[auth.rate_limit]
+# Anti-pompage SMS : plafonds bas, complétés par Turnstile et le préfixe +221.
+sms_sent = 30
+email_sent = 30
+token_verifications = 60
+
+# Connexion par code à 6 chiffres reçu par email (pas de lien magique : il s'ouvrirait hors de la PWA).
+[auth.email]
+enable_signup = true
+enable_confirmations = false
+otp_length = 6
+otp_expiry = 600
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = true
+# Texte en GSM-7 uniquement (sans ê, â, ç…) : un SMS de 160 caractères au lieu de 70.
+template = "DIANGAL : votre code est {{ .Code }}. Ne le partagez avec personne."
+max_frequency = "60s"
+
+# Comptes de démonstration et tests E2E : code fixe, aucun SMS envoyé.
+[auth.sms.test_otp]
+221770000001 = "123456"
+221770000021 = "123456"
+221770000031 = "123456"
+221770000041 = "123456"
+
+# Ajoute la claim « user_role » au JWT (lue par proxy.ts et la RLS).
+[auth.hook.custom_access_token]
+enabled = true
+uri = "pg-functions://postgres/public/custom_access_token_hook"
+
+# Envoi des SMS par l'API Orange Sénégal (repli Twilio) : fonction Edge send-sms.
+[auth.hook.send_sms]
+enabled = true
+uri = "http://host.docker.internal:54321/functions/v1/send-sms"
+secrets = "env(SEND_SMS_HOOK_SECRET)"
+
+# Double authentification : obligatoire pour les administrateurs (vérifiée par la RLS : aal2).
+[auth.mfa]
+max_enrolled_factors = 5
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+# Activé en production avec la clé Cloudflare Turnstile.
+[auth.captcha]
+enabled = false
+provider = "turnstile"
+secret = "env(TURNSTILE_SECRET_KEY)"
+
+[edge_runtime]
+enabled = true
+policy = "oneshot"
+
+[functions.send-sms]
+verify_jwt = false
+
+[functions.process-sms-outbox]
+verify_jwt = false

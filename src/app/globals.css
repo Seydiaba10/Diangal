@@ -1,26 +1,172 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Tokens DIANGAL. La palette par défaut de Tailwind est désactivée :
+   les composants n'utilisent que ces couleurs (jamais d'hexadécimal en dur). */
+@theme {
+  --font-sans: var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
+
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* Marque (teal) */
+  --color-brand-50: #e6f4f1;
+  --color-brand-100: #c9e9e2;
+  --color-brand-500: #12a594;
+  --color-brand-600: #0e9384;
+  --color-brand-700: #0b7a6e;
+  --color-brand-800: #095f56;
+
+  /* Surfaces et texte */
+  --color-canvas: #f5f7f9;
+  --color-cream: #faf6ee;
+  --color-surface: #ffffff;
+  --color-line: #eaecef;
+  --color-ink: #101828;
+  --color-ink-muted: #667085;
+  --color-ink-subtle: #98a2b3;
+
+  /* États (badges de chapitre, alertes) */
+  --color-success-50: #ecfdf3;
+  --color-success-500: #12b76a;
+  --color-success-700: #027a48;
+  --color-info-50: #eff8ff;
+  --color-info-500: #2e90fa;
+  --color-info-700: #175cd3;
+  --color-idle-50: #f2f4f7;
+  --color-idle-200: #e4e7ec;
+  --color-idle-500: #98a2b3;
+  --color-idle-700: #475467;
+  --color-premium-50: #fffaeb;
+  --color-premium-500: #f79009;
+  --color-premium-700: #b54708;
+  --color-danger-50: #fef3f2;
+  --color-danger-500: #f04438;
+  --color-danger-700: #b42318;
+  --color-flame-50: #fff4ed;
+  --color-flame-500: #f97316;
+
+  /* Pastels (cartes d'accent) */
+  --color-pastel-mint: #ddf0ec;
+  --color-pastel-cream: #fdf3d0;
+  --color-pastel-sand: #ede6dd;
+  --color-pastel-sage: #e3eed9;
+  --color-pastel-lavender: #e4e1f2;
+
+  /* Matières : couleur forte (texte AA sur le fond doux) + fond doux */
+  --color-subject-math: #1d4ed8;
+  --color-subject-math-soft: #eff6ff;
+  --color-subject-fr: #be123c;
+  --color-subject-fr-soft: #fff1f2;
+  --color-subject-ang: #6d28d9;
+  --color-subject-ang-soft: #f5f3ff;
+  --color-subject-hg: #b45309;
+  --color-subject-hg-soft: #fffbeb;
+  --color-subject-svt: #15803d;
+  --color-subject-svt-soft: #f0fdf4;
+  --color-subject-pc: #c2410c;
+  --color-subject-pc-soft: #fff7ed;
+  --color-subject-ec: #0f766e;
+  --color-subject-ec-soft: #f0fdfa;
+  --color-subject-lv2: #0e7490;
+  --color-subject-lv2-soft: #ecfeff;
+  --color-subject-philo: #4338ca;
+  --color-subject-philo-soft: #eef2ff;
+  --color-subject-eps: #4d7c0f;
+  --color-subject-eps-soft: #f7fee7;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Contenu pédagogique (HTML pré-rendu) : leçons, énoncés, corrigés. */
+@layer components {
+  .rich-text {
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+  }
+  .rich-text > * + * {
+    margin-top: 0.75rem;
+  }
+  .rich-text h2 {
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .rich-text ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .rich-text li + li {
+    margin-top: 0.375rem;
+  }
+  .rich-text strong {
+    font-weight: 600;
+  }
+  .rich-text .callout {
+    border-left: 4px solid var(--color-brand-600);
+    border-radius: 0.75rem;
+    background-color: var(--color-brand-50);
+    padding: 0.875rem 1rem;
+  }
+  .rich-text .callout-title {
+    font-weight: 600;
+    color: var(--color-brand-800);
+  }
+  .rich-text .callout > * + *,
+  .rich-text .example > * + * {
+    margin-top: 0.5rem;
+  }
+  .rich-text .example {
+    border: 1px solid var(--color-line);
+    border-radius: 0.75rem;
+    background-color: var(--color-canvas);
+    padding: 0.875rem 1rem;
+  }
+  .rich-text .formula {
+    padding: 0.5rem 0;
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+  /* Fraction écrite en HTML : numérateur au-dessus du dénominateur. */
+  .frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0.15em;
+    vertical-align: middle;
+    line-height: 1.25;
+  }
+  .frac > span:last-child {
+    border-top: 1.5px solid currentColor;
+    padding-top: 0.05em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -1,3 +1,8 @@
 allowBuilds:
   sharp: false
   unrs-resolver: false
+  # next-intl : binaires précompilés installés via les dépendances optionnelles
+  "@parcel/watcher": false
+  "@swc/core": false
+  # esbuild (service worker Serwist) : binaire fourni par @esbuild/win32-x64
+  esbuild: false

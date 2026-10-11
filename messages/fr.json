@@ -1,0 +1,1427 @@
+{
+  "meta": {
+    "title": "DIANGAL",
+    "description": "Cours, exercices corrigés, contrôles et préparation au CFEE, au BFEM et au Bac, du CI à la Terminale."
+  },
+  "brand": {
+    "name": "Diangal",
+    "home": "Diangal, retour à l’accueil"
+  },
+  "nav": {
+    "primary": "Navigation principale",
+    "skipToContent": "Aller au contenu",
+    "mainMenu": "Menu principal",
+    "others": "Autres",
+    "home": "Accueil",
+    "courses": "Cours",
+    "practice": "Entraînement",
+    "exams": "Examens",
+    "tutors": "Répétiteurs",
+    "profile": "Profil",
+    "messages": "Messages",
+    "downloads": "Téléchargements",
+    "notifications": "Notifications",
+    "subscription": "Abonnement",
+    "subscriptions": "Abonnements",
+    "addChild": "Ajouter un enfant",
+    "dashboard": "Tableau de bord",
+    "verification": "Vérification",
+    "availability": "Disponibilités",
+    "stats": "Statistiques",
+    "contents": "Contenus",
+    "assessments": "Évaluations",
+    "examSessions": "Examens",
+    "tutorsReview": "Répétiteurs",
+    "reports": "Signalements",
+    "users": "Utilisateurs",
+    "payments": "Paiements",
+    "audit": "Journal"
+  },
+  "header": {
+    "searchLabel": "Rechercher un cours",
+    "searchPlaceholder": "Rechercher un cours…",
+    "streak": "{count, plural, one {# jour d’affilée} other {# jours d’affilée}}",
+    "notifications": "{count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}}",
+    "openProfile": "Ouvrir mon profil"
+  },
+  "student": {
+    "level": "{level}",
+    "levelAndSchool": "{level} · {school}"
+  },
+  "premiumCard": {
+    "title": "Passe à Premium",
+    "body": "Contrôles chronométrés, examens blancs et corrigés détaillés.",
+    "cta": "Voir les offres"
+  },
+  "dashboard": {
+    "greeting": "Bonjour {name} !",
+    "subtitle": "On continue à apprendre aujourd’hui ?",
+    "stats": {
+      "label": "Mes chiffres clés",
+      "average": "Moyenne générale",
+      "averageHint": "Calculée sur tes contrôles DIANGAL avec les coefficients du BFEM",
+      "chapters": "Chapitres terminés",
+      "quizzes": "Contrôles passés",
+      "streak": "Jours d’affilée",
+      "outOf": "/{total}",
+      "seeProgress": "Voir ma progression détaillée"
+    },
+    "continue": {
+      "title": "Continuer",
+      "count": "({count, plural, one {# chapitre} other {# chapitres}})",
+      "seeAll": "Tous les cours",
+      "colChapter": "Chapitre",
+      "colSubject": "Matière",
+      "colProgress": "Progression",
+      "nextLesson": "Prochaine leçon : {title}",
+      "lessons": "{done}/{total} leçons",
+      "progress": "{pct} % du chapitre « {chapter} »",
+      "resume": "Reprendre",
+      "start": "Commencer",
+      "empty": "Choisis un chapitre dans tes cours pour commencer."
+    },
+    "weak": {
+      "title": "Points faibles à réviser",
+      "subtitle": "D’après tes derniers contrôles",
+      "lastScore": "Dernière note : {score}",
+      "actions": {
+        "review_lesson": "Revoir la leçon",
+        "practice": "Refaire les exercices",
+        "retake_quiz": "Repasser le contrôle"
+      },
+      "empty": "Aucun point faible pour l’instant. Bravo !"
+    },
+    "exam": {
+      "title": "{exam} {year}",
+      "daysLeft": "{days, plural, one {jour restant} other {jours restants}}",
+      "today": "C’est le jour J, bon courage !",
+      "startsOn": "Début des épreuves le {date}",
+      "indicative": "Date indicative",
+      "tip": "Un peu chaque jour, c’est comme ça qu’on réussit.",
+      "cta": "Préparer le {exam}"
+    }
+  },
+  "chapterStatus": {
+    "completed": "Terminé",
+    "in_progress": "En cours",
+    "not_started": "Non commencé"
+  },
+  "badges": {
+    "premium": "Premium"
+  },
+  "pages": {
+    "courses": "Mes cours",
+    "practice": "Entraînement",
+    "exams": "Examens",
+    "tutors": "Répétiteurs",
+    "profile": "Mon profil",
+    "messages": "Messages",
+    "downloads": "Téléchargements",
+    "notifications": "Notifications",
+    "subscription": "Abonnement"
+  },
+  "breadcrumb": {
+    "label": "Fil d’Ariane",
+    "courses": "Cours",
+    "practice": "Entraînement",
+    "tutors": "Répétiteurs"
+  },
+  "subjects": {
+    "MATH": "Mathématiques",
+    "FR": "Français",
+    "ANG": "Anglais",
+    "HG": "Histoire-Géographie",
+    "SVT": "SVT",
+    "PC": "Sciences physiques",
+    "EC": "Éducation civique",
+    "LV2": "Espagnol",
+    "PHILO": "Philosophie",
+    "EPS": "EPS"
+  },
+  "levels": {
+    "CI": "CI",
+    "CP": "CP",
+    "CE1": "CE1",
+    "CE2": "CE2",
+    "CM1": "CM1",
+    "CM2": "CM2",
+    "6E": "6e",
+    "5E": "5e",
+    "4E": "4e",
+    "3E": "3e",
+    "2NDE": "2nde",
+    "1RE": "1re",
+    "TLE": "Terminale"
+  },
+  "courses": {
+    "subtitle": "{level} · {count, plural, one {# matière} other {# matières}}",
+    "subjectsLabel": "Matières",
+    "coefficient": "Coef. {value}",
+    "chaptersDone": "{done}/{total} chapitres terminés",
+    "progressLabel": "Progression en {subject}",
+    "searchResults": "{count, plural, =0 {Aucun chapitre pour « {query} »} one {# chapitre pour « {query} »} other {# chapitres pour « {query} »}}",
+    "chapterNumber": "Chapitre {number}"
+  },
+  "subject": {
+    "chaptersTitle": "Chapitres",
+    "chapters": "{count, plural, one {# chapitre} other {# chapitres}}",
+    "meta": "{lessons, plural, one {# leçon} other {# leçons}} · {minutes} min",
+    "progressLabel": "Progression du chapitre « {title} »"
+  },
+  "chapter": {
+    "number": "Chapitre {number}",
+    "progress": "{done}/{total} leçons terminées",
+    "lessonsTitle": "Leçons",
+    "practiceTitle": "S’entraîner",
+    "practiceEmpty": "Les exercices de ce chapitre arrivent bientôt.",
+    "lessonMeta": "{minutes} min",
+    "lessonDone": "Terminée",
+    "resume": "Reprendre",
+    "start": "Commencer le chapitre",
+    "review": "Revoir le chapitre"
+  },
+  "lesson": {
+    "meta": "Leçon {number} sur {total} · {minutes} min",
+    "resourcesTitle": "Supports de la leçon",
+    "resource": {
+      "pdf": "PDF",
+      "video": "Vidéo",
+      "audio": "Audio"
+    },
+    "resourceMeta": "{kind} · {size}",
+    "resourceMetaDuration": "{kind} · {duration} · {size}",
+    "resourceDemo": "Démo : média indisponible",
+    "dataSaverHint": "Les médias ne se chargent qu’à la demande, pour économiser tes données.",
+    "markDone": "Marquer comme terminée",
+    "done": "Leçon terminée",
+    "previous": "Précédente",
+    "next": "Suivante",
+    "practice": "S’entraîner sur ce chapitre"
+  },
+  "paywall": {
+    "title": "Contenu Premium",
+    "body": "Débloque cette leçon, tous les contrôles chronométrés et les examens blancs.",
+    "price": "À partir de {price} par mois",
+    "cta": "Voir les offres"
+  },
+  "assessment": {
+    "kind": {
+      "exercise": "Exercices corrigés",
+      "quiz": "Contrôle chronométré",
+      "mock_exam": "Examen blanc",
+      "past_paper": "Annale"
+    },
+    "questions": "{count, plural, one {# question} other {# questions}}",
+    "untimed": "Sans chrono",
+    "bestScore": "Meilleure note : {score}",
+    "start": "Commencer",
+    "retry": "Refaire"
+  },
+  "practice": {
+    "subtitle": "Exercices corrigés et contrôles chronométrés, avec correction immédiate.",
+    "recommended": "Recommandé pour toi",
+    "recommendedHint": "D’après tes points faibles",
+    "all": "Tous les exercices et contrôles",
+    "allSubjects": "Toutes",
+    "filterLabel": "Filtrer par matière",
+    "empty": "Aucun exercice pour cette matière pour l’instant."
+  },
+  "intro": {
+    "duration": "Durée",
+    "questions": "Questions",
+    "scale": "Barème",
+    "scaleValue": "Note sur 20",
+    "untimed": "Sans limite",
+    "rulesTitle": "Avant de commencer",
+    "rules": {
+      "timer": "Le chronomètre démarre dès que tu cliques sur « Commencer ».",
+      "saved": "Tes réponses restent sur ce téléphone, même si la connexion coupe.",
+      "auto": "À la fin du temps, ta copie est envoyée automatiquement.",
+      "online": "Il faut être connecté pour commencer et pour envoyer ta copie.",
+      "practice": "Prends ton temps : tu peux revenir sur chaque question avant de valider.",
+      "correction": "Correction immédiate, avec un corrigé détaillé pour chaque question."
+    },
+    "startQuiz": "Commencer le contrôle",
+    "startExercise": "Commencer les exercices",
+    "lockedTitle": "Ce contrôle est réservé aux abonnés Premium",
+    "chapterLink": "Chapitre : {title}"
+  },
+  "player": {
+    "question": "Question {current} sur {total}",
+    "points": "{points, plural, one {# point} other {# points}}",
+    "timeLeft": "Temps restant",
+    "untimed": "Sans chrono",
+    "warning5": "Attention : il reste 5 minutes.",
+    "warning1": "Attention : il reste 1 minute.",
+    "timeUp": "Temps écoulé : envoi de ta copie…",
+    "chooseOne": "Choisis une réponse.",
+    "chooseMany": "Plusieurs réponses possibles.",
+    "yourAnswer": "Ta réponse",
+    "numericHint": "Écris un nombre (par exemple 4,5).",
+    "textHint": "Écris ta réponse en quelques mots.",
+    "previous": "Précédente",
+    "next": "Suivante",
+    "finish": "Terminer",
+    "navigator": "Aller à une question",
+    "goTo": "Question {number}",
+    "answered": "répondue",
+    "saved": "Réponses enregistrées sur ce téléphone",
+    "confirmTitle": "Envoyer ta copie ?",
+    "confirmBody": "{answered, plural, one {Tu as répondu à # question} other {Tu as répondu à # questions}} sur {total}.",
+    "confirmUnanswered": "{count, plural, one {# question est encore sans réponse.} other {# questions sont encore sans réponse.}}",
+    "keepGoing": "Continuer",
+    "submit": "Envoyer ma copie",
+    "submitting": "Envoi en cours…",
+    "error": "Impossible d’envoyer ta copie. Vérifie ta connexion : tes réponses sont gardées sur ce téléphone.",
+    "retry": "Réessayer",
+    "notFound": "Cette tentative n’existe plus. Recommence depuis la page Entraînement."
+  },
+  "result": {
+    "title": "Résultat",
+    "score": "Ta note",
+    "mention": {
+      "excellent": "Excellent travail !",
+      "good": "Bien joué !",
+      "average": "C’est la moyenne, continue tes efforts !",
+      "low": "Courage : revois la leçon et réessaie."
+    },
+    "correct": "{correct}/{total} bonnes réponses",
+    "points": "{score}/{max} points",
+    "duration": "Durée : {duration}",
+    "submittedAt": "Envoyé le {date}",
+    "late": "Copie reçue après la fin du temps",
+    "reviewTitle": "Correction détaillée",
+    "status": {
+      "correct": "Juste",
+      "partial": "En partie juste",
+      "wrong": "Faux",
+      "empty": "Sans réponse"
+    },
+    "yourAnswer": "Ta réponse : {answer}",
+    "noAnswer": "Tu n’as pas répondu.",
+    "expected": "Réponse attendue : {answer}",
+    "yourChoice": "Ton choix",
+    "rightAnswer": "Bonne réponse",
+    "explanation": "Corrigé",
+    "pointsAwarded": "{awarded}/{points} pt",
+    "reviewLesson": "Revoir le chapitre",
+    "retry": "Refaire",
+    "backToPractice": "Retour à l’entraînement",
+    "notFound": "Résultat introuvable : il a peut-être expiré. Recommence l’évaluation."
+  },
+  "tutors": {
+    "subtitle": "Des répétiteurs vérifiés par DIANGAL, en ligne ou à domicile.",
+    "filters": "Filtres",
+    "subject": "Matière",
+    "level": "Niveau",
+    "city": "Ville",
+    "mode": "Type de cours",
+    "price": "Prix maximum par heure",
+    "minRating": "Note minimale",
+    "sort": "Trier par",
+    "anySubject": "Toutes les matières",
+    "anyLevel": "Tous les niveaux",
+    "anyCity": "Toutes les villes",
+    "anyMode": "En ligne ou à domicile",
+    "anyPrice": "Tous les prix",
+    "anyRating": "Toutes les notes",
+    "ratingOption": "{value} et plus",
+    "sortOptions": {
+      "relevance": "Pertinence",
+      "price": "Prix croissant",
+      "rating": "Mieux notés"
+    },
+    "apply": "Appliquer",
+    "reset": "Réinitialiser",
+    "count": "{count, plural, =0 {Aucun répétiteur} one {# répétiteur} other {# répétiteurs}}",
+    "empty": "Aucun répétiteur ne correspond à ces filtres. Essaie d’élargir ta recherche.",
+    "verified": "Vérifié",
+    "new": "Nouveau",
+    "rating": "{rating} ({count, plural, one {# avis} other {# avis}})",
+    "perHour": "{price} / h",
+    "viewProfile": "Voir le profil",
+    "modes": {
+      "online": "En ligne",
+      "home": "À domicile",
+      "both": "En ligne et à domicile"
+    }
+  },
+  "tutor": {
+    "about": "À propos",
+    "experience": "{years, plural, one {# an d’expérience} other {# ans d’expérience}}",
+    "subjectsLevels": "Matières et niveaux",
+    "levels": "Niveaux",
+    "qualifications": "Diplômes vérifiés",
+    "availability": "Disponibilités",
+    "weekdays": {
+      "d1": "Lundi",
+      "d2": "Mardi",
+      "d3": "Mercredi",
+      "d4": "Jeudi",
+      "d5": "Vendredi",
+      "d6": "Samedi",
+      "d7": "Dimanche"
+    },
+    "slot": "{start} – {end}",
+    "reviews": "Avis",
+    "noReviews": "Pas encore d’avis : ils arriveront avec les premières séances réservées sur DIANGAL.",
+    "rate": "Tarif",
+    "contact": "Envoyer un message",
+    "whatsapp": "Écrire sur WhatsApp",
+    "book": "Réserver une séance",
+    "bookSoon": "La réservation en ligne arrive bientôt.",
+    "consentTitle": "Validation parentale nécessaire",
+    "consentBody": "Pour ta sécurité, un parent doit valider ton compte avant que tu puisses contacter un répétiteur.",
+    "consentCta": "Demander à mon parent",
+    "safety": "Ne partage jamais ton adresse ni ton numéro dans les messages. Signale tout comportement inapproprié."
+  },
+  "session": {
+    "studentSubtitle": "{level} · {school}",
+    "parentSubtitle": "{count, plural, one {Parent de # enfant} other {Parent de # enfants}}",
+    "tutorSubtitle": "Répétiteur vérifié",
+    "adminSubtitle": "Administrateur"
+  },
+  "demo": {
+    "title": "Mode démo : changer de compte",
+    "loginAs": "Compte de démonstration",
+    "roles": {
+      "student": "Élève",
+      "parent": "Parent",
+      "tutor": "Répétiteur",
+      "admin": "Admin"
+    }
+  },
+  "marketing": {
+    "header": {
+      "label": "Navigation du site",
+      "courses": "Cours",
+      "exams": "Examens",
+      "parents": "Parents",
+      "pricing": "Tarifs",
+      "becomeTutor": "Devenir répétiteur",
+      "signIn": "Se connecter",
+      "signUp": "S’inscrire"
+    },
+    "footer": {
+      "tagline": "La plateforme scolaire du Sénégal, du CI à la Terminale. Pensée pour les petites connexions.",
+      "columns": {
+        "platform": "Plateforme",
+        "families": "Familles",
+        "legal": "Informations"
+      },
+      "links": {
+        "courses": "Cours",
+        "exams": "Examens nationaux",
+        "tutors": "Trouver un répétiteur",
+        "pricing": "Tarifs",
+        "parents": "Espace parents",
+        "becomeTutor": "Devenir répétiteur",
+        "signIn": "Se connecter",
+        "privacy": "Confidentialité",
+        "terms": "Conditions d’utilisation",
+        "legalNotice": "Mentions légales"
+      },
+      "bottom": "© {year} DIANGAL · Fait au Sénégal, pour les élèves du Sénégal."
+    }
+  },
+  "landing": {
+    "metaTitle": "DIANGAL · Apprendre, réviser et réussir, du CI à la Terminale",
+    "metaDescription": "Cours conformes au programme sénégalais, exercices corrigés, contrôles chronométrés, préparation au CFEE, au BFEM et au Bac, et répétiteurs vérifiés.",
+    "hero": {
+      "eyebrow": "Programme officiel du Sénégal · du CI à la Terminale",
+      "title": "Apprendre, réviser et réussir, même avec une petite connexion.",
+      "subtitle": "Des cours clairs par chapitre, des exercices corrigés, des contrôles chronométrés et des répétiteurs vérifiés pour préparer le CFEE, le BFEM et le Bac.",
+      "ctaStudent": "Commencer gratuitement",
+      "ctaParent": "Je suis parent",
+      "trust": {
+        "free": "Cours de base gratuits",
+        "offline": "Fonctionne hors ligne",
+        "mobileMoney": "Paiement Wave et Orange Money"
+      },
+      "phoneAlt": "Le tableau de bord DIANGAL d’une élève de 3e sur un téléphone",
+      "resultCard": {
+        "label": "Contrôle de maths",
+        "value": "15/20, bravo !"
+      },
+      "sticker": {
+        "top": "Prêt pour",
+        "main": "le BFEM ?"
+      }
+    },
+    "features": {
+      "title": "Tout pour réussir son année",
+      "subtitle": "Des contenus alignés sur les programmes du Ministère de l’Éducation nationale, pensés pour les élèves sénégalais.",
+      "items": {
+        "lessons": {
+          "title": "Des cours par chapitre",
+          "body": "Leçons courtes en texte, PDF, audio et vidéo, matière par matière, avec l’essentiel à retenir."
+        },
+        "exercises": {
+          "title": "Des exercices corrigés",
+          "body": "Chaque exercice a son corrigé détaillé pour comprendre ses erreurs et progresser."
+        },
+        "quizzes": {
+          "title": "Des contrôles chronométrés",
+          "body": "Mets-toi en conditions d’examen : correction automatique et note sur 20 tout de suite."
+        },
+        "exams": {
+          "title": "CFEE, BFEM et Bac",
+          "body": "Anciens sujets corrigés, examens blancs et compte à rebours jusqu’au jour J."
+        },
+        "offline": {
+          "title": "Hors ligne",
+          "body": "Télécharge tes cours avec le Wi-Fi et révise ensuite sans consommer de données."
+        },
+        "tutors": {
+          "title": "Des répétiteurs vérifiés",
+          "body": "En ligne ou à domicile, à Dakar, Thiès, Saint-Louis, Ziguinchor et partout au Sénégal."
+        }
+      }
+    },
+    "levels": {
+      "title": "Du CI à la Terminale",
+      "subtitle": "Chaque élève choisit sa classe (et sa série au lycée) et retrouve ses matières.",
+      "prepare": "Préparer le {exam}",
+      "cycles": {
+        "elementary": {
+          "name": "Élémentaire",
+          "body": "Lecture, calcul et éveil, avec une préparation progressive au CFEE."
+        },
+        "middle": {
+          "name": "Moyen",
+          "body": "Toutes les matières du collège et l’entraînement au BFEM, chapitre par chapitre."
+        },
+        "secondary": {
+          "name": "Secondaire",
+          "body": "Séries L, S, G et T : cours, sujets du Bac corrigés et examens blancs."
+        }
+      }
+    },
+    "local": {
+      "title": "Pensé pour le Sénégal",
+      "items": {
+        "light": {
+          "title": "Léger et rapide",
+          "body": "Optimisé pour les téléphones Android d’entrée de gamme et les connexions lentes."
+        },
+        "offline": {
+          "title": "Disponible hors ligne",
+          "body": "Les cours téléchargés restent accessibles sans connexion."
+        },
+        "payments": {
+          "title": "Paiement local en FCFA",
+          "body": "Pass prépayés, sans prélèvement automatique ni carte obligatoire."
+        },
+        "program": {
+          "title": "Programmes officiels",
+          "body": "Contenus rédigés et relus par des enseignants sénégalais. Le wolof arrive bientôt."
+        }
+      },
+      "paymentsTitle": "Moyens de paiement acceptés",
+      "card": "Carte bancaire",
+      "paymentsNote": "Un parent peut payer l’abonnement de son enfant depuis son propre téléphone."
+    },
+    "parents": {
+      "title": "Parents : suivez les progrès, en toute sécurité",
+      "subtitle": "Reliez le compte de vos enfants au vôtre pour suivre leurs notes et leurs révisions, et trouvez un répétiteur de confiance.",
+      "cta": "Créer un compte parent",
+      "items": {
+        "progress": {
+          "title": "Suivi des résultats",
+          "body": "Moyenne, chapitres terminés, points faibles et jours de révision de chaque enfant."
+        },
+        "consent": {
+          "title": "Validation parentale",
+          "body": "Un enfant mineur ne peut contacter un répétiteur ni payer qu’après votre accord."
+        },
+        "verified": {
+          "title": "Répétiteurs vérifiés",
+          "body": "Pièce d’identité et diplômes contrôlés par notre équipe avant toute publication."
+        },
+        "noAds": {
+          "title": "Ni publicité ni revente",
+          "body": "Les données de vos enfants ne sont jamais vendues ni utilisées pour de la publicité."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Gratuit pour commencer",
+      "subtitle": "Les cours de base sont gratuits. Le Premium débloque les contrôles et les examens blancs."
+    },
+    "tutorBand": {
+      "title": "Vous êtes enseignant ?",
+      "body": "Rejoignez les répétiteurs DIANGAL : fixez vos tarifs, vos disponibilités et votre zone, en ligne ou à domicile.",
+      "cta": "Devenir répétiteur"
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "items": {
+        "free": {
+          "q": "DIANGAL est-il gratuit ?",
+          "a": "Oui : les cours de base, des exercices corrigés et un contrôle découverte par matière sont gratuits. Le Premium (à partir de 2 000 FCFA par mois) débloque tous les contrôles chronométrés, les examens blancs et les corrigés détaillés."
+        },
+        "levels": {
+          "q": "Quelles classes sont disponibles ?",
+          "a": "DIANGAL couvre du CI à la Terminale, avec toutes les séries du lycée. Les contenus sont publiés progressivement, en commençant par la 3e et le BFEM."
+        },
+        "offline": {
+          "q": "Peut-on réviser sans connexion ?",
+          "a": "Oui. Télécharge un chapitre quand tu as du Wi-Fi : tu pourras le lire et faire les exercices hors ligne. Ta progression se synchronise dès que tu retrouves du réseau."
+        },
+        "safety": {
+          "q": "Comment protégez-vous les enfants ?",
+          "a": "Les répétiteurs sont vérifiés avant publication, un parent valide le compte de son enfant mineur, les conversations restent visibles par le parent et aucune donnée n’est utilisée pour de la publicité."
+        },
+        "payment": {
+          "q": "Comment payer ?",
+          "a": "Par Wave, Orange Money, Free Money (Yas) ou carte bancaire, en FCFA. Ce sont des pass prépayés : rien n’est prélevé automatiquement."
+        }
+      }
+    }
+  },
+  "pricing": {
+    "pageTitle": "Tarifs",
+    "pageSubtitle": "Commence gratuitement. Passe au Premium quand tu veux, sans engagement.",
+    "note": "Prix en FCFA, toutes taxes comprises. Pass prépayés : aucun prélèvement automatique.",
+    "perMonth": "/ mois",
+    "plans": {
+      "monthly": "1 mois",
+      "quarterly": "3 mois",
+      "yearly": "1 an",
+      "bfem_pass": "Pass BFEM (jusqu’à l’examen)"
+    },
+    "free": {
+      "name": "Gratuit",
+      "tagline": "Pour découvrir et réviser l’essentiel.",
+      "cta": "Créer un compte gratuit",
+      "features": {
+        "lessons": "Cours de base de toutes les matières",
+        "exercises": "Exercices corrigés",
+        "discoveryQuiz": "Un contrôle découverte par matière",
+        "pastPapers": "Sujets des examens nationaux",
+        "offline": "Téléchargement des cours gratuits"
+      }
+    },
+    "premium": {
+      "name": "Premium",
+      "badge": "Le plus complet",
+      "tagline": "Pour s’entraîner en conditions d’examen.",
+      "cta": "Commencer, puis passer Premium",
+      "features": {
+        "allQuizzes": "Tous les contrôles chronométrés",
+        "mockExams": "Examens blancs CFEE, BFEM et Bac",
+        "corrections": "Corrigés détaillés des annales",
+        "recommendations": "Recommandations de révision personnalisées",
+        "everythingFree": "Tout le contenu gratuit, bien sûr"
+      }
+    }
+  },
+  "tutorJoin": {
+    "title": "Devenir répétiteur DIANGAL",
+    "subtitle": "Partagez votre savoir avec des élèves de tout le Sénégal, en ligne ou à domicile, à vos tarifs et selon vos disponibilités.",
+    "cta": "Créer mon profil de répétiteur",
+    "stepsTitle": "Comment ça marche ?",
+    "steps": {
+      "profile": {
+        "title": "Créez votre profil",
+        "body": "Matières, niveaux, tarifs, zone et mode de cours."
+      },
+      "documents": {
+        "title": "Envoyez vos pièces",
+        "body": "Pièce d’identité, diplômes et extrait de casier judiciaire pour les cours à domicile."
+      },
+      "review": {
+        "title": "Vérification",
+        "body": "Notre équipe vérifie votre dossier avant la publication de votre profil."
+      },
+      "requests": {
+        "title": "Recevez des demandes",
+        "body": "Les familles vous contactent par la messagerie DIANGAL."
+      }
+    },
+    "requirementsTitle": "Ce qu’il faut fournir",
+    "requirements": {
+      "id": "Une pièce d’identité valide (CNI ou passeport)",
+      "diploma": "Vos diplômes (licence, CAE, CAP…)",
+      "record": "Un extrait de casier judiciaire de moins de 3 mois pour les cours à domicile",
+      "experience": "Une description de votre expérience d’enseignement"
+    },
+    "whyTitle": "Pourquoi ces vérifications ?",
+    "whyBody": "La plupart de nos élèves sont mineurs. Vérifier l’identité et les diplômes de chaque répétiteur protège les familles et valorise les enseignants sérieux. Vos pièces sont stockées de façon sécurisée, consultées uniquement par l’équipe de vérification, puis supprimées après la décision."
+  },
+  "legal": {
+    "draftNotice": "Document provisoire, à faire valider par un juriste avant la mise en ligne.",
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "sections": [
+        {
+          "title": "Qui sommes-nous ?",
+          "body": "DIANGAL est une plateforme scolaire destinée aux élèves du Sénégal, à leurs parents et à des répétiteurs. Le responsable du traitement des données sera précisé ici (raison sociale, adresse, NINEA)."
+        },
+        {
+          "title": "Données collectées",
+          "body": "Pour un élève : prénom, nom, date de naissance (jamais affichée), classe, série et résultats. Pour un parent : nom et numéro de téléphone. Pour un répétiteur : identité, diplômes et pièces justificatives. Nous ne collectons pas de photo d’élève : les avatars sont des illustrations."
+        },
+        {
+          "title": "Pourquoi ?",
+          "body": "Pour fournir les cours et les évaluations, suivre la progression, permettre aux parents de suivre leurs enfants, mettre en relation familles et répétiteurs et traiter les paiements. Aucune donnée n’est vendue ni utilisée pour de la publicité."
+        },
+        {
+          "title": "Enfants mineurs",
+          "body": "Un élève mineur peut accéder aux cours gratuits dès l’inscription. Le contact avec un répétiteur, la messagerie et les paiements ne sont possibles qu’après la validation d’un parent. Les conversations entre un mineur et un répétiteur sont visibles par le parent."
+        },
+        {
+          "title": "Durées de conservation",
+          "body": "Les pièces d’identité des répétiteurs sont supprimées 30 jours après la décision de vérification. Les messages sont conservés 24 mois. Les journaux techniques sont conservés 12 mois."
+        },
+        {
+          "title": "Vos droits",
+          "body": "Conformément à la loi n° 2008-12 du 25 janvier 2008 sur la protection des données à caractère personnel, vous pouvez accéder à vos données, les rectifier, les exporter ou les supprimer depuis votre profil. Un parent exerce ces droits pour son enfant. Vous pouvez aussi saisir la Commission de Protection des Données Personnelles (CDP)."
+        },
+        {
+          "title": "Hébergement et sécurité",
+          "body": "Les données sont hébergées dans l’Union européenne, après déclaration auprès de la CDP. Elles sont chiffrées en transit et au repos, et l’accès est limité selon le rôle de chaque utilisateur."
+        }
+      ]
+    },
+    "terms": {
+      "title": "Conditions générales d’utilisation",
+      "sections": [
+        {
+          "title": "Objet",
+          "body": "Ces conditions encadrent l’utilisation de DIANGAL par les élèves, les parents, les répétiteurs et l’administration."
+        },
+        {
+          "title": "Comptes",
+          "body": "La connexion se fait par code reçu par SMS ou par email. Chaque utilisateur est responsable de son compte. Un élève mineur utilise DIANGAL sous la responsabilité de son parent ou tuteur légal."
+        },
+        {
+          "title": "Abonnements",
+          "body": "Le Premium est vendu sous forme de pass prépayés en FCFA, sans renouvellement automatique. Le contenu débloqué reste accessible jusqu’à la fin de la période achetée."
+        },
+        {
+          "title": "Répétiteurs",
+          "body": "Les répétiteurs sont vérifiés avant publication et s’engagent à un comportement irréprochable envers les élèves. Tout manquement entraîne la suspension du profil."
+        },
+        {
+          "title": "Signalements",
+          "body": "Chaque utilisateur peut signaler un message, un avis ou un profil. L’équipe de modération traite les signalements dans les meilleurs délais."
+        }
+      ]
+    },
+    "notice": {
+      "title": "Mentions légales",
+      "sections": [
+        {
+          "title": "Éditeur",
+          "body": "Raison sociale, forme juridique, adresse, NINEA et registre du commerce : à compléter avant la mise en ligne."
+        },
+        {
+          "title": "Hébergement",
+          "body": "Application : Vercel Inc. Données : Supabase (région Union européenne, Paris)."
+        },
+        {
+          "title": "Contact",
+          "body": "Une adresse de contact et un numéro d’assistance seront indiqués ici."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "backToSite": "Retour au site",
+    "privacyLink": "Protection de vos données",
+    "login": {
+      "title": "Se connecter",
+      "noAccount": "Pas encore de compte ?",
+      "signUpLink": "S’inscrire",
+      "phoneTab": "Téléphone",
+      "emailTab": "Email",
+      "phoneLabel": "Numéro de téléphone",
+      "phonePlaceholder": "77 123 45 67",
+      "phoneHint": "Tu recevras un code à 6 chiffres par SMS.",
+      "emailLabel": "Adresse email",
+      "emailPlaceholder": "prenom@exemple.sn",
+      "submit": "Recevoir le code"
+    },
+    "code": {
+      "title": "Entre ton code",
+      "sentTo": "Nous avons envoyé un code à 6 chiffres à {to}.",
+      "label": "Code de vérification",
+      "error": "Ce code n’est pas le bon. Vérifie-le et réessaie.",
+      "demoHint": "Démo : le code est 123456.",
+      "submit": "Valider",
+      "changeNumber": "Changer de numéro",
+      "resendIn": "Renvoyer le code dans 60 s"
+    }
+  },
+  "signup": {
+    "title": "Créer un compte",
+    "hasAccount": "Déjà inscrit ?",
+    "signInLink": "Se connecter",
+    "step": "Étape {current} sur {total}",
+    "back": "Retour",
+    "continue": "Continuer",
+    "finish": "Créer mon compte",
+    "titles": {
+      "role": "Qui es-tu ?",
+      "identifier": "Ton numéro ou ton email",
+      "code": "Vérification",
+      "profile": "Ton profil",
+      "details": "Quelques précisions",
+      "consent": "Dernière étape"
+    },
+    "roles": {
+      "student": {
+        "title": "Élève",
+        "body": "Je suis en classe, du CI à la Terminale."
+      },
+      "parent": {
+        "title": "Parent",
+        "body": "Je suis les progrès de mes enfants."
+      },
+      "tutor": {
+        "title": "Répétiteur",
+        "body": "J’enseigne en ligne ou à domicile."
+      }
+    },
+    "methods": {
+      "phone": "Téléphone",
+      "email": "Email"
+    },
+    "fields": {
+      "phone": "Numéro de téléphone",
+      "email": "Adresse email",
+      "code": "Code reçu",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "birthDate": "Date de naissance",
+      "city": "Ville",
+      "level": "Ta classe",
+      "series": "Ta série",
+      "chooseSeries": "Choisir la série",
+      "childCode": "Code élève de votre enfant (facultatif)",
+      "subjects": "Matières enseignées",
+      "parentPhone": "Numéro de téléphone de ton parent"
+    },
+    "hints": {
+      "phone": "Numéro sénégalais à 9 chiffres.",
+      "code": "Code envoyé à {to}.",
+      "demoCode": "Démo : le code est 123456.",
+      "birthDate": "Elle sert à protéger les plus jeunes. Elle n’est jamais affichée.",
+      "childCode": "Votre enfant le trouve dans son profil. Vous pourrez aussi l’ajouter plus tard.",
+      "tutorReview": "Votre profil sera visible après la vérification de vos pièces par notre équipe."
+    },
+    "minor": {
+      "title": "Validation par un parent",
+      "body": "Tu as moins de 18 ans : nous envoyons un SMS à ton parent pour qu’il valide ton compte. En attendant, tu as accès aux cours gratuits."
+    },
+    "consent": {
+      "terms": "J’accepte les",
+      "termsLink": "conditions d’utilisation",
+      "and": "et la",
+      "privacyLink": "politique de confidentialité",
+      "dataNote": "Tes données ne sont jamais vendues ni utilisées pour de la publicité."
+    },
+    "errors": {
+      "phone": "Entre un numéro à 9 chiffres.",
+      "email": "Entre une adresse email valide.",
+      "code": "Le code contient 6 chiffres.",
+      "wrongCode": "Ce code n’est pas le bon. Démo : 123456.",
+      "name": "Indique ton prénom et ton nom.",
+      "birthDate": "Indique ta date de naissance.",
+      "city": "Indique ta ville.",
+      "series": "Choisis ta série.",
+      "subjects": "Choisis au moins une matière.",
+      "terms": "Tu dois accepter les conditions pour continuer.",
+      "parentPhone": "Entre le numéro de ton parent (9 chiffres).",
+      "generic": "Une erreur est survenue. Réessaie."
+    }
+  },
+  "consent": {
+    "title": "Validation parentale",
+    "intro": "{child} souhaite utiliser DIANGAL pour réviser. Comme {child} est mineur(e), nous avons besoin de votre accord.",
+    "collectedTitle": "Ce que nous enregistrons",
+    "collected": {
+      "identity": "Prénom, nom et date de naissance (jamais affichée)",
+      "level": "Classe, série et établissement",
+      "progress": "Leçons suivies, résultats aux exercices et aux contrôles",
+      "messages": "Messages échangés avec les répétiteurs, que vous pourrez lire"
+    },
+    "neverCollected": "Pas de photo, pas d’adresse, pas de publicité. Aucune donnée n’est vendue.",
+    "unlockTitle": "Ce que votre accord débloque",
+    "unlock": {
+      "contact": "Contacter un répétiteur vérifié",
+      "messages": "La messagerie, toujours visible par vous",
+      "payments": "Les paiements, que vous pouvez aussi faire vous-même"
+    },
+    "rights": "Vous pouvez retirer votre accord, consulter, exporter ou supprimer les données de votre enfant à tout moment depuis votre espace parent.",
+    "accept": "J’accepte et je crée mon espace parent",
+    "refuse": "Je refuse",
+    "expired": "Ce lien a expiré ou n’est pas valide. Demandez à votre enfant d’envoyer une nouvelle demande depuis son profil."
+  },
+  "examsPage": {
+    "subtitle": "Prépare le BFEM : examens blancs, anciens sujets corrigés et compte à rebours.",
+    "mockExams": "Examens blancs",
+    "mockExamsHint": "En conditions réelles, avec la durée officielle.",
+    "pastPapers": "Annales du {exam}",
+    "pastPapersHint": "Sujets gratuits, corrigés détaillés pour les abonnés Premium.",
+    "session": "Session {year}",
+    "withOnline": "Sujet, corrigé et version en ligne",
+    "subjectAndCorrection": "Sujet et corrigé",
+    "premiumCorrection": "Corrigé détaillé réservé au Premium",
+    "tipsTitle": "Conseils de révision",
+    "tips": {
+      "plan": "Fais un planning : un peu chaque jour vaut mieux qu’une nuit blanche.",
+      "papers": "Entraîne-toi sur les anciens sujets pour connaître le format des épreuves.",
+      "timed": "Passe au moins un examen blanc chronométré par matière.",
+      "rest": "La veille de l’examen, révise léger et dors bien."
+    },
+    "paperTitle": "{exam} {year} · {subject}",
+    "subjectPdf": "Sujet officiel",
+    "correctionPdf": "Corrigé détaillé",
+    "onlineTitle": "Ce sujet existe en version interactive",
+    "onlineBody": "Réponds en ligne et obtiens ta note sur 20 avec le corrigé de chaque question.",
+    "onlineCta": "Faire le sujet en ligne",
+    "pdfDemo": "Démo : les fichiers PDF ne sont pas encore disponibles."
+  },
+  "progressPage": {
+    "title": "Ma progression",
+    "subtitle": "Tes moyennes et ta progression, matière par matière.",
+    "bySubject": "Par matière",
+    "progressLabel": "Progression en {subject}",
+    "chapters": "{done}/{total} chapitres terminés",
+    "recentResults": "Derniers résultats",
+    "noResults": "Pas encore de résultat : lance un contrôle depuis l’Entraînement."
+  },
+  "downloadsPage": {
+    "subtitle": "Les cours téléchargés se lisent sans connexion.",
+    "howTitle": "Comment ça marche ?",
+    "how": {
+      "wifi": "Connecte-toi au Wi-Fi pour ne pas consommer ton forfait.",
+      "download": "Télécharge les chapitres que tu veux réviser.",
+      "offline": "Révise ensuite sans connexion : ta progression se synchronise au retour du réseau."
+    },
+    "storageHint": "Tu peux supprimer un chapitre téléchargé à tout moment."
+  },
+  "dataSaver": {
+    "title": "Économie de données",
+    "body": "Vidéos remplacées par l’audio ou le texte, images légères, rien ne se charge sans ton accord."
+  },
+  "checkout": {
+    "beneficiary": "Pour quel enfant ?",
+    "plan": "Choisis ton pass",
+    "plans": {
+      "monthly": "1 mois",
+      "quarterly": "3 mois",
+      "yearly": "1 an",
+      "bfem_pass": "Pass BFEM"
+    },
+    "planHints": {
+      "monthly": "Pour essayer",
+      "quarterly": "Le plus choisi",
+      "yearly": "Le moins cher par mois",
+      "bfem_pass": "Jusqu’à la fin de l’examen"
+    },
+    "channel": "Moyen de paiement",
+    "channels": {
+      "wave": {
+        "name": "Wave",
+        "hint": "Confirmation dans l’application Wave"
+      },
+      "orange_money": {
+        "name": "Orange Money",
+        "hint": "Validation par code sur ton téléphone"
+      },
+      "free_money": {
+        "name": "Free Money / Yas",
+        "hint": "Validation par code sur ton téléphone"
+      },
+      "card": {
+        "name": "Carte bancaire",
+        "hint": "Visa ou Mastercard"
+      }
+    },
+    "submit": "Continuer vers le paiement",
+    "secure": "Paiement sécurisé par notre prestataire agréé. Démo : aucun débit réel."
+  },
+  "subscription": {
+    "subtitle": "Débloque tous les contrôles chronométrés, les examens blancs et les corrigés détaillés.",
+    "statusFree": "Tu as le compte gratuit",
+    "statusFreeHint": "Cours de base, exercices corrigés et un contrôle découverte par matière.",
+    "statusPremium": "Ton Premium est actif",
+    "statusPremiumHint": "Tu peux le prolonger : la nouvelle période s’ajoute à la fin de la période en cours.",
+    "choose": "Choisir une offre",
+    "parentPays": {
+      "title": "Demande à ton parent",
+      "body": "Tant que ton parent n’a pas validé ton compte, c’est lui qui peut payer ton abonnement depuis son espace parent.",
+      "cta": "Voir la validation parentale"
+    },
+    "errors": {
+      "consent": "Ton parent doit d’abord valider ton compte avant un paiement.",
+      "form": "Choisis une offre et un moyen de paiement."
+    }
+  },
+  "studentProfile": {
+    "levelChange": "Pour changer de classe, contacte l’assistance (une fois par année scolaire).",
+    "consent": {
+      "title": "Validation parentale",
+      "granted": "Ton compte est validé par ton parent.",
+      "pending": "Nous avons envoyé une demande par SMS à ton parent ({phone}). En attendant, tu as accès aux cours gratuits.",
+      "resend": "Renvoyer le SMS",
+      "resent": "La demande a été renvoyée à ton parent.",
+      "demoLink": "Démo : ouvrir le lien reçu par le parent"
+    },
+    "linkCode": {
+      "title": "Mon code élève",
+      "body": "Donne ce code à ton parent pour qu’il relie ton compte au sien."
+    },
+    "data": {
+      "title": "Mes données",
+      "body": "Tu peux télécharger ou supprimer tes données (avec l’accord de ton parent si tu es mineur).",
+      "export": "Télécharger mes données",
+      "delete": "Supprimer mon compte",
+      "soon": "Disponible avec la mise en ligne des comptes réels."
+    },
+    "language": {
+      "title": "Langue",
+      "current": "Français",
+      "wolofSoon": "Le wolof arrive bientôt."
+    },
+    "signOut": "Se déconnecter"
+  },
+  "paymentReturn": {
+    "title": "Paiement",
+    "success": "Paiement confirmé",
+    "successHint": "Le Premium de {name} est actif.",
+    "notFound": "Nous ne trouvons pas ce paiement. S’il a été débité, il sera confirmé dans quelques minutes.",
+    "reference": "Référence",
+    "plan": "Offre",
+    "amount": "Montant",
+    "channel": "Moyen de paiement",
+    "beneficiary": "Bénéficiaire",
+    "date": "Date",
+    "duration": "Durée",
+    "days": "{days, plural, one {# jour} other {# jours}}",
+    "back": "Retour",
+    "demoNote": "Démo : paiement simulé, aucun débit réel."
+  },
+  "messaging": {
+    "subtitle": "Échanges avec les répétiteurs, toujours sur DIANGAL.",
+    "consentTitle": "Validation parentale nécessaire",
+    "consentBody": "Pour ta sécurité, la messagerie s’ouvre quand ton parent a validé ton compte.",
+    "consentCta": "Voir ma demande",
+    "emptyTitle": "Aucune conversation",
+    "emptyBody": "Contacte un répétiteur depuis l’annuaire pour démarrer une conversation.",
+    "findTutor": "Trouver un répétiteur",
+    "unread": "Non lu",
+    "observed": "Les échanges avec un élève mineur sont visibles par son parent.",
+    "threadLabel": "Messages de la conversation",
+    "composeLabel": "Votre message",
+    "composePlaceholder": "Écrire un message…",
+    "safety": "Ne partagez ni adresse ni numéro : les numéros sont masqués.",
+    "send": "Envoyer",
+    "report": "Signaler cette conversation"
+  },
+  "notificationsPage": {
+    "emptyTitle": "Aucune notification",
+    "emptyBody": "Tu seras prévenu ici de tes résultats, des messages et des examens.",
+    "markAll": "Tout marquer comme lu",
+    "unread": "Non lue",
+    "items": {
+      "consent": "{child} attend votre validation pour utiliser toutes les fonctions de DIANGAL.",
+      "quiz_result": "Ton contrôle de {subject} est corrigé : {score}.",
+      "tutor_message": "Nouveau message de {tutor}.",
+      "payment": "Votre paiement est confirmé.",
+      "exam": "Les révisions du {exam} commencent : consulte les annales corrigées.",
+      "tutor_review": "Votre profil de répétiteur a été vérifié et publié."
+    }
+  },
+  "parentHome": {
+    "metaTitle": "Espace parent",
+    "greeting": "Bonjour {name} !",
+    "subtitle": "Suivez les progrès de vos enfants et accompagnez leurs révisions.",
+    "notices": {
+      "consentGranted": "Merci ! Le compte de votre enfant est validé : toutes les fonctions sont débloquées.",
+      "consentRefused": "Vous avez refusé : votre enfant garde l’accès aux cours gratuits uniquement.",
+      "linked": "Votre enfant est maintenant relié à votre compte."
+    },
+    "consentBanner": "{child} attend votre validation pour contacter des répétiteurs et utiliser la messagerie.",
+    "consentCta": "Valider maintenant",
+    "childrenLabel": "Mes enfants",
+    "average": "Moyenne",
+    "chapters": "Chapitres",
+    "streak": "Jours d’affilée",
+    "weakPoints": "Points faibles",
+    "premiumUntil": "Premium jusqu’au {date}",
+    "free": "Compte gratuit",
+    "consentPending": "Validation en attente",
+    "lastActivity": "Dernière activité le {date}",
+    "seeProgress": "Voir le suivi",
+    "subscription": "Abonnement",
+    "findTutor": "Trouver un répétiteur",
+    "findTutorHint": "Vérifiés, en ligne ou à domicile",
+    "messages": "Messages",
+    "messagesHint": "Vos échanges avec les répétiteurs"
+  },
+  "parentChild": {
+    "metaTitle": "Suivi de l’enfant",
+    "subjects": "Progression par matière",
+    "programSoon": "Le programme détaillé de cette classe sera publié prochainement.",
+    "readOnly": "Vous consultez la progression en lecture seule. Votre enfant garde la main sur ses révisions."
+  },
+  "addChild": {
+    "title": "Ajouter un enfant",
+    "subtitle": "Reliez le compte de votre enfant au vôtre pour suivre sa progression.",
+    "codeTitle": "Avec le code élève",
+    "codeBody": "Votre enfant trouve son code dans son profil DIANGAL.",
+    "codeLabel": "Code élève",
+    "codeHint": "Démo : utilisez le code AWA-7K3Q.",
+    "codePlaceholder": "ABC-1234",
+    "submit": "Relier ce compte",
+    "error": "Ce code ne correspond à aucun élève. Vérifiez-le avec votre enfant.",
+    "managedTitle": "Enfant du primaire sans téléphone ?",
+    "managedBody": "Bientôt, vous pourrez créer vous-même un profil pour un enfant du CI au CM2, utilisable sur votre téléphone avec un code secret."
+  },
+  "parentSubscriptions": {
+    "title": "Abonnements",
+    "subtitle": "Payez le Premium de vos enfants avec Wave, Orange Money, Free Money ou carte.",
+    "activeUntil": "Premium jusqu’au {date}",
+    "free": "Compte gratuit",
+    "buy": "Acheter ou prolonger un pass",
+    "buyHint": "Le pass s’ajoute à la fin de l’abonnement en cours."
+  },
+  "parentProfile": {
+    "children": "Enfants reliés",
+    "unlink": "Retirer",
+    "notifications": {
+      "title": "Notifications",
+      "sms": "SMS pour les alertes importantes (validation, paiement)",
+      "push": "Notifications sur le téléphone",
+      "weekly": "Résumé hebdomadaire des progrès"
+    },
+    "data": {
+      "title": "Données de la famille",
+      "body": "Vous pouvez exporter ou supprimer vos données et celles de vos enfants mineurs.",
+      "export": "Exporter les données",
+      "delete": "Supprimer le compte"
+    },
+    "signOut": "Se déconnecter"
+  },
+  "tutorHome": {
+    "metaTitle": "Espace répétiteur",
+    "greeting": "Bonjour {name} !",
+    "subtitle": "Votre activité sur DIANGAL.",
+    "verified": "Votre profil est vérifié et visible dans l’annuaire.",
+    "statsLabel": "Vos chiffres",
+    "views": "Vues du profil (30 j)",
+    "requests": "Demandes de contact",
+    "rating": "{count, plural, =0 {Note moyenne} one {Note (# avis)} other {Note (# avis)}}",
+    "completionTitle": "Votre profil",
+    "completion": "Complété à {pct} %",
+    "edit": "Modifier",
+    "checklist": {
+      "bio": "Une présentation détaillée",
+      "subjects": "Matières et niveaux",
+      "rate": "Un tarif horaire",
+      "availability": "Vos disponibilités",
+      "qualifications": "Des diplômes vérifiés"
+    },
+    "latestMessages": "Derniers messages",
+    "noMessages": "Aucun message pour l’instant.",
+    "bookingsSoonTitle": "Réservations et paiement des séances",
+    "bookingsSoonBody": "Bientôt, les familles pourront réserver et payer vos séances sur DIANGAL, avec la visioconférence intégrée."
+  },
+  "tutorProfileForm": {
+    "title": "Mon profil",
+    "subtitle": "Ces informations apparaissent sur votre fiche publique.",
+    "saved": "Profil enregistré.",
+    "error": "Vérifiez les champs : un titre, au moins une matière et un niveau, et un tarif entre 1 000 et 50 000 FCFA.",
+    "presentation": "Présentation",
+    "headline": "Titre de votre profil",
+    "headlineHint": "Une phrase, par exemple : Professeur de maths, préparation au BFEM.",
+    "bio": "À propos de vous",
+    "bioHint": "Votre expérience et votre façon d’enseigner (800 caractères maximum).",
+    "teaching": "Enseignement",
+    "subjects": "Matières",
+    "levels": "Niveaux",
+    "pricing": "Tarif et mode de cours",
+    "rate": "Tarif horaire (FCFA)",
+    "rateHint": "Arrondi à la centaine.",
+    "mode": "Type de cours",
+    "zone": "Zone : {city} · {neighborhood}",
+    "whatsapp": "Afficher mon numéro WhatsApp aux parents",
+    "whatsappHint": "Jamais aux élèves mineurs. Les échanges passent d’abord par la messagerie DIANGAL.",
+    "save": "Enregistrer",
+    "preview": "Voir ma fiche publique"
+  },
+  "tutorVerification": {
+    "title": "Vérification",
+    "subtitle": "Vos pièces justificatives et le statut de votre dossier.",
+    "status": {
+      "pending": "Dossier en cours de vérification",
+      "approved": "Profil vérifié",
+      "rejected": "Dossier à compléter",
+      "suspended": "Profil suspendu"
+    },
+    "statusBody": {
+      "pending": "Notre équipe vérifie vos pièces, en général sous 72 heures.",
+      "approved": "Vos pièces ont été validées : votre profil est publié dans l’annuaire.",
+      "rejected": "Une pièce doit être renvoyée : consultez le motif ci-dessous.",
+      "suspended": "Votre profil n’est plus visible. Contactez l’équipe DIANGAL."
+    },
+    "documents": "Pièces justificatives",
+    "types": {
+      "cni": "Pièce d’identité",
+      "diploma": "Diplôme",
+      "criminal_record": "Extrait de casier judiciaire"
+    },
+    "docStatus": {
+      "pending": "En attente",
+      "accepted": "Validé",
+      "rejected": "Refusé"
+    },
+    "upload": "Envoyer une pièce",
+    "uploadHint": "PDF, JPG ou PNG, 10 Mo maximum. Le stockage sécurisé arrive avec la base de données.",
+    "privacy": "Vos pièces sont consultées uniquement par l’équipe de vérification, puis supprimées 30 jours après la décision. Seul le résultat de la vérification est conservé."
+  },
+  "tutorAvailability": {
+    "title": "Disponibilités",
+    "subtitle": "Les créneaux où les familles peuvent vous solliciter.",
+    "saved": "Disponibilités enregistrées.",
+    "from": "De",
+    "to": "À",
+    "hint": "Un créneau par jour dans cette version. Les réservations en ligne arrivent bientôt.",
+    "save": "Enregistrer"
+  },
+  "adminHome": {
+    "title": "Statistiques",
+    "subtitle": "Vue d’ensemble de la plateforme.",
+    "kpis": "Indicateurs clés",
+    "students": "Élèves inscrits",
+    "parents": "Parents",
+    "tutors": "Répétiteurs publiés",
+    "premium": "Abonnés Premium",
+    "revenue": "Revenus du mois",
+    "quizzes": "Contrôles cette semaine",
+    "signups": "Inscriptions",
+    "signupsHint": "7 derniers jours",
+    "revenueByChannel": "Revenus par moyen de paiement",
+    "tasks": "À traiter",
+    "tasksTutors": "{count, plural, =0 {Aucun dossier de répétiteur} one {# dossier de répétiteur à vérifier} other {# dossiers de répétiteurs à vérifier}}",
+    "tasksReports": "{count, plural, =0 {Aucun signalement ouvert} one {# signalement à traiter} other {# signalements à traiter}}",
+    "tasksContent": "Leçons de 3e à rédiger",
+    "mfaNote": "Espace protégé : en production, l’accès admin exige la double authentification."
+  },
+  "adminContent": {
+    "title": "Contenus",
+    "subtitle": "Niveaux, matières, chapitres et leçons.",
+    "level": "Niveau {level}",
+    "otherLevels": "Autres niveaux : bientôt",
+    "counts": "{chapters} chapitres · {lessons} leçons · {written} rédigées",
+    "premium": "Premium",
+    "written": "Rédigée",
+    "toWrite": "À rédiger",
+    "edit": "Modifier"
+  },
+  "adminLesson": {
+    "title": "Modifier une leçon",
+    "saved": "Leçon enregistrée : elle est visible par les élèves.",
+    "error": "Le contenu ne peut pas être vide.",
+    "editor": "Contenu",
+    "editorHint": "HTML simplifié pour la démo. Bientôt : Markdown et formules mathématiques (LaTeX).",
+    "save": "Enregistrer",
+    "workflow": "Bientôt : brouillon, relecture par un enseignant, puis publication.",
+    "preview": "Aperçu"
+  },
+  "adminAssessments": {
+    "title": "Évaluations",
+    "subtitle": "Exercices, contrôles chronométrés, examens blancs et banque de questions.",
+    "import": "Importer un fichier CSV",
+    "cols": {
+      "title": "Titre",
+      "subject": "Matière",
+      "kind": "Type",
+      "questions": "Questions",
+      "duration": "Durée",
+      "access": "Accès"
+    },
+    "questionsValue": "{count} questions · {points} pts",
+    "premium": "Premium",
+    "free": "Gratuit",
+    "keysWarning": "Les corrigés ne sont visibles que par l’administration : ils ne sont jamais envoyés aux élèves avant la remise de leur copie.",
+    "types": {
+      "single_choice": "Choix unique",
+      "multiple_choice": "Choix multiples",
+      "true_false": "Vrai ou faux",
+      "short_text": "Réponse courte",
+      "numeric": "Réponse numérique"
+    },
+    "points": "{points} pts",
+    "expected": "Réponse attendue : {answer}"
+  },
+  "adminExams": {
+    "title": "Examens nationaux",
+    "subtitle": "Dates officielles et annales.",
+    "saved": "Date enregistrée : le compte à rebours des élèves est mis à jour.",
+    "error": "Date invalide.",
+    "sessions": "Sessions",
+    "sessionsHint": "La date du premier jour d’épreuves alimente le compte à rebours.",
+    "current": "Actuellement le {date}",
+    "official": "officielle",
+    "indicative": "indicative",
+    "startsOn": "Premier jour",
+    "officialLabel": "Date officielle",
+    "save": "Enregistrer",
+    "papers": "Annales",
+    "papersCount": "{count} sujets du {exam} en ligne.",
+    "papersHint": "L’ajout de sujets et de corrigés PDF arrive avec le stockage de fichiers."
+  },
+  "adminTutors": {
+    "title": "Répétiteurs",
+    "subtitle": "Vérification des dossiers et statuts des profils.",
+    "filter": "Filtrer par statut",
+    "all": "Tous ({count})",
+    "statusCount": {
+      "pending": "À vérifier ({count})",
+      "approved": "Publiés ({count})",
+      "rejected": "Refusés ({count})",
+      "suspended": "Suspendus ({count})"
+    },
+    "cols": {
+      "name": "Nom",
+      "subjects": "Matières",
+      "city": "Ville",
+      "rate": "Tarif horaire",
+      "submitted": "Dossier envoyé le",
+      "status": "Statut"
+    },
+    "status": {
+      "pending": "À vérifier",
+      "approved": "Publié",
+      "rejected": "Refusé",
+      "suspended": "Suspendu"
+    },
+    "decisionSaved": "Décision enregistrée et notifiée au répétiteur.",
+    "reasonRequired": "Indiquez le motif du refus.",
+    "rejectedBecause": "Motif du refus : {reason}",
+    "profile": "Profil",
+    "mode": "Type de cours",
+    "documentsHint": "Chaque consultation de pièce est enregistrée dans le journal.",
+    "view": "Voir la pièce",
+    "decision": "Décision",
+    "decisionHint": "Le répétiteur est notifié par SMS.",
+    "approve": "Approuver et publier",
+    "reason": "Motif du refus",
+    "reasonHint": "Visible par le répétiteur.",
+    "reject": "Refuser le dossier",
+    "suspend": "Suspendre le profil",
+    "auditNote": "Toutes les décisions sont enregistrées dans le journal d’audit."
+  },
+  "adminReports": {
+    "title": "Signalements",
+    "subtitle": "Messages, avis et profils signalés par les utilisateurs.",
+    "cols": {
+      "target": "Élément",
+      "reason": "Motif",
+      "reporter": "Signalé par",
+      "date": "Date",
+      "status": "Statut",
+      "action": "Action"
+    },
+    "types": {
+      "message": "Message",
+      "review": "Avis",
+      "tutor": "Profil répétiteur",
+      "user": "Utilisateur"
+    },
+    "status": {
+      "open": "Ouvert",
+      "handled": "Traité"
+    },
+    "handle": "Marquer comme traité"
+  },
+  "adminUsers": {
+    "title": "Utilisateurs",
+    "subtitle": "Élèves, parents, répétiteurs et administrateurs.",
+    "search": "Rechercher un nom ou une ville",
+    "cols": {
+      "name": "Nom",
+      "role": "Rôle",
+      "city": "Ville",
+      "created": "Inscrit le",
+      "consent": "Consentement parental"
+    },
+    "consent": {
+      "not_required": "Non requis",
+      "pending": "En attente",
+      "granted": "Accordé",
+      "refused": "Refusé"
+    },
+    "privacy": "Données minimales : la date de naissance et les coordonnées des élèves ne sont pas affichées ici."
+  },
+  "adminPayments": {
+    "title": "Paiements",
+    "subtitle": "Abonnements Premium payés par mobile money et carte.",
+    "total": "Encaissé",
+    "succeeded": "Paiements réussis",
+    "failed": "Paiements échoués",
+    "cols": {
+      "reference": "Référence",
+      "payer": "Payeur",
+      "beneficiary": "Bénéficiaire",
+      "plan": "Offre",
+      "channel": "Moyen",
+      "amount": "Montant",
+      "date": "Date",
+      "status": "Statut"
+    },
+    "status": {
+      "pending": "En attente",
+      "succeeded": "Réussi",
+      "failed": "Échoué"
+    },
+    "note": "En production, chaque paiement est confirmé par le webhook signé du prestataire, puis rapproché automatiquement."
+  },
+  "adminAudit": {
+    "title": "Journal d’audit",
+    "subtitle": "Actions sensibles : décisions, consultations de pièces, paiements, modifications de contenus.",
+    "cols": {
+      "date": "Date",
+      "actor": "Auteur",
+      "action": "Action",
+      "target": "Concerne"
+    }
+  },
+  "pwa": {
+    "name": "DIANGAL, la plateforme scolaire du Sénégal",
+    "shortName": "Diangal",
+    "description": "Cours, exercices corrigés, contrôles et préparation au CFEE, au BFEM et au Bac, même hors ligne."
+  },
+  "offline": {
+    "pageTitle": "Tu es hors ligne",
+    "pageBody": "Cette page n’est pas disponible sans connexion. Tes chapitres téléchargés restent accessibles.",
+    "openDownloads": "Ouvrir mes cours téléchargés",
+    "readerTitle": "Mes cours hors ligne",
+    "nothingOffline": "Aucun chapitre téléchargé sur ce téléphone. Avec une connexion, ouvre un chapitre et touche « Télécharger ».",
+    "allDownloads": "Tous mes téléchargements",
+    "premiumLocked": "Leçon Premium : elle sera disponible hors ligne après abonnement et un nouveau téléchargement.",
+    "previous": "Précédente",
+    "next": "Suivante",
+    "download": "Télécharger pour lire hors ligne",
+    "downloading": "Téléchargement en cours…",
+    "error": "Le téléchargement a échoué. Réessaie avec une connexion.",
+    "hint": "Environ {size} · le Wi-Fi est conseillé",
+    "hintNoSize": "Texte seulement : quelques kilo-octets",
+    "saved": "Disponible hors ligne sur ce téléphone",
+    "readOffline": "Lire hors ligne",
+    "remove": "Supprimer",
+    "removeNamed": "Supprimer « {title} » du téléphone",
+    "used": "{count, plural, =0 {Aucun chapitre téléchargé} one {# chapitre · {size} utilisés} other {# chapitres · {size} utilisés}}",
+    "meta": "{subject} · {size} · téléchargé le {date}",
+    "emptyTitle": "Aucun cours téléchargé",
+    "emptyBody": "Ouvre un chapitre et touche « Télécharger pour lire hors ligne » quand tu as du Wi-Fi.",
+    "browse": "Parcourir mes cours",
+    "install": "Installer DIANGAL sur ce téléphone",
+    "installHint": "Accès direct depuis l’écran d’accueil, même sans connexion."
+  }
+}
