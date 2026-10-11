@@ -3,6 +3,7 @@
 // sera fourni et validé par des enseignants d'après le programme officiel.
 
 import type { StudentDashboard, StudentSummary } from "@/types/domain";
+import { CHAPTERS_3E } from "./curriculum-3e";
 
 export const mockStudent: StudentSummary = {
   firstName: "Awa",
@@ -25,7 +26,7 @@ export const mockDashboard: Omit<StudentDashboard, "nextExam"> = {
   stats: {
     average20: 13.4,
     chaptersCompleted: 18,
-    chaptersTotal: 56,
+    chaptersTotal: CHAPTERS_3E.length,
     quizzesTaken: 9,
     streakDays: 6,
   },
@@ -44,17 +45,17 @@ export const mockDashboard: Omit<StudentDashboard, "nextExam"> = {
       href: "/eleve/cours/mathematiques/theoreme-de-thales",
     },
     {
-      chapterId: "pc-electrolyse-et-synthese-de-l-eau",
+      chapterId: "pc-solutions-acides-et-solutions-basiques",
       subject: "PC",
       subjectName: "Sciences physiques",
-      chapterTitle: "Électrolyse et synthèse de l’eau",
+      chapterTitle: "Solutions acides et solutions basiques",
       status: "in_progress",
       isPremium: true,
       progressPct: 25,
       lessonsDone: 1,
       lessonsTotal: 4,
-      nextLessonTitle: "Bilan de l’électrolyse",
-      href: "/eleve/cours/sciences-physiques/electrolyse-et-synthese-de-l-eau",
+      nextLessonTitle: "Les indicateurs colorés",
+      href: "/eleve/cours/sciences-physiques/solutions-acides-et-solutions-basiques",
     },
     {
       chapterId: "hg-la-decolonisation-en-afrique",

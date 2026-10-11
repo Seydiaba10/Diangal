@@ -5,20 +5,16 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState, useTransition, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { CycleDot } from "@/components/ui/level-badge";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/cn";
+import { CYCLE_STYLES, CYCLES, SERIES_BY_LEVEL, type LevelCode } from "@/lib/levels";
 import type { AppRole, SubjectCode } from "@/types/domain";
 import { completeSignupAction } from "../actions";
 import { INPUT_CLASS } from "./auth-card";
 
 type SignupRole = Exclude<AppRole, "admin">;
 
-const LEVELS = ["CI", "CP", "CE1", "CE2", "CM1", "CM2", "6E", "5E", "4E", "3E", "2NDE", "1RE", "TLE"] as const;
-const SERIES: Partial<Record<(typeof LEVELS)[number], string[]>> = {
-  "2NDE": ["L", "S"],
-  "1RE": ["L1", "L2", "L'", "S1", "S2", "S3", "S4", "S5", "G", "T1", "T2"],
-  TLE: ["L1", "L2", "L'", "S1", "S2", "S3", "S4", "S5", "G", "T1", "T2"],
-};
 const SUBJECTS: SubjectCode[] = ["MATH", "FR", "ANG", "HG", "SVT", "PC", "EC", "LV2"];
 
 const ROLE_OPTIONS: { role: SignupRole; icon: typeof Users }[] = [
@@ -50,6 +46,7 @@ function Field({ id, label, hint, children }: { id: string; label: string; hint?
 export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }) {
   const t = useTranslations("signup");
   const tLevels = useTranslations("levels");
+  const tCycles = useTranslations("cycles");
   const tSubjects = useTranslations("subjects");
   const [step, setStep] = useState(initialRole ? 1 : 0);
   const [role, setRole] = useState<SignupRole>(initialRole ?? "student");
@@ -59,7 +56,7 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [birthDate, setBirthDate] = useState("");
-  const [level, setLevel] = useState<(typeof LEVELS)[number]>("3E");
+  const [level, setLevel] = useState<LevelCode>("3E");
   const [series, setSeries] = useState("");
   const [childCode, setChildCode] = useState("");
   const [city, setCity] = useState("");
@@ -87,7 +84,7 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
         if (role === "tutor" && !city.trim()) return t("errors.city");
         return null;
       case "details":
-        if (role === "student" && SERIES[level] && !series) return t("errors.series");
+        if (role === "student" && SERIES_BY_LEVEL[level] && !series) return t("errors.series");
         if (role === "tutor" && subjects.length === 0) return t("errors.subjects");
         return null;
       case "consent":
@@ -275,28 +272,51 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
 
         {current === "details" && role === "student" ? (
           <>
-            <Field id="niveau" label={t("fields.level")}>
-              <select
-                id="niveau"
-                value={level}
-                onChange={(e) => {
-                  setLevel(e.target.value as (typeof LEVELS)[number]);
-                  setSeries("");
-                }}
-                className={INPUT_CLASS}
-              >
-                {LEVELS.map((l) => (
-                  <option key={l} value={l}>
-                    {tLevels(l)}
-                  </option>
+            {/* Classes groupées par cycle, aux couleurs du drapeau : vert, jaune, rouge. */}
+            <fieldset>
+              <legend className="text-sm font-medium text-ink">{t("fields.level")}</legend>
+              <div className="mt-2 space-y-3">
+                {CYCLES.map((cycle) => (
+                  <div key={cycle.key}>
+                    <p className="flex items-center gap-2 text-xs font-semibold text-ink-muted">
+                      <CycleDot cycle={cycle.key} />
+                      {tCycles(cycle.key)}
+                    </p>
+                    <div className="mt-1.5 flex flex-wrap gap-2">
+                      {cycle.levels.map((l) => (
+                        <label
+                          key={l}
+                          className={cn(
+                            "flex h-11 min-w-12 cursor-pointer items-center justify-center rounded-full border-2 px-4 text-sm font-semibold transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-600 has-[:focus-visible]:ring-offset-2",
+                            level === l
+                              ? [CYCLE_STYLES[cycle.key].solid, CYCLE_STYLES[cycle.key].onSolid, "border-transparent"]
+                              : "border-line bg-surface text-ink hover:bg-canvas",
+                          )}
+                        >
+                          <input
+                            type="radio"
+                            name="niveau"
+                            value={l}
+                            checked={level === l}
+                            onChange={() => {
+                              setLevel(l);
+                              setSeries("");
+                            }}
+                            className="sr-only"
+                          />
+                          {tLevels(l)}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                 ))}
-              </select>
-            </Field>
-            {SERIES[level] ? (
+              </div>
+            </fieldset>
+            {SERIES_BY_LEVEL[level] ? (
               <Field id="serie" label={t("fields.series")}>
                 <select id="serie" value={series} onChange={(e) => setSeries(e.target.value)} className={INPUT_CLASS}>
                   <option value="">{t("fields.chooseSeries")}</option>
-                  {SERIES[level]!.map((s) => (
+                  {SERIES_BY_LEVEL[level].map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>

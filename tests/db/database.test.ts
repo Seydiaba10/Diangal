@@ -1,6 +1,7 @@
 import type { PGlite } from "@electric-sql/pglite";
 import { beforeAll, describe, expect, it } from "vitest";
 import { normalizeText, parseNumber } from "@/lib/grading";
+import { CHAPTERS_3E } from "@/mocks/curriculum-3e";
 import { ANON, as, createTestDatabase, createUser, type Actor } from "./harness";
 
 let db: PGlite;
@@ -65,7 +66,7 @@ describe("contenus", () => {
       )).rows[0]!.n,
       freeBodies: (await tx.query<{ n: number }>("select count(*)::int as n from public.lesson_bodies")).rows[0]!.n,
     }));
-    expect(result.chapters).toBe(56);
+    expect(result.chapters).toBe(CHAPTERS_3E.length);
     expect(result.premiumBodies).toBe(0);
     expect(result.freeBodies).toBeGreaterThan(200);
   });
@@ -129,7 +130,7 @@ describe("contrôle chronométré", () => {
   });
 
   it("bloque un contrôle Premium sans abonnement, l'ouvre avec un pass actif", async () => {
-    const premium = await assessmentId("electrolyse-quiz");
+    const premium = await assessmentId("acides-bases-quiz");
     await expect(as(db, awa, (tx) => tx.query("select public.start_attempt($1)", [premium]))).rejects.toThrow(/premium_required/);
     await db.query(
       `insert into public.subscriptions (student_id, payer_id, plan_id, starts_at, ends_at)

@@ -35,7 +35,7 @@ create table public.series (
   description text
 );
 
--- Séries valides par niveau (2nde : L, S ; 1re et Terminale : L1, L2, L', S1…S5, G, T1, T2).
+-- Séries valides par niveau (2nde : L, S ; 1re et Terminale : L1, L2, LA, S1…S5, G, T1, T2).
 create table public.level_series (
   level_id smallint not null references public.levels on delete cascade,
   series_id smallint not null references public.series on delete cascade,

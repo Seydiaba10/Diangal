@@ -291,6 +291,7 @@ export interface SessionUser {
   avatarKey: AvatarKey | null;
   unreadNotifications: number;
   /** Élève : classe et établissement. */
+  levelCode?: string;
   levelName?: string;
   schoolName?: string;
   /** Élève : jours d'affilée. */

@@ -4,22 +4,23 @@ import { getTranslations } from "next-intl/server";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDecimal, formatFCFA } from "@/lib/format";
+import { CYCLES } from "@/lib/levels";
 import type { SubjectCode, TutorCard, TutorFilters } from "@/types/domain";
 import { parseTutorFilters, PRICE_STEPS, searchTutors, TUTOR_CITIES } from "../data";
 import { ModeBadges, SubjectChips, TutorAvatar, TutorLocation, TutorRating, VerifiedBadge } from "./tutor-bits";
 
 const SUBJECTS: SubjectCode[] = ["MATH", "FR", "ANG", "HG", "SVT", "PC", "EC", "LV2"];
-const LEVELS = ["CI", "CP", "CE1", "CE2", "CM1", "CM2", "6E", "5E", "4E", "3E", "2NDE", "1RE", "TLE"] as const;
 
 const SELECT_CLASS =
   "mt-1.5 h-12 w-full rounded-xl border border-line bg-surface px-3 text-sm text-ink focus:border-brand-600";
 
 /** Formulaire GET sans JavaScript : les filtres vivent dans l'URL (partageable, mis en cache). */
 async function FiltersForm({ filters, idPrefix }: { filters: TutorFilters; idPrefix: string }) {
-  const [t, tSubjects, tLevels, tModes] = await Promise.all([
+  const [t, tSubjects, tLevels, tCycles, tModes] = await Promise.all([
     getTranslations("tutors"),
     getTranslations("subjects"),
     getTranslations("levels"),
+    getTranslations("cycles"),
     getTranslations("tutors.modes"),
   ]);
   const field = (name: string) => `${idPrefix}-${name}`;
@@ -38,8 +39,12 @@ async function FiltersForm({ filters, idPrefix }: { filters: TutorFilters; idPre
         <label htmlFor={field("niveau")} className="text-sm font-medium text-ink">{t("level")}</label>
         <select id={field("niveau")} name="niveau" defaultValue={filters.level ?? ""} className={SELECT_CLASS}>
           <option value="">{t("anyLevel")}</option>
-          {LEVELS.map((code) => (
-            <option key={code} value={code}>{tLevels(code)}</option>
+          {CYCLES.map((cycle) => (
+            <optgroup key={cycle.key} label={tCycles(cycle.key)}>
+              {cycle.levels.map((code) => (
+                <option key={code} value={code}>{tLevels(code)}</option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </div>

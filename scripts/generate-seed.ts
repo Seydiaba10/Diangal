@@ -63,7 +63,7 @@ out.push(
 );
 
 const SERIES: [string, string][] = [
-  ["L", "Littéraire (2nde)"], ["S", "Scientifique (2nde)"], ["L1", "L1"], ["L2", "L2"], ["L'", "L'"],
+  ["L", "Littéraire (2nde)"], ["S", "Scientifique (2nde)"], ["L1", "L1"], ["L2", "L2"], ["LA", "LA"],
   ["S1", "S1"], ["S2", "S2"], ["S3", "S3"], ["S4", "S4"], ["S5", "S5"], ["G", "G"], ["T1", "T1"], ["T2", "T2"],
 ];
 out.push(`insert into public.series (code, name) values\n${SERIES.map(([c, n]) => `  (${q(c)}, ${q(n)})`).join(",\n")};`);
@@ -80,7 +80,7 @@ const SUBJECTS: [string, string, string, string, string][] = [
   ["SVT", "svt", "SVT", "subject-svt", "leaf"],
   ["PC", "sciences-physiques", "Sciences physiques", "subject-pc", "atom"],
   ["EC", "education-civique", "Éducation civique", "subject-ec", "landmark"],
-  ["LV2", "espagnol", "Espagnol", "subject-lv2", "message-circle"],
+  ["LV2", "lv2", "Langue vivante 2", "subject-lv2", "message-circle"],
   ["PHILO", "philosophie", "Philosophie", "subject-philo", "brain"],
   ["EPS", "eps", "EPS", "subject-eps", "dumbbell"],
 ];

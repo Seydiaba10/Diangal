@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { LevelBadge } from "@/components/ui/level-badge";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,9 +41,9 @@ async function ChildContent({ params }: { params: PageProps<"/parent/enfants/[id
           <h1 className="text-2xl font-semibold tracking-tight text-ink">
             {child.firstName} {child.lastName}
           </h1>
-          <p className="text-sm text-ink-muted">
-            {child.levelName}
-            {child.schoolName ? ` · ${child.schoolName}` : ""}
+          <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-muted">
+            <LevelBadge code={child.levelCode}>{child.levelName}</LevelBadge>
+            {child.schoolName ? <span>{child.schoolName}</span> : null}
           </p>
         </div>
       </header>

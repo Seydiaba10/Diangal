@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { MessagesLink, NotificationsLink, SearchForm, StreakChip } from "@/components/layout/header-widgets";
 import { PageHeader } from "@/components/layout/page-header";
+import { LevelBadge } from "@/components/ui/level-badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getStudentDashboard } from "../data";
 import { ContinueLearning } from "./continue-learning";
@@ -17,11 +18,7 @@ const LAYOUT =
   "grid grid-cols-1 gap-4 sm:gap-6 [grid-template-areas:'stats''exam''continue''weak'] xl:grid-cols-[minmax(0,1fr)_340px] xl:grid-rows-[auto_auto_1fr] xl:[grid-template-areas:'stats_exam''continue_exam''continue_weak']";
 
 export async function StudentDashboard() {
-  const [data, t, tStudent] = await Promise.all([
-    getStudentDashboard(),
-    getTranslations("dashboard"),
-    getTranslations("student"),
-  ]);
+  const [data, t] = await Promise.all([getStudentDashboard(), getTranslations("dashboard")]);
   const { student } = data;
 
   return (
@@ -30,11 +27,10 @@ export async function StudentDashboard() {
         title={t("greeting", { name: student.firstName })}
         subtitle={
           <>
-            <span className="font-medium text-ink">
-              {student.schoolName
-                ? tStudent("levelAndSchool", { level: student.levelName, school: student.schoolName })
-                : tStudent("level", { level: student.levelName })}
-            </span>
+            <LevelBadge code={student.levelCode} className="mr-1.5 align-[1px]">
+              {student.levelName}
+            </LevelBadge>
+            {student.schoolName ? <span className="font-medium text-ink">{student.schoolName}</span> : null}
             {" — "}
             {t("subtitle")}
           </>

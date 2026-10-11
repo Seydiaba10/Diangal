@@ -4,7 +4,7 @@ import type { AvatarKey } from "@/types/domain";
 // Avatars illustrés : aucune photo d'élève n'est stockée (protection des mineurs).
 // Couleurs d'illustration propres à ces SVG décoratifs, hors palette d'interface.
 const VARIANTS: Record<AvatarKey, { bg: string; skin: string; hair: string; top: string }> = {
-  awa: { bg: "#ddf0ec", skin: "#8d5a3b", hair: "#1f1a17", top: "#0e9384" },
+  awa: { bg: "#ddf0ec", skin: "#8d5a3b", hair: "#1f1a17", top: "#00853f" },
   moussa: { bg: "#e4e1f2", skin: "#6b4128", hair: "#16120f", top: "#4338ca" },
   fatou: { bg: "#fdf3d0", skin: "#a0673f", hair: "#2a201b", top: "#c2410c" },
 };

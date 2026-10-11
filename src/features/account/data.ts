@@ -53,6 +53,7 @@ export const getSessionUser = cache(async (role: AppRole): Promise<SessionUser> 
         lastName: s.lastName,
         avatarKey: s.avatarKey,
         unreadNotifications: s.unreadNotifications,
+        levelCode: s.levelCode,
         levelName: s.levelName,
         schoolName: s.schoolName,
         streakDays: s.streakDays,

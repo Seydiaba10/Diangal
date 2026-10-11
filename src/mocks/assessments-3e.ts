@@ -144,30 +144,30 @@ const QUESTION_LIST: MockQuestion[] = [
     explanationHtml: `<p>tan B = ${frac("côté opposé", "côté adjacent")} = ${frac("AC", "AB")}.</p>`,
   },
 
-  // ── Électrolyse (premium) ──
+  // ── Solutions acides et basiques (premium) ──
   {
-    id: "elec-q1",
+    id: "ab-q1",
     type: "single_choice",
     points: 7,
-    promptHtml: "<p>Lors de l’électrolyse de l’eau, quel gaz se dégage à la cathode ?</p>",
-    options: options("elec-q1", ["Le dihydrogène", "Le dioxygène", "Le dioxyde de carbone", "Le diazote"]),
-    explanationHtml: "<p>À la cathode (borne −), il se dégage du <strong>dihydrogène</strong> ; à l’anode, du dioxygène.</p>",
+    promptHtml: "<p>Une solution aqueuse a un pH égal à 3. Cette solution est…</p>",
+    options: options("ab-q1", ["acide", "basique", "neutre", "impossible à classer sans indicateur coloré"]),
+    explanationHtml: "<p>À 25 °C, une solution de pH inférieur à 7 est <strong>acide</strong> ; au-dessus de 7, elle est basique.</p>",
   },
   {
-    id: "elec-q2",
+    id: "ab-q2",
     type: "numeric",
     points: 7,
-    promptHtml: "<p>On recueille 10 mL de dioxygène. Quel volume de dihydrogène (en mL) obtient-on ?</p>",
+    promptHtml: "<p>Quel est le pH de l’eau pure à 25 °C ?</p>",
     options: [],
-    explanationHtml: "<p>Le volume de dihydrogène est le double de celui du dioxygène : <strong>20 mL</strong>.</p>",
+    explanationHtml: "<p>L’eau pure est neutre : son pH vaut <strong>7</strong>.</p>",
   },
   {
-    id: "elec-q3",
+    id: "ab-q3",
     type: "true_false",
     points: 6,
-    promptHtml: "<p>La synthèse de l’eau est la réaction entre le dihydrogène et le dioxygène.</p>",
-    options: trueFalse("elec-q3"),
-    explanationHtml: "<p><strong>Vrai</strong> : 2 H₂ + O₂ → 2 H₂O.</p>",
+    promptHtml: "<p>Quand on dilue une solution basique avec de l’eau, son pH diminue et se rapproche de 7.</p>",
+    options: trueFalse("ab-q3"),
+    explanationHtml: "<p><strong>Vrai</strong> : la dilution rend la solution moins basique, son pH diminue vers 7 sans jamais passer en dessous.</p>",
   },
 
   // ── Texte argumentatif ──
@@ -328,14 +328,14 @@ export const ASSESSMENTS_3E: Assessment[] = [
     questionIds: ["trigo-q1", "trigo-q2", "trigo-q3"],
   },
   {
-    id: "electrolyse-quiz",
+    id: "acides-bases-quiz",
     kind: "quiz",
-    title: "Contrôle : électrolyse et synthèse de l’eau",
+    title: "Contrôle : solutions acides et solutions basiques",
     subjectCode: "PC",
-    chapterId: "pc-electrolyse-et-synthese-de-l-eau",
+    chapterId: "pc-solutions-acides-et-solutions-basiques",
     durationS: 15 * 60,
     isPremium: true,
-    questionIds: ["elec-q1", "elec-q2", "elec-q3"],
+    questionIds: ["ab-q1", "ab-q2", "ab-q3"],
   },
   {
     id: "argumentatif-quiz",

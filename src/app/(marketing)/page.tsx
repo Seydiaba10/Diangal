@@ -18,10 +18,12 @@ import {
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { ButtonLink } from "@/components/ui/button";
+import { SenegalFlag } from "@/components/ui/senegal-flag";
 import { MarketingHeader } from "@/features/marketing/components/marketing-header";
 import { TornEdge } from "@/features/marketing/components/torn-edge";
 import { PlanCards } from "@/features/payments/components/plan-cards";
 import { cn } from "@/lib/cn";
+import { CYCLE_STYLES, CYCLES } from "@/lib/levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("landing");
@@ -42,12 +44,6 @@ const FEATURES: {
   { key: "tutors", icon: Users, border: "border-subject-fr/40", tint: "bg-subject-fr-soft text-subject-fr" },
 ];
 
-const CYCLES = [
-  { key: "elementary", levels: ["CI", "CP", "CE1", "CE2", "CM1", "CM2"], exam: "CFEE", tone: "bg-pastel-cream" },
-  { key: "middle", levels: ["6E", "5E", "4E", "3E"], exam: "BFEM", tone: "bg-pastel-mint" },
-  { key: "secondary", levels: ["2NDE", "1RE", "TLE"], exam: "Bac", tone: "bg-pastel-lavender" },
-] as const;
-
 const LOCAL = [
   { key: "light", icon: Smartphone },
   { key: "offline", icon: Download },
@@ -61,7 +57,11 @@ const PAYMENT_NAMES = ["Wave", "Orange Money", "Free Money / Yas"];
 const FAQ = ["free", "levels", "offline", "safety", "payment"] as const;
 
 export default async function LandingPage() {
-  const [t, tLevels] = await Promise.all([getTranslations("landing"), getTranslations("levels")]);
+  const [t, tLevels, tExams] = await Promise.all([
+    getTranslations("landing"),
+    getTranslations("levels"),
+    getTranslations("examNames"),
+  ]);
 
   return (
     <>
@@ -75,7 +75,7 @@ export default async function LandingPage() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-32 sm:pt-36 lg:grid-cols-[1.15fr_1fr] lg:pb-28">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-sm font-medium">
-              <BadgeCheck className="size-4" aria-hidden />
+              <SenegalFlag />
               {t("hero.eyebrow")}
             </p>
             <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
@@ -124,9 +124,10 @@ export default async function LandingPage() {
                 {t("hero.resultCard.value")}
               </p>
             </div>
-            <div className="absolute -bottom-6 -right-6 flex size-32 rotate-12 flex-col items-center justify-center rounded-full border-4 border-dashed border-premium-500 bg-cream text-center shadow-xl sm:-right-12 sm:size-36">
-              <span className="text-xs font-semibold uppercase tracking-wide text-brand-700">{t("hero.sticker.top")}</span>
-              <span className="text-xl font-bold leading-tight text-premium-700">{t("hero.sticker.main")}</span>
+            {/* Autocollant BFEM dans le jaune du cycle moyen, comme la bande centrale du drapeau. */}
+            <div className="absolute -bottom-6 -right-6 flex size-32 rotate-12 flex-col items-center justify-center rounded-full border-4 border-dashed border-ink/25 bg-senegal-yellow text-center text-ink shadow-xl sm:-right-12 sm:size-36">
+              <span className="text-xs font-semibold uppercase tracking-wide">{t("hero.sticker.top")}</span>
+              <span className="text-xl font-bold leading-tight">{t("hero.sticker.main")}</span>
             </div>
           </div>
         </div>
@@ -159,21 +160,26 @@ export default async function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">{t("levels.title")}</h2>
             <p className="mt-3 text-ink-muted">{t("levels.subtitle")}</p>
           </div>
+          {/* Un cycle = une bande du drapeau : vert, jaune, rouge. */}
           <ul className="mt-12 grid gap-5 lg:grid-cols-3">
-            {CYCLES.map((cycle) => (
-              <li key={cycle.key} className={cn("rounded-3xl p-6", cycle.tone)}>
-                <p className="text-sm font-medium text-ink-muted">{t(`levels.cycles.${cycle.key}.name`)}</p>
-                <p className="mt-1 text-2xl font-bold text-ink">{t("levels.prepare", { exam: cycle.exam })}</p>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {cycle.levels.map((level) => (
-                    <li key={level} className="rounded-full bg-surface px-3 py-1 text-sm font-medium text-ink">
-                      {tLevels(level)}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-4 text-sm text-ink-muted">{t(`levels.cycles.${cycle.key}.body`)}</p>
-              </li>
-            ))}
+            {CYCLES.map((cycle) => {
+              const style = CYCLE_STYLES[cycle.key];
+              return (
+                <li key={cycle.key} className={cn("rounded-3xl p-6", style.solid, style.onSolid)}>
+                  <p className="text-sm font-semibold uppercase tracking-wide">{t(`levels.cycles.${cycle.key}.name`)}</p>
+                  <p className="mt-1 text-2xl font-bold">{t("levels.prepare", { exam: tExams(cycle.exam) })}</p>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {cycle.levels.map((level) => (
+                      <li key={level} className={cn("rounded-full bg-surface px-3 py-1 text-sm font-semibold", style.text)}>
+                        {tLevels(level)}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-5 text-xs font-semibold uppercase tracking-wide">{t("levels.subjectsTitle")}</p>
+                  <p className="mt-1 text-sm leading-relaxed">{t(`levels.cycles.${cycle.key}.body`)}</p>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </section>

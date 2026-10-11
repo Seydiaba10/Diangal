@@ -44,10 +44,6 @@
     "notifications": "{count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}}",
     "openProfile": "Ouvrir mon profil"
   },
-  "student": {
-    "level": "{level}",
-    "levelAndSchool": "{level} · {school}"
-  },
   "premiumCard": {
     "title": "Passe à Premium",
     "body": "Contrôles chronométrés, examens blancs et corrigés détaillés.",
@@ -134,7 +130,7 @@
     "SVT": "SVT",
     "PC": "Sciences physiques",
     "EC": "Éducation civique",
-    "LV2": "Espagnol",
+    "LV2": "Langue vivante 2",
     "PHILO": "Philosophie",
     "EPS": "EPS"
   },
@@ -152,6 +148,16 @@
     "2NDE": "2nde",
     "1RE": "1re",
     "TLE": "Terminale"
+  },
+  "cycles": {
+    "elementary": "Élémentaire",
+    "middle": "Moyen",
+    "secondary": "Secondaire"
+  },
+  "examNames": {
+    "CFEE": "CFEE",
+    "BFEM": "BFEM",
+    "BAC": "Bac"
   },
   "courses": {
     "subtitle": "{level} · {count, plural, one {# matière} other {# matières}}",
@@ -480,20 +486,21 @@
     },
     "levels": {
       "title": "Du CI à la Terminale",
-      "subtitle": "Chaque élève choisit sa classe (et sa série au lycée) et retrouve ses matières.",
+      "subtitle": "Les matières du programme officiel, cycle par cycle. Chaque cycle porte une couleur du drapeau : vert pour l’élémentaire, jaune pour le moyen, rouge pour le secondaire.",
       "prepare": "Préparer le {exam}",
+      "subjectsTitle": "Au programme",
       "cycles": {
         "elementary": {
-          "name": "Élémentaire",
-          "body": "Lecture, calcul et éveil, avec une préparation progressive au CFEE."
+          "name": "Cycle élémentaire",
+          "body": "Langue et communication (avec l’éveil à l’anglais), mathématiques, ESVS (histoire, géographie, sciences d’observation), EDD et citoyenneté, arts et EPS."
         },
         "middle": {
-          "name": "Moyen",
-          "body": "Toutes les matières du collège et l’entraînement au BFEM, chapitre par chapitre."
+          "name": "Cycle moyen",
+          "body": "Français, mathématiques, anglais dès la 6e, histoire-géographie, SVT, EPS et éducation artistique. Sciences physiques et LV2 (espagnol, arabe, allemand, italien) ou latin dès la 4e."
         },
         "secondary": {
-          "name": "Secondaire",
-          "body": "Séries L, S, G et T : cours, sujets du Bac corrigés et examens blancs."
+          "name": "Cycle secondaire",
+          "body": "Séries littéraires (L1, L2, LA), scientifiques (S1 à S5) et techniques (G, T1, T2). Tronc commun : français, histoire-géographie, anglais, EPS, et philosophie en Terminale."
         }
       }
     },

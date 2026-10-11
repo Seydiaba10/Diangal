@@ -7,15 +7,16 @@ import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { ChipCheckbox, Field, INPUT_CLASS, TEXTAREA_CLASS } from "@/components/ui/form";
+import { CycleDot } from "@/components/ui/level-badge";
 import { Notice } from "@/components/ui/notice";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { saveTutorProfileAction } from "@/features/tutors/actions";
 import { getDemoTutorProfile } from "@/features/tutors/data";
+import { CYCLES } from "@/lib/levels";
 import type { SubjectCode, TeachingMode } from "@/types/domain";
 
 const SUBJECTS: SubjectCode[] = ["MATH", "FR", "ANG", "HG", "SVT", "PC", "EC", "LV2", "PHILO"];
-const LEVELS = ["CI", "CP", "CE1", "CE2", "CM1", "CM2", "6E", "5E", "4E", "3E", "2NDE", "1RE", "TLE"] as const;
 const MODES: TeachingMode[] = ["online", "home", "both"];
 
 export async function generateMetadata() {
@@ -24,12 +25,13 @@ export async function generateMetadata() {
 }
 
 async function ProfileForm({ searchParams }: { searchParams: PageProps<"/prof/profil">["searchParams"] }) {
-  const [params, profile, t, tSubjects, tLevels, tModes] = await Promise.all([
+  const [params, profile, t, tSubjects, tLevels, tCycles, tModes] = await Promise.all([
     searchParams,
     getDemoTutorProfile(),
     getTranslations("tutorProfileForm"),
     getTranslations("subjects"),
     getTranslations("levels"),
+    getTranslations("cycles"),
     getTranslations("tutors.modes"),
   ]);
 
@@ -61,9 +63,19 @@ async function ProfileForm({ searchParams }: { searchParams: PageProps<"/prof/pr
           </fieldset>
           <fieldset className="mt-5">
             <legend className="text-sm font-medium text-ink">{t("levels")}</legend>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {LEVELS.map((l) => (
-                <ChipCheckbox key={l} name="levels" value={l} label={tLevels(l)} defaultChecked={profile.levels.includes(l)} />
+            <div className="mt-2 space-y-3">
+              {CYCLES.map((cycle) => (
+                <div key={cycle.key}>
+                  <p className="flex items-center gap-2 text-xs font-semibold text-ink-muted">
+                    <CycleDot cycle={cycle.key} />
+                    {tCycles(cycle.key)}
+                  </p>
+                  <div className="mt-1.5 flex flex-wrap gap-2">
+                    {cycle.levels.map((l) => (
+                      <ChipCheckbox key={l} name="levels" value={l} label={tLevels(l)} defaultChecked={profile.levels.includes(l)} />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </fieldset>

@@ -16,7 +16,7 @@ async function Wizard({ searchParams }: { searchParams: PageProps<"/inscription"
   const initialRole = role === "student" || role === "parent" || role === "tutor" ? role : null;
   const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={{ signup: messages.signup, levels: messages.levels, subjects: messages.subjects }}>
+    <NextIntlClientProvider messages={{ signup: messages.signup, levels: messages.levels, cycles: messages.cycles, subjects: messages.subjects }}>
       <SignupWizard initialRole={initialRole} />
     </NextIntlClientProvider>
   );

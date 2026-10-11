@@ -2,11 +2,13 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/layout/logo";
+import { FlagStripe } from "@/components/ui/senegal-flag";
 
 export default async function AuthLayout({ children }: { children: ReactNode }) {
   const t = await getTranslations("auth");
   return (
     <div className="flex min-h-dvh flex-col bg-cream">
+      <FlagStripe />
       <header className="mx-auto flex w-full max-w-md items-center justify-between px-4 pt-6">
         <Logo href="/" />
         <Link href="/" className="text-sm font-medium text-ink-muted hover:text-ink">

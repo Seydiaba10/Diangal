@@ -6,6 +6,7 @@ import { DemoRoleSwitcher } from "@/components/layout/demo-role-switcher";
 import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
+import { LevelBadge } from "@/components/ui/level-badge";
 import { Notice } from "@/components/ui/notice";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,12 +21,11 @@ export async function generateMetadata() {
 }
 
 async function ProfileContent({ searchParams }: { searchParams: PageProps<"/eleve/profil">["searchParams"] }) {
-  const [{ demande }, student, link, t, tSession] = await Promise.all([
+  const [{ demande }, student, link, t] = await Promise.all([
     searchParams,
     getCurrentStudent(),
     getStudentLinkInfo(),
     getTranslations("studentProfile"),
-    getTranslations("session"),
   ]);
   const consentGranted = student.consentStatus === "granted";
 
@@ -40,8 +40,9 @@ async function ProfileContent({ searchParams }: { searchParams: PageProps<"/elev
             <p className="text-lg font-semibold text-ink">
               {student.firstName} {student.lastName}
             </p>
-            <p className="text-sm text-ink-muted">
-              {tSession("studentSubtitle", { level: student.levelName, school: student.schoolName ?? "" })}
+            <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-muted">
+              <LevelBadge code={student.levelCode}>{student.levelName}</LevelBadge>
+              {student.schoolName ? <span>{student.schoolName}</span> : null}
             </p>
             <p className="mt-1 text-xs text-ink-subtle">{t("levelChange")}</p>
           </div>

@@ -5,6 +5,7 @@ import { Suspense, type ReactNode } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Card } from "@/components/ui/card";
+import { LevelBadge } from "@/components/ui/level-badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   ModeBadges,
@@ -78,10 +79,14 @@ async function TutorProfileContent({ params }: { params: PageProps<"/repetiteurs
 
           <Section id="matieres" title={t("subjectsLevels")}>
             <SubjectChips subjects={tutor.subjects} />
-            <p className="mt-3 text-sm text-ink-muted">
-              <span className="font-medium text-ink">{t("levels")} : </span>
-              {tutor.levels.map((code) => tLevels(code as Parameters<typeof tLevels>[0])).join(", ")}
-            </p>
+            <p className="mt-4 text-sm font-medium text-ink">{t("levels")}</p>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {tutor.levels.map((code) => (
+                <li key={code}>
+                  <LevelBadge code={code}>{tLevels(code as Parameters<typeof tLevels>[0])}</LevelBadge>
+                </li>
+              ))}
+            </ul>
           </Section>
 
           <Section id="diplomes" title={t("qualifications")}>

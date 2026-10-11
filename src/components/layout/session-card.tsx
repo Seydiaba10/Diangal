@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { LevelBadge } from "@/components/ui/level-badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StudentAvatar } from "@/components/ui/student-avatar";
 import { getSessionUser } from "@/features/account/data";
@@ -54,7 +55,17 @@ export async function SessionCard({ role }: { role: AppRole }) {
         <span className="block truncate text-sm font-semibold text-ink">
           {user.firstName} {user.lastName}
         </span>
-        <span className="block truncate text-xs text-ink-muted">{subtitle}</span>
+        {user.levelCode && user.levelName ? (
+          // Élève : classe dans la couleur de son cycle, puis l'établissement.
+          <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-ink-muted">
+            <LevelBadge code={user.levelCode} className="px-2 py-0">
+              {user.levelName}
+            </LevelBadge>
+            {user.schoolName ? <span className="truncate">{user.schoolName}</span> : null}
+          </span>
+        ) : (
+          <span className="block truncate text-xs text-ink-muted">{subtitle}</span>
+        )}
       </span>
       <ChevronRight className="size-4 text-ink-subtle" aria-hidden />
     </Link>

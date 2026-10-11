@@ -2,6 +2,7 @@ import { BookCheck, ChevronRight, Crown, Flame, ShieldAlert, Target, Trophy } fr
 import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
+import { LevelBadge } from "@/components/ui/level-badge";
 import { StudentAvatar } from "@/components/ui/student-avatar";
 import { formatDate, formatScore } from "@/lib/format";
 import type { ChildOverview } from "@/types/domain";
@@ -22,9 +23,9 @@ export async function ChildCard({ child }: { child: ChildOverview }) {
           <h2 className="text-lg font-semibold text-ink">
             {child.firstName} {child.lastName}
           </h2>
-          <p className="text-sm text-ink-muted">
-            {child.levelName}
-            {child.schoolName ? ` · ${child.schoolName}` : ""}
+          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-muted">
+            <LevelBadge code={child.levelCode}>{child.levelName}</LevelBadge>
+            {child.schoolName ? <span>{child.schoolName}</span> : null}
           </p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {child.premiumUntil ? (

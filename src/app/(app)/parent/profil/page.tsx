@@ -6,6 +6,7 @@ import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
 import { UserAvatar } from "@/components/layout/session-card";
 import { Button } from "@/components/ui/button";
+import { LevelBadge } from "@/components/ui/level-badge";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { signOutAction } from "@/features/account/actions";
@@ -37,8 +38,9 @@ async function ParentProfile() {
           <ul className="divide-y divide-line">
             {children.map((c) => (
               <li key={c.id} className="flex items-center justify-between gap-3 py-3 text-sm">
-                <span className="font-medium text-ink">
-                  {c.firstName} {c.lastName} · {c.levelName}
+                <span className="flex flex-wrap items-center gap-2 font-medium text-ink">
+                  {c.firstName} {c.lastName}
+                  <LevelBadge code={c.levelCode}>{c.levelName}</LevelBadge>
                 </span>
                 <Button variant="ghost" size="sm" disabled>
                   {t("unlink")}

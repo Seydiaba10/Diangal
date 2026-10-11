@@ -11,13 +11,31 @@
   --color-transparent: transparent;
   --color-current: currentColor;
 
-  /* Marque (teal) */
-  --color-brand-50: #e6f4f1;
-  --color-brand-100: #c9e9e2;
-  --color-brand-500: #12a594;
-  --color-brand-600: #0e9384;
-  --color-brand-700: #0b7a6e;
-  --color-brand-800: #095f56;
+  /* Marque : vert du drapeau sénégalais (texte blanc sur brand-600 : contraste 4,7, AA) */
+  --color-brand-50: #e8f5ed;
+  --color-brand-100: #c7e8d3;
+  --color-brand-500: #16a157;
+  --color-brand-600: #00853f;
+  --color-brand-700: #006b32;
+  --color-brand-800: #005027;
+
+  /* Drapeau du Sénégal (bandeaux décoratifs) */
+  --color-senegal-green: #00853f;
+  --color-senegal-yellow: #fdef42;
+  --color-senegal-red: #e31b23;
+
+  /* Cycles, aux couleurs du drapeau : élémentaire vert, moyen jaune, secondaire rouge.
+     Couleur pleine + fond doux + encre (texte AA sur blanc et sur le fond doux).
+     Sur le jaune plein, le texte reste toujours ink : le blanc y serait illisible. */
+  --color-cycle-elementary: #00853f;
+  --color-cycle-elementary-soft: #e8f5ed;
+  --color-cycle-elementary-ink: #006b32;
+  --color-cycle-middle: #fdef42;
+  --color-cycle-middle-soft: #fffbd6;
+  --color-cycle-middle-ink: #6b5c00;
+  --color-cycle-secondary: #e31b23;
+  --color-cycle-secondary-soft: #fdecec;
+  --color-cycle-secondary-ink: #b3141b;
 
   /* Surfaces et texte */
   --color-canvas: #f5f7f9;
