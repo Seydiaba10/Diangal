@@ -28,14 +28,24 @@ export async function POST(request: Request) {
   if (!confirmed.reference) return NextResponse.json({ error: "unknown_reference" }, { status: 422 });
 
   const supabase = createSupabaseAdminClient();
+  const eventId = `${token}:${confirmed.status}`;
   const { error: eventError } = await supabase.from("payment_events").insert({
     provider: "paydunya",
-    event_id: `${token}:${confirmed.status}`,
+    event_id: eventId,
     payload: { token, status: confirmed.status, reference: confirmed.reference },
   });
-  // Événement déjà reçu : on répond OK sans rien rejouer.
-  if (eventError?.code === "23505") return NextResponse.json({ ok: true, duplicate: true });
-  if (eventError) return NextResponse.json({ error: "storage_failed" }, { status: 500 });
+  if (eventError && eventError.code !== "23505") return NextResponse.json({ error: "storage_failed" }, { status: 500 });
+  if (eventError) {
+    // Événement déjà reçu : rien à rejouer s'il a été traité. Sinon (échec précédent),
+    // on réessaie : apply_payment_event est lui-même idempotent.
+    const { data: previous } = await supabase
+      .from("payment_events")
+      .select("processed_at")
+      .eq("provider", "paydunya")
+      .eq("event_id", eventId)
+      .maybeSingle();
+    if (previous?.processed_at) return NextResponse.json({ ok: true, duplicate: true });
+  }
 
   if (confirmed.status === "pending") return NextResponse.json({ ok: true, pending: true });
 
@@ -44,10 +54,14 @@ export async function POST(request: Request) {
     p_reference: confirmed.reference,
     p_provider_ref: token,
     p_status: confirmed.status,
-    p_channel: channel && CHANNELS.has(channel) ? channel : null,
+    p_channel: channel && CHANNELS.has(channel) ? (channel as "wave" | "orange_money" | "free_money" | "card") : undefined,
   });
   if (error) return NextResponse.json({ error: "apply_failed" }, { status: 500 });
 
-  await supabase.from("payment_events").update({ processed_at: new Date().toISOString() }).eq("event_id", `${token}:${confirmed.status}`);
+  await supabase
+    .from("payment_events")
+    .update({ processed_at: new Date().toISOString() })
+    .eq("provider", "paydunya")
+    .eq("event_id", eventId);
   return NextResponse.json({ ok: true });
 }

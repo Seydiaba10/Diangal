@@ -1,8 +1,11 @@
 import { connection } from "next/server";
 import { cache } from "react";
+import { requireIdentity } from "@/features/account/session";
+import { isSupabaseConfigured } from "@/lib/env";
 import { normalizeText } from "@/lib/grading";
-import { CHAPTERS_3E, LESSONS_DONE_BY_CHAPTER, SUBJECTS_3E } from "@/mocks/curriculum-3e";
-import { genericLessonBody, LESSON_BODIES } from "@/mocks/lesson-content";
+import { CATALOG_CHAPTERS, CATALOG_LESSON_BODIES, CATALOG_SUBJECTS } from "@/mocks/curriculum";
+import { CHAPTERS_3E, LESSONS_DONE_BY_CHAPTER } from "@/mocks/curriculum-3e";
+import { genericLessonBody } from "@/mocks/lesson-content";
 import { mockState } from "@/mocks/progress-store";
 import type {
   Chapter,
@@ -14,25 +17,38 @@ import type {
   Subject,
   SubjectProgress,
 } from "@/types/domain";
+import { getCompletedLessonIds, getLessonBodyHtml, loadCatalog } from "./supabase";
 
 // ── Contenu publié : identique pour tous les élèves, donc prérendable ──────────
-// Phase 3 : lecture Supabase des tables programs / chapters / lessons (statut publié).
+// Démo : src/mocks. Supabase : programmes publiés de toutes les classes (programs / chapters /
+// lessons), mis en cache. Une « matière » est un programme : Mathématiques du CI ≠ de la 3e.
 
-export async function getSubjects(): Promise<Subject[]> {
-  return SUBJECTS_3E;
+async function catalog(): Promise<{ subjects: Subject[]; chapters: Chapter[] }> {
+  return isSupabaseConfigured() ? loadCatalog() : { subjects: CATALOG_SUBJECTS, chapters: CATALOG_CHAPTERS };
+}
+
+/** Matière (programme) d'un chapitre : même code et même classe. */
+function subjectOf(subjects: Subject[], chapter: Pick<Chapter, "subjectCode" | "levelCode">) {
+  return subjects.find((s) => s.code === chapter.subjectCode && s.levelCode === chapter.levelCode);
+}
+
+/** Matières d'une classe (levelCode), ou de tout le catalogue publié. */
+export async function getSubjects(levelCode?: string): Promise<Subject[]> {
+  const { subjects } = await catalog();
+  return levelCode ? subjects.filter((s) => s.levelCode === levelCode) : subjects;
 }
 
 export async function getSubject(slug: string): Promise<Subject | undefined> {
-  return SUBJECTS_3E.find((s) => s.slug === slug);
+  return (await getSubjects()).find((s) => s.slug === slug);
 }
 
 export async function getChapters(subject: Subject): Promise<Chapter[]> {
-  return CHAPTERS_3E.filter((c) => c.subjectCode === subject.code);
+  return (await catalog()).chapters.filter((c) => c.subjectCode === subject.code && c.levelCode === subject.levelCode);
 }
 
 export async function getChapter(subjectSlug: string, chapterSlug: string) {
   const subject = await getSubject(subjectSlug);
-  const chapter = subject && CHAPTERS_3E.find((c) => c.subjectCode === subject.code && c.slug === chapterSlug);
+  const chapter = subject && (await getChapters(subject)).find((c) => c.slug === chapterSlug);
   return subject && chapter ? { subject, chapter } : undefined;
 }
 
@@ -58,62 +74,82 @@ export function lessonHref(subject: Subject, chapter: Pick<Chapter, "slug">, les
   return `${chapterHref(subject, chapter)}/${lesson.slug}`;
 }
 
-export function findChapterById(chapterId: string) {
-  const chapter = CHAPTERS_3E.find((c) => c.id === chapterId);
-  const subject = chapter && SUBJECTS_3E.find((s) => s.code === chapter.subjectCode);
+export async function findChapterById(chapterId: string) {
+  const { subjects, chapters } = await catalog();
+  const chapter = chapters.find((c) => c.id === chapterId);
+  const subject = chapter && subjectOf(subjects, chapter);
   return chapter && subject ? { subject, chapter } : undefined;
 }
 
+/** Leçon et son chapitre à partir de l'identifiant de la leçon. */
+export async function findLessonById(lessonId: string) {
+  const { subjects, chapters } = await catalog();
+  const chapter = chapters.find((c) => c.lessons.some((l) => l.id === lessonId));
+  const lesson = chapter?.lessons.find((l) => l.id === lessonId);
+  const subject = chapter && subjectOf(subjects, chapter);
+  return chapter && lesson && subject ? { subject, chapter, lesson } : undefined;
+}
+
 export async function getAllChapterParams() {
-  return CHAPTERS_3E.map((chapter) => ({
-    matiere: SUBJECTS_3E.find((s) => s.code === chapter.subjectCode)!.slug,
+  const { subjects, chapters } = await catalog();
+  return chapters.map((chapter) => ({
+    matiere: subjectOf(subjects, chapter)!.slug,
     chapitre: chapter.slug,
   }));
 }
 
 export async function getAllLessonParams() {
-  const chapters = await getAllChapterParams();
-  return CHAPTERS_3E.flatMap((chapter, i) =>
-    chapter.lessons.map((lesson) => ({ ...chapters[i]!, lecon: lesson.slug })),
-  );
+  const { chapters } = await catalog();
+  const params = await getAllChapterParams();
+  return chapters.flatMap((chapter, i) => chapter.lessons.map((lesson) => ({ ...params[i]!, lecon: lesson.slug })));
 }
 
-export async function searchChapters(query: string): Promise<ChapterSearchHit[]> {
+/** Recherche dans les chapitres d'une classe. */
+export async function searchChapters(query: string, levelCode: string): Promise<ChapterSearchHit[]> {
   const needle = normalizeText(query);
   if (needle.length < 2) return [];
-  return CHAPTERS_3E.filter((c) => normalizeText(`${c.title} ${c.summary}`).includes(needle))
+  const { subjects, chapters } = await catalog();
+  return chapters
+    .filter((c) => c.levelCode === levelCode && normalizeText(`${c.title} ${c.summary}`).includes(needle))
     .slice(0, 12)
     .map((c) => ({
-      subject: SUBJECTS_3E.find((s) => s.code === c.subjectCode)!,
+      subject: subjectOf(subjects, c)!,
       chapterSlug: c.slug,
       chapterTitle: c.title,
       number: c.number,
     }));
 }
 
-// ── Progression de l'élève connecté : rendue à la requête ───────────────────
+// ── Progression d'un élève : rendue à la requête ────────────────────────────
 
-/** Leçons terminées d'après l'historique fictif (les premières du chapitre). */
-function baseLessonsDone(chapter: Chapter): number {
-  const base = LESSONS_DONE_BY_CHAPTER[chapter.id];
-  return base === "all" ? chapter.lessons.length : (base ?? 0);
+/** Démo : les premières leçons de chaque chapitre d'après l'historique fictif, plus celles de la session. */
+function mockCompletedLessonIds(): Set<string> {
+  const done = new Set(mockState.completedLessons);
+  for (const chapter of CHAPTERS_3E) {
+    const base = LESSONS_DONE_BY_CHAPTER[chapter.id];
+    const count = base === "all" ? chapter.lessons.length : (base ?? 0);
+    for (const lesson of chapter.lessons.slice(0, count)) done.add(lesson.id);
+  }
+  return done;
 }
 
-function isLessonDone(chapter: Chapter, index: number): boolean {
-  return index < baseLessonsDone(chapter) || mockState.completedLessons.has(chapter.lessons[index]!.id);
-}
-
-function lessonsDone(chapter: Chapter): number {
-  return chapter.lessons.filter((_, i) => isLessonDone(chapter, i)).length;
-}
+/**
+ * Leçons terminées par l'élève connecté, ou par l'enfant d'un parent (studentId).
+ * Supabase : lesson_progress, la RLS n'autorise que l'élève, ses parents liés et l'admin.
+ */
+export const getCompletedLessons = cache(async (studentId?: string): Promise<Set<string>> => {
+  await connection();
+  if (!isSupabaseConfigured()) return mockCompletedLessonIds();
+  return getCompletedLessonIds(studentId ?? (await requireIdentity()).userId);
+});
 
 function statusOf(done: number, total: number): ChapterStatus {
-  if (done >= total) return "completed";
+  if (total > 0 && done >= total) return "completed";
   return done > 0 ? "in_progress" : "not_started";
 }
 
-export function toChapterSummary(chapter: Chapter): ChapterSummary {
-  const done = lessonsDone(chapter);
+export function toChapterSummary(chapter: Chapter, completed: Set<string>): ChapterSummary {
+  const done = chapter.lessons.filter((l) => completed.has(l.id)).length;
   const total = chapter.lessons.length;
   return {
     id: chapter.id,
@@ -121,7 +157,7 @@ export function toChapterSummary(chapter: Chapter): ChapterSummary {
     number: chapter.number,
     title: chapter.title,
     status: statusOf(done, total),
-    progressPct: Math.round((done / total) * 100),
+    progressPct: total ? Math.round((done / total) * 100) : 0,
     isPremium: chapter.lessons.some((l) => l.isPremium),
     lessonsCount: total,
     lessonsDone: done,
@@ -129,36 +165,38 @@ export function toChapterSummary(chapter: Chapter): ChapterSummary {
   };
 }
 
-export const getSubjectsProgress = cache(async (): Promise<SubjectProgress[]> => {
-  await connection();
-  return SUBJECTS_3E.map((subject) => {
-    const chapters = CHAPTERS_3E.filter((c) => c.subjectCode === subject.code).map(toChapterSummary);
-    const completed = chapters.filter((c) => c.status === "completed").length;
+/** Progression par matière dans la classe de l'élève (levelCode), lui-même ou l'enfant d'un parent. */
+export const getSubjectsProgress = cache(async (levelCode: string, studentId?: string): Promise<SubjectProgress[]> => {
+  const [completed, subjects] = await Promise.all([getCompletedLessons(studentId), getSubjects(levelCode)]);
+  return Promise.all(subjects.map(async (subject) => {
+    const summaries = (await getChapters(subject)).map((c) => toChapterSummary(c, completed));
+    const done = summaries.filter((c) => c.status === "completed").length;
     return {
       ...subject,
-      chaptersTotal: chapters.length,
-      chaptersCompleted: completed,
-      progressPct: chapters.length ? Math.round((completed / chapters.length) * 100) : 0,
+      chaptersTotal: summaries.length,
+      chaptersCompleted: done,
+      progressPct: summaries.length ? Math.round((done / summaries.length) * 100) : 0,
     };
-  });
+  }));
 });
 
 export const getChapterSummaries = cache(async (subject: Subject): Promise<ChapterSummary[]> => {
-  await connection();
-  return CHAPTERS_3E.filter((c) => c.subjectCode === subject.code).map(toChapterSummary);
+  const completed = await getCompletedLessons();
+  return (await getChapters(subject)).map((c) => toChapterSummary(c, completed));
 });
 
 export const getChapterProgress = cache(async (chapter: Chapter) => {
-  await connection();
+  const completed = await getCompletedLessons();
   const statuses: Record<string, LessonStatus> = Object.fromEntries(
-    chapter.lessons.map((l, i) => [l.id, isLessonDone(chapter, i) ? "completed" : "not_started"]),
+    chapter.lessons.map((l) => [l.id, completed.has(l.id) ? "completed" : "not_started"]),
   );
-  return { summary: toChapterSummary(chapter), statuses };
+  return { summary: toChapterSummary(chapter, completed), statuses };
 });
 
 /** Corps de la leçon, ou null si elle est Premium et que l'élève n'est pas abonné. */
 export const getLessonBody = cache(async (chapter: Chapter, lesson: Lesson, isPremiumStudent: boolean) => {
   await connection();
   if (lesson.isPremium && !isPremiumStudent) return null;
-  return mockState.lessonBodyOverrides.get(lesson.id) ?? LESSON_BODIES[lesson.id] ?? genericLessonBody(lesson.title, chapter.title);
+  if (isSupabaseConfigured()) return getLessonBodyHtml(lesson.id);
+  return mockState.lessonBodyOverrides.get(lesson.id) ?? CATALOG_LESSON_BODIES[lesson.id] ?? genericLessonBody(lesson.title, chapter.title);
 });

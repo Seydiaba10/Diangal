@@ -1,11 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { switchDemoRoleAction } from "@/features/account/actions";
 import { ROLES } from "@/features/account/roles";
+import { isSupabaseConfigured } from "@/lib/env";
 import { cn } from "@/lib/cn";
 import type { AppRole } from "@/types/domain";
 
-/** Phases 1-2 uniquement : bascule entre les comptes de démonstration (supprimé en phase 4). */
+/** Mode démo uniquement : bascule entre les comptes fictifs (absent avec la vraie base Supabase). */
 export async function DemoRoleSwitcher({ current, className }: { current: AppRole; className?: string }) {
+  if (isSupabaseConfigured()) return null;
   const t = await getTranslations("demo");
   return (
     <div className={cn("rounded-2xl border border-dashed border-line p-3", className)}>

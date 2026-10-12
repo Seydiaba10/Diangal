@@ -1,11 +1,12 @@
 // Génère supabase/seed.sql à partir des données de démonstration (src/mocks) :
 // la base et les écrans partent ainsi du même contenu. Usage : pnpm db:seed
 import { writeFileSync } from "node:fs";
+import { CITIES } from "../src/lib/places";
 import { ANSWER_KEYS } from "../src/mocks/answer-keys-3e";
 import { ASSESSMENTS_3E, MOCK_QUESTIONS } from "../src/mocks/assessments-3e";
-import { CHAPTERS_3E, SUBJECTS_3E } from "../src/mocks/curriculum-3e";
+import { CATALOG_CHAPTERS, CATALOG_LESSON_BODIES, CATALOG_SUBJECTS } from "../src/mocks/curriculum";
 import { EXAM_SESSIONS } from "../src/mocks/exams";
-import { genericLessonBody, LESSON_BODIES } from "../src/mocks/lesson-content";
+import { genericLessonBody } from "../src/mocks/lesson-content";
 import { MOCK_PLANS } from "../src/mocks/plans";
 
 const q = (value: string | null | undefined) => (value == null ? "null" : `'${value.replace(/'/g, "''")}'`);
@@ -14,7 +15,7 @@ const textArray = (values: string[]) => `array[${values.map(q).join(", ")}]::tex
 
 const out: string[] = [
   "-- Généré par scripts/generate-seed.ts : ne pas modifier à la main.",
-  "-- Contenu de démonstration (3e). Le programme réel est saisi par l'admin et validé par des enseignants.",
+  "-- Contenu publié : CI (Curriculum de l'Éducation de Base, étape 1) et 3e. Leçons à faire valider par des enseignants.",
   "",
 ];
 
@@ -25,15 +26,9 @@ const REGIONS = [
 ];
 out.push(`insert into public.regions (id, name) values\n${REGIONS.map((r, i) => `  (${i + 1}, ${q(r)})`).join(",\n")};`);
 
-const CITIES: [string, string, string][] = [
-  ["Dakar", "dakar", "Dakar"], ["Pikine", "pikine", "Dakar"], ["Guédiawaye", "guediawaye", "Dakar"],
-  ["Rufisque", "rufisque", "Dakar"], ["Thiès", "thies", "Thiès"], ["Mbour", "mbour", "Thiès"],
-  ["Saint-Louis", "saint-louis", "Saint-Louis"], ["Ziguinchor", "ziguinchor", "Ziguinchor"],
-  ["Kaolack", "kaolack", "Kaolack"], ["Touba", "touba", "Diourbel"],
-];
 out.push(
   `insert into public.cities (region_id, name, slug) values\n${CITIES.map(
-    ([name, slug, region]) => `  ((select id from public.regions where name = ${q(region)}), ${q(name)}, ${q(slug)})`,
+    ({ name, slug, region }) => `  ((select id from public.regions where name = ${q(region)}), ${q(name)}, ${q(slug)})`,
   ).join(",\n")};`,
 );
 
@@ -83,6 +78,7 @@ const SUBJECTS: [string, string, string, string, string][] = [
   ["LV2", "lv2", "Langue vivante 2", "subject-lv2", "message-circle"],
   ["PHILO", "philosophie", "Philosophie", "subject-philo", "brain"],
   ["EPS", "eps", "EPS", "subject-eps", "dumbbell"],
+  ["ESVS", "esvs", "Science et vie sociale", "subject-esvs", "compass"],
 ];
 out.push(
   `insert into public.subjects (code, slug, name, color_token, icon) values\n${SUBJECTS.map(
@@ -90,25 +86,28 @@ out.push(
   ).join(",\n")};`,
 );
 
-// ── Programme de 3e : matières, chapitres, leçons ───────────────────────────
+// ── Programmes publiés (CI, 3e) : matières, chapitres, leçons ───────────────
+// Ordre des matières : celui du catalogue, classe par classe.
+const sortOrder = (levelCode: string, slug: string) =>
+  CATALOG_SUBJECTS.filter((s) => s.levelCode === levelCode).findIndex((s) => s.slug === slug) + 1;
 out.push(
-  `insert into public.programs (level_id, subject_id, coefficient, sort_order) values\n${SUBJECTS_3E.map(
-    (s, i) =>
-      `  ((select id from public.levels where code = '3E'), (select id from public.subjects where code = ${q(s.code)}), ${s.coefficient}, ${i + 1})`,
+  `insert into public.programs (level_id, subject_id, coefficient, sort_order) values\n${CATALOG_SUBJECTS.map(
+    (s) =>
+      `  ((select id from public.levels where code = ${q(s.levelCode)}), (select id from public.subjects where code = ${q(s.code)}), ${s.coefficient}, ${sortOrder(s.levelCode, s.slug)})`,
   ).join(",\n")};`,
 );
 
-const programOf = (code: string) =>
-  `(select p.id from public.programs p join public.subjects s on s.id = p.subject_id join public.levels l on l.id = p.level_id where s.code = ${q(code)} and l.code = '3E')`;
+const programOf = (code: string, levelCode: string) =>
+  `(select p.id from public.programs p join public.subjects s on s.id = p.subject_id join public.levels l on l.id = p.level_id where s.code = ${q(code)} and l.code = ${q(levelCode)} and p.series_id is null)`;
 const chapterRef = (chapterId: string) => {
-  const c = CHAPTERS_3E.find((x) => x.id === chapterId)!;
-  return `(select c.id from public.chapters c where c.program_id = ${programOf(c.subjectCode)} and c.slug = ${q(c.slug)})`;
+  const c = CATALOG_CHAPTERS.find((x) => x.id === chapterId)!;
+  return `(select c.id from public.chapters c where c.program_id = ${programOf(c.subjectCode, c.levelCode)} and c.slug = ${q(c.slug)})`;
 };
 
-for (const chapter of CHAPTERS_3E) {
+for (const chapter of CATALOG_CHAPTERS) {
   out.push(
     `insert into public.chapters (program_id, number, slug, title, summary, sort_order, status) values ` +
-      `(${programOf(chapter.subjectCode)}, ${chapter.number}, ${q(chapter.slug)}, ${q(chapter.title)}, ${q(chapter.summary)}, ${chapter.number}, 'published');`,
+      `(${programOf(chapter.subjectCode, chapter.levelCode)}, ${chapter.number}, ${q(chapter.slug)}, ${q(chapter.title)}, ${q(chapter.summary)}, ${chapter.number}, 'published');`,
   );
   for (const lesson of chapter.lessons) {
     const lessonRef = `(select id from public.lessons where chapter_id = ${chapterRef(chapter.id)} and slug = ${q(lesson.slug)})`;
@@ -116,7 +115,7 @@ for (const chapter of CHAPTERS_3E) {
       `insert into public.lessons (chapter_id, number, slug, title, is_premium, status, estimated_minutes, published_at) values ` +
         `(${chapterRef(chapter.id)}, ${lesson.number}, ${q(lesson.slug)}, ${q(lesson.title)}, ${lesson.isPremium}, 'published', ${lesson.estimatedMinutes}, now());`,
       `insert into public.lesson_bodies (lesson_id, body_html) values (${lessonRef}, ${html(
-        LESSON_BODIES[lesson.id] ?? genericLessonBody(lesson.title, chapter.title),
+        CATALOG_LESSON_BODIES[lesson.id] ?? genericLessonBody(lesson.title, chapter.title),
       )});`,
     );
   }
@@ -150,7 +149,7 @@ for (const question of Object.values(MOCK_QUESTIONS)) {
 for (const a of ASSESSMENTS_3E) {
   out.push(
     `insert into public.assessments (slug, kind, title, level_id, subject_id, chapter_id, exam_type, duration_s, is_premium, status) values (` +
-      `${q(a.id)}, ${q(a.kind)}, ${q(a.title)}, (select id from public.levels where code = '3E'), ` +
+      `${q(a.id)}, ${q(a.kind)}, ${q(a.title)}, (select id from public.levels where code = ${q(a.levelCode)}), ` +
       `(select id from public.subjects where code = ${q(a.subjectCode)}), ${a.chapterId ? chapterRef(a.chapterId) : "null"}, ` +
       `${a.kind === "mock_exam" ? "'BFEM'" : "null"}, ${a.durationS ?? "null"}, ${a.isPremium}, 'published');`,
   );

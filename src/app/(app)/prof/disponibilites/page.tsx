@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Notice } from "@/components/ui/notice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { saveAvailabilityAction } from "@/features/tutors/actions";
-import { getDemoTutorProfile } from "@/features/tutors/data";
+import { getOwnTutorProfile } from "@/features/tutors/data";
 
 export async function generateMetadata() {
   const t = await getTranslations("tutorAvailability");
@@ -18,7 +18,7 @@ const TIME_CLASS = "h-11 w-full rounded-xl border border-line bg-surface px-3 te
 async function AvailabilityForm({ searchParams }: { searchParams: PageProps<"/prof/disponibilites">["searchParams"] }) {
   const [params, profile, t, tTutor] = await Promise.all([
     searchParams,
-    getDemoTutorProfile(),
+    getOwnTutorProfile(),
     getTranslations("tutorAvailability"),
     getTranslations("tutor"),
   ]);

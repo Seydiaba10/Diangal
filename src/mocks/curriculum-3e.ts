@@ -4,22 +4,26 @@
 // chapitres et les coefficients restent indicatifs. Le programme réel sera saisi par
 // l'admin et validé par des enseignants.
 
-import { slugify } from "@/lib/slug";
+import { programSlug, slugify } from "@/lib/slug";
 import type { Chapter, Lesson, LessonResource, Subject, SubjectCode } from "@/types/domain";
 
-export const SUBJECTS_3E: Subject[] = [
-  { code: "MATH", slug: "mathematiques", name: "Mathématiques", coefficient: 4 },
-  { code: "FR", slug: "francais", name: "Français", coefficient: 4 },
-  { code: "ANG", slug: "anglais", name: "Anglais", coefficient: 2 },
-  { code: "HG", slug: "histoire-geographie", name: "Histoire-Géographie", coefficient: 2 },
-  { code: "SVT", slug: "svt", name: "SVT", coefficient: 2 },
-  { code: "PC", slug: "sciences-physiques", name: "Sciences physiques", coefficient: 2 },
-  { code: "EC", slug: "education-civique", name: "Éducation civique", coefficient: 1 },
-];
+const LEVEL = "3E";
 
-type LessonSpec = string | { title: string; premium?: boolean; minutes?: number; resources?: LessonResource[] };
+export const SUBJECTS_3E: Subject[] = (
+  [
+    ["MATH", "mathematiques", "Mathématiques", 4],
+    ["FR", "francais", "Français", 4],
+    ["ANG", "anglais", "Anglais", 2],
+    ["HG", "histoire-geographie", "Histoire-Géographie", 2],
+    ["SVT", "svt", "SVT", 2],
+    ["PC", "sciences-physiques", "Sciences physiques", 2],
+    ["EC", "education-civique", "Éducation civique", 1],
+  ] as const
+).map(([code, slug, name, coefficient]) => ({ code, slug: programSlug(slug, LEVEL), name, coefficient, levelCode: LEVEL }));
 
-interface ChapterSpec {
+export type LessonSpec = string | { title: string; premium?: boolean; minutes?: number; resources?: LessonResource[] };
+
+export interface ChapterSpec {
   title: string;
   summary: string;
   lessons?: LessonSpec[];
@@ -30,7 +34,7 @@ const DEFAULT_LESSONS: LessonSpec[] = ["Découvrir la notion", "L’essentiel à
 
 const PDF_SUMMARY: LessonResource = { kind: "pdf", title: "Fiche résumé", sizeBytes: 240_000 };
 
-const SPECS: Record<SubjectCode, ChapterSpec[]> = {
+const SPECS: Partial<Record<SubjectCode, ChapterSpec[]>> = {
   MATH: [
     { title: "Racine carrée", summary: "Définition, propriétés et calculs avec les racines carrées." },
     { title: "Calcul algébrique", summary: "Développer, factoriser et utiliser les identités remarquables." },
@@ -196,7 +200,7 @@ const SPECS: Record<SubjectCode, ChapterSpec[]> = {
   EPS: [],
 };
 
-function buildLessons(chapterId: string, specs: LessonSpec[]): Lesson[] {
+export function buildLessons(chapterId: string, specs: LessonSpec[]): Lesson[] {
   return specs.map((spec, index) => {
     const s = typeof spec === "string" ? { title: spec } : spec;
     const slug = slugify(s.title);
@@ -213,7 +217,7 @@ function buildLessons(chapterId: string, specs: LessonSpec[]): Lesson[] {
 }
 
 export const CHAPTERS_3E: Chapter[] = SUBJECTS_3E.flatMap((subject) =>
-  SPECS[subject.code].map((spec, index) => {
+  (SPECS[subject.code] ?? []).map((spec, index) => {
     const slug = slugify(spec.title);
     const id = `${subject.code.toLowerCase()}-${slug}`;
     return {
@@ -223,6 +227,7 @@ export const CHAPTERS_3E: Chapter[] = SUBJECTS_3E.flatMap((subject) =>
       title: spec.title,
       summary: spec.summary,
       subjectCode: subject.code,
+      levelCode: LEVEL,
       lessons: buildLessons(id, spec.lessons ?? DEFAULT_LESSONS),
     };
   }),

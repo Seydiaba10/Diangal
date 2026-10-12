@@ -4,18 +4,21 @@ import { Suspense, type ReactNode } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentRole } from "@/features/account/data";
 import { ROLE_HOME } from "@/features/account/roles";
+import { requireIdentity } from "@/features/account/session";
+import { isSupabaseConfigured } from "@/lib/env";
 import type { AppRole } from "@/types/domain";
 import { BottomNav } from "./bottom-nav";
 import { MobileTopBar } from "./mobile-top-bar";
 import { Sidebar } from "./sidebar";
 
 /**
- * Renvoie vers l'espace du rôle connecté si l'URL appartient à un autre rôle.
- * Phase 4 : doublé par proxy.ts et, surtout, par la RLS côté base.
+ * Renvoie vers l'espace du rôle connecté si l'URL appartient à un autre rôle, et l'admin vers
+ * la double authentification. Doublé par proxy.ts et, surtout, par la RLS côté base.
  */
 async function RoleGuard({ role }: { role: AppRole }) {
   const current = await getCurrentRole();
   if (current !== role) redirect(ROLE_HOME[current]);
+  if (role === "admin" && isSupabaseConfigured() && (await requireIdentity()).aal !== "aal2") redirect("/connexion/securite");
   return null;
 }
 

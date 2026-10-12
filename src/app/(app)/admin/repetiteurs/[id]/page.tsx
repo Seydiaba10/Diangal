@@ -10,7 +10,7 @@ import { Field, TEXTAREA_CLASS } from "@/components/ui/form";
 import { Notice } from "@/components/ui/notice";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { reviewTutorAction } from "@/features/admin/actions";
+import { openTutorDocumentAction, reviewTutorAction } from "@/features/admin/actions";
 import { TUTOR_STATUS_TONE } from "@/features/admin/tutor-status";
 import { getTutorReviewItem } from "@/features/tutors/data";
 import { formatDate, formatFCFA } from "@/lib/format";
@@ -43,6 +43,8 @@ async function TutorReview({ params, searchParams }: Props) {
       </header>
       {query.decision ? <Notice tone="success">{t("decisionSaved")}</Notice> : null}
       {query.erreur === "motif" ? <Notice tone="error">{t("reasonRequired")}</Notice> : null}
+      {query.erreur === "decision" ? <Notice tone="error">{t("errors.decision")}</Notice> : null}
+      {query.erreur === "piece" ? <Notice tone="error">{t("errors.piece")}</Notice> : null}
       {item.rejectionReason ? <Notice tone="warning">{t("rejectedBecause", { reason: item.rejectionReason })}</Notice> : null}
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
@@ -67,7 +69,7 @@ async function TutorReview({ params, searchParams }: Props) {
           <SectionCard id="pieces-titre" title={tVerification("documents")} subtitle={t("documentsHint")}>
             <ul className="divide-y divide-line">
               {item.documents.map((doc) => (
-                <li key={doc.type} className="flex items-center gap-3 py-3">
+                <li key={doc.id ?? doc.type} className="flex items-center gap-3 py-3">
                   <FileText className="size-5 shrink-0 text-ink-muted" aria-hidden />
                   <span className="min-w-0 flex-1">
                     <span className="block font-medium text-ink">{tVerification(`types.${doc.type}`)}</span>
@@ -76,9 +78,12 @@ async function TutorReview({ params, searchParams }: Props) {
                   <Badge tone={doc.status === "accepted" ? "success" : doc.status === "rejected" ? "danger" : "info"}>
                     {tVerification(`docStatus.${doc.status}`)}
                   </Badge>
-                  <Button variant="ghost" size="sm" disabled aria-label={t("view")}>
-                    <Eye className="size-4" aria-hidden />
-                  </Button>
+                  {/* Lien signé de 5 minutes, consultation inscrite au journal d'audit. */}
+                  <form action={openTutorDocumentAction.bind(null, item.id, doc.storagePath ?? "")}>
+                    <Button type="submit" variant="ghost" size="sm" disabled={!doc.storagePath} aria-label={t("view")}>
+                      <Eye className="size-4" aria-hidden />
+                    </Button>
+                  </form>
                 </li>
               ))}
             </ul>

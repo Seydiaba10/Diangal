@@ -132,7 +132,8 @@
     "EC": "Éducation civique",
     "LV2": "Langue vivante 2",
     "PHILO": "Philosophie",
-    "EPS": "EPS"
+    "EPS": "EPS",
+    "ESVS": "Science et vie sociale"
   },
   "levels": {
     "CI": "CI",
@@ -162,11 +163,11 @@
   "courses": {
     "subtitle": "{level} · {count, plural, one {# matière} other {# matières}}",
     "subjectsLabel": "Matières",
-    "coefficient": "Coef. {value}",
     "chaptersDone": "{done}/{total} chapitres terminés",
     "progressLabel": "Progression en {subject}",
     "searchResults": "{count, plural, =0 {Aucun chapitre pour « {query} »} one {# chapitre pour « {query} »} other {# chapitres pour « {query} »}}",
-    "chapterNumber": "Chapitre {number}"
+    "chapterNumber": "Chapitre {number}",
+    "otherLevel": "Les cours de ta classe ({level}) ne sont pas encore publiés : ils arrivent bientôt."
   },
   "subject": {
     "chaptersTitle": "Chapitres",
@@ -373,13 +374,23 @@
     "noReviews": "Pas encore d’avis : ils arriveront avec les premières séances réservées sur DIANGAL.",
     "rate": "Tarif",
     "contact": "Envoyer un message",
+    "continueConversation": "Continuer la conversation",
+    "messageLabel": "Premier message",
+    "messagePlaceholder": "Présentation, matière, classe, jours souhaités…",
+    "childLabel": "Pour quel enfant ?",
+    "childNone": "Ne pas préciser",
+    "errors": {
+      "message": "Écris un message avant de l’envoyer.",
+      "contact": "Le message n’est pas parti. Réessaie dans un instant."
+    },
     "whatsapp": "Écrire sur WhatsApp",
     "book": "Réserver une séance",
     "bookSoon": "La réservation en ligne arrive bientôt.",
     "consentTitle": "Validation parentale nécessaire",
     "consentBody": "Pour ta sécurité, un parent doit valider ton compte avant que tu puisses contacter un répétiteur.",
     "consentCta": "Demander à mon parent",
-    "safety": "Ne partage jamais ton adresse ni ton numéro dans les messages. Signale tout comportement inapproprié."
+    "safety": "Ne partage jamais ton adresse ni ton numéro dans les messages. Signale tout comportement inapproprié.",
+    "continueAbout": "Continuer la conversation ({name})"
   },
   "session": {
     "studentSubtitle": "{level} · {school}",
@@ -460,7 +471,7 @@
       "items": {
         "lessons": {
           "title": "Des cours par chapitre",
-          "body": "Leçons courtes en texte, PDF, audio et vidéo, matière par matière, avec l’essentiel à retenir."
+          "body": "Des leçons courtes et claires, matière par matière, avec l’essentiel à retenir."
         },
         "exercises": {
           "title": "Des exercices corrigés",
@@ -472,7 +483,7 @@
         },
         "exams": {
           "title": "CFEE, BFEM et Bac",
-          "body": "Anciens sujets corrigés, examens blancs et compte à rebours jusqu’au jour J."
+          "body": "Compte à rebours jusqu’au jour J et contrôles chronométrés. Annales corrigées et examens blancs publiés au fil de l’année."
         },
         "offline": {
           "title": "Hors ligne",
@@ -521,7 +532,7 @@
         },
         "program": {
           "title": "Programmes officiels",
-          "body": "Contenus rédigés et relus par des enseignants sénégalais. Le wolof arrive bientôt."
+          "body": "Des contenus construits à partir des programmes du Ministère de l’Éducation nationale. Le wolof arrive bientôt."
         }
       },
       "paymentsTitle": "Moyens de paiement acceptés",
@@ -569,11 +580,11 @@
         },
         "levels": {
           "q": "Quelles classes sont disponibles ?",
-          "a": "DIANGAL couvre du CI à la Terminale, avec toutes les séries du lycée. Les contenus sont publiés progressivement, en commençant par la 3e et le BFEM."
+          "a": "DIANGAL couvre du CI à la Terminale, avec toutes les séries du lycée. Les cours sont publiés classe par classe : le CI et la 3e sont déjà disponibles."
         },
         "offline": {
           "q": "Peut-on réviser sans connexion ?",
-          "a": "Oui. Télécharge un chapitre quand tu as du Wi-Fi : tu pourras le lire et faire les exercices hors ligne. Ta progression se synchronise dès que tu retrouves du réseau."
+          "a": "Oui. Télécharge un chapitre quand tu as du Wi-Fi : tu pourras relire ses leçons sans connexion, même en mode avion."
         },
         "safety": {
           "q": "Comment protégez-vous les enfants ?",
@@ -683,11 +694,11 @@
         },
         {
           "title": "Vos droits",
-          "body": "Conformément à la loi n° 2008-12 du 25 janvier 2008 sur la protection des données à caractère personnel, vous pouvez accéder à vos données, les rectifier, les exporter ou les supprimer depuis votre profil. Un parent exerce ces droits pour son enfant. Vous pouvez aussi saisir la Commission de Protection des Données Personnelles (CDP)."
+          "body": "Conformément à la loi n° 2008-12 du 25 janvier 2008 sur la protection des données à caractère personnel, vous pouvez accéder à vos données, les rectifier, vous opposer à leur traitement et demander leur suppression. Le profil permet déjà de les consulter ; l’export et la suppression depuis le profil arrivent bientôt. Un parent exerce ces droits pour son enfant. Vous pouvez aussi saisir la Commission de Protection des Données Personnelles (CDP)."
         },
         {
           "title": "Hébergement et sécurité",
-          "body": "Les données sont hébergées dans l’Union européenne, après déclaration auprès de la CDP. Elles sont chiffrées en transit et au repos, et l’accès est limité selon le rôle de chaque utilisateur."
+          "body": "Les données sont hébergées dans l’Union européenne (Irlande). Ce transfert hors du Sénégal est déclaré auprès de la CDP avant l’ouverture du service. Les données sont chiffrées en transit et au repos, et l’accès est limité selon le rôle de chaque utilisateur."
         }
       ]
     },
@@ -725,7 +736,7 @@
         },
         {
           "title": "Hébergement",
-          "body": "Application : Vercel Inc. Données : Supabase (région Union européenne, Paris)."
+          "body": "Application : Vercel Inc. Données : Supabase (région Union européenne, Irlande)."
         },
         {
           "title": "Contact",
@@ -741,24 +752,47 @@
       "title": "Se connecter",
       "noAccount": "Pas encore de compte ?",
       "signUpLink": "S’inscrire",
-      "phoneTab": "Téléphone",
-      "emailTab": "Email",
+      "tabs": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email"
+      },
       "phoneLabel": "Numéro de téléphone",
       "phonePlaceholder": "77 123 45 67",
       "phoneHint": "Tu recevras un code à 6 chiffres par SMS.",
+      "whatsappHint": "Tu recevras un code à 6 chiffres sur WhatsApp.",
       "emailLabel": "Adresse email",
       "emailPlaceholder": "prenom@exemple.sn",
-      "submit": "Recevoir le code"
+      "submit": "Recevoir le code",
+      "emailHint": "Tu recevras un code à 6 chiffres par email.",
+      "phoneSoon": "La connexion par WhatsApp et par SMS arrive bientôt. Utilise ton adresse email.",
+      "errors": {
+        "email": "Entre une adresse email valide.",
+        "phone": "Entre un numéro à 9 chiffres.",
+        "unknown": "Aucun compte avec cet identifiant. Crée ton compte en t’inscrivant.",
+        "limit": "Trop de codes demandés. Réessaie dans quelques minutes.",
+        "sms": "La connexion par SMS n’est pas encore ouverte : utilise ton email.",
+        "send": "Le code n’a pas pu être envoyé. Réessaie dans un instant.",
+        "profil": "Ton profil est introuvable. Écris au support DIANGAL.",
+        "lien": "Ce lien de connexion n’est plus valable. Demande un nouvel email.",
+        "whatsapp": "La connexion par WhatsApp n’est pas encore ouverte : utilise ton email."
+      }
     },
     "code": {
       "title": "Entre ton code",
       "sentTo": "Nous avons envoyé un code à 6 chiffres à {to}.",
+      "sentToWhatsapp": "Nous avons envoyé un code à 6 chiffres sur WhatsApp au {to}.",
       "label": "Code de vérification",
       "error": "Ce code n’est pas le bon. Vérifie-le et réessaie.",
       "demoHint": "Démo : le code est 123456.",
       "submit": "Valider",
       "changeNumber": "Changer de numéro",
-      "resendIn": "Renvoyer le code dans 60 s"
+      "resendIn": "Renvoyer le code dans 60 s",
+      "changeEmail": "Changer d’adresse",
+      "resend": "Renvoyer un code",
+      "resent": "Un nouveau code vient d’être envoyé.",
+      "linkSent": "Nous avons envoyé un email à {to}. Ouvre-le sur cet appareil et touche le lien de connexion : tu seras connecté automatiquement.",
+      "codeOptional": "L’email contient un code à 6 chiffres ? Saisis-le ici."
     }
   },
   "signup": {
@@ -771,7 +805,7 @@
     "finish": "Créer mon compte",
     "titles": {
       "role": "Qui es-tu ?",
-      "identifier": "Ton numéro ou ton email",
+      "identifier": "Ton email ou ton numéro",
       "code": "Vérification",
       "profile": "Ton profil",
       "details": "Quelques précisions",
@@ -792,7 +826,8 @@
       }
     },
     "methods": {
-      "phone": "Téléphone",
+      "whatsapp": "WhatsApp",
+      "phone": "SMS",
       "email": "Email"
     },
     "fields": {
@@ -811,12 +846,16 @@
       "parentPhone": "Numéro de téléphone de ton parent"
     },
     "hints": {
-      "phone": "Numéro sénégalais à 9 chiffres.",
+      "phone": "Numéro sénégalais à 9 chiffres : le code arrivera par SMS.",
+      "whatsapp": "Numéro WhatsApp sénégalais à 9 chiffres : le code arrivera dans WhatsApp.",
       "code": "Code envoyé à {to}.",
       "demoCode": "Démo : le code est 123456.",
       "birthDate": "Elle sert à protéger les plus jeunes. Elle n’est jamais affichée.",
       "childCode": "Votre enfant le trouve dans son profil. Vous pourrez aussi l’ajouter plus tard.",
-      "tutorReview": "Votre profil sera visible après la vérification de vos pièces par notre équipe."
+      "tutorReview": "Votre profil sera visible après la vérification de vos pièces par notre équipe.",
+      "emailOnly": "Pour l’instant, l’inscription se fait par email. WhatsApp et SMS arrivent bientôt.",
+      "codeExpiry": "Le code est valable 10 minutes.",
+      "linkSent": "Nous avons envoyé un email à {to}. Ouvre-le sur cet appareil et touche le lien : ton compte sera créé automatiquement. S’il contient un code à 6 chiffres, saisis-le ici."
     },
     "minor": {
       "title": "Validation par un parent",
@@ -833,7 +872,7 @@
       "phone": "Entre un numéro à 9 chiffres.",
       "email": "Entre une adresse email valide.",
       "code": "Le code contient 6 chiffres.",
-      "wrongCode": "Ce code n’est pas le bon. Démo : 123456.",
+      "wrongCode": "Ce code n’est pas le bon ou il a expiré. Vérifie-le et réessaie.",
       "name": "Indique ton prénom et ton nom.",
       "birthDate": "Indique ta date de naissance.",
       "city": "Indique ta ville.",
@@ -841,8 +880,14 @@
       "subjects": "Choisis au moins une matière.",
       "terms": "Tu dois accepter les conditions pour continuer.",
       "parentPhone": "Entre le numéro de ton parent (9 chiffres).",
-      "generic": "Une erreur est survenue. Réessaie."
-    }
+      "generic": "Une erreur est survenue. Réessaie.",
+      "limit": "Trop de codes demandés. Réessaie dans quelques minutes.",
+      "sms": "L’envoi par SMS n’est pas encore ouvert : utilise ton adresse email.",
+      "whatsapp": "L’envoi sur WhatsApp n’est pas encore ouvert : utilise ton adresse email.",
+      "send": "Le code n’a pas pu être envoyé. Vérifie l’adresse et réessaie.",
+      "profile": "Le compte n’a pas pu être créé. Vérifie ta classe et ta date de naissance."
+    },
+    "sendCode": "Recevoir le code"
   },
   "consent": {
     "title": "Validation parentale",
@@ -861,10 +906,18 @@
       "messages": "La messagerie, toujours visible par vous",
       "payments": "Les paiements, que vous pouvez aussi faire vous-même"
     },
-    "rights": "Vous pouvez retirer votre accord, consulter, exporter ou supprimer les données de votre enfant à tout moment depuis votre espace parent.",
+    "rights": "Depuis votre espace parent, vous suivez la progression de votre enfant. Retirer votre accord, exporter ou supprimer ses données y sera bientôt possible.",
     "accept": "J’accepte et je crée mon espace parent",
     "refuse": "Je refuse",
-    "expired": "Ce lien a expiré ou n’est pas valide. Demandez à votre enfant d’envoyer une nouvelle demande depuis son profil."
+    "expired": "Ce lien a expiré ou n’est pas valide. Demandez à votre enfant d’envoyer une nouvelle demande depuis son profil.",
+    "loginFirst": "Pour valider, connectez-vous avec le numéro de téléphone qui a reçu ce SMS.",
+    "login": "Me connecter",
+    "signup": "Créer mon compte parent",
+    "errors": {
+      "parent": "Ce compte n’est pas un compte parent : connectez-vous avec votre compte parent.",
+      "numero": "Connectez-vous avec le numéro de téléphone qui a reçu le SMS.",
+      "lien": "Ce lien n’est plus valable. Demandez à votre enfant d’envoyer une nouvelle demande."
+    }
   },
   "examsPage": {
     "subtitle": "Prépare le BFEM : examens blancs, anciens sujets corrigés et compte à rebours.",
@@ -965,7 +1018,9 @@
     },
     "errors": {
       "consent": "Ton parent doit d’abord valider ton compte avant un paiement.",
-      "form": "Choisis une offre et un moyen de paiement."
+      "form": "Choisis une offre et un moyen de paiement.",
+      "unavailable": "Le paiement en ligne n’est pas encore ouvert. Il arrive très bientôt.",
+      "provider": "Le service de paiement ne répond pas. Réessaie dans quelques minutes."
     }
   },
   "studentProfile": {
@@ -976,7 +1031,17 @@
       "pending": "Nous avons envoyé une demande par SMS à ton parent ({phone}). En attendant, tu as accès aux cours gratuits.",
       "resend": "Renvoyer le SMS",
       "resent": "La demande a été renvoyée à ton parent.",
-      "demoLink": "Démo : ouvrir le lien reçu par le parent"
+      "demoLink": "Démo : ouvrir le lien reçu par le parent",
+      "adult": "Tu es majeur : ton compte n’a pas besoin de validation parentale.",
+      "noRequest": "Indique le numéro de ton parent : il recevra un SMS pour valider ton compte. En attendant, tu as accès aux cours gratuits.",
+      "refused": "Ton parent a refusé la validation. Parles-en avec lui, puis envoie une nouvelle demande.",
+      "parentPhone": "Numéro de ton parent",
+      "send": "Envoyer la demande",
+      "errors": {
+        "phone": "Numéro invalide : 9 chiffres après +221.",
+        "tooMany": "Tu as déjà envoyé 3 demandes aujourd’hui. Réessaie demain.",
+        "generic": "La demande n’a pas pu partir. Réessaie dans un instant."
+      }
     },
     "linkCode": {
       "title": "Mon code élève",
@@ -984,17 +1049,23 @@
     },
     "data": {
       "title": "Mes données",
-      "body": "Tu peux télécharger ou supprimer tes données (avec l’accord de ton parent si tu es mineur).",
+      "body": "Tu pourras bientôt télécharger ou supprimer tes données ici (avec l’accord de ton parent si tu es mineur).",
       "export": "Télécharger mes données",
       "delete": "Supprimer mon compte",
-      "soon": "Disponible avec la mise en ligne des comptes réels."
+      "soon": "Bientôt disponible."
     },
     "language": {
       "title": "Langue",
       "current": "Français",
       "wolofSoon": "Le wolof arrive bientôt."
     },
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "parentLinks": {
+      "title": "Demandes de parents",
+      "body": "Ces personnes ont saisi ton code élève. Confirme seulement s’il s’agit bien de ton parent.",
+      "confirm": "Confirmer",
+      "confirmed": "Lien confirmé : ton parent peut maintenant suivre ta progression."
+    }
   },
   "paymentReturn": {
     "title": "Paiement",
@@ -1040,7 +1111,7 @@
       "tutor_message": "Nouveau message de {tutor}.",
       "payment": "Votre paiement est confirmé.",
       "exam": "Les révisions du {exam} commencent : consulte les annales corrigées.",
-      "tutor_review": "Votre profil de répétiteur a été vérifié et publié."
+      "tutor_review": "{decision, select, approved {Votre profil de répétiteur a été vérifié et publié.} rejected {Votre dossier de répétiteur a été refusé : consultez le motif.} suspended {Votre profil de répétiteur a été suspendu.} other {Votre dossier de répétiteur a été mis à jour.}}"
     }
   },
   "parentHome": {
@@ -1050,7 +1121,8 @@
     "notices": {
       "consentGranted": "Merci ! Le compte de votre enfant est validé : toutes les fonctions sont débloquées.",
       "consentRefused": "Vous avez refusé : votre enfant garde l’accès aux cours gratuits uniquement.",
-      "linked": "Votre enfant est maintenant relié à votre compte."
+      "linked": "Votre enfant est maintenant relié à votre compte.",
+      "linkPending": "Demande envoyée : votre enfant doit la confirmer dans son profil DIANGAL."
     },
     "consentBanner": "{child} attend votre validation pour contacter des répétiteurs et utiliser la messagerie.",
     "consentCta": "Valider maintenant",
@@ -1068,7 +1140,13 @@
     "findTutor": "Trouver un répétiteur",
     "findTutorHint": "Vérifiés, en ligne ou à domicile",
     "messages": "Messages",
-    "messagesHint": "Vos échanges avec les répétiteurs"
+    "messagesHint": "Vos échanges avec les répétiteurs",
+    "consentBannerSms": "{child} attend votre validation : ouvrez le lien reçu par SMS pour la donner.",
+    "empty": {
+      "title": "Aucun enfant relié pour l’instant",
+      "body": "Saisissez le code élève de votre enfant (il le trouve dans son profil) pour suivre sa progression.",
+      "cta": "Ajouter un enfant"
+    }
   },
   "parentChild": {
     "metaTitle": "Suivi de l’enfant",
@@ -1104,15 +1182,19 @@
       "title": "Notifications",
       "sms": "SMS pour les alertes importantes (validation, paiement)",
       "push": "Notifications sur le téléphone",
-      "weekly": "Résumé hebdomadaire des progrès"
+      "weekly": "Résumé hebdomadaire des progrès",
+      "soon": "Ces réglages arrivent bientôt. En attendant, vos notifications s’affichent dans l’application.",
+      "soonBadge": "Bientôt"
     },
     "data": {
       "title": "Données de la famille",
-      "body": "Vous pouvez exporter ou supprimer vos données et celles de vos enfants mineurs.",
+      "body": "Vous pourrez bientôt exporter ou supprimer ici vos données et celles de vos enfants mineurs.",
       "export": "Exporter les données",
-      "delete": "Supprimer le compte"
+      "delete": "Supprimer le compte",
+      "soon": "Bientôt disponible."
     },
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "contactUnknown": "Coordonnées non renseignées"
   },
   "tutorHome": {
     "metaTitle": "Espace répétiteur",
@@ -1136,7 +1218,8 @@
     "latestMessages": "Derniers messages",
     "noMessages": "Aucun message pour l’instant.",
     "bookingsSoonTitle": "Réservations et paiement des séances",
-    "bookingsSoonBody": "Bientôt, les familles pourront réserver et payer vos séances sur DIANGAL, avec la visioconférence intégrée."
+    "bookingsSoonBody": "Bientôt, les familles pourront réserver et payer vos séances sur DIANGAL, avec la visioconférence intégrée.",
+    "notMeasured": "–"
   },
   "tutorProfileForm": {
     "title": "Mon profil",
@@ -1168,28 +1251,48 @@
       "pending": "Dossier en cours de vérification",
       "approved": "Profil vérifié",
       "rejected": "Dossier à compléter",
-      "suspended": "Profil suspendu"
+      "suspended": "Profil suspendu",
+      "draft": "Dossier pas encore envoyé"
     },
     "statusBody": {
       "pending": "Notre équipe vérifie vos pièces, en général sous 72 heures.",
       "approved": "Vos pièces ont été validées : votre profil est publié dans l’annuaire.",
       "rejected": "Une pièce doit être renvoyée : consultez le motif ci-dessous.",
-      "suspended": "Votre profil n’est plus visible. Contactez l’équipe DIANGAL."
+      "suspended": "Votre profil n’est plus visible. Contactez l’équipe DIANGAL.",
+      "draft": "Complétez votre profil, ajoutez une pièce d’identité et un diplôme, puis envoyez votre dossier à la vérification."
     },
     "documents": "Pièces justificatives",
     "types": {
-      "cni": "Pièce d’identité",
+      "cni": "Carte d’identité",
       "diploma": "Diplôme",
-      "criminal_record": "Extrait de casier judiciaire"
+      "criminal_record": "Extrait de casier judiciaire",
+      "passport": "Passeport"
     },
     "docStatus": {
       "pending": "En attente",
       "accepted": "Validé",
       "rejected": "Refusé"
     },
-    "upload": "Envoyer une pièce",
-    "uploadHint": "PDF, JPG ou PNG, 10 Mo maximum. Le stockage sécurisé arrive avec la base de données.",
-    "privacy": "Vos pièces sont consultées uniquement par l’équipe de vérification, puis supprimées 30 jours après la décision. Seul le résultat de la vérification est conservé."
+    "upload": "Envoyer la pièce",
+    "uploadHint": "PDF, JPG ou PNG, 10 Mo maximum. Stockage privé : seule l’équipe de vérification y a accès.",
+    "privacy": "Vos pièces sont consultées uniquement par l’équipe de vérification, puis supprimées 30 jours après la décision. Seul le résultat de la vérification est conservé.",
+    "typeLabel": "Type de pièce",
+    "fileLabel": "Fichier",
+    "empty": "Aucune pièce envoyée pour l’instant.",
+    "rejectionReason": "Motif : {reason}",
+    "submit": "Envoyer mon dossier à la vérification",
+    "submitHint": "Il faut un profil complet (titre, tarif, matières, niveaux), une pièce d’identité et un diplôme.",
+    "notices": {
+      "sent": "Pièce envoyée.",
+      "submitted": "Dossier envoyé : notre équipe le vérifie, en général sous 72 heures."
+    },
+    "errors": {
+      "fichier": "Choisissez un type de pièce et un fichier.",
+      "format": "Fichier refusé : PDF, JPG ou PNG de 10 Mo maximum.",
+      "envoi": "L’envoi n’a pas abouti. Réessayez dans un instant.",
+      "incomplet": "Dossier incomplet : complétez votre profil et envoyez une pièce d’identité et un diplôme.",
+      "demo": "L’envoi de pièces n’est pas disponible en mode démonstration."
+    }
   },
   "tutorAvailability": {
     "title": "Disponibilités",
@@ -1292,7 +1395,8 @@
       "pending": "À vérifier ({count})",
       "approved": "Publiés ({count})",
       "rejected": "Refusés ({count})",
-      "suspended": "Suspendus ({count})"
+      "suspended": "Suspendus ({count})",
+      "draft": "Brouillons ({count})"
     },
     "cols": {
       "name": "Nom",
@@ -1306,7 +1410,8 @@
       "pending": "À vérifier",
       "approved": "Publié",
       "rejected": "Refusé",
-      "suspended": "Suspendu"
+      "suspended": "Suspendu",
+      "draft": "Brouillon"
     },
     "decisionSaved": "Décision enregistrée et notifiée au répétiteur.",
     "reasonRequired": "Indiquez le motif du refus.",
@@ -1322,7 +1427,12 @@
     "reasonHint": "Visible par le répétiteur.",
     "reject": "Refuser le dossier",
     "suspend": "Suspendre le profil",
-    "auditNote": "Toutes les décisions sont enregistrées dans le journal d’audit."
+    "auditNote": "Toutes les décisions sont enregistrées dans le journal d’audit.",
+    "openDocument": "Ouvrir",
+    "errors": {
+      "decision": "La décision n’a pas pu être enregistrée.",
+      "piece": "La pièce est introuvable dans le stockage."
+    }
   },
   "adminReports": {
     "title": "Signalements",
@@ -1430,5 +1540,19 @@
     "browse": "Parcourir mes cours",
     "install": "Installer DIANGAL sur ce téléphone",
     "installHint": "Accès direct depuis l’écran d’accueil, même sans connexion."
+  },
+  "mfa": {
+    "title": "Double vérification",
+    "intro": "L’espace d’administration est protégé par une double vérification.",
+    "enrollTitle": "Activez votre application d’authentification",
+    "enrollBody": "Scannez ce QR code avec Google Authenticator, Microsoft Authenticator ou une application similaire, puis entrez le code à 6 chiffres qu’elle affiche.",
+    "qrAlt": "QR code à scanner avec l’application d’authentification",
+    "secret": "Pas de caméra ? Saisissez cette clé dans l’application : {secret}",
+    "challengeBody": "Entrez le code à 6 chiffres affiché par votre application d’authentification.",
+    "codeLabel": "Code à 6 chiffres",
+    "submit": "Vérifier",
+    "error": "Code incorrect ou expiré. Entrez le code affiché en ce moment.",
+    "resumeBody": "Vous avez déjà scanné le QR code : entrez le code à 6 chiffres affiché en ce moment par votre application.",
+    "newQr": "Afficher un nouveau QR code"
   }
 }

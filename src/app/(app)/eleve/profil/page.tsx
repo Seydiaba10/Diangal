@@ -11,28 +11,55 @@ import { Notice } from "@/components/ui/notice";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StudentAvatar } from "@/components/ui/student-avatar";
-import { resendConsentRequestAction, signOutAction } from "@/features/account/actions";
+import { INPUT_CLASS } from "@/components/ui/form";
+import { confirmParentLinkAction, resendConsentRequestAction, signOutAction } from "@/features/account/actions";
 import { DataSaverForm } from "@/features/account/components/data-saver-form";
-import { getCurrentStudent, getStudentLinkInfo } from "@/features/account/data";
+import { getCurrentStudent, getPendingParentLinks, getStudentLinkInfo } from "@/features/account/data";
+import { isSupabaseConfigured } from "@/lib/env";
 
 export async function generateMetadata() {
   const t = await getTranslations("pages");
   return { title: t("profile") };
 }
 
+const CONSENT_ERRORS = { telephone: "phone", limite: "tooMany", erreur: "generic" } as const;
+
 async function ProfileContent({ searchParams }: { searchParams: PageProps<"/eleve/profil">["searchParams"] }) {
-  const [{ demande }, student, link, t] = await Promise.all([
+  const [{ demande, lien }, student, link, pendingParents, t] = await Promise.all([
     searchParams,
     getCurrentStudent(),
     getStudentLinkInfo(),
+    getPendingParentLinks(),
     getTranslations("studentProfile"),
   ]);
-  const consentGranted = student.consentStatus === "granted";
+  const consentError = CONSENT_ERRORS[demande as keyof typeof CONSENT_ERRORS];
+  const demo = !isSupabaseConfigured();
 
   return (
     <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
       <div className="space-y-5">
         {demande === "envoyee" ? <Notice tone="success">{t("consent.resent")}</Notice> : null}
+        {consentError ? <Notice tone="error">{t(`consent.errors.${consentError}`)}</Notice> : null}
+        {lien === "confirme" ? <Notice tone="success">{t("parentLinks.confirmed")}</Notice> : null}
+
+        {pendingParents.length ? (
+          <SectionCard id="parents-titre" title={t("parentLinks.title")} subtitle={t("parentLinks.body")}>
+            <ul className="divide-y divide-line">
+              {pendingParents.map((p) => (
+                <li key={p.parentId} className="flex items-center justify-between gap-3 py-3 text-sm">
+                  <span className="font-medium text-ink">
+                    {p.firstName} {p.lastName}
+                  </span>
+                  <form action={confirmParentLinkAction.bind(null, p.parentId)}>
+                    <Button type="submit" size="sm">
+                      {t("parentLinks.confirm")}
+                    </Button>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          </SectionCard>
+        ) : null}
 
         <section className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-5">
           <StudentAvatar avatarKey={student.avatarKey} className="size-16" />
@@ -49,30 +76,54 @@ async function ProfileContent({ searchParams }: { searchParams: PageProps<"/elev
         </section>
 
         <SectionCard id="parent-titre" title={t("consent.title")}>
-          {consentGranted ? (
+          {student.consentStatus === "granted" || student.consentStatus === "not_required" ? (
             <p className="flex items-center gap-2 text-sm font-medium text-success-700">
               <ShieldCheck className="size-5" aria-hidden />
-              {t("consent.granted")}
+              {t(student.consentStatus === "granted" ? "consent.granted" : "consent.adult")}
             </p>
           ) : (
             <>
               <p className="flex gap-2 text-sm text-ink">
                 <ShieldAlert className="mt-0.5 size-4 shrink-0 text-premium-700" aria-hidden />
-                {t("consent.pending", { phone: link.parentPhoneMasked })}
+                {student.consentStatus === "refused"
+                  ? t("consent.refused")
+                  : link.parentPhoneMasked
+                    ? t("consent.pending", { phone: link.parentPhoneMasked })
+                    : t("consent.noRequest")}
               </p>
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                <form action={resendConsentRequestAction}>
-                  <Button type="submit" variant="outline" size="sm" className="w-full">
-                    {t("consent.resend")}
-                  </Button>
-                </form>
-                <Link
-                  href="/consentement/demo"
-                  className="inline-flex h-11 items-center justify-center rounded-xl px-4 text-sm font-medium text-brand-700 hover:bg-brand-50"
-                >
-                  {t("consent.demoLink")}
-                </Link>
-              </div>
+              <form action={resendConsentRequestAction} className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
+                {demo ? null : (
+                  <div className="flex-1">
+                    <label htmlFor="tel-parent" className="text-sm font-medium text-ink">
+                      {t("consent.parentPhone")}
+                    </label>
+                    <div className="mt-1.5 flex gap-2">
+                      <span className="flex h-12 items-center rounded-xl border border-line bg-canvas px-3 font-medium text-ink">+221</span>
+                      <input
+                        id="tel-parent"
+                        name="parentPhone"
+                        type="tel"
+                        inputMode="numeric"
+                        required
+                        pattern="[0-9 ]{9,12}"
+                        autoComplete="off"
+                        className={INPUT_CLASS}
+                      />
+                    </div>
+                  </div>
+                )}
+                <Button type="submit" variant="outline" size="sm">
+                  {link.parentPhoneMasked ? t("consent.resend") : t("consent.send")}
+                </Button>
+                {demo ? (
+                  <Link
+                    href="/consentement/demo"
+                    className="inline-flex h-11 items-center justify-center rounded-xl px-4 text-sm font-medium text-brand-700 hover:bg-brand-50"
+                  >
+                    {t("consent.demoLink")}
+                  </Link>
+                ) : null}
+              </form>
             </>
           )}
         </SectionCard>

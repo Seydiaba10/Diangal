@@ -7,7 +7,9 @@ import { PageHeader } from "@/components/layout/page-header";
 import { ButtonLink } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LiveRefresh } from "@/features/messaging/components/live-refresh";
 import { getConversations, getMessagingAccess } from "@/features/messaging/data";
+import { isSupabaseConfigured } from "@/lib/env";
 import { TutorAvatar } from "@/features/tutors/components/tutor-bits";
 import { formatDate } from "@/lib/format";
 
@@ -46,6 +48,8 @@ async function ConversationList() {
   }
 
   return (
+    <>
+    {isSupabaseConfigured() ? <LiveRefresh /> : null}
     <ul className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface">
       {conversations.map((c) => (
         <li key={c.id}>
@@ -64,6 +68,7 @@ async function ConversationList() {
         </li>
       ))}
     </ul>
+    </>
   );
 }
 

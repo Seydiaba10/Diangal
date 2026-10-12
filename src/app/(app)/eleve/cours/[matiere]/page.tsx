@@ -22,12 +22,7 @@ export async function generateMetadata({ params }: PageProps<"/eleve/cours/[mati
 async function SubjectContent({ params }: { params: Params }) {
   const subject = await getSubject((await params).matiere);
   if (!subject) notFound();
-  const [chapters, t, tCourses, tBreadcrumb] = await Promise.all([
-    getChapters(subject),
-    getTranslations("subject"),
-    getTranslations("courses"),
-    getTranslations("breadcrumb"),
-  ]);
+  const [chapters, t, tBreadcrumb] = await Promise.all([getChapters(subject), getTranslations("subject"), getTranslations("breadcrumb")]);
 
   return (
     <>
@@ -37,7 +32,7 @@ async function SubjectContent({ params }: { params: Params }) {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-ink lg:text-[28px]">{subject.name}</h1>
           <p className="mt-0.5 text-sm text-ink-muted">
-            {t("chapters", { count: chapters.length })} · {tCourses("coefficient", { value: subject.coefficient })}
+            {t("chapters", { count: chapters.length })}
           </p>
         </div>
       </header>

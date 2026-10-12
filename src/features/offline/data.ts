@@ -10,7 +10,7 @@ import { chapterHref, findChapterById, getLessonBody } from "@/features/curricul
  * et les médias, que le service worker met alors en cache.
  */
 export async function buildChapterPack(chapterId: string) {
-  const found = findChapterById(chapterId);
+  const found = await findChapterById(chapterId);
   if (!found) return null;
   const { subject, chapter } = found;
   const student = await getCurrentStudent();

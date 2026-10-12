@@ -23,6 +23,8 @@ async function SubscriptionContent({ searchParams }: { searchParams: PageProps<"
     <div className="space-y-5">
       {erreur === "consentement" ? <Notice tone="error">{t("errors.consent")}</Notice> : null}
       {erreur === "formulaire" ? <Notice tone="error">{t("errors.form")}</Notice> : null}
+      {erreur === "indisponible" ? <Notice tone="error">{t("errors.unavailable")}</Notice> : null}
+      {erreur === "prestataire" ? <Notice tone="error">{t("errors.provider")}</Notice> : null}
 
       <div className="flex items-center gap-4 rounded-2xl bg-premium-50 p-5">
         <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-surface text-premium-700">

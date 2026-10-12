@@ -94,6 +94,8 @@
   --color-subject-philo-soft: #eef2ff;
   --color-subject-eps: #4d7c0f;
   --color-subject-eps-soft: #f7fee7;
+  --color-subject-esvs: #a21caf;
+  --color-subject-esvs-soft: #fdf4ff;
 }
 
 @layer base {

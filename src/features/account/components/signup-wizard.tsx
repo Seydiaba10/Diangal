@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, BookOpen, CircleAlert, GraduationCap, Info, Mail, Smartphone, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, CircleAlert, GraduationCap, Info, Mail, MessageCircle, Smartphone, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState, useTransition, type ReactNode } from "react";
@@ -10,7 +10,7 @@ import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/cn";
 import { CYCLE_STYLES, CYCLES, SERIES_BY_LEVEL, type LevelCode } from "@/lib/levels";
 import type { AppRole, SubjectCode } from "@/types/domain";
-import { completeSignupAction } from "../actions";
+import { completeSignupAction, requestSignupCodeAction, type SignupError, type SignupInput } from "../actions";
 import { INPUT_CLASS } from "./auth-card";
 
 type SignupRole = Exclude<AppRole, "admin">;
@@ -22,6 +22,19 @@ const ROLE_OPTIONS: { role: SignupRole; icon: typeof Users }[] = [
   { role: "parent", icon: Users },
   { role: "tutor", icon: BookOpen },
 ];
+
+// Le compte est créé à l'envoi du code : la classe et la date de naissance doivent être connues avant.
+const STEPS = ["role", "profile", "details", "consent", "identifier", "code"] as const;
+
+const ERROR_KEYS: Record<SignupError, string> = {
+  invalid: "generic",
+  limit: "limit",
+  sms: "sms",
+  whatsapp: "whatsapp",
+  send: "send",
+  profile: "profile",
+  code: "wrongCode",
+};
 
 function isMinor(birthDate: string): boolean {
   const birth = Date.parse(birthDate);
@@ -43,14 +56,31 @@ function Field({ id, label, hint, children }: { id: string; label: string; hint?
   );
 }
 
-export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }) {
+export function SignupWizard({
+  initialRole,
+  smsEnabled,
+  whatsappEnabled,
+  emailCode,
+  demo,
+}: {
+  initialRole: SignupRole | null;
+  /** Inscription par SMS possible (fournisseur branché) ; sinon par email uniquement. */
+  smsEnabled: boolean;
+  /** Code envoyé sur WhatsApp possible (fonction send-sms + WhatsApp Business). */
+  whatsappEnabled: boolean;
+  /** L'email contient un code à 6 chiffres ; sinon, un lien à ouvrir sur l'appareil. */
+  emailCode: boolean;
+  demo: boolean;
+}) {
   const t = useTranslations("signup");
   const tLevels = useTranslations("levels");
   const tCycles = useTranslations("cycles");
   const tSubjects = useTranslations("subjects");
   const [step, setStep] = useState(initialRole ? 1 : 0);
   const [role, setRole] = useState<SignupRole>(initialRole ?? "student");
-  const [method, setMethod] = useState<"phone" | "email">("phone");
+  // Moyens ouverts, du plus courant au Sénégal au plus universel.
+  const methods: SignupInput["method"][] = [...(whatsappEnabled ? (["whatsapp"] as const) : []), ...(smsEnabled ? (["phone"] as const) : []), "email"];
+  const [method, setMethod] = useState<SignupInput["method"]>(methods[0]!);
   const [identifier, setIdentifier] = useState("");
   const [code, setCode] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -67,17 +97,27 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
   const [isPending, startTransition] = useTransition();
 
   const minor = role === "student" && isMinor(birthDate);
-  const steps = ["role", "identifier", "code", "profile", "details", "consent"] as const;
-  const current = steps[step]!;
+  const current = STEPS[step]!;
+  const linkMode = !demo && method === "email" && !emailCode;
+
+  const input = (): SignupInput => ({
+    role,
+    method,
+    identifier,
+    firstName,
+    lastName,
+    birthDate,
+    levelCode: level,
+    seriesCode: series,
+    city,
+    subjects,
+    childCode,
+    parentPhone: minor ? parentPhone : "",
+    acceptTerms,
+  });
 
   const validate = (): string | null => {
     switch (current) {
-      case "identifier":
-        if (method === "phone" && identifier.replace(/\D/g, "").length !== 9) return t("errors.phone");
-        if (method === "email" && !/^\S+@\S+\.\S+$/.test(identifier)) return t("errors.email");
-        return null;
-      case "code":
-        return /^\d{6}$/.test(code.replace(/\s/g, "")) ? null : t("errors.code");
       case "profile":
         if (!firstName.trim() || !lastName.trim()) return t("errors.name");
         if (role === "student" && !birthDate) return t("errors.birthDate");
@@ -91,34 +131,45 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
         if (!acceptTerms) return t("errors.terms");
         if (minor && parentPhone.replace(/\D/g, "").length !== 9) return t("errors.parentPhone");
         return null;
+      case "identifier":
+        if (method !== "email" && identifier.replace(/\D/g, "").length !== 9) return t("errors.phone");
+        if (method === "email" && !/^\S+@\S+\.\S+$/.test(identifier)) return t("errors.email");
+        return null;
+      case "code":
+        return /^\d{6}$/.test(code.replace(/\s/g, "")) ? null : t("errors.code");
       default:
         return null;
     }
   };
 
+  const showError = (key: SignupError) => setError(t(`errors.${ERROR_KEYS[key]}` as "errors.generic"));
+
   const next = () => {
     const problem = validate();
     setError(problem);
     if (problem) return;
-    if (current !== "consent") {
-      setStep(step + 1);
+    if (current === "identifier") {
+      startTransition(async () => {
+        const result = await requestSignupCodeAction(input());
+        if (result.error) showError(result.error);
+        else setStep(step + 1);
+      });
       return;
     }
-    startTransition(async () => {
-      const result = await completeSignupAction({ role, firstName, code });
-      if (result?.error === "code") {
-        setStep(steps.indexOf("code"));
-        setError(t("errors.wrongCode"));
-      } else if (result?.error) {
-        setError(t("errors.generic"));
-      }
-    });
+    if (current === "code") {
+      startTransition(async () => {
+        const result = await completeSignupAction({ ...input(), code });
+        if (result?.error) showError(result.error);
+      });
+      return;
+    }
+    setStep(step + 1);
   };
 
   return (
     <div>
       <div className="flex items-center justify-between text-sm text-ink-muted">
-        <span>{t("step", { current: step + 1, total: steps.length })}</span>
+        <span>{t("step", { current: step + 1, total: STEPS.length })}</span>
         {step > 0 ? (
           <button
             type="button"
@@ -133,7 +184,7 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
           </button>
         ) : null}
       </div>
-      <ProgressBar value={((step + 1) / steps.length) * 100} label={t("step", { current: step + 1, total: steps.length })} className="mt-2" />
+      <ProgressBar value={((step + 1) / STEPS.length) * 100} label={t("step", { current: step + 1, total: STEPS.length })} className="mt-2" />
 
       <form
         className="mt-6 space-y-4"
@@ -173,78 +224,6 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
               </label>
             ))}
           </fieldset>
-        ) : null}
-
-        {current === "identifier" ? (
-          <>
-            <div className="flex gap-1 rounded-xl bg-canvas p-1">
-              {(["phone", "email"] as const).map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  aria-pressed={method === m}
-                  onClick={() => {
-                    setMethod(m);
-                    setIdentifier("");
-                  }}
-                  className={cn(
-                    "flex h-11 flex-1 items-center justify-center gap-2 rounded-lg text-sm font-medium",
-                    method === m ? "bg-surface text-ink shadow-sm" : "text-ink-muted",
-                  )}
-                >
-                  {m === "phone" ? <Smartphone className="size-4" aria-hidden /> : <Mail className="size-4" aria-hidden />}
-                  {t(`methods.${m}`)}
-                </button>
-              ))}
-            </div>
-            {method === "phone" ? (
-              <Field id="tel" label={t("fields.phone")} hint={t("hints.phone")}>
-                <div className="flex gap-2">
-                  <span className="flex h-12 items-center rounded-xl border border-line bg-canvas px-3 font-medium text-ink">+221</span>
-                  <input
-                    id="tel"
-                    type="tel"
-                    inputMode="numeric"
-                    autoComplete="tel-national"
-                    value={identifier}
-                    onChange={(e) => setIdentifier(e.target.value)}
-                    className={INPUT_CLASS}
-                  />
-                </div>
-              </Field>
-            ) : (
-              <Field id="email" label={t("fields.email")}>
-                <input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  className={INPUT_CLASS}
-                />
-              </Field>
-            )}
-          </>
-        ) : null}
-
-        {current === "code" ? (
-          <>
-            <Field id="otp" label={t("fields.code")} hint={t("hints.code", { to: identifier })}>
-              <input
-                id="otp"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={7}
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className={cn(INPUT_CLASS, "text-center text-2xl font-semibold tracking-[0.5em]")}
-              />
-            </Field>
-            <p className="flex gap-2 rounded-xl bg-brand-50 p-3 text-sm text-brand-800">
-              <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
-              {t("hints.demoCode")}
-            </p>
-          </>
         ) : null}
 
         {current === "profile" ? (
@@ -407,6 +386,97 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
           </>
         ) : null}
 
+        {current === "identifier" ? (
+          <>
+            {methods.length > 1 ? (
+              <div className="flex gap-1 rounded-xl bg-canvas p-1">
+                {methods.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    aria-pressed={method === m}
+                    onClick={() => {
+                      setMethod(m);
+                      setIdentifier("");
+                    }}
+                    className={cn(
+                      "flex h-11 flex-1 items-center justify-center gap-1.5 rounded-lg text-sm font-medium",
+                      method === m ? "bg-surface text-ink shadow-sm" : "text-ink-muted",
+                    )}
+                  >
+                    {m === "whatsapp" ? (
+                      <MessageCircle className="size-4" aria-hidden />
+                    ) : m === "phone" ? (
+                      <Smartphone className="size-4" aria-hidden />
+                    ) : (
+                      <Mail className="size-4" aria-hidden />
+                    )}
+                    {t(`methods.${m}`)}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-ink-muted">{t("hints.emailOnly")}</p>
+            )}
+            {method !== "email" ? (
+              <Field id="tel" label={t("fields.phone")} hint={t(method === "whatsapp" ? "hints.whatsapp" : "hints.phone")}>
+                <div className="flex gap-2">
+                  <span className="flex h-12 items-center rounded-xl border border-line bg-canvas px-3 font-medium text-ink">+221</span>
+                  <input
+                    id="tel"
+                    type="tel"
+                    inputMode="numeric"
+                    autoComplete="tel-national"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </div>
+              </Field>
+            ) : (
+              <Field id="email" label={t("fields.email")}>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  className={INPUT_CLASS}
+                />
+              </Field>
+            )}
+          </>
+        ) : null}
+
+        {current === "code" ? (
+          <>
+            {linkMode ? (
+              <p className="rounded-xl bg-brand-50 p-3 text-sm font-medium text-brand-800">{t("hints.linkSent", { to: identifier })}</p>
+            ) : null}
+            <Field
+              id="otp"
+              label={t("fields.code")}
+              hint={linkMode ? t("hints.codeExpiry") : `${t("hints.code", { to: identifier })} ${t("hints.codeExpiry")}`}
+            >
+              <input
+                id="otp"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={7}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className={cn(INPUT_CLASS, "text-center text-2xl font-semibold tracking-[0.5em]")}
+              />
+            </Field>
+            {demo ? (
+              <p className="flex gap-2 rounded-xl bg-brand-50 p-3 text-sm text-brand-800">
+                <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
+                {t("hints.demoCode")}
+              </p>
+            ) : null}
+          </>
+        ) : null}
+
         {error ? (
           <p role="alert" className="flex items-center gap-1.5 text-sm font-medium text-danger-700">
             <CircleAlert className="size-4 shrink-0" aria-hidden />
@@ -415,7 +485,7 @@ export function SignupWizard({ initialRole }: { initialRole: SignupRole | null }
         ) : null}
 
         <Button type="submit" className="w-full" disabled={isPending}>
-          {current === "consent" ? t("finish") : t("continue")}
+          {current === "code" ? t("finish") : current === "identifier" ? t("sendCode") : t("continue")}
           <ArrowRight className="size-4" aria-hidden />
         </Button>
       </form>

@@ -1,36 +1,38 @@
 import { Crown, PenLine } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
+import { LevelBadge } from "@/components/ui/level-badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { getContentOverview } from "@/features/admin/data";
+import type { LevelCode } from "@/lib/levels";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminContent");
   return { title: t("title") };
 }
 
-export default async function AdminContentPage() {
-  const [subjects, t] = await Promise.all([getContentOverview(), getTranslations("adminContent")]);
+/** Arborescence lue à la requête (leçons rédigées ou non, selon la base). */
+async function ContentTree() {
+  const [subjects, t, tLevels] = await Promise.all([getContentOverview(), getTranslations("adminContent"), getTranslations("levels")]);
   return (
-    <PageContainer width="wide" className="space-y-5 lg:space-y-7">
-      <PageHeader title={t("title")} subtitle={t("subtitle")} />
-      <div className="flex flex-wrap gap-2 text-sm">
-        <span className="rounded-full bg-brand-600 px-4 py-2 font-medium text-white">{t("level", { level: "3e" })}</span>
-        <span className="rounded-full bg-canvas px-4 py-2 text-ink-muted">{t("otherLevels")}</span>
-      </div>
       <div className="space-y-3">
         {subjects.map(({ subject, chapters }) => {
           const lessons = chapters.flatMap((c) => c.lessons);
           const written = lessons.filter((l) => l.written).length;
           return (
-            <details key={subject.code} className="group rounded-2xl border border-line bg-surface">
+            <details key={subject.slug} className="group rounded-2xl border border-line bg-surface">
               <summary className="flex cursor-pointer list-none items-center gap-3 p-4">
                 <SubjectIcon code={subject.code} size="sm" />
                 <span className="min-w-0 flex-1">
-                  <span className="block font-semibold text-ink">{subject.name}</span>
+                  <span className="flex flex-wrap items-center gap-2 font-semibold text-ink">
+                    {subject.name}
+                    <LevelBadge code={subject.levelCode}>{tLevels(subject.levelCode as LevelCode)}</LevelBadge>
+                  </span>
                   <span className="block text-xs text-ink-muted">
                     {t("counts", { chapters: chapters.length, lessons: lessons.length, written })}
                   </span>
@@ -72,6 +74,21 @@ export default async function AdminContentPage() {
           );
         })}
       </div>
+  );
+}
+
+export default async function AdminContentPage() {
+  const t = await getTranslations("adminContent");
+  return (
+    <PageContainer width="wide" className="space-y-5 lg:space-y-7">
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      <div className="flex flex-wrap gap-2 text-sm">
+        <span className="rounded-full bg-brand-600 px-4 py-2 font-medium text-white">{t("level", { level: "3e" })}</span>
+        <span className="rounded-full bg-canvas px-4 py-2 text-ink-muted">{t("otherLevels")}</span>
+      </div>
+      <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
+        <ContentTree />
+      </Suspense>
     </PageContainer>
   );
 }

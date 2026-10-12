@@ -1,6 +1,9 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { cache } from "react";
+import { getNextExamFor } from "@/features/exams/data";
+import { isSupabaseConfigured } from "@/lib/env";
 import { mockDashboard, mockStudent } from "@/mocks/student-3e";
 import { mockState } from "@/mocks/progress-store";
 import { MOCK_TUTORS } from "@/mocks/tutors";
@@ -13,14 +16,24 @@ import {
   DEMO_TUTOR_ID,
 } from "@/mocks/users";
 import type { AppRole, ChildOverview, SessionUser, StudentSummary } from "@/types/domain";
-import { getNextExamFor } from "@/features/exams/data";
-import { ROLES } from "./roles";
+import { ROLE_HOME, ROLES } from "./roles";
+import { requireIdentity } from "./session";
+import {
+  fetchConsentRequest,
+  fetchDataSaver,
+  fetchParentChildren,
+  fetchPendingParentLinks,
+  fetchSessionUser,
+  fetchStudentLinkInfo,
+  fetchStudentSummary,
+} from "./supabase";
 
-// Phases 1-2 : le rôle de démonstration est stocké dans un cookie.
-// Phase 4 : remplacé par la session Supabase (claim user_role du JWT).
+// Démo : rôle stocké dans un cookie et comptes fictifs (src/mocks).
+// Supabase : session Supabase Auth (claim user_role du JWT) et données lues sous RLS.
 export const DEMO_ROLE_COOKIE = "diangal_demo_role";
 
 export const getCurrentRole = cache(async (): Promise<AppRole> => {
+  if (isSupabaseConfigured()) return (await requireIdentity()).role;
   const value = (await cookies()).get(DEMO_ROLE_COOKIE)?.value;
   return ROLES.includes(value as AppRole) ? (value as AppRole) : "student";
 });
@@ -30,9 +43,16 @@ function premiumUntil(studentId: string): number | null {
   return until > Date.now() ? until : null;
 }
 
-/** Élève connecté. Phase 3 : lecture Supabase (profiles + student_profiles), même signature. */
+/** Élève connecté. Un autre rôle est renvoyé vers son propre espace. */
 export const getCurrentStudent = cache(async (): Promise<StudentSummary> => {
   await connection(); // donnée propre à l'utilisateur : rendue à la requête
+  if (isSupabaseConfigured()) {
+    const identity = await requireIdentity();
+    if (identity.role !== "student") redirect(ROLE_HOME[identity.role]);
+    const student = await fetchStudentSummary(identity.userId, true);
+    if (!student) redirect("/connexion?erreur=profil");
+    return student;
+  }
   return {
     ...mockStudent,
     isPremium: premiumUntil(DEMO_STUDENT_ID) !== null,
@@ -40,9 +60,17 @@ export const getCurrentStudent = cache(async (): Promise<StudentSummary> => {
   };
 });
 
+/** Élève vu par un parent lié (ou par l'admin) : la RLS vérifie le lien. */
+export const getStudentSummaryFor = cache(async (studentId: string): Promise<StudentSummary | null> => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchStudentSummary(studentId, false);
+  return studentId === DEMO_STUDENT_ID ? getCurrentStudent() : null;
+});
+
 /** Utilisateur affiché dans la coquille (carte, avatar, notifications) selon le rôle. */
 export const getSessionUser = cache(async (role: AppRole): Promise<SessionUser> => {
   await connection();
+  if (isSupabaseConfigured()) return fetchSessionUser(await requireIdentity());
   switch (role) {
     case "student": {
       const s = await getCurrentStudent();
@@ -85,9 +113,10 @@ export const getSessionUser = cache(async (role: AppRole): Promise<SessionUser> 
   }
 });
 
-/** Enfants reliés au parent connecté. Phase 3 : parent_links + get_student_dashboard. */
+/** Enfants reliés au parent connecté (lien actif), avec leur suivi. */
 export const getParentChildren = cache(async (): Promise<ChildOverview[]> => {
   await connection();
+  if (isSupabaseConfigured()) return fetchParentChildren((await requireIdentity()).userId);
   const awaUntil = premiumUntil(DEMO_STUDENT_ID);
   const moussaUntil = premiumUntil(DEMO_SECOND_CHILD.id);
   const [awaExam, moussaExam] = await Promise.all([getNextExamFor("3E"), getNextExamFor("CM2")]);
@@ -123,18 +152,36 @@ export const getParentChild = cache(async (childId: string) => {
   return (await getParentChildren()).find((c) => c.id === childId);
 });
 
-/** Demande de consentement liée au lien SMS. Phase 4 : consent_requests (jeton haché, expiration). */
+/** Demande de consentement liée au lien SMS (jeton haché en base, expiration 7 jours). */
 export async function getConsentRequest(token: string) {
+  if (isSupabaseConfigured()) return fetchConsentRequest(token);
   return token === "demo" ? { childFirstName: mockStudent.firstName, childLastName: mockStudent.lastName } : null;
 }
 
-/** Préférences de l'utilisateur. Phase 3 : colonne student_profiles.data_saver. */
+/** Préférences de l'élève (économie de données). */
 export const getPreferences = cache(async () => {
   await connection();
+  if (isSupabaseConfigured()) return { dataSaver: await fetchDataSaver((await requireIdentity()).userId) };
   return { dataSaver: mockState.dataSaver };
 });
 
-/** Infos de rattachement parent : numéro masqué du parent sollicité et code élève. */
-export async function getStudentLinkInfo() {
+/** Infos de rattachement parent : numéro masqué du parent sollicité (s'il y en a un) et code élève. */
+export async function getStudentLinkInfo(): Promise<{ parentPhoneMasked: string | null; linkCode: string }> {
+  if (isSupabaseConfigured()) return fetchStudentLinkInfo((await requireIdentity()).userId);
   return { parentPhoneMasked: DEMO_PARENT.phoneMasked, linkCode: DEMO_STUDENT_LINK_CODE };
 }
+
+/** Coordonnée de connexion de l'utilisateur, masquée (téléphone) ou email. */
+export async function getOwnContact(): Promise<string | null> {
+  if (!isSupabaseConfigured()) return DEMO_PARENT.phoneMasked;
+  const { phone, email } = await requireIdentity();
+  if (phone) return `${phone.slice(4, 6)} ••• •• ${phone.slice(-2)}`;
+  return email;
+}
+
+/** Parents qui ont saisi le code de l'élève connecté et attendent sa confirmation. */
+export const getPendingParentLinks = cache(async () => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchPendingParentLinks();
+  return [] as { parentId: string; firstName: string; lastName: string }[];
+});

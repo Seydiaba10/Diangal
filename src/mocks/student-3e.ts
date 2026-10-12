@@ -42,7 +42,7 @@ export const mockDashboard: Omit<StudentDashboard, "nextExam"> = {
       lessonsDone: 3,
       lessonsTotal: 5,
       nextLessonTitle: "La réciproque du théorème de Thalès",
-      href: "/eleve/cours/mathematiques/theoreme-de-thales",
+      href: "/eleve/cours/mathematiques-3e/theoreme-de-thales",
     },
     {
       chapterId: "pc-solutions-acides-et-solutions-basiques",
@@ -55,7 +55,7 @@ export const mockDashboard: Omit<StudentDashboard, "nextExam"> = {
       lessonsDone: 1,
       lessonsTotal: 4,
       nextLessonTitle: "Les indicateurs colorés",
-      href: "/eleve/cours/sciences-physiques/solutions-acides-et-solutions-basiques",
+      href: "/eleve/cours/sciences-physiques-3e/solutions-acides-et-solutions-basiques",
     },
     {
       chapterId: "hg-la-decolonisation-en-afrique",
@@ -68,7 +68,7 @@ export const mockDashboard: Omit<StudentDashboard, "nextExam"> = {
       lessonsDone: 4,
       lessonsTotal: 5,
       nextLessonTitle: "Les indépendances en Afrique de l’Ouest",
-      href: "/eleve/cours/histoire-geographie/la-decolonisation-en-afrique",
+      href: "/eleve/cours/histoire-geographie-3e/la-decolonisation-en-afrique",
     },
     {
       chapterId: "ang-the-simple-past",
@@ -81,7 +81,7 @@ export const mockDashboard: Omit<StudentDashboard, "nextExam"> = {
       lessonsDone: 0,
       lessonsTotal: 3,
       nextLessonTitle: "Regular and irregular verbs",
-      href: "/eleve/cours/anglais/the-simple-past",
+      href: "/eleve/cours/anglais-3e/the-simple-past",
     },
   ],
   weakPoints: [
@@ -92,7 +92,7 @@ export const mockDashboard: Omit<StudentDashboard, "nextExam"> = {
       chapterTitle: "Relations trigonométriques",
       lastScore20: 7.5,
       action: "review_lesson",
-      href: "/eleve/cours/mathematiques/relations-trigonometriques",
+      href: "/eleve/cours/mathematiques-3e/relations-trigonometriques",
     },
     {
       chapterId: "svt-l-immunite-de-l-organisme",

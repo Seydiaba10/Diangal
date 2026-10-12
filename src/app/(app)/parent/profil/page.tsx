@@ -10,7 +10,7 @@ import { LevelBadge } from "@/components/ui/level-badge";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { signOutAction } from "@/features/account/actions";
-import { getParentChildren, getSessionUser, getStudentLinkInfo } from "@/features/account/data";
+import { getOwnContact, getParentChildren, getSessionUser } from "@/features/account/data";
 
 export async function generateMetadata() {
   const t = await getTranslations("pages");
@@ -30,7 +30,7 @@ async function ParentProfile() {
             </p>
             <p className="flex items-center gap-1.5 text-sm text-ink-muted">
               <Phone className="size-4" aria-hidden />
-              {(await getStudentLinkInfo()).parentPhoneMasked}
+              {(await getOwnContact()) ?? t("contactUnknown")}
             </p>
           </div>
         </section>
@@ -49,13 +49,13 @@ async function ParentProfile() {
             ))}
           </ul>
         </SectionCard>
-        <SectionCard id="notif-titre" title={t("notifications.title")}>
+        <SectionCard id="notif-titre" title={t("notifications.title")} subtitle={t("notifications.soon")}>
           <ul className="space-y-3 text-sm text-ink">
             {(["sms", "push", "weekly"] as const).map((key) => (
               <li key={key} className="flex items-center gap-3">
                 <Bell className="size-4 text-ink-muted" aria-hidden />
                 <span className="flex-1">{t(`notifications.${key}`)}</span>
-                <input type="checkbox" defaultChecked={key !== "weekly"} disabled className="size-5 accent-brand-600" aria-label={t(`notifications.${key}`)} />
+                <span className="rounded-full bg-canvas px-2.5 py-1 text-xs font-medium text-ink-muted">{t("notifications.soonBadge")}</span>
               </li>
             ))}
           </ul>
@@ -71,6 +71,7 @@ async function ParentProfile() {
               {t("data.delete")}
             </Button>
           </div>
+          <p className="mt-2 text-xs text-ink-subtle">{t("data.soon")}</p>
         </SectionCard>
       </div>
       <aside className="space-y-4">

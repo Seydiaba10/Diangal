@@ -5,8 +5,8 @@ import { Card } from "@/components/ui/card";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { searchChapters } from "../data";
 
-export async function ChapterSearchResults({ query }: { query: string }) {
-  const [hits, t] = await Promise.all([searchChapters(query), getTranslations("courses")]);
+export async function ChapterSearchResults({ query, levelCode }: { query: string; levelCode: string }) {
+  const [hits, t] = await Promise.all([searchChapters(query, levelCode), getTranslations("courses")]);
   return (
     <Card aria-live="polite" className="p-4 sm:p-5">
       <h2 className="font-semibold text-ink">{t("searchResults", { count: hits.length, query })}</h2>

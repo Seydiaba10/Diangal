@@ -2,12 +2,14 @@
 
 import { notFound, redirect } from "next/navigation";
 import { getCurrentStudent } from "@/features/account/data";
+import { isSupabaseConfigured } from "@/lib/env";
 import { gradeAnswer, toScore20 } from "@/lib/grading";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ANSWER_KEYS } from "@/mocks/answer-keys-3e";
 import { ASSESSMENTS_3E, MOCK_QUESTIONS } from "@/mocks/assessments-3e";
 import { mockState } from "@/mocks/progress-store";
 import type { AnswerMap, AnswerValue, QuestionReview } from "@/types/domain";
-import { toAssessmentSummary } from "./data";
+import { findAssessment, getAssessmentSummary } from "./data";
 
 /** Une soumission reçue jusqu'à 60 s après la limite reste « à l'heure » (latence réseau). */
 const GRACE_MS = 60_000;
@@ -26,11 +28,23 @@ function seededShuffle<T>(items: T[], seed: string): T[] {
   return out;
 }
 
-/** Phase 3 : RPC start_attempt (vérifie le premium et fixe la date limite côté serveur). */
+/**
+ * Démarre un contrôle. Supabase : RPC start_attempt (vérifie le Premium et fixe la date
+ * limite côté serveur), puis ouverture du lecteur.
+ */
 export async function startAttemptAction(assessmentId: string) {
-  const assessment = ASSESSMENTS_3E.find((a) => a.id === assessmentId);
-  if (!assessment) notFound();
+  const info = await findAssessment(assessmentId);
+  if (!info) notFound();
 
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase.rpc("start_attempt", { p_assessment: info.uuid! });
+    if (error?.message.includes("premium_required")) redirect("/eleve/abonnement");
+    if (error || !data) redirect(`/eleve/evaluations/${info.id}?erreur=demarrage`);
+    redirect(`/eleve/tentatives/${(data as { attempt_id: string }).attempt_id}`);
+  }
+
+  const assessment = ASSESSMENTS_3E.find((a) => a.id === info.id)!;
   const student = await getCurrentStudent();
   if (assessment.isPremium && !student.isPremium) redirect("/eleve/abonnement");
 
@@ -46,7 +60,7 @@ export async function startAttemptAction(assessmentId: string) {
 
   mockState.attempts.set(id, {
     id,
-    assessmentId,
+    assessmentId: assessment.id,
     startedAt: now,
     deadlineAt: assessment.durationS ? now + assessment.durationS * 1000 : null,
     optionOrder,
@@ -64,10 +78,26 @@ function sanitizeAnswer(value: unknown): AnswerValue | null {
 export type SubmitAttemptResult = { ok: true } | { ok: false; error: "not_found" };
 
 /**
- * Phase 3 : RPC submit_attempt (correction avec private.answer_keys, idempotente).
- * Renvoie un statut au lieu de rediriger : le lecteur distingue ainsi une erreur réseau.
+ * Envoi de la copie. Supabase : RPC submit_attempt (correction avec les corrigés privés,
+ * idempotente). Renvoie un statut au lieu de rediriger : le lecteur distingue ainsi une erreur réseau.
  */
 export async function submitAttemptAction(attemptId: string, answers: AnswerMap): Promise<SubmitAttemptResult> {
+  if (isSupabaseConfigured()) {
+    const clean = Object.fromEntries(
+      Object.entries(answers ?? {})
+        .slice(0, 100)
+        .map(([questionId, value]) => [questionId, sanitizeAnswer(value)] as const)
+        .filter(([, value]) => value !== null),
+    );
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase.rpc("submit_attempt", {
+      p_attempt: attemptId,
+      p_answers: clean,
+      p_client_submitted_at: new Date().toISOString(),
+    });
+    return error ? { ok: false, error: "not_found" } : { ok: true };
+  }
+
   const attempt = mockState.attempts.get(attemptId);
   if (!attempt) return { ok: false, error: "not_found" };
   if (attempt.status === "submitted") return { ok: true };
@@ -102,7 +132,7 @@ export async function submitAttemptAction(attemptId: string, answers: AnswerMap)
   attempt.status = "submitted";
   attempt.result = {
     id: attempt.id,
-    assessment: toAssessmentSummary(assessment, false),
+    assessment: (await getAssessmentSummary(assessment.id))!,
     score,
     maxScore,
     score20: toScore20(score, maxScore),

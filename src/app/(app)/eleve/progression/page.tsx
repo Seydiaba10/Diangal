@@ -8,6 +8,7 @@ import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { getRecentResults } from "@/features/assessments/data";
+import { getCurrentStudent } from "@/features/account/data";
 import { getSubjectsProgress } from "@/features/curriculum/data";
 import { WeakPoints } from "@/features/progress/components/weak-points";
 import { getStudentDashboard, getSubjectAverages } from "@/features/progress/data";
@@ -27,8 +28,9 @@ function scoreTone(score: number) {
 }
 
 async function ProgressContent() {
+  const student = await getCurrentStudent();
   const [subjects, averages, results, dashboard, t] = await Promise.all([
-    getSubjectsProgress(),
+    getSubjectsProgress(student.levelCode),
     getSubjectAverages(),
     getRecentResults(),
     getStudentDashboard(),
@@ -43,7 +45,7 @@ async function ProgressContent() {
             {subjects.map((s) => {
               const avg = averages[s.code];
               return (
-                <li key={s.code}>
+                <li key={s.slug}>
                   <Link href={`/eleve/cours/${s.slug}`} className="flex items-center gap-3 rounded-xl hover:bg-canvas">
                     <SubjectIcon code={s.code} size="sm" />
                     <span className="min-w-0 flex-1">

@@ -2,6 +2,7 @@ import {
   Atom,
   Brain,
   Calculator,
+  Compass,
   Dumbbell,
   Earth,
   Landmark,
@@ -35,4 +36,5 @@ export const SUBJECT_STYLES: Record<SubjectCode, SubjectStyle> = {
   LV2: { icon: MessageCircle, text: "text-subject-lv2", soft: "bg-subject-lv2-soft", solid: "bg-subject-lv2" },
   PHILO: { icon: Brain, text: "text-subject-philo", soft: "bg-subject-philo-soft", solid: "bg-subject-philo" },
   EPS: { icon: Dumbbell, text: "text-subject-eps", soft: "bg-subject-eps-soft", solid: "bg-subject-eps" },
+  ESVS: { icon: Compass, text: "text-subject-esvs", soft: "bg-subject-esvs-soft", solid: "bg-subject-esvs" },
 };

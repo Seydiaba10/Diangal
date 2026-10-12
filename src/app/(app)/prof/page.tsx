@@ -34,7 +34,7 @@ async function TutorHome() {
       </p>
 
       <section aria-label={t("statsLabel")} className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
-        <StatCard icon={<Eye className="size-5" aria-hidden />} iconClassName="bg-brand-50 text-brand-700" label={t("views")} value={String(stats.profileViews)} />
+        <StatCard icon={<Eye className="size-5" aria-hidden />} iconClassName="bg-brand-50 text-brand-700" label={t("views")} value={stats.profileViews === null ? t("notMeasured") : String(stats.profileViews)} />
         <StatCard
           icon={<MessageCircle className="size-5" aria-hidden />}
           iconClassName="bg-info-50 text-info-700"

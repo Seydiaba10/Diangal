@@ -19,6 +19,8 @@ Relevé fait le 11/10/2026, **à valider** par un enseignant ou à partir des pr
 
 ## Cycle élémentaire (CI → CM2) · vert
 
+> Le programme détaillé du **CI**, tiré des guides officiels du Curriculum de l’Éducation de Base, est dans [programme-ci.md](programme-ci.md). Le tableau ci-dessous ne reflète que PROMET.
+
 Matières et activités trouvées sur PROMET, regroupées par domaine du CEB. Les classes indiquées sont celles où PROMET a des ressources, pas forcément toutes celles où la matière est enseignée.
 
 | Domaine (CEB) | Matières et activités (noms PROMET) | Classes avec ressources |

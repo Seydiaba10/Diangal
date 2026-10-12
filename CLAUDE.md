@@ -13,16 +13,25 @@ Contraintes qui guident tous les choix :
 
 ## État actuel (octobre 2026)
 
-- MVP centré sur la **3e**. Tous les écrans des 4 rôles fonctionnent sur des **données de démonstration** (`src/mocks`), avec une session de démo.
-- La base **Supabase** est écrite : migrations, RLS, RPC et seed. Elle est testée avec PGlite mais **pas encore branchée** à l'application.
-- **En attente de comptes externes** : projet Supabase et clés, Orange SMS et Twilio, sandbox PayDunya, Vercel et le domaine `diangal.sn`.
+- Classes publiées : **CI** (programme officiel de l'étape 1 du CEB) et **3e**. Chaque élève voit les cours de sa classe ; une classe sans programme affiche « pas encore publiés ».
+- **Application full stack sur Supabase** depuis le 12/10/2026 : projet hébergé `mlepbueoqrzmniksdhpl` (région **eu-west-1, Irlande**). Toutes les fonctionnalités des 4 rôles lisent et écrivent dans la base, sous RLS. Vérifiées de bout en bout avec de vrais comptes (élève de CI et de 3e, parent, répétiteur, admin), pages contrôlées à 360 px.
+- **Deux modes**, choisis par `DIANGAL_DATA_SOURCE` (`.env.local`) :
+  - `supabase` : vraie base, vraie session, proxy actif. C'est le mode actuel en local ;
+  - `demo` : données fictives de `src/mocks`, sans réseau. C'est la valeur par défaut si la variable manque.
+- **Connexion** : par email (code à 6 chiffres ou lien), par code **WhatsApp** ou par **SMS**. WhatsApp et SMS restent masqués tant que leur fournisseur n'est pas branché (`DIANGAL_WHATSAPP_ENABLED`, `DIANGAL_SMS_ENABLED`). L'admin passe par une double authentification TOTP.
+- **Limites actuelles, qui demandent des comptes externes** :
+  - **emails** : l'envoi intégré à Supabase (offre gratuite) n'envoie qu'aux membres de l'équipe du projet, 2 emails par heure, avec un modèle non modifiable qui contient un lien et pas de code. Il faut un SMTP personnalisé (Resend, Brevo…), puis le modèle en français avec `{{ .Token }}` (`DIANGAL_EMAIL_CODE=true`) ;
+  - **SMS** : Orange SMS ou Twilio, plus le déploiement des Edge Functions (`DIANGAL_SMS_ENABLED=true`). Sans SMS, les demandes de validation parentale attendent dans `private.sms_outbox` ;
+  - **WhatsApp** : compte WhatsApp Business (API Cloud de Meta), modèle d'authentification `diangal_code` en français approuvé par Meta, secrets `WHATSAPP_TOKEN` et `WHATSAPP_PHONE_NUMBER_ID` sur la fonction `send-sms`, Send SMS Hook activé, puis `DIANGAL_WHATSAPP_ENABLED=true`. Le canal choisi est noté dans `private.otp_channels` juste avant l'envoi (le hook ne le transmet pas) ;
+  - **paiement** : clés PayDunya (sandbox). Sans elles, le bouton « Payer » affiche « paiement pas encore ouvert » ;
+  - **mise en ligne** : Vercel est relié au dépôt (projet `seydi1/diangal`, https://diangal.vercel.app, déploiement automatique de `main`). Il tourne en **mode démo** tant que ses variables d'environnement Supabase ne sont pas saisies (`DIANGAL_DATA_SOURCE=supabase`, URL et clés, `NEXT_PUBLIC_SITE_URL=https://diangal.vercel.app`). L'URL est déjà autorisée dans l'Auth Supabase. Domaine `diangal.sn` à brancher.
 - Dépôt : `github.com/Seydiaba10/Diangal`, branche `main`.
 
 ## Commandes
 
 ```bash
 pnpm dev          # http://localhost:3000 (Turbopack)
-pnpm build        # build de production (~450 pages)
+pnpm build        # build de production (~750 pages)
 pnpm lint
 pnpm typecheck    # tsc --noEmit
 pnpm test         # Vitest : tests/unit + tests/db (PGlite)
@@ -34,6 +43,21 @@ pnpm db:seed      # régénère supabase/seed.sql depuis src/mocks
 - Après avoir ajouté ou supprimé une route, lancer `pnpm exec next typegen` avant `pnpm typecheck`.
 - Ne jamais lancer `next build` pendant que `next dev` tourne : cela corrompt `.next`. Arrêter le serveur de dev d'abord.
 - Le serveur de dev peut garder en mémoire d'anciennes versions des mocks. Si une modification de données n'apparaît pas, le redémarrer.
+- **Base hébergée** : les clés sont dans `.env.local` (jamais dans le code ni le chat). Pour appliquer une nouvelle migration :
+  - CLI Supabase via `npx supabase`, avec `SUPABASE_ACCESS_TOKEN` dans l'environnement ;
+  - `supabase link --project-ref mlepbueoqrzmniksdhpl`, puis `supabase db push --linked` ;
+  - forcer `SUPABASE_DB_PASSWORD` à vide pour que la CLI utilise son rôle de connexion temporaire ;
+  - la CLI valide `config.toml` : fournir des valeurs factices pour `SEND_SMS_HOOK_SECRET` (format `v1,whsec_…`) et `TURNSTILE_SECRET_KEY` ;
+  - l'hôte direct `db.<ref>` est IPv6 seulement : passer par le pooler `aws-0-eu-west-1.pooler.supabase.com`.
+- Une migration déjà appliquée ne se modifie pas : en ajouter une nouvelle (ex. `20261012000001_hook_grants.sql`).
+- **Publier le contenu d'une classe sur la base hébergée** : pas de nouveau seed complet (les autres lignes existent déjà). Générer seulement ses `insert` (programmes, chapitres, leçons, corps) à partir des mocks, les exécuter en une transaction via l'API de gestion, puis lancer `pnpm db:seed` pour garder le seed local aligné.
+- Après une migration, regénérer les types : `supabase gen types typescript --linked --schema public` vers `src/types/database.ts`, en gardant la ligne d'en-tête.
+- **Réglages Auth** (Management API `/v1/projects/{ref}/config/auth`, avec le jeton) :
+  - hook d'access token activé ; OTP email à 6 chiffres, valable 600 s ;
+  - `uri_allow_list` : `localhost:3000` et `diangal.sn` ;
+  - les modèles d'email ne sont modifiables qu'avec un SMTP personnalisé.
+- **Comptes de test** : les créer avec l'API admin (`auth.admin.createUser`, le déclencheur crée le profil) et obtenir un code sans email avec `auth.admin.generateLink({ type: "magiclink" })` (`properties.email_otp`).
+  - Un compte qui a agi (messages, consentements, journal) ne se supprime pas tant que ces lignes existent : effacer d'abord ces traces.
 - **Démo** :
   - le code OTP est toujours `123456` ;
   - le rôle est lu dans le cookie `diangal_demo_role` (`student` par défaut) ;
@@ -49,7 +73,7 @@ pnpm db:seed      # régénère supabase/seed.sql depuis src/mocks
 | Traduction | **next-intl** sans préfixe de langue : locale fixée à `fr` (`src/i18n/request.ts`), textes dans `messages/fr.json`, typés par `src/global.d.ts`. |
 | Icônes, police | `lucide-react`, Lexend (`next/font`). |
 | PWA | **Serwist** (`@serwist/turbopack`) : service worker `src/app/sw.ts` servi par `src/app/serwist/[path]/route.ts`. Données hors ligne dans IndexedDB via `idb`. |
-| Base de données | **Supabase** (Postgres, RLS, RPC, Storage, pg_cron), `@supabase/ssr` avec `getClaims()`. Région prévue : Paris. |
+| Base de données | **Supabase** (Postgres, RLS, RPC, Storage, pg_cron), `@supabase/ssr` avec `getClaims()`, clients typés par `src/types/database.ts` (généré). Région actuelle : Irlande. |
 | Validation | `zod`, notamment pour les variables d'environnement (`src/lib/env.ts`). |
 | Paiement | **PayDunya** (Wave, OM, Free/Yas, carte) derrière l'interface `PaymentProvider`. |
 | SMS | Edge Functions Supabase : API SMS Orange Sénégal, avec Twilio en secours. |
@@ -57,39 +81,48 @@ pnpm db:seed      # régénère supabase/seed.sql depuis src/mocks
 
 ## Fonctionnalités implémentées
 
-Toutes fonctionnent sur les mocks, sauf mention contraire.
+Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention contraire.
 
 - **Public** : landing (inspirée de Kindering), `/tarifs`, `/devenir-repetiteur`, pages légales (`/confidentialite`, `/cgu`, `/mentions-legales`, à faire relire par un juriste).
 - **Authentification** :
-  - `/connexion` : téléphone ou email, puis code OTP ;
-  - `/inscription` : assistant en 6 étapes (rôle, identifiant, code, profil, niveau et série, consentements). Un élève mineur doit saisir le téléphone d'un parent ;
-  - `/consentement/[token]` : validation par le parent.
+  - `/connexion` puis `/connexion/code` : email (ou téléphone quand le SMS sera branché). Code à 6 chiffres, ou lien de l'email traité par `/auth/confirmation` ;
+  - `/inscription` : assistant en 6 étapes, dans l'ordre rôle, profil, classe, conditions, identifiant (email, WhatsApp ou SMS), code. Le compte Supabase est créé à l'envoi du code avec ses métadonnées (le déclencheur `handle_new_user` exige la classe et la date de naissance). Les compléments (téléphone du parent, code enfant, ville, matières) sont rangés dans les métadonnées du compte (`signup_pending`) ; `features/account/signup.ts` les applique une fois l'adresse vérifiée, sur n'importe quel appareil, puis efface le marqueur ;
+  - `/connexion/securite` : double authentification de l'admin (enrôlement TOTP par QR code, puis code) ; le proxy et la garde de l'espace admin exigent `aal2` ;
+  - `/consentement/[token]` : validation par le parent, connecté avec le numéro qui a reçu le SMS.
 - **Élève** (`/eleve`) :
   - tableau de bord : moyenne, chapitres, contrôles, jours d'affilée, « Continuer », points faibles, compte à rebours de l'examen ;
-  - cours par matière, chapitre puis leçon, avec « Marquer comme terminée » et mur Premium ;
+  - cours de **sa classe** par matière, chapitre puis leçon, avec « Marquer comme terminée » et mur Premium. Une « matière » est un programme (matière × classe) : `/eleve/cours/mathematiques-ci`, `/eleve/cours/francais-3e` ;
   - entraînement ;
   - **contrôle chronométré** en mode concentration (`(focus)`) : échéance fixée par le serveur, sauvegarde locale, envoi automatique ;
   - résultat avec corrigé détaillé ;
   - examens et annales, progression, téléchargements hors ligne, profil, abonnement.
-- **Écrans partagés** : annuaire des répétiteurs (filtres dans l'URL), fiche répétiteur (contact bloqué en mode limité), messagerie, notifications, retour de paiement.
-- **Parent** : une carte par enfant, détail d'un enfant, rattachement par code élève, abonnements, profil.
-- **Répétiteur** (`/prof`) : accueil, profil (matières, niveaux, tarif, mode), pièces de vérification, disponibilités.
-- **Admin** : statistiques, contenus avec éditeur de leçon, évaluations, examens, file de vérification des répétiteurs, signalements, utilisateurs, paiements, journal d'audit.
+- **Écrans partagés** :
+  - annuaire des répétiteurs (filtres dans l'URL) ;
+  - fiche répétiteur : premier message qui crée la conversation, avec le parent en observateur pour un mineur ; contact bloqué en mode limité ;
+  - messagerie **en temps réel** (Supabase Realtime sur `messages`, composant `LiveRefresh`), numéros masqués en base, notification des autres membres ;
+  - notifications, retour de paiement.
+- **Parent** : une carte par enfant, détail d'un enfant, rattachement par code élève (confirmé ensuite par l'élève dans son profil), abonnements, profil.
+- **Répétiteur** (`/prof`) : accueil, profil (matières, niveaux, tarif, mode), disponibilités, pièces envoyées dans le Storage privé `tutor-documents`, envoi du dossier à la vérification.
+- **Admin** : statistiques, contenus avec éditeur de leçon, évaluations avec corrigés, examens, file de vérification des répétiteurs (pièces par lien signé de 5 min, consultation journalisée), signalements, utilisateurs, paiements, journal d'audit.
 - **Hors ligne** :
   - manifeste, icônes, `/demarrer` (adresse de lancement de la PWA), page `/hors-ligne` ;
   - téléchargement d'un chapitre (`/api/hors-ligne/chapitres/[id]`) vers IndexedDB, lecteur hors ligne, bouton d'installation.
 - **Paiement** :
   - client PayDunya (`src/lib/payments`) ;
   - webhook `/api/webhooks/paydunya` : vérifie le hash, relit le statut chez PayDunya, journalise dans `payment_events` (idempotent), puis appelle la RPC `apply_payment_event`.
-- **Base Supabase** (`supabase/migrations`, 15 fichiers) :
+- **Base Supabase** (`supabase/migrations`, 21 fichiers) :
   - RLS sur toutes les tables, droits par colonne, schéma `private` pour les fonctions `SECURITY DEFINER` et les corrigés ;
   - hook d'access token (claim `user_role`) ; un admin doit avoir le niveau MFA `aal2` ;
   - RPC `start_attempt`, `submit_attempt` (correction côté serveur), `get_student_dashboard`, `search_tutors`, consentement parental, messagerie, vérification des répétiteurs, paiements ;
+  - RPC des écrans (migrations du 12/10) : `complete_lesson`, `get_attempt_session`, `get_consent_request`, `get_my_consent_request`, `get_pending_parent_links`, `record_signup_consents`, `get_tutor_profile`, `get_assessments_catalog`, `admin_log`, `admin_get_assessment`, `admin_save_lesson_body` ; déclencheur `notify_new_message` ;
+  - canal du code de connexion (`20261012000006_otp_channel.sql`) : `public.set_otp_channel` (clé secrète seulement) et `private.otp_channel_for` lu par `send-sms` ;
   - Storage et pg_cron, installés seulement si l'extension existe.
 - **Pas encore fait** :
-  - branchement des `data.ts` sur Supabase et vraie connexion OTP avec Turnstile ;
+  - SMTP personnalisé (emails avec code), SMS (Edge Functions à déployer), clés PayDunya, Turnstile ;
+  - suppression de compte par anonymisation et export « Mes données » (droits CDP) ;
   - réservations, visio LiveKit et avis (release 2) ;
-  - autres niveaux que la 3e, interface en wolof ;
+  - autres classes que le CI et la 3e (CP à 4e, lycée par série), exercices corrigés du CI, arabe, EPS et arts au CI, interface en wolof ;
+  - réglages de notifications du parent (affichés « Bientôt ») ;
   - E2E Playwright en CI, Lighthouse CI, déploiement.
 
 ## Structure des fichiers
@@ -109,32 +142,45 @@ src/
   components/
     ui/                  briques : Button, Card, Badge, LevelBadge, SenegalFlag, form, table…
     layout/              AppShell, Sidebar, BottomNav, MobileTopBar, NavLink, SessionCard, Logo…
-  features/<domaine>/    data.ts (lecture), actions.ts (Server Actions), components/
+  app/auth/confirmation/ route du lien de l'email (ouverture de session, fin d'inscription)
+  features/<domaine>/    data.ts (lecture : mode démo OU Supabase), supabase.ts (requêtes Supabase),
+                         actions.ts (Server Actions), components/
+  features/account/      session.ts (identité depuis le JWT), signup.ts (fin d'inscription)
                          domaines : account, curriculum, assessments, progress, exams, tutors,
                          messaging, notifications, payments, parents, admin, offline, marketing
   lib/                   format, grading, levels (cycles et séries), subjects, navigation,
-                         env, slug, cn, payments/, supabase/{server,browser,admin}
-  mocks/                 données de démo (élève de 3e, catalogue, contrôles, corrigés,
-                         répétiteurs, offres) + progress-store (état en mémoire)
+                         places (villes), env, slug (programSlug), sanitize (HTML des leçons),
+                         safe-path (redirections internes), cn, payments/,
+                         supabase/{server,public,browser,admin}
+  mocks/                 données de démo (élève de 3e, contrôles, corrigés, répétiteurs, offres)
+                         + progress-store (état en mémoire). curriculum.ts = catalogue de toutes
+                         les classes publiées (curriculum-ci.ts + ci/, curriculum-3e.ts)
   types/domain.ts        types métier partagés entre l'UI et data.ts
+  types/database.ts      GÉNÉRÉ depuis la base (supabase gen types)
   i18n/request.ts  proxy.ts  global.d.ts
 messages/fr.json         tous les textes de l'interface, un namespace par écran
 supabase/                migrations/, seed.sql (GÉNÉRÉ), config.toml, functions/ (SMS)
 scripts/generate-seed.ts produit supabase/seed.sql à partir des mocks
 tests/unit/              format, grading, paydunya
 tests/db/                harness PGlite + tests RLS/RPC (parité de correction SQL/TS)
-docs/programme/          relevé du programme scolaire (sources et listes de chapitres)
+docs/programme/          programme du CI (sources officielles) et relevé CI → 3e
 public/                  icons/ (PWA), landing/app-accueil.png (capture du tableau de bord)
 ```
 
 ## Règles à respecter
 
 ### Données
-- **Un composant n'importe jamais `src/mocks`.** Il passe par `features/*/data.ts`. Ces fonctions gardent la même signature quand elles liront Supabase.
+- **Un composant n'importe jamais `src/mocks` ni `supabase.ts`.** Il passe par `features/*/data.ts`. Chaque fonction choisit sa source avec `isSupabaseConfigured()` et renvoie les mêmes types dans les deux modes.
+- **Contenu public** (catalogue, contrôles publiés, offres, dates d'examen, fiches répétiteurs) : client `createSupabasePublicClient()` dans une fonction `"use cache"`, avec `cacheLife("hours")` et un `cacheTag` (`catalog`, `exam-sessions`, `plans`, `tutors`) que l'admin invalide par `updateTag`.
+- **Données d'un utilisateur** : `createSupabaseServerClient()`, qui appelle `connection()` (jamais de prérendu). Le droit d'accès est vérifié par la RLS ou par la RPC, jamais seulement dans le code.
+- L'identité vient de `getAuthIdentity()` / `requireIdentity()` (`features/account/session.ts`) : id, rôle (claim `user_role`), niveau `aal`, email ou téléphone.
+- Identifiants publics : un contrôle s'adresse par son `slug` (`/eleve/evaluations/thales-quiz`) ; les chapitres, leçons, tentatives et répétiteurs par leur uuid.
 - Les corrigés (`answer-keys-3e.ts`) sont `server-only` et ne doivent jamais atteindre le client.
 - Une donnée propre à l'utilisateur passe par une fonction de `data.ts` qui appelle `await connection()`. Elle s'affiche sous `<Suspense>` avec un squelette.
 - `supabase/seed.sql` est **généré** : ne pas le modifier à la main, lancer `pnpm db:seed` après tout changement de mocks.
-- Les tests ne codent pas en dur des volumes de contenu : ils les dérivent des mocks (ex. `CHAPTERS_3E.length`).
+- Les tests ne codent pas en dur des volumes de contenu : ils les dérivent des mocks (ex. `CATALOG_CHAPTERS.length`).
+- **Plusieurs classes** : une matière (`Subject`) porte sa classe (`levelCode`) et un slug de programme (`programSlug`). Toujours apparier chapitres, évaluations et matières par code **et** classe, et filtrer par la classe de l'élève (`getSubjects(levelCode)`).
+- Les coefficients ne sont pas affichés : aucun n'est officiel pour l'instant (ils pondèrent seulement la moyenne).
 
 ### Next.js 16
 Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`). Avec `cacheComponents` :
@@ -167,8 +213,12 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 
 ### Sécurité et données personnelles
 - RLS sur toutes les tables.
+- Dans une règle RLS, écrire `(select auth.uid())` et non `auth.uid()` : la valeur est calculée une fois par requête (migration `20261012000004_performance.sql`). Indexer chaque nouvelle clé étrangère.
+- Temps réel : avant `.subscribe()`, transmettre le jeton avec `supabase.realtime.setAuth(session.access_token)` ; sinon le serveur applique la RLS d'un visiteur anonyme. Donner un nom de canal unique à chaque abonnement.
 - `role`, `status`, `consent_status` et `rating_*` ne sont jamais modifiables par un client.
 - Les fonctions `SECURITY DEFINER` utilisent `set search_path = ''`.
+- Le HTML d'une leçon saisi par l'admin passe par `sanitizeLessonHtml` (`lib/sanitize.ts`, liste blanche). Un paramètre `next` passe par `safeInternalPath` (`lib/safe-path.ts`).
+- Un texte de l'interface n'annonce jamais une fonction absente : marquer « Bientôt » ce qui n'est pas encore fait.
 - La clé secrète Supabase reste côté serveur (`server-only`).
 - **Correction** : `lib/grading.ts` et les fonctions SQL `private.normalize_text`, `parse_number` et `grade_answer` doivent rester alignées. Les tests de `tests/db` vérifient cette parité.
 - **Mineurs** : en « mode limité » tant que le parent n'a pas validé par SMS.
@@ -189,7 +239,7 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 - **URLs en français** sans préfixe de langue (`/eleve/cours`), pour des URLs stables en cache hors ligne.
 - **Offres prépayées**, car le mobile money ne gère pas le prélèvement : 2 000 FCFA par mois, 5 000 par trimestre, 15 000 par an, Pass BFEM à 7 500. Les cours gratuits restent toujours téléchargeables hors ligne.
 - **Paiement via PayDunya**, pour une seule intégration. Wave en direct pourra s'ajouter plus tard derrière `PaymentProvider`.
-- **Hébergement prévu** : Supabase et Vercel à Paris.
+- **Hébergement** : Supabase en Irlande pour l'instant (projet créé ainsi), Vercel prévu à Paris. On pourra recréer le projet à Paris avant le lancement.
 
 ## Programme scolaire
 
@@ -198,7 +248,8 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
   - PROMET, site officiel du ministère ;
   - Sunudaara, site privé : ne reprendre que les titres, jamais ses leçons.
 - **Catalogue de 3e** : maths, physique-chimie, SVT et histoire-géographie suivent ce relevé. Français, anglais, éducation civique et les coefficients restent indicatifs.
-- Seules les leçons du chapitre « Théorème de Thalès » sont rédigées (`src/mocks/lesson-content.ts`).
+- **Catalogue du CI** : français, mathématiques et ESVS d'après le guide officiel de l'étape 1 du CEB et le guide « Langue et communication » (`docs/programme/programme-ci.md`). 41 chapitres, 98 leçons rédigées par DIANGAL (`src/mocks/ci/`), à faire valider.
+- En 3e, seules les leçons du chapitre « Théorème de Thalès » sont rédigées (`src/mocks/lesson-content.ts`).
 - Tout contenu pédagogique doit être **original** et **validé par des enseignants**.
 - **Manque encore** :
   - programmes officiels (MEN, INEADE) ;
@@ -214,9 +265,14 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 3. Après chaque modification, vérifier `pnpm lint`, `pnpm typecheck` et `pnpm test`. Lancer aussi `pnpm db:seed` si les mocks changent.
 4. Ne rien inventer sur le programme officiel. Signaler ce qui n'est pas sourcé.
 5. Le porteur du projet écrit en français et n'est pas développeur : lui répondre en français simple, et ne pousser sur GitHub que s'il le demande.
-6. Prochaines étapes :
-   - brancher `features/*/data.ts` sur Supabase dès que les clés sont fournies (`.env.local`, voir `.env.example`) ;
-   - vraie connexion OTP ;
-   - E2E Playwright ;
-   - déploiement ;
-   - contenus des autres matières et niveaux.
+6. Toute nouvelle fonctionnalité se branche dans les deux modes : mock dans `data.ts`, Supabase dans `supabase.ts`. Une nouvelle règle d'accès va en base (migration + test dans `tests/db`).
+7. Prochaines étapes :
+   - saisir les variables Supabase dans Vercel pour sortir du mode démo ;
+   - compte WhatsApp Business (Meta), modèle `diangal_code`, puis déploiement de `send-sms` ;
+   - programme du CP (même guide officiel que le CI), puis les autres classes ;
+   - SMTP personnalisé, puis modèles d'email en français avec le code ;
+   - fournisseur SMS et déploiement des Edge Functions `send-sms` et `process-sms-outbox` ;
+   - clés PayDunya sandbox, puis test d'un paiement complet ;
+   - E2E Playwright en CI ;
+   - suppression de compte par anonymisation, export des données ;
+   - contenus des autres matières et niveaux, validation des leçons du CI par des enseignants.

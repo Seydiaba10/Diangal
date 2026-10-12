@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AssessmentCard } from "@/features/assessments/components/assessment-card";
 import { getPracticeAssessments, getRecommendedAssessments } from "@/features/assessments/data";
+import { getCurrentStudent } from "@/features/account/data";
 import { getSubjects } from "@/features/curriculum/data";
 import { getStudentDashboard } from "@/features/progress/data";
 import { cn } from "@/lib/cn";
@@ -32,9 +33,10 @@ function AssessmentGrid({ items }: { items: AssessmentSummary[] }) {
 
 async function PracticeContent({ searchParams }: { searchParams: SearchParams }) {
   const { matiere } = await searchParams;
-  const [subjects, t] = await Promise.all([getSubjects(), getTranslations("practice")]);
+  const student = await getCurrentStudent();
+  const [subjects, t] = await Promise.all([getSubjects(student.levelCode), getTranslations("practice")]);
   const selected = subjects.find((s) => s.slug === matiere);
-  const [all, dashboard] = await Promise.all([getPracticeAssessments(selected?.code), getStudentDashboard()]);
+  const [all, dashboard] = await Promise.all([getPracticeAssessments(student.levelCode, selected?.code), getStudentDashboard()]);
   const recommended = selected ? [] : await getRecommendedAssessments(dashboard.weakPoints.map((w) => w.chapterId));
 
   const chip = (href: string, label: string, active: boolean) => (

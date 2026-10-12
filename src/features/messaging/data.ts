@@ -1,10 +1,13 @@
 import { connection } from "next/server";
 import { cache } from "react";
 import { getCurrentRole, getCurrentStudent } from "@/features/account/data";
+import { requireIdentity } from "@/features/account/session";
+import { isSupabaseConfigured } from "@/lib/env";
 import { mockState, type MockConversation } from "@/mocks/progress-store";
 import { MOCK_TUTORS } from "@/mocks/tutors";
 import { DEMO_PARENT, DEMO_STUDENT_ID, DEMO_TUTOR_ID } from "@/mocks/users";
 import type { AppRole, ChatMessage, ConversationSummary } from "@/types/domain";
+import { fetchConversation, fetchConversations, findConversationsWithTutor } from "./supabase";
 
 // Phase 3 : tables conversations / conversation_members / messages (RLS : membres + parent observateur),
 // mises à jour en temps réel par Supabase Realtime.
@@ -64,6 +67,10 @@ function isMember(conversation: MockConversation, role: AppRole) {
 
 export const getConversations = cache(async (): Promise<ConversationSummary[]> => {
   await connection();
+  if (isSupabaseConfigured()) {
+    const identity = await requireIdentity();
+    return fetchConversations(identity.userId, identity.role);
+  }
   ensureSeed();
   const role = await getCurrentRole();
   return [...mockState.conversations.values()]
@@ -84,6 +91,10 @@ export const getConversations = cache(async (): Promise<ConversationSummary[]> =
 
 export const getConversation = cache(async (id: string) => {
   await connection();
+  if (isSupabaseConfigured()) {
+    const identity = await requireIdentity();
+    return fetchConversation(id, identity.userId, identity.role);
+  }
   ensureSeed();
   const role = await getCurrentRole();
   const conversation = mockState.conversations.get(id);
@@ -103,3 +114,17 @@ export const getConversation = cache(async (id: string) => {
 export function selfIdFor(role: AppRole) {
   return SELF_ID[role];
 }
+
+/**
+ * Conversations déjà ouvertes avec ce répétiteur (fiche : « Continuer » ou « Contacter »).
+ * Un parent peut en avoir une par enfant.
+ */
+export const getConversationsWithTutor = cache(async (tutorId: string): Promise<{ id: string; studentId: string | null }[]> => {
+  await connection();
+  if (isSupabaseConfigured()) {
+    const identity = await requireIdentity();
+    return findConversationsWithTutor(tutorId, identity.userId, identity.role);
+  }
+  ensureSeed();
+  return tutorId === DEMO_TUTOR_ID ? [{ id: SEED_ID, studentId: DEMO_STUDENT_ID }] : [];
+});

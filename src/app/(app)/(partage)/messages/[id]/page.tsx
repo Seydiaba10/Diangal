@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { TEXTAREA_CLASS } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { sendMessageAction } from "@/features/messaging/actions";
+import { LiveRefresh } from "@/features/messaging/components/live-refresh";
 import { getConversation, getMessagingAccess } from "@/features/messaging/data";
 import { TutorAvatar } from "@/features/tutors/components/tutor-bits";
 import { cn } from "@/lib/cn";
+import { isSupabaseConfigured } from "@/lib/env";
 import { formatDate } from "@/lib/format";
 
 export async function generateMetadata() {
@@ -31,6 +33,7 @@ async function Thread({ params }: { params: PageProps<"/messages/[id]">["params"
 
   return (
     <>
+      {isSupabaseConfigured() ? <LiveRefresh filter={`conversation_id=eq.${id}`} /> : null}
       <Breadcrumb items={[{ label: tPages("messages"), href: "/messages" }, { label: summary.title }]} />
       <header className="flex items-center gap-3">
         <TutorAvatar name={summary.title} className="size-12" />

@@ -25,7 +25,11 @@ async function SubscriptionsContent({ searchParams }: { searchParams: PageProps<
   ]);
   return (
     <div className="space-y-5">
-      {erreur ? <Notice tone="error">{tSubscription("errors.form")}</Notice> : null}
+      {erreur ? (
+        <Notice tone="error">
+          {tSubscription(erreur === "indisponible" ? "errors.unavailable" : erreur === "prestataire" ? "errors.provider" : "errors.form")}
+        </Notice>
+      ) : null}
       <ul className="grid gap-3 sm:grid-cols-2">
         {children.map((child) => (
           <li key={child.id} className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4">

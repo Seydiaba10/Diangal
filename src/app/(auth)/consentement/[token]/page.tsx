@@ -1,11 +1,14 @@
 import { CircleCheck, Lock, ShieldCheck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { Notice } from "@/components/ui/notice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { decideParentalConsentAction } from "@/features/account/actions";
-import { getConsentRequest } from "@/features/account/data";
 import { AuthCard } from "@/features/account/components/auth-card";
+import { getConsentRequest } from "@/features/account/data";
+import { getAuthIdentity } from "@/features/account/session";
+import { isSupabaseConfigured } from "@/lib/env";
 
 export async function generateMetadata() {
   const t = await getTranslations("consent");
@@ -15,14 +18,33 @@ export async function generateMetadata() {
 const COLLECTED = ["identity", "level", "progress", "messages"] as const;
 const UNLOCKED = ["contact", "messages", "payments"] as const;
 
-/** Lien reçu par SMS. Phase 4 : jeton haché, expiration 7 jours, connexion du parent par OTP. */
-async function ConsentContent({ params }: { params: PageProps<"/consentement/[token]">["params"] }) {
-  const { token } = await params;
-  const [t, request] = await Promise.all([getTranslations("consent"), getConsentRequest(token)]);
+const ERRORS = ["parent", "numero", "lien"] as const;
+
+/**
+ * Lien reçu par SMS (jeton haché en base, valable 7 jours). Le parent doit être connecté
+ * avec le numéro qui a reçu le SMS : un élève ne peut pas valider son propre compte.
+ */
+async function ConsentContent({
+  params,
+  searchParams,
+}: {
+  params: PageProps<"/consentement/[token]">["params"];
+  searchParams: PageProps<"/consentement/[token]">["searchParams"];
+}) {
+  const [{ token }, { erreur }] = await Promise.all([params, searchParams]);
+  const [t, request, identity] = await Promise.all([
+    getTranslations("consent"),
+    getConsentRequest(token),
+    isSupabaseConfigured() ? getAuthIdentity() : Promise.resolve(null),
+  ]);
   if (!request) return <p className="text-sm text-ink">{t("expired")}</p>;
+  const error = ERRORS.find((e) => e === erreur);
+  const mustLogIn = isSupabaseConfigured() && !identity;
+  const next = new URLSearchParams({ next: `/consentement/${token}` });
 
   return (
     <div className="space-y-5">
+      {error ? <Notice tone="error">{t(`errors.${error}`)}</Notice> : null}
       <p className="text-ink">{t("intro", { child: request.childFirstName })}</p>
       <section className="rounded-2xl bg-canvas p-4">
         <h2 className="flex items-center gap-2 font-semibold text-ink">
@@ -51,28 +73,40 @@ async function ConsentContent({ params }: { params: PageProps<"/consentement/[to
         </ul>
       </section>
       <p className="text-xs text-ink-muted">{t("rights")}</p>
-      <div className="flex flex-col gap-3">
-        <form action={decideParentalConsentAction.bind(null, "granted")}>
-          <Button type="submit" className="w-full">
-            {t("accept")}
-          </Button>
-        </form>
-        <form action={decideParentalConsentAction.bind(null, "refused")}>
-          <Button type="submit" variant="ghost" className="w-full">
-            {t("refuse")}
-          </Button>
-        </form>
-      </div>
+      {mustLogIn ? (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-ink">{t("loginFirst")}</p>
+          <ButtonLink href={`/connexion?${next}`} className="w-full">
+            {t("login")}
+          </ButtonLink>
+          <ButtonLink href="/inscription?role=parent" variant="outline" className="w-full">
+            {t("signup")}
+          </ButtonLink>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          <form action={decideParentalConsentAction.bind(null, token, "granted")}>
+            <Button type="submit" className="w-full">
+              {t("accept")}
+            </Button>
+          </form>
+          <form action={decideParentalConsentAction.bind(null, token, "refused")}>
+            <Button type="submit" variant="ghost" className="w-full">
+              {t("refuse")}
+            </Button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
 
-export default async function ConsentPage({ params }: PageProps<"/consentement/[token]">) {
+export default async function ConsentPage({ params, searchParams }: PageProps<"/consentement/[token]">) {
   const t = await getTranslations("consent");
   return (
     <AuthCard title={t("title")}>
       <Suspense fallback={<Skeleton className="h-96" />}>
-        <ConsentContent params={params} />
+        <ConsentContent params={params} searchParams={searchParams} />
       </Suspense>
     </AuthCard>
   );

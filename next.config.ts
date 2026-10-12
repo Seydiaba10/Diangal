@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
   },
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    // Pièces des répétiteurs (PDF, photo) jusqu'à 10 Mo, comme le bucket tutor-documents.
+    serverActions: { bodySizeLimit: "11mb" },
+  },
   turbopack: {
     rules: {
       "*.css": {

@@ -1,8 +1,11 @@
-import { CalendarDays, MessageCircle, ShieldAlert, ShieldCheck } from "lucide-react";
+import { CalendarDays, MessageCircle, Send, ShieldAlert, ShieldCheck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Button, ButtonLink } from "@/components/ui/button";
+import { INPUT_CLASS, TEXTAREA_CLASS } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getCurrentRole, getCurrentStudent } from "@/features/account/data";
+import { getCurrentRole, getCurrentStudent, getParentChildren } from "@/features/account/data";
+import { startConversationAction } from "@/features/messaging/actions";
+import { getConversationsWithTutor } from "@/features/messaging/data";
 import { formatFCFA } from "@/lib/format";
 import type { TutorProfile } from "@/types/domain";
 
@@ -12,14 +15,25 @@ import type { TutorProfile } from "@/types/domain";
  * WhatsApp n'est jamais proposé à un mineur (numéro exposé hors plateforme).
  */
 export async function TutorContactPanel({ tutor }: { tutor: TutorProfile }) {
-  const [role, student, t, tTutors] = await Promise.all([
-    getCurrentRole(),
-    getCurrentStudent(),
-    getTranslations("tutor"),
-    getTranslations("tutors"),
-  ]);
+  const [role, t, tTutors] = await Promise.all([getCurrentRole(), getTranslations("tutor"), getTranslations("tutors")]);
   const isFamily = role === "student" || role === "parent";
-  const canContact = role === "parent" || !student.isMinor || student.consentStatus === "granted";
+  const student = role === "student" ? await getCurrentStudent() : null;
+  const canContact = isFamily && (!student || !student.isMinor || student.consentStatus === "granted");
+  const [existing, children] = canContact
+    ? await Promise.all([getConversationsWithTutor(tutor.id), role === "parent" ? getParentChildren() : Promise.resolve([])])
+    : [[], []];
+  // Un parent ouvre une conversation par enfant (et une pour lui-même s'il ne précise pas).
+  const opened = new Set(existing.map((c) => c.studentId ?? ""));
+  const childName = new Map(children.map((c) => [c.id, c.firstName]));
+  const targets =
+    role === "parent"
+      ? [
+          ...children.filter((c) => !opened.has(c.id)).map((c) => ({ value: c.id, label: `${c.firstName} ${c.lastName}` })),
+          ...(children.length !== 1 && !opened.has("") ? [{ value: "", label: t("childNone") }] : []),
+        ]
+      : existing.length === 0
+        ? [{ value: "", label: "" }]
+        : [];
 
   return (
     <div className="space-y-4">
@@ -31,10 +45,53 @@ export async function TutorContactPanel({ tutor }: { tutor: TutorProfile }) {
 
         {!isFamily ? null : canContact ? (
           <div className="mt-4 space-y-3">
-            <ButtonLink href="/messages" className="w-full">
-              <MessageCircle className="size-4" aria-hidden />
-              {t("contact")}
-            </ButtonLink>
+            {existing.map((c) => {
+              const name = role === "parent" && c.studentId ? childName.get(c.studentId) : undefined;
+              return (
+                <ButtonLink key={c.id} href={`/messages/${c.id}`} variant={targets.length ? "outline" : "primary"} className="w-full">
+                  <MessageCircle className="size-4" aria-hidden />
+                  {name ? t("continueAbout", { name }) : t("continueConversation")}
+                </ButtonLink>
+              );
+            })}
+            {targets.length ? (
+              <form action={startConversationAction.bind(null, tutor.id)} className="space-y-3">
+                {targets.length > 1 ? (
+                  <div>
+                    <label htmlFor="contact-enfant" className="text-sm font-medium text-ink">
+                      {t("childLabel")}
+                    </label>
+                    <select id="contact-enfant" name="child" className={`${INPUT_CLASS} mt-1.5`}>
+                      {targets.map((c) => (
+                        <option key={c.value} value={c.value}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : targets[0]!.value ? (
+                  <input type="hidden" name="child" value={targets[0]!.value} />
+                ) : null}
+                <div>
+                  <label htmlFor="contact-message" className="text-sm font-medium text-ink">
+                    {t("messageLabel")}
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    required
+                    rows={3}
+                    maxLength={1000}
+                    placeholder={t("messagePlaceholder")}
+                    className={`${TEXTAREA_CLASS} mt-1.5`}
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  <Send className="size-4" aria-hidden />
+                  {t("contact")}
+                </Button>
+              </form>
+            ) : null}
             <Button variant="outline" className="w-full" disabled>
               <CalendarDays className="size-4" aria-hidden />
               {t("book")}

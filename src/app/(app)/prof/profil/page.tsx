@@ -12,7 +12,7 @@ import { Notice } from "@/components/ui/notice";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { saveTutorProfileAction } from "@/features/tutors/actions";
-import { getDemoTutorProfile } from "@/features/tutors/data";
+import { getOwnTutorProfile } from "@/features/tutors/data";
 import { CYCLES } from "@/lib/levels";
 import type { SubjectCode, TeachingMode } from "@/types/domain";
 
@@ -27,7 +27,7 @@ export async function generateMetadata() {
 async function ProfileForm({ searchParams }: { searchParams: PageProps<"/prof/profil">["searchParams"] }) {
   const [params, profile, t, tSubjects, tLevels, tCycles, tModes] = await Promise.all([
     searchParams,
-    getDemoTutorProfile(),
+    getOwnTutorProfile(),
     getTranslations("tutorProfileForm"),
     getTranslations("subjects"),
     getTranslations("levels"),

@@ -51,6 +51,12 @@ export async function proxy(request: NextRequest) {
   if (role && required && role !== required) {
     return NextResponse.redirect(new URL(ROLE_HOME[role] ?? "/", request.url));
   }
+  // Espace admin : double authentification (aal2) exigée avant tout affichage.
+  if (role === "admin" && required === "admin" && claims?.aal !== "aal2") {
+    const mfa = new URL("/connexion/securite", request.url);
+    mfa.searchParams.set("next", path);
+    return NextResponse.redirect(mfa);
+  }
   return response;
 }
 

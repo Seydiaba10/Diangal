@@ -1,7 +1,8 @@
 import type { PGlite } from "@electric-sql/pglite";
 import { beforeAll, describe, expect, it } from "vitest";
 import { normalizeText, parseNumber } from "@/lib/grading";
-import { CHAPTERS_3E } from "@/mocks/curriculum-3e";
+import { CATALOG_CHAPTERS } from "@/mocks/curriculum";
+import { CHAPTERS_CI } from "@/mocks/curriculum-ci";
 import { ANON, as, createTestDatabase, createUser, type Actor } from "./harness";
 
 let db: PGlite;
@@ -66,9 +67,25 @@ describe("contenus", () => {
       )).rows[0]!.n,
       freeBodies: (await tx.query<{ n: number }>("select count(*)::int as n from public.lesson_bodies")).rows[0]!.n,
     }));
-    expect(result.chapters).toBe(CHAPTERS_3E.length);
+    expect(result.chapters).toBe(CATALOG_CHAPTERS.length);
     expect(result.premiumBodies).toBe(0);
     expect(result.freeBodies).toBeGreaterThan(200);
+  });
+
+  it("publie le programme du CI (français, maths, ESVS), chaque leçon rédigée", async () => {
+    const ci = await as(db, ANON, async (tx) =>
+      (await tx.query<{ subject: string; chapters: number; empty: number }>(
+        `select s.code as subject, count(distinct c.id)::int as chapters,
+                count(l.id) filter (where coalesce(b.body_html, '') not like '%<h2>%')::int as empty
+         from public.programs p join public.levels lv on lv.id = p.level_id join public.subjects s on s.id = p.subject_id
+         join public.chapters c on c.program_id = p.id join public.lessons l on l.chapter_id = c.id
+         left join public.lesson_bodies b on b.lesson_id = l.id
+         where lv.code = 'CI' group by s.code order by s.code`,
+      )).rows,
+    );
+    expect(ci.map((r) => r.subject)).toEqual(["ESVS", "FR", "MATH"]);
+    expect(ci.reduce((sum, r) => sum + r.chapters, 0)).toBe(CHAPTERS_CI.length);
+    expect(ci.every((r) => r.empty === 0)).toBe(true);
   });
 
   it("n'expose jamais les questions ni les corrigés à un élève", async () => {
@@ -278,5 +295,160 @@ describe("répétiteurs et administration", () => {
       );
     await insert("2026-10-17T09:00:00Z", "2026-10-17T10:00:00Z");
     await expect(insert("2026-10-17T09:30:00Z", "2026-10-17T10:30:00Z")).rejects.toThrow(/bookings_no_overlap/);
+  });
+});
+
+describe("fonctions des écrans", () => {
+  it("marque une leçon terminée une seule fois et compte la journée d'activité", async () => {
+    const lesson = await one<{ id: string }>(
+      "select l.id from public.lessons l join public.chapters c on c.id = l.chapter_id where c.slug = 'racine-carree' and not l.is_premium order by l.number limit 1",
+    );
+    await as(db, ibou, (tx) => tx.query("select public.complete_lesson($1)", [lesson.id]));
+    await as(db, ibou, (tx) => tx.query("select public.complete_lesson($1)", [lesson.id]));
+    const progress = await one<{ status: string }>("select status from public.lesson_progress where user_id = $1 and lesson_id = $2", [ibou.id, lesson.id]);
+    expect(progress.status).toBe("completed");
+    const activity = await one<{ n: number }>("select lessons_completed as n from public.daily_activity where user_id = $1", [ibou.id]);
+    expect(activity.n).toBe(1);
+
+    const premium = await one<{ id: string }>("select id from public.lessons where is_premium limit 1");
+    await expect(as(db, ibou, (tx) => tx.query("select public.complete_lesson($1)", [premium.id]))).rejects.toThrow(/premium_required/);
+    await expect(as(db, mamadou, (tx) => tx.query("select public.complete_lesson($1)", [lesson.id]))).rejects.toThrow(/students_only/);
+  });
+
+  it("reprend un contrôle en cours avec le même ordre d'options, sans corrigé", async () => {
+    const quiz = await assessmentId("trigo-quiz");
+    const started = await as(db, ibou, async (tx) =>
+      (await tx.query<{ s: { attempt_id: string; questions: { options: { id: string }[] }[] } }>("select public.start_attempt($1) as s", [quiz])).rows[0]!.s,
+    );
+    const resumed = await as(db, ibou, async (tx) =>
+      (await tx.query<{ s: { status: string; assessment_slug: string; questions: { options: { id: string }[] }[] } }>(
+        "select public.get_attempt_session($1) as s", [started.attempt_id],
+      )).rows[0]!.s,
+    );
+    expect(resumed.status).toBe("in_progress");
+    expect(resumed.assessment_slug).toBe("trigo-quiz");
+    expect(resumed.questions.map((q) => q.options.map((o) => o.id))).toEqual(started.questions.map((q) => q.options.map((o) => o.id)));
+    expect(JSON.stringify(resumed)).not.toMatch(/correct|accepted|numeric_value|explanation/);
+
+    const other = await as(db, awa, async (tx) => (await tx.query<{ s: unknown }>("select public.get_attempt_session($1) as s", [started.attempt_id])).rows[0]!.s);
+    expect(other).toBeNull();
+  });
+
+  it("affiche le prénom de l'enfant sur la page du lien SMS, seulement avec un jeton valide", async () => {
+    await as(db, ibou, (tx) => tx.query("select public.request_parental_consent('+221770000021')"));
+    const { params } = await one<{ params: { token: string } }>("select params from private.sms_outbox order by id desc limit 1");
+    const found = await as(db, ANON, async (tx) =>
+      (await tx.query<{ r: { child_first_name: string } | null }>("select public.get_consent_request($1) as r", [params.token])).rows[0]!.r,
+    );
+    expect(found?.child_first_name).toBe("Ibou");
+    const wrong = await as(db, ANON, async (tx) => (await tx.query<{ r: unknown }>("select public.get_consent_request('faux') as r")).rows[0]!.r);
+    expect(wrong).toBeNull();
+  });
+
+  it("montre à l'élève le parent qui demande à être relié", async () => {
+    const khady = await createUser(db, { role: "student", first_name: "Khady", last_name: "Fall", birth_date: "2013-01-10", level_code: "3E" });
+    const omar = await createUser(db, { role: "parent", first_name: "Omar", last_name: "Fall" });
+    const { student_code } = await one<{ student_code: string }>("select student_code from public.student_profiles where user_id = $1", [khady]);
+    await as(db, { id: omar, role: "parent" }, (tx) => tx.query("select public.link_child_by_code($1)", [student_code]));
+    const pending = await as(db, { id: khady, role: "student" }, async (tx) =>
+      (await tx.query<{ first_name: string }>("select first_name from public.get_pending_parent_links()")).rows,
+    );
+    expect(pending.map((p) => p.first_name)).toEqual(["Omar"]);
+  });
+
+  it("enregistre les consentements d'inscription sans doublon", async () => {
+    await as(db, ibou, (tx) => tx.query("select public.record_signup_consents('2026-10')"));
+    await as(db, ibou, (tx) => tx.query("select public.record_signup_consents('2026-10')"));
+    const rows = await one<{ n: number }>("select count(*)::int as n from public.consents where subject_user_id = $1", [ibou.id]);
+    expect(rows.n).toBe(2);
+  });
+
+  it("publie la fiche d'un répétiteur approuvé, cache celle d'un dossier en attente", async () => {
+    const pape = await createUser(db, { role: "tutor", first_name: "Pape", last_name: "Sarr" });
+    const pub = await as(db, ANON, async (tx) =>
+      (await tx.query<{ r: { display_name: string; subjects: string[] } | null }>("select public.get_tutor_profile($1) as r", [mamadou.id])).rows[0]!.r,
+    );
+    expect(pub?.display_name).toBe("Mamadou Diallo");
+    expect(pub?.subjects).toEqual(["MATH"]);
+    expect(JSON.stringify(pub)).not.toMatch(/\+221/);
+    const hidden = await as(db, ANON, async (tx) => (await tx.query<{ r: unknown }>("select public.get_tutor_profile($1) as r", [pape])).rows[0]!.r);
+    expect(hidden).toBeNull();
+    const own = await as(db, { id: pape, role: "tutor" }, async (tx) =>
+      (await tx.query<{ r: { status: string } | null }>("select public.get_tutor_profile($1) as r", [pape])).rows[0]!.r,
+    );
+    expect(own?.status).toBe("draft");
+  });
+
+  it("réserve les corrigés et l'édition des leçons à l'admin en double authentification", async () => {
+    const quiz = await assessmentId("thales-quiz");
+    await expect(as(db, admin, (tx) => tx.query("select public.admin_get_assessment($1)", [quiz]))).rejects.toThrow(/admins_only/);
+    const full = await as(db, adminMfa, async (tx) =>
+      (await tx.query<{ r: { questions: { correct_option_ids: string[] }[] } }>("select public.admin_get_assessment($1) as r", [quiz])).rows[0]!.r,
+    );
+    expect(full.questions).toHaveLength(6);
+    expect(full.questions.some((q) => q.correct_option_ids.length > 0)).toBe(true);
+
+    const lesson = await one<{ id: string; version: number }>("select id, version from public.lessons order by number limit 1");
+    await expect(as(db, ibou, (tx) => tx.query("select public.admin_save_lesson_body($1, '<p>x</p>')", [lesson.id]))).rejects.toThrow(/admins_only/);
+    await as(db, adminMfa, (tx) => tx.query("select public.admin_save_lesson_body($1, '<p>Nouveau cours</p>')", [lesson.id]));
+    const saved = await one<{ html: string; version: number }>(
+      "select b.body_html as html, l.version from public.lesson_bodies b join public.lessons l on l.id = b.lesson_id where l.id = $1",
+      [lesson.id],
+    );
+    expect(saved.html).toBe("<p>Nouveau cours</p>");
+    expect(saved.version).toBe(lesson.version + 1);
+
+    await as(db, adminMfa, (tx) => tx.query("select public.admin_log('signalement traité', 'report', 'r-1')"));
+    const log = await one<{ n: number }>("select count(*)::int as n from public.audit_logs where entity_id = 'r-1'");
+    expect(log.n).toBe(1);
+  });
+
+  it("publie le nombre de questions et le barème des contrôles, sans les questions", async () => {
+    const rows = await as(db, ANON, async (tx) =>
+      (await tx.query<{ slug: string; questions_count: number; total_points: string }>(
+        "select slug, questions_count, total_points::text from public.get_assessments_catalog()",
+      )).rows,
+    );
+    const thales = rows.find((r) => r.slug === "thales-quiz")!;
+    expect(thales.questions_count).toBe(6);
+    expect(Number(thales.total_points)).toBeGreaterThan(0);
+  });
+
+  it("montre à l'élève le numéro masqué du parent sollicité", async () => {
+    const info = await as(db, ibou, async (tx) =>
+      (await tx.query<{ r: { parent_phone_masked: string } | null }>("select public.get_my_consent_request() as r")).rows[0]!.r,
+    );
+    expect(info?.parent_phone_masked).toBe("77 ••• •• 21");
+  });
+
+  it("prévient les autres membres d'une conversation d'un nouveau message", async () => {
+    const count = (actor: Actor) =>
+      as(db, actor, async (tx) => (await tx.query<{ n: number }>("select count(*)::int as n from public.notifications where type = 'tutor_message'")).rows[0]!.n);
+    expect(await count(mamadou)).toBeGreaterThan(0);
+    expect(await count(mariama)).toBeGreaterThan(0);
+    expect(await count(awa)).toBe(0);
+  });
+});
+
+describe("canal du code de connexion", () => {
+  it("note le choix WhatsApp avec la clé secrète uniquement, SMS par défaut", async () => {
+    const channelOf = async (phone: string) => (await one<{ c: string }>("select private.otp_channel_for($1) as c", [phone])).c;
+    expect(await channelOf("+221771112233")).toBe("sms");
+
+    // Un navigateur (anonyme ou connecté) ne peut pas choisir le canal d'un numéro.
+    for (const actor of [ANON, awa]) {
+      await expect(
+        as(db, actor, (tx) => tx.query("select public.set_otp_channel('+221771112233', 'whatsapp')")),
+      ).rejects.toThrow(/permission denied/);
+    }
+
+    await db.transaction(async (tx) => {
+      await tx.exec("set local role service_role");
+      await tx.query("select public.set_otp_channel('+221771112233', 'whatsapp')");
+    });
+    expect(await channelOf("+221771112233")).toBe("whatsapp");
+    await db.query("select public.set_otp_channel('+221771112233', 'sms')");
+    expect(await channelOf("+221771112233")).toBe("sms");
+    await expect(db.query("select public.set_otp_channel('771112233', 'whatsapp')")).rejects.toThrow(/check/);
   });
 });

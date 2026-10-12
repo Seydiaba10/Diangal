@@ -53,7 +53,7 @@ export default async function AdminAssessmentsPage() {
               </Td>
               <Td>{a.subjectName}</Td>
               <Td>{tAssessment(`kind.${a.kind}`)}</Td>
-              <Td>{t("questionsValue", { count: a.questionIds.length, points: a.points })}</Td>
+              <Td>{t("questionsValue", { count: a.questionsCount, points: a.points })}</Td>
               <Td>{a.durationS ? formatDuration(a.durationS) : tAssessment("untimed")}</Td>
               <Td>
                 {a.isPremium ? (

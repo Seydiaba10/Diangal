@@ -30,7 +30,9 @@ async function ChildContent({ params }: { params: PageProps<"/parent/enfants/[id
   const [t, tParent] = await Promise.all([getTranslations("parentChild"), getTranslations("parentHome")]);
   // Seul le programme de 3e est publié dans cette version.
   const hasProgram = child.levelCode === "3E";
-  const [dashboard, subjects] = hasProgram ? await Promise.all([getStudentDashboard(), getSubjectsProgress()]) : [null, []];
+  const [dashboard, subjects] = hasProgram
+    ? await Promise.all([getStudentDashboard(child.id), getSubjectsProgress(child.levelCode, child.id)])
+    : [null, []];
 
   return (
     <>
@@ -64,7 +66,7 @@ async function ChildContent({ params }: { params: PageProps<"/parent/enfants/[id
             <SectionCard id="matieres-titre" title={t("subjects")}>
               <ul className="space-y-4">
                 {subjects.map((s) => (
-                  <li key={s.code} className="flex items-center gap-3">
+                  <li key={s.slug} className="flex items-center gap-3">
                     <SubjectIcon code={s.code} size="sm" />
                     <span className="min-w-0 flex-1">
                       <span className="flex justify-between text-sm">

@@ -9,6 +9,7 @@ import { Notice } from "@/components/ui/notice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getParentChildren, getSessionUser } from "@/features/account/data";
 import { ChildCard } from "@/features/parents/components/child-card";
+import { isSupabaseConfigured } from "@/lib/env";
 
 export async function generateMetadata() {
   const t = await getTranslations("parentHome");
@@ -23,6 +24,7 @@ async function ParentHome({ searchParams }: { searchParams: PageProps<"/parent">
     getTranslations("parentHome"),
   ]);
   const pending = children.filter((c) => c.consentStatus === "pending");
+  const demo = !isSupabaseConfigured();
 
   return (
     <div className="space-y-5 lg:space-y-7">
@@ -30,24 +32,38 @@ async function ParentHome({ searchParams }: { searchParams: PageProps<"/parent">
       {params.consentement === "granted" ? <Notice tone="success">{t("notices.consentGranted")}</Notice> : null}
       {params.consentement === "refused" ? <Notice tone="warning">{t("notices.consentRefused")}</Notice> : null}
       {params.lien === "ok" ? <Notice tone="success">{t("notices.linked")}</Notice> : null}
+      {params.lien === "attente" ? <Notice tone="success">{t("notices.linkPending")}</Notice> : null}
 
       {pending.map((child) => (
         <div key={child.id} className="flex flex-col gap-3 rounded-2xl bg-premium-50 p-5 sm:flex-row sm:items-center sm:justify-between">
           <p className="flex gap-2 text-sm text-ink">
             <ShieldAlert className="mt-0.5 size-5 shrink-0 text-premium-700" aria-hidden />
-            {t("consentBanner", { child: child.firstName })}
+            {demo ? t("consentBanner", { child: child.firstName }) : t("consentBannerSms", { child: child.firstName })}
           </p>
-          <ButtonLink href="/consentement/demo" size="sm" className="shrink-0">
-            {t("consentCta")}
-          </ButtonLink>
+          {/* Avec la vraie base, le parent valide depuis le lien reçu par SMS. */}
+          {demo ? (
+            <ButtonLink href="/consentement/demo" size="sm" className="shrink-0">
+              {t("consentCta")}
+            </ButtonLink>
+          ) : null}
         </div>
       ))}
 
-      <section aria-label={t("childrenLabel")} className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        {children.map((child) => (
-          <ChildCard key={child.id} child={child} />
-        ))}
-      </section>
+      {children.length ? (
+        <section aria-label={t("childrenLabel")} className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {children.map((child) => (
+            <ChildCard key={child.id} child={child} />
+          ))}
+        </section>
+      ) : (
+        <section className="rounded-2xl border border-dashed border-line bg-surface p-6 text-center">
+          <p className="font-semibold text-ink">{t("empty.title")}</p>
+          <p className="mx-auto mt-1 max-w-md text-sm text-ink-muted">{t("empty.body")}</p>
+          <ButtonLink href="/parent/enfants/ajouter" size="sm" className="mt-4">
+            {t("empty.cta")}
+          </ButtonLink>
+        </section>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Link href="/repetiteurs" className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-5 hover:border-brand-500">

@@ -1,5 +1,8 @@
 import { connection } from "next/server";
 import { cache } from "react";
+import { requireIdentity } from "@/features/account/session";
+import { isSupabaseConfigured } from "@/lib/env";
+import { CITY_NAMES } from "@/lib/places";
 import { PENDING_TUTOR_DETAILS, PENDING_TUTORS } from "@/mocks/admin";
 import { mockState } from "@/mocks/progress-store";
 import { MOCK_TUTORS } from "@/mocks/tutors";
@@ -13,14 +16,22 @@ import type {
   TutorSort,
   TutorStatus,
 } from "@/types/domain";
+import {
+  countTutorConversations,
+  fetchTutorProfile,
+  fetchTutorReviewItems,
+  loadPublishedTutorIds,
+  loadTutorName,
+  searchTutorsRemote,
+} from "./supabase";
 
-// Phase 3 : RPC search_tutors (répétiteurs approuvés uniquement, pagination keyset),
-// tables tutor_profiles / tutor_documents / tutor_availability.
+// Démo : src/mocks. Supabase : RPC search_tutors / get_tutor_profile (répétiteurs approuvés
+// uniquement pour le public), tables tutor_profiles / tutor_documents / tutor_availability.
 
 const SUBJECT_CODES: SubjectCode[] = ["MATH", "FR", "ANG", "HG", "SVT", "PC", "EC", "LV2", "PHILO", "EPS"];
 const SORTS: TutorSort[] = ["relevance", "price", "rating"];
 
-export const TUTOR_CITIES = [...new Set(MOCK_TUTORS.map((t) => t.city))].sort((a, b) => a.localeCompare(b, "fr"));
+export const TUTOR_CITIES = CITY_NAMES;
 export const PRICE_STEPS = [2000, 3000, 4000, 5000, 10000];
 
 type RawParams = Record<string, string | string[] | undefined>;
@@ -109,6 +120,7 @@ function toCard(t: TutorProfile): TutorCard {
 
 export const searchTutors = cache(async (filters: TutorFilters): Promise<TutorCard[]> => {
   await connection();
+  if (isSupabaseConfigured()) return searchTutorsRemote(filters);
   const results = publishedTutors().filter(
     (t) =>
       (!filters.subject || t.subjects.includes(filters.subject)) &&
@@ -132,22 +144,31 @@ export const searchTutors = cache(async (filters: TutorFilters): Promise<TutorCa
 
 export const getTutor = cache(async (id: string): Promise<TutorProfile | undefined> => {
   await connection();
+  if (isSupabaseConfigured()) return (await fetchTutorProfile(id)) ?? undefined;
   return publishedTutors().find((t) => t.id === id);
 });
 
 export async function getAllTutorIds() {
-  return MOCK_TUTORS.map((t) => ({ id: t.id }));
+  const ids = isSupabaseConfigured() ? await loadPublishedTutorIds() : MOCK_TUTORS.map((t) => t.id);
+  // generateStaticParams doit renvoyer au moins une valeur : « _ » mène à une page 404.
+  return ids.length ? ids.map((id) => ({ id })) : [{ id: "_" }];
 }
 
 // ── Espace répétiteur ───────────────────────────────────────────────────────
 
-export const getDemoTutorProfile = cache(async (): Promise<TutorProfile> => {
+/** Profil du répétiteur connecté (tel qu'il le modifie, quel que soit son statut). */
+export const getOwnTutorProfile = cache(async (): Promise<TutorProfile> => {
   await connection();
+  if (isSupabaseConfigured()) {
+    const profile = await fetchTutorProfile((await requireIdentity()).userId);
+    if (!profile) throw new Error("profil répétiteur introuvable");
+    return profile;
+  }
   return withEdits(MOCK_TUTORS.find((t) => t.id === DEMO_TUTOR_ID)!);
 });
 
 export const getTutorDashboard = cache(async () => {
-  const profile = await getDemoTutorProfile();
+  const profile = await getOwnTutorProfile();
   const checklist = {
     bio: profile.bio.length >= 80,
     subjects: profile.subjects.length > 0 && profile.levels.length > 0,
@@ -156,18 +177,30 @@ export const getTutorDashboard = cache(async () => {
     qualifications: profile.qualifications.length > 0,
   };
   const done = Object.values(checklist).filter(Boolean).length;
+  const contactRequests = isSupabaseConfigured() ? await countTutorConversations(profile.id) : 3;
   return {
     profile,
     checklist,
     completion: Math.round((done / Object.keys(checklist).length) * 100),
-    stats: { profileViews: 128, contactRequests: 3, rating: profile.ratingAvg, ratingCount: profile.ratingCount },
+    // Les vues de profil ne sont pas encore mesurées hors démonstration.
+    stats: {
+      profileViews: isSupabaseConfigured() ? null : 128,
+      contactRequests,
+      rating: profile.ratingAvg,
+      ratingCount: profile.ratingCount,
+    },
   };
 });
 
 // ── Administration : file de vérification ───────────────────────────────────
 
+const STATUS_ORDER: Record<TutorStatus, number> = { pending: 0, rejected: 1, suspended: 2, approved: 3, draft: 4 };
+
 export const getTutorReviewQueue = cache(async (): Promise<TutorReviewItem[]> => {
   await connection();
+  if (isSupabaseConfigured()) {
+    return (await fetchTutorReviewItems()).sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+  }
   const queue = PENDING_TUTORS.map((item) => ({
     ...item,
     status: statusOf(item),
@@ -188,18 +221,23 @@ export const getTutorReviewQueue = cache(async (): Promise<TutorReviewItem[]> =>
       { type: "diploma", fileName: "diplome.pdf", status: "accepted" },
     ],
   }));
-  const order: Record<TutorStatus, number> = { pending: 0, rejected: 1, suspended: 2, approved: 3 };
-  return [...queue, ...approved].sort((a, b) => order[a.status] - order[b.status]);
+  return [...queue, ...approved].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
 });
 
 export const getTutorReviewItem = cache(async (id: string) => {
+  if (isSupabaseConfigured()) return (await fetchTutorReviewItems(id))[0];
   return (await getTutorReviewQueue()).find((t) => t.id === id);
 });
 
 /** Nom affiché (métadonnées de page) : lecture du contenu publié, sans donnée de requête. */
 export async function getTutorName(id: string): Promise<string | undefined> {
+  if (isSupabaseConfigured()) return loadTutorName(id);
   return MOCK_TUTORS.find((t) => t.id === id)?.displayName ?? PENDING_TUTORS.find((t) => t.id === id)?.displayName;
 }
 
-/** Dossier de vérification du répétiteur connecté. Phase 3 : tutor_documents (RLS : propriétaire). */
-export const getOwnVerification = cache(async () => getTutorReviewItem(DEMO_TUTOR_ID));
+/** Dossier de vérification du répétiteur connecté (statut et pièces envoyées). */
+export const getOwnVerification = cache(async () => {
+  await connection();
+  if (isSupabaseConfigured()) return (await fetchTutorReviewItems((await requireIdentity()).userId))[0];
+  return getTutorReviewItem(DEMO_TUTOR_ID);
+});

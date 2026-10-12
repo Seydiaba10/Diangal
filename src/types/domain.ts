@@ -11,7 +11,9 @@ export type SubjectCode =
   | "EC"
   | "LV2"
   | "PHILO"
-  | "EPS";
+  | "EPS"
+  /** Éducation à la science et à la vie sociale (élémentaire : histoire, géographie, sciences, vivre ensemble). */
+  | "ESVS";
 
 export type ChapterStatus = "completed" | "in_progress" | "not_started";
 
@@ -94,11 +96,15 @@ export interface StudentDashboard {
 
 // ── Catalogue de cours (contenu publié, identique pour tous) ────────────────
 
+/** Matière telle qu'enseignée dans une classe (un programme) : « Mathématiques » en CI ≠ en 3e. */
 export interface Subject {
   code: SubjectCode;
+  /** Identifiant d'URL du programme, unique dans le catalogue (ex. « mathematiques-ci »). */
   slug: string;
   name: string;
   coefficient: number;
+  /** Classe du programme (CI, 3E…). */
+  levelCode: string;
 }
 
 export type LessonResourceKind = "pdf" | "video" | "audio";
@@ -127,6 +133,8 @@ export interface Chapter {
   title: string;
   summary: string;
   subjectCode: SubjectCode;
+  /** Classe du programme auquel appartient le chapitre. */
+  levelCode: string;
   lessons: Lesson[];
 }
 
@@ -170,6 +178,8 @@ export interface Assessment {
   kind: AssessmentKind;
   title: string;
   subjectCode: SubjectCode;
+  /** Classe de l’évaluation (CI, 3E…). */
+  levelCode: string;
   chapterId: string | null;
   /** null = non chronométré. */
   durationS: number | null;
@@ -402,9 +412,19 @@ export interface ExamPaper {
 
 // ── Administration ──────────────────────────────────────────────────────────
 
-export type TutorStatus = "pending" | "approved" | "rejected" | "suspended";
+/** draft : dossier pas encore envoyé à la vérification. */
+export type TutorStatus = "draft" | "pending" | "approved" | "rejected" | "suspended";
 
-export type TutorDocumentType = "cni" | "diploma" | "criminal_record";
+export type TutorDocumentType = "cni" | "passport" | "diploma" | "criminal_record";
+
+export interface TutorDocument {
+  /** Supabase uniquement : ligne tutor_documents et chemin dans le Storage privé. */
+  id?: string;
+  storagePath?: string;
+  type: TutorDocumentType;
+  fileName: string;
+  status: "pending" | "accepted" | "rejected";
+}
 
 export interface TutorReviewItem {
   id: string;
@@ -416,7 +436,7 @@ export interface TutorReviewItem {
   submittedAt: string;
   status: TutorStatus;
   rejectionReason: string | null;
-  documents: { type: TutorDocumentType; fileName: string; status: "pending" | "accepted" | "rejected" }[];
+  documents: TutorDocument[];
 }
 
 export interface AdminStats {
