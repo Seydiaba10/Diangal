@@ -9,7 +9,6 @@ import {
   PenLine,
   ShieldCheck,
   Smartphone,
-  Star,
   Timer,
   Users,
   WifiOff,
@@ -18,7 +17,6 @@ import {
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { ButtonLink } from "@/components/ui/button";
-import { SenegalFlag } from "@/components/ui/senegal-flag";
 import { MarketingHeader } from "@/features/marketing/components/marketing-header";
 import { TornEdge } from "@/features/marketing/components/torn-edge";
 import { PlanCards } from "@/features/payments/components/plan-cards";
@@ -65,24 +63,33 @@ export default async function LandingPage() {
 
   return (
     <>
-      {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-brand-700 text-white">
+      {/* ── Hero plein écran : la photo « révision du soir » couvre toute la zone visible ── */}
+      <section className="relative isolate flex min-h-[calc(100svh-0.375rem)] flex-col overflow-hidden bg-ink text-white">
+        {/* Une maman aide ses enfants à réviser le soir, DIANGAL ouvert sur la tablette.
+            Cadrage : la famille sur téléphone, toute la scène (tablette comprise) sur grand écran. */}
+        <Image
+          src="/landing/revision-du-soir.jpg"
+          alt={t("hero.imageAlt")}
+          fill
+          priority
+          sizes="(orientation: portrait) 180svh, 100vw"
+          className="-z-20 object-cover object-[52%_35%] md:object-[40%_center] lg:object-center"
+        />
+        {/* Voile sombre pour un texte lisible (globals.css). */}
+        <div aria-hidden className="hero-veil absolute inset-0 -z-10" />
         <MarketingHeader overlay />
-        <span aria-hidden className="absolute -left-24 top-24 size-72 rounded-full bg-brand-600" />
-        <span aria-hidden className="absolute -right-16 -top-16 size-80 rounded-full bg-brand-600" />
-        <span aria-hidden className="absolute bottom-24 left-1/2 size-40 rounded-full bg-brand-800" />
 
-        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-32 sm:pt-36 lg:grid-cols-[1.15fr_1fr] lg:pb-28">
-          <div>
-            <p className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-sm font-medium">
-              <SenegalFlag />
-              {t("hero.eyebrow")}
+        {/* Grand écran : le texte occupe le mur en haut à gauche, au-dessus de la tablette ; les garanties
+            descendent en bas de l'écran. Téléphone et tablette : tout le texte est en bas. */}
+        <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-4 pb-12 pt-24 sm:pb-20 sm:pt-28 lg:justify-start lg:pb-14 lg:pt-28">
+          <div className="flex flex-col items-start lg:flex-1">
+            <p className="hidden items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg sm:inline-flex lg:hidden">
+              <WifiOff className="size-4 text-brand-700" aria-hidden />
+              {t("hero.offlineBadge")}
             </p>
-            <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-              {t("hero.title")}
-            </h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-brand-50">{t("hero.subtitle")}</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <h1 className="hero-title hero-shadow max-w-xl font-bold tracking-tight sm:mt-5 lg:mt-0">{t("hero.title")}</h1>
+            <p className="hero-lead hero-shadow mt-5 max-w-xl leading-relaxed text-white/90">{t("hero.subtitle")}</p>
+            <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               <ButtonLink href="/inscription" className="bg-white text-brand-700 hover:bg-brand-50">
                 {t("hero.ctaStudent")}
                 <ArrowRight className="size-4" aria-hidden />
@@ -95,41 +102,21 @@ export default async function LandingPage() {
                 {t("hero.ctaParent")}
               </ButtonLink>
             </div>
-            <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-brand-50">
+            <ul className="mt-6 flex flex-wrap gap-2 text-xs text-white sm:mt-8 sm:text-sm lg:mt-auto lg:pt-8">
               {(["free", "offline", "mobileMoney"] as const).map((key) => (
-                <li key={key} className="flex items-center gap-1.5">
-                  <CircleCheck className="size-4 text-white" aria-hidden />
+                <li key={key} className="flex items-center gap-1.5 rounded-full bg-ink/55 px-2.5 py-1 ring-1 ring-white/15 backdrop-blur-sm sm:px-3 sm:py-1.5">
+                  <CircleCheck className="size-4 shrink-0 text-white" aria-hidden />
                   {t(`hero.trust.${key}`)}
                 </li>
               ))}
             </ul>
           </div>
+        </div>
 
-          <div className="relative mx-auto w-full max-w-[300px]">
-            <div className="relative overflow-hidden rounded-[2.5rem] border-[10px] border-ink bg-ink shadow-2xl">
-              <Image
-                src="/landing/app-accueil.png"
-                alt={t("hero.phoneAlt")}
-                width={360}
-                height={780}
-                priority
-                sizes="(min-width: 1024px) 300px, 260px"
-                className="h-auto w-full"
-              />
-            </div>
-            <div className="absolute -left-10 top-1/3 hidden w-48 rotate-[-4deg] rounded-2xl bg-surface p-3 text-ink shadow-xl sm:block">
-              <p className="text-xs text-ink-muted">{t("hero.resultCard.label")}</p>
-              <p className="mt-0.5 flex items-center gap-1.5 font-semibold">
-                <Star className="size-4 fill-premium-500 text-premium-500" aria-hidden />
-                {t("hero.resultCard.value")}
-              </p>
-            </div>
-            {/* Autocollant BFEM dans le jaune du cycle moyen, comme la bande centrale du drapeau. */}
-            <div className="absolute -bottom-6 -right-6 flex size-32 rotate-12 flex-col items-center justify-center rounded-full border-4 border-dashed border-ink/25 bg-senegal-yellow text-center text-ink shadow-xl sm:-right-12 sm:size-36">
-              <span className="text-xs font-semibold uppercase tracking-wide">{t("hero.sticker.top")}</span>
-              <span className="text-xl font-bold leading-tight">{t("hero.sticker.main")}</span>
-            </div>
-          </div>
+        {/* Autocollant BFEM dans le jaune du cycle moyen, comme la bande centrale du drapeau. */}
+        <div className="absolute bottom-16 right-4 hidden size-28 rotate-12 flex-col items-center justify-center rounded-full border-4 border-dashed border-ink/25 bg-senegal-yellow text-center text-ink shadow-xl lg:flex xl:right-10 xl:size-32">
+          <span className="text-xs font-semibold uppercase tracking-wide">{t("hero.sticker.top")}</span>
+          <span className="text-lg font-bold leading-tight xl:text-xl">{t("hero.sticker.main")}</span>
         </div>
         <TornEdge className="absolute inset-x-0 -bottom-px text-cream" />
       </section>
