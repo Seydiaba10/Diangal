@@ -43,6 +43,7 @@ pnpm db:seed      # régénère supabase/seed.sql depuis src/mocks
 - Après avoir ajouté ou supprimé une route, lancer `pnpm exec next typegen` avant `pnpm typecheck`.
 - Ne jamais lancer `next build` pendant que `next dev` tourne : cela corrompt `.next`. Arrêter le serveur de dev d'abord.
 - Le serveur de dev peut garder en mémoire d'anciennes versions des mocks. Si une modification de données n'apparaît pas, le redémarrer.
+- Le cache disque de Turbopack est désactivé (`turbopackFileSystemCacheForDev` et `…ForBuild` à `false` dans `next.config.ts`) : avec `@tailwindcss/turbopack`, il servait un CSS périmé après une modification de `globals.css`, en dev comme sur Vercel (qui restaure `.next/cache`). Ne pas le réactiver sans vérifier le CSS servi.
 - **Base hébergée** : les clés sont dans `.env.local` (jamais dans le code ni le chat). Pour appliquer une nouvelle migration :
   - CLI Supabase via `npx supabase`, avec `SUPABASE_ACCESS_TOKEN` dans l'environnement ;
   - `supabase link --project-ref mlepbueoqrzmniksdhpl`, puis `supabase db push --linked` ;

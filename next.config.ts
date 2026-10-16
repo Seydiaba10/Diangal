@@ -31,6 +31,11 @@ const nextConfig: NextConfig = {
   experimental: {
     // Pièces des répétiteurs (PDF, photo) jusqu'à 10 Mo, comme le bucket tutor-documents.
     serverActions: { bodySizeLimit: "11mb" },
+    // Cache disque de Turbopack désactivé : avec le chargeur @tailwindcss/turbopack, il servait
+    // un CSS périmé après une modification de globals.css (en dev comme sur Vercel, qui restaure
+    // .next/cache d'un build à l'autre). Les builds partent donc toujours de zéro.
+    turbopackFileSystemCacheForDev: false,
+    turbopackFileSystemCacheForBuild: false,
   },
   turbopack: {
     rules: {
