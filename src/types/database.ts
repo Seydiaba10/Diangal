@@ -51,6 +51,7 @@ export type Database = {
       assessments: {
         Row: {
           chapter_id: string | null
+          correction_source: string | null
           created_at: string
           duration_s: number | null
           exam_type: Database["public"]["Enums"]["exam_type"] | null
@@ -59,16 +60,20 @@ export type Database = {
           is_premium: boolean
           kind: Database["public"]["Enums"]["assessment_kind"]
           level_id: number
+          owner_id: string | null
           series_id: number | null
           shuffle_options: boolean
           slug: string
+          sources: Json
           status: Database["public"]["Enums"]["publish_status"]
           subject_id: number
           title: string
           updated_at: string
+          verification: Database["public"]["Enums"]["content_verification"]
         }
         Insert: {
           chapter_id?: string | null
+          correction_source?: string | null
           created_at?: string
           duration_s?: number | null
           exam_type?: Database["public"]["Enums"]["exam_type"] | null
@@ -77,16 +82,20 @@ export type Database = {
           is_premium?: boolean
           kind: Database["public"]["Enums"]["assessment_kind"]
           level_id: number
+          owner_id?: string | null
           series_id?: number | null
           shuffle_options?: boolean
           slug: string
+          sources?: Json
           status?: Database["public"]["Enums"]["publish_status"]
           subject_id: number
           title: string
           updated_at?: string
+          verification?: Database["public"]["Enums"]["content_verification"]
         }
         Update: {
           chapter_id?: string | null
+          correction_source?: string | null
           created_at?: string
           duration_s?: number | null
           exam_type?: Database["public"]["Enums"]["exam_type"] | null
@@ -95,13 +104,16 @@ export type Database = {
           is_premium?: boolean
           kind?: Database["public"]["Enums"]["assessment_kind"]
           level_id?: number
+          owner_id?: string | null
           series_id?: number | null
           shuffle_options?: boolean
           slug?: string
+          sources?: Json
           status?: Database["public"]["Enums"]["publish_status"]
           subject_id?: number
           title?: string
           updated_at?: string
+          verification?: Database["public"]["Enums"]["content_verification"]
         }
         Relationships: [
           {
@@ -116,6 +128,13 @@ export type Database = {
             columns: ["level_id"]
             isOneToOne: false
             referencedRelation: "levels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessments_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -429,10 +448,13 @@ export type Database = {
           program_id: number
           slug: string
           sort_order: number
+          sources: Json
           status: Database["public"]["Enums"]["publish_status"]
+          strand: string | null
           summary: string
           title: string
           updated_at: string
+          verification: Database["public"]["Enums"]["content_verification"]
         }
         Insert: {
           created_at?: string
@@ -441,10 +463,13 @@ export type Database = {
           program_id: number
           slug: string
           sort_order?: number
+          sources?: Json
           status?: Database["public"]["Enums"]["publish_status"]
+          strand?: string | null
           summary?: string
           title: string
           updated_at?: string
+          verification?: Database["public"]["Enums"]["content_verification"]
         }
         Update: {
           created_at?: string
@@ -453,10 +478,13 @@ export type Database = {
           program_id?: number
           slug?: string
           sort_order?: number
+          sources?: Json
           status?: Database["public"]["Enums"]["publish_status"]
+          strand?: string | null
           summary?: string
           title?: string
           updated_at?: string
+          verification?: Database["public"]["Enums"]["content_verification"]
         }
         Relationships: [
           {
@@ -1249,6 +1277,7 @@ export type Database = {
           duration_days: number
           id: number
           is_active: boolean
+          max_children: number | null
           name: string
           price_fcfa: number
           sort_order: number
@@ -1258,6 +1287,7 @@ export type Database = {
           duration_days: number
           id?: number
           is_active?: boolean
+          max_children?: number | null
           name: string
           price_fcfa: number
           sort_order?: number
@@ -1267,6 +1297,7 @@ export type Database = {
           duration_days?: number
           id?: number
           is_active?: boolean
+          max_children?: number | null
           name?: string
           price_fcfa?: number
           sort_order?: number
@@ -1344,6 +1375,7 @@ export type Database = {
       programs: {
         Row: {
           coefficient: number
+          free_chapters: number
           id: number
           level_id: number
           series_id: number | null
@@ -1353,6 +1385,7 @@ export type Database = {
         }
         Insert: {
           coefficient?: number
+          free_chapters?: number
           id?: number
           level_id: number
           series_id?: number | null
@@ -1362,6 +1395,7 @@ export type Database = {
         }
         Update: {
           coefficient?: number
+          free_chapters?: number
           id?: number
           level_id?: number
           series_id?: number | null
@@ -1672,6 +1706,65 @@ export type Database = {
         }
         Relationships: []
       }
+      student_level_history: {
+        Row: {
+          changed_by: string | null
+          ended_at: string
+          id: number
+          level_id: number
+          series_id: number | null
+          started_at: string
+          student_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          ended_at?: string
+          id?: never
+          level_id: number
+          series_id?: number | null
+          started_at: string
+          student_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          ended_at?: string
+          id?: never
+          level_id?: number
+          series_id?: number | null
+          started_at?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_level_history_changed_by_fkey"
+            columns: ["changed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_level_history_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "levels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_level_history_series_id_fkey"
+            columns: ["series_id"]
+            isOneToOne: false
+            referencedRelation: "series"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_level_history_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       student_profiles: {
         Row: {
           birth_date: string
@@ -1819,6 +1912,54 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      tutor_assignments: {
+        Row: {
+          created_at: string
+          done_at: string | null
+          due_on: string | null
+          id: string
+          instructions: string
+          student_id: string
+          title: string
+          tutor_id: string
+        }
+        Insert: {
+          created_at?: string
+          done_at?: string | null
+          due_on?: string | null
+          id?: string
+          instructions?: string
+          student_id: string
+          title: string
+          tutor_id: string
+        }
+        Update: {
+          created_at?: string
+          done_at?: string | null
+          due_on?: string | null
+          id?: string
+          instructions?: string
+          student_id?: string
+          title?: string
+          tutor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutor_assignments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "student_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "tutor_assignments_tutor_id_fkey"
+            columns: ["tutor_id"]
+            isOneToOne: false
+            referencedRelation: "tutor_profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -2091,6 +2232,103 @@ export type Database = {
           },
         ]
       }
+      tutor_sessions: {
+        Row: {
+          created_at: string
+          duration_min: number
+          id: string
+          starts_at: string
+          status: string
+          student_id: string
+          topic: string
+          tutor_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_min: number
+          id?: string
+          starts_at: string
+          status?: string
+          student_id: string
+          topic: string
+          tutor_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_min?: number
+          id?: string
+          starts_at?: string
+          status?: string
+          student_id?: string
+          topic?: string
+          tutor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutor_sessions_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "student_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "tutor_sessions_tutor_id_fkey"
+            columns: ["tutor_id"]
+            isOneToOne: false
+            referencedRelation: "tutor_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      tutor_students: {
+        Row: {
+          answered_at: string | null
+          answered_by: string | null
+          invited_at: string
+          status: Database["public"]["Enums"]["tutor_link_status"]
+          student_id: string
+          tutor_id: string
+        }
+        Insert: {
+          answered_at?: string | null
+          answered_by?: string | null
+          invited_at?: string
+          status?: Database["public"]["Enums"]["tutor_link_status"]
+          student_id: string
+          tutor_id: string
+        }
+        Update: {
+          answered_at?: string | null
+          answered_by?: string | null
+          invited_at?: string
+          status?: Database["public"]["Enums"]["tutor_link_status"]
+          student_id?: string
+          tutor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutor_students_answered_by_fkey"
+            columns: ["answered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tutor_students_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "student_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "tutor_students_tutor_id_fkey"
+            columns: ["tutor_id"]
+            isOneToOne: false
+            referencedRelation: "tutor_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       tutor_subjects: {
         Row: {
           subject_id: number
@@ -2126,6 +2364,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_content_tracking: {
+        Args: never
+        Returns: {
+          chapters: number
+          chapters_official: number
+          chapters_published: number
+          chapters_reviewed: number
+          chapters_unverified: number
+          exams: number
+          exercises: number
+          free_chapters: number
+          lessons: number
+          lessons_written: number
+          level_code: string
+          level_order: number
+          program_id: number
+          questions: number
+          quizzes: number
+          series_code: string
+          sourced_chapters: number
+          subject_code: string
+          subject_name: string
+        }[]
+      }
       admin_get_assessment: { Args: { p_assessment: string }; Returns: Json }
       admin_log: {
         Args: {
@@ -2140,6 +2402,11 @@ export type Database = {
         Args: { p_html: string; p_lesson: string }
         Returns: undefined
       }
+      admin_set_free_tier: { Args: { p_enabled: boolean }; Returns: undefined }
+      answer_tutor_invite: {
+        Args: { p_accept: boolean; p_student: string; p_tutor: string }
+        Returns: undefined
+      }
       apply_payment_event: {
         Args: {
           p_channel?: Database["public"]["Enums"]["payment_channel"]
@@ -2149,6 +2416,7 @@ export type Database = {
         }
         Returns: Json
       }
+      cancel_tutor_session: { Args: { p_session: string }; Returns: undefined }
       complete_lesson: { Args: { p_lesson: string }; Returns: undefined }
       confirm_parent_link: { Args: { p_parent: string }; Returns: undefined }
       create_payment_intent: {
@@ -2159,6 +2427,19 @@ export type Database = {
         }
         Returns: Json
       }
+      create_practice_session: {
+        Args: { p_chapters: string[]; p_count: number; p_timed: boolean }
+        Returns: string
+      }
+      create_tutor_assignment: {
+        Args: {
+          p_due_on?: string
+          p_instructions: string
+          p_student: string
+          p_title: string
+        }
+        Returns: string
+      }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
       decide_parental_consent: {
         Args: {
@@ -2167,10 +2448,19 @@ export type Database = {
         }
         Returns: undefined
       }
+      delete_tutor_assignment: {
+        Args: { p_assignment: string }
+        Returns: undefined
+      }
+      end_tutor_link: {
+        Args: { p_student: string; p_tutor: string }
+        Returns: undefined
+      }
       get_assessments_catalog: {
         Args: never
         Returns: {
           chapter_id: string
+          correction_source: string
           duration_s: number
           exam_type: Database["public"]["Enums"]["exam_type"]
           exam_year: number
@@ -2179,16 +2469,44 @@ export type Database = {
           kind: Database["public"]["Enums"]["assessment_kind"]
           level_code: string
           questions_count: number
+          series_code: string
           slug: string
+          sources: Json
           subject_code: string
           title: string
           total_points: number
+          verification: Database["public"]["Enums"]["content_verification"]
         }[]
       }
       get_attempt_review: { Args: { p_attempt: string }; Returns: Json }
       get_attempt_session: { Args: { p_attempt: string }; Returns: Json }
+      get_chapter_question_counts: {
+        Args: never
+        Returns: {
+          chapter_id: string
+          questions: number
+        }[]
+      }
       get_consent_request: { Args: { p_token: string }; Returns: Json }
+      get_family_children: {
+        Args: { p_code: string }
+        Returns: {
+          avatar_key: string
+          first_name: string
+          student_id: string
+        }[]
+      }
+      get_family_tutor_links: { Args: never; Returns: Json }
+      get_my_child_logins: {
+        Args: never
+        Returns: {
+          locked: boolean
+          student_id: string
+          updated_at: string
+        }[]
+      }
       get_my_consent_request: { Args: never; Returns: Json }
+      get_my_family_code: { Args: never; Returns: string }
       get_pending_parent_links: {
         Args: never
         Returns: {
@@ -2200,10 +2518,21 @@ export type Database = {
       }
       get_student_dashboard: { Args: { p_student: string }; Returns: Json }
       get_tutor_profile: { Args: { p_tutor: string }; Returns: Json }
+      get_tutor_student: { Args: { p_student: string }; Returns: Json }
+      get_tutor_students: { Args: never; Returns: Json }
+      invite_student_by_code: { Args: { p_code: string }; Returns: Json }
       link_child_by_code: { Args: { p_code: string }; Returns: undefined }
+      promote_student: {
+        Args: { p_series?: string; p_student: string }
+        Returns: Json
+      }
       record_signup_consents: {
         Args: { p_version: string }
         Returns: undefined
+      }
+      register_managed_child: {
+        Args: { p_child: string; p_parent: string; p_pin: string }
+        Returns: string
       }
       request_parental_consent: {
         Args: { p_parent_phone: string }
@@ -2220,6 +2549,15 @@ export type Database = {
       save_attempt_answers: {
         Args: { p_answers: Json; p_attempt: string }
         Returns: undefined
+      }
+      schedule_tutor_session: {
+        Args: {
+          p_duration_min: number
+          p_starts_at: string
+          p_student: string
+          p_topic: string
+        }
+        Returns: string
       }
       search_tutors: {
         Args: {
@@ -2247,8 +2585,16 @@ export type Database = {
           user_id: string
         }[]
       }
+      set_child_pin: {
+        Args: { p_pin: string; p_student: string }
+        Returns: undefined
+      }
       set_otp_channel: {
         Args: { p_channel: string; p_phone: string }
+        Returns: undefined
+      }
+      set_tutor_assignment_done: {
+        Args: { p_assignment: string; p_done: boolean }
         Returns: undefined
       }
       start_attempt: { Args: { p_assessment: string }; Returns: Json }
@@ -2266,6 +2612,14 @@ export type Database = {
         Returns: Json
       }
       submit_tutor_for_review: { Args: never; Returns: undefined }
+      tutor_message_student: {
+        Args: { p_body: string; p_student: string }
+        Returns: string
+      }
+      verify_child_pin: {
+        Args: { p_code: string; p_pin: string; p_student: string }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "student" | "parent" | "tutor" | "admin"
@@ -2283,6 +2637,7 @@ export type Database = {
         | "expired"
       consent_status: "not_required" | "pending" | "granted" | "refused"
       consent_type: "terms" | "privacy" | "parental" | "marketing"
+      content_verification: "unverified" | "reviewed" | "official"
       cycle: "elementaire" | "moyen" | "secondaire"
       document_type: "cni" | "passport" | "diploma" | "criminal_record"
       exam_type: "CFEE" | "BFEM" | "BAC"
@@ -2307,6 +2662,7 @@ export type Database = {
       report_target: "message" | "review" | "tutor" | "user"
       review_status: "pending" | "published" | "rejected"
       teaching_mode: "online" | "home" | "both"
+      tutor_link_status: "pending" | "active" | "declined" | "revoked"
       tutor_status: "draft" | "pending" | "approved" | "rejected" | "suspended"
     }
     CompositeTypes: {
@@ -2451,6 +2807,7 @@ export const Constants = {
       ],
       consent_status: ["not_required", "pending", "granted", "refused"],
       consent_type: ["terms", "privacy", "parental", "marketing"],
+      content_verification: ["unverified", "reviewed", "official"],
       cycle: ["elementaire", "moyen", "secondaire"],
       document_type: ["cni", "passport", "diploma", "criminal_record"],
       exam_type: ["CFEE", "BFEM", "BAC"],
@@ -2477,6 +2834,7 @@ export const Constants = {
       report_target: ["message", "review", "tutor", "user"],
       review_status: ["pending", "published", "rejected"],
       teaching_mode: ["online", "home", "both"],
+      tutor_link_status: ["pending", "active", "declined", "revoked"],
       tutor_status: ["draft", "pending", "approved", "rejected", "suspended"],
     },
   },
