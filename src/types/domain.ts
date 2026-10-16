@@ -13,7 +13,10 @@ export type SubjectCode =
   | "PHILO"
   | "EPS"
   /** Éducation à la science et à la vie sociale (élémentaire : histoire, géographie, sciences, vivre ensemble). */
-  | "ESVS";
+  | "ESVS"
+  | "AR"
+  | "ER"
+  | "ESP";
 
 export type ChapterStatus = "completed" | "in_progress" | "not_started";
 
@@ -105,6 +108,8 @@ export interface Subject {
   coefficient: number;
   /** Classe du programme (CI, 3E…). */
   levelCode: string;
+  /** Série du lycée (S1, L2…), ou null pour un programme commun à la classe. */
+  seriesCode?: string | null;
 }
 
 export type LessonResourceKind = "pdf" | "video" | "audio";
@@ -135,6 +140,9 @@ export interface Chapter {
   subjectCode: SubjectCode;
   /** Classe du programme auquel appartient le chapitre. */
   levelCode: string;
+  seriesCode?: string | null;
+  /** Rubrique du programme officiel (ex. « Activités géométriques »), si la matière en a. */
+  strand?: string | null;
   lessons: Lesson[];
 }
 
@@ -150,6 +158,7 @@ export interface ChapterSummary {
   lessonsCount: number;
   lessonsDone: number;
   estimatedMinutes: number;
+  strand?: string | null;
 }
 
 export interface SubjectProgress extends Subject {
@@ -185,6 +194,12 @@ export interface Assessment {
   durationS: number | null;
   isPremium: boolean;
   questionIds: string[];
+  /** Série (lycée) d'un sujet de Bac. */
+  seriesCode?: string | null;
+  /** Sujet d'examen : vérification, sources et origine du corrigé. */
+  verification?: ContentVerification;
+  sources?: ContentSource[];
+  correctionSource?: string | null;
 }
 
 export interface AssessmentSummary {
@@ -198,6 +213,36 @@ export interface AssessmentSummary {
   questionsCount: number;
   isPremium: boolean;
   bestScore20: number | null;
+  /** Séance « Préparer mon prochain devoir » propre à un élève (absente du catalogue). */
+  isPersonal?: boolean;
+  /** Épreuve d'examen (sujet blanc ou annale) : examen, année, série, vérification, provenance. */
+  examType?: ExamType | null;
+  examYear?: number | null;
+  seriesCode?: string | null;
+  verification?: ContentVerification;
+  sources?: ContentSource[];
+  correctionSource?: string | null;
+}
+
+/** Chapitre proposé pour « Préparer mon prochain devoir ». */
+export interface PracticeChapterOption {
+  id: string;
+  number: number;
+  title: string;
+  strand: string | null;
+  questionsCount: number;
+  isPremium: boolean;
+}
+
+/** Séance « Préparer mon prochain devoir » dans l'historique de l'élève. */
+export interface PracticeHistoryItem {
+  attemptId: string;
+  subject: Subject;
+  questionsCount: number;
+  timed: boolean;
+  status: "in_progress" | "submitted";
+  score20: number | null;
+  date: string;
 }
 
 /** Question telle qu'envoyée au navigateur : jamais d'information de correction. */
@@ -335,12 +380,29 @@ export interface ChildOverview {
 
 export type PaymentChannel = "wave" | "orange_money" | "free_money" | "card";
 
-export type PlanCode = "monthly" | "quarterly" | "yearly" | "bfem_pass";
+export type PlanCode = "monthly" | "quarterly" | "yearly" | "bfem_pass" | "family_monthly" | "family_quarterly" | "family_yearly";
 
 export interface Plan {
   code: PlanCode;
   priceFcfa: number;
   durationDays: number;
+  /** Formule Famille : nombre d'enfants couverts ; null pour un pass individuel. */
+  maxChildren?: number | null;
+}
+
+/** Formule Famille en cours d'un parent : fin de période et enfants couverts. */
+export interface FamilyCoverage {
+  planCode: PlanCode;
+  endsAt: string;
+  childIds: string[];
+  maxChildren: number;
+}
+
+/** Connexion d'un enfant par code famille + code PIN. */
+export interface ChildLoginInfo {
+  studentId: string;
+  hasPin: boolean;
+  locked: boolean;
 }
 
 export interface PaymentRecord {
@@ -375,7 +437,18 @@ export interface ChatMessage {
   mine: boolean;
 }
 
-export type NotificationKind = "consent" | "quiz_result" | "tutor_message" | "payment" | "exam" | "tutor_review";
+export type NotificationKind =
+  | "consent"
+  | "quiz_result"
+  | "tutor_message"
+  | "payment"
+  | "exam"
+  | "tutor_review"
+  | "tutor_invite"
+  | "tutor_invite_answer"
+  | "tutor_assignment"
+  | "tutor_session"
+  | "tutor_session_cancelled";
 
 export interface AppNotification {
   id: string;
@@ -397,17 +470,22 @@ export interface ExamSession {
   isOfficial: boolean;
 }
 
+/** Annale officielle vérifiée (évaluation « past_paper »). */
 export interface ExamPaper {
   id: string;
   examType: ExamType;
   year: number;
+  seriesCode: string | null;
   subjectCode: SubjectCode;
   subjectName: string;
-  subjectSizeBytes: number;
-  correctionSizeBytes: number;
   correctionPremium: boolean;
-  /** Version numérisée corrigée automatiquement, si disponible. */
+  /** Version numérisée corrigée automatiquement. */
   assessmentId: string | null;
+  questionsCount: number;
+  durationS: number | null;
+  verification: ContentVerification;
+  sources: ContentSource[];
+  correctionSource: string | null;
 }
 
 // ── Administration ──────────────────────────────────────────────────────────
@@ -477,4 +555,139 @@ export interface AuditEntry {
   action: string;
   target: string;
   createdAt: string;
+}
+
+// ── Référentiel scolaire (administration des contenus) ─────────────────────
+
+export type PublishStatus = "draft" | "review" | "published" | "archived";
+
+/** Vérification d'un chapitre : à vérifier, relu par un enseignant, source officielle vérifiée. */
+export type ContentVerification = "unverified" | "reviewed" | "official";
+
+/** Source d'un chapitre : document officiel vérifié, source externe ou contenu créé par DIANGAL. */
+export interface ContentSource {
+  title: string;
+  url?: string;
+  kind: "official" | "external" | "diangal";
+}
+
+/** Ligne du tableau de suivi : un programme (classe, série au lycée, matière). */
+export interface ContentTrackingRow {
+  programId: string;
+  levelCode: string;
+  seriesCode: string | null;
+  subjectCode: string;
+  subjectName: string;
+  freeChapters: number;
+  chapters: number;
+  chaptersPublished: number;
+  lessons: number;
+  lessonsWritten: number;
+  exercises: number;
+  quizzes: number;
+  exams: number;
+  questions: number;
+  chaptersUnverified: number;
+  chaptersReviewed: number;
+  chaptersOfficial: number;
+  sourcedChapters: number;
+}
+
+export interface AdminLessonRow {
+  id: string;
+  number: number;
+  title: string;
+  status: PublishStatus;
+  written: boolean;
+}
+
+/** Chapitre vu par l'admin : brouillons compris. */
+export interface AdminChapterRow {
+  id: string;
+  number: number;
+  slug: string;
+  title: string;
+  summary: string;
+  strand: string | null;
+  status: PublishStatus;
+  verification: ContentVerification;
+  sources: ContentSource[];
+  lessons: AdminLessonRow[];
+}
+
+/** Programme (matière d'une classe) vu par l'admin. */
+export interface AdminProgram {
+  id: string;
+  levelCode: string;
+  seriesCode: string | null;
+  subjectCode: string;
+  subjectName: string;
+  freeChapters: number;
+  chapters: AdminChapterRow[];
+}
+
+export interface AdminSubjectOption {
+  id: string;
+  code: string;
+  name: string;
+}
+
+// ── Suivi par un répétiteur ────────────────────────────────────────────────
+
+export type TutorLinkStatus = "pending" | "active" | "declined" | "revoked";
+
+/** Élève suivi (ou invité) par le répétiteur connecté : prénom et initiale seulement. */
+export interface TutorStudentItem {
+  id: string;
+  name: string;
+  levelCode: string;
+  levelName: string;
+  status: TutorLinkStatus;
+  invitedAt: string;
+  openAssignments: number;
+  nextSessionAt: string | null;
+}
+
+/** Notes d'un élève suivi, telles que les voit son répétiteur. */
+export interface TutorStudentView {
+  student: { id: string; name: string; levelCode: string; levelName: string };
+  stats: { average20: number | null; quizzesTaken: number; chaptersCompleted: number; chaptersTotal: number };
+  subjects: { code: SubjectCode; name: string; average20: number; attempts: number }[];
+  results: { title: string; subjectCode: SubjectCode; score20: number; submittedAt: string }[];
+}
+
+/** Répétiteur d'un enfant (vu par le parent) ou de l'élève lui-même. */
+export interface FamilyTutorLink {
+  tutorId: string;
+  tutorName: string;
+  headline: string;
+  studentId: string;
+  studentName: string;
+  status: TutorLinkStatus;
+  invitedAt: string;
+  /** Le parent lié, ou l'élève majeur : peut accepter, refuser ou mettre fin au suivi. */
+  canAnswer: boolean;
+}
+
+export interface TutorAssignment {
+  id: string;
+  tutorId: string;
+  studentId: string;
+  title: string;
+  instructions: string;
+  /** aaaa-mm-jj */
+  dueOn: string | null;
+  doneAt: string | null;
+  createdAt: string;
+}
+
+/** Cours en ligne planifié par le répétiteur. */
+export interface TutorSession {
+  id: string;
+  tutorId: string;
+  studentId: string;
+  startsAt: string;
+  durationMin: number;
+  topic: string;
+  status: "planned" | "cancelled";
 }

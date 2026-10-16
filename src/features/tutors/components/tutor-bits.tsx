@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/cn";
 import { formatDecimal } from "@/lib/format";
-import { SUBJECT_STYLES } from "@/lib/subjects";
+import { subjectStyle } from "@/lib/subjects";
 import type { SubjectCode, TutorCard } from "@/types/domain";
 
 const AVATAR_TONES = ["bg-pastel-mint", "bg-pastel-cream", "bg-pastel-sand", "bg-pastel-sage", "bg-pastel-lavender"];
@@ -54,7 +54,7 @@ export async function SubjectChips({ subjects }: { subjects: SubjectCode[] }) {
       {subjects.map((code) => (
         <li
           key={code}
-          className={cn("rounded-full px-2.5 py-1 text-xs font-medium", SUBJECT_STYLES[code].soft, SUBJECT_STYLES[code].text)}
+          className={cn("rounded-full px-2.5 py-1 text-xs font-medium", subjectStyle(code).soft, subjectStyle(code).text)}
         >
           {t(code)}
         </li>

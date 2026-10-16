@@ -3,13 +3,39 @@ import { cache } from "react";
 import { getCurrentRole } from "@/features/account/data";
 import { requireIdentity } from "@/features/account/session";
 import { isSupabaseConfigured } from "@/lib/env";
+import { formatDateTime } from "@/lib/format";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { mockState } from "@/mocks/progress-store";
 import type { AppNotification, AppRole, NotificationKind } from "@/types/domain";
 
 // Démo : notifications fictives. Supabase : table notifications (type + paramètres, traduits à l'affichage).
 
-const KINDS: NotificationKind[] = ["consent", "quiz_result", "tutor_message", "payment", "exam", "tutor_review"];
+const KINDS: NotificationKind[] = [
+  "consent",
+  "quiz_result",
+  "tutor_message",
+  "payment",
+  "exam",
+  "tutor_review",
+  "tutor_invite",
+  "tutor_invite_answer",
+  "tutor_assignment",
+  "tutor_session",
+  "tutor_session_cancelled",
+];
+
+/**
+ * Paramètres affichables : textes, date des cours au format de Dakar, et « child » = « none »
+ * quand la notification s'adresse à l'élève lui-même (sélecteur ICU des messages).
+ */
+function displayParams(kind: NotificationKind, raw: Record<string, unknown>): Record<string, string> {
+  const params = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, String(v ?? "")]));
+  if (kind.startsWith("tutor_") && kind !== "tutor_message" && kind !== "tutor_review" && kind !== "tutor_invite_answer") {
+    params.child ||= "none";
+  }
+  if (params.startsAt) params.startsAt = formatDateTime(params.startsAt);
+  return params;
+}
 
 const SEED: Record<AppRole, Omit<AppNotification, "read">[]> = {
   student: [
@@ -68,9 +94,7 @@ export const getNotifications = cache(async (): Promise<AppNotification[]> => {
       .map((n) => ({
         id: n.id,
         kind: n.type as NotificationKind,
-        params: Object.fromEntries(
-          Object.entries((n.params ?? {}) as Record<string, unknown>).map(([k, v]) => [k, String(v ?? "")]),
-        ),
+        params: displayParams(n.type as NotificationKind, (n.params ?? {}) as Record<string, unknown>),
         href: n.link ?? "/notifications",
         createdAt: n.created_at,
         read: n.read_at !== null,

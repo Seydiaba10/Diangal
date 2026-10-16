@@ -26,7 +26,7 @@ async function MobileTopBarActions({ role }: { role: AppRole }) {
 export function MobileTopBar({ role }: { role: AppRole }) {
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b border-line bg-surface px-4 lg:hidden">
-      <Logo href={NAV[role].main[0]!.href} />
+      <Logo href="/" />
       <Suspense fallback={<Skeleton className="h-11 w-36" />}>
         <MobileTopBarActions role={role} />
       </Suspense>

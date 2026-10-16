@@ -7,18 +7,27 @@ import type { PaymentChannel, PaymentRecord, Plan, PlanCode } from "@/types/doma
 
 // Paiements Supabase : offres (plans, publiques), paiements (lecture des siens ; tous pour l'admin).
 
-/** Offres actives : contenu public, mis en cache. */
+/**
+ * Offres actives : contenu public, mis en cache. Les formules Famille sont affichées même
+ * inactives (activées à la mise en ligne) : create_payment_intent refuse une offre inactive.
+ */
 export async function loadPlans(): Promise<(Plan & { name: string })[]> {
   "use cache";
   cacheLife("hours");
   cacheTag("plans");
   const { data, error } = await createSupabasePublicClient()
     .from("plans")
-    .select("code, name, price_fcfa, duration_days")
-    .eq("is_active", true)
+    .select("code, name, price_fcfa, duration_days, max_children")
+    .or("is_active.eq.true,max_children.not.is.null")
     .order("sort_order");
   if (error) throw new Error(`offres : ${error.message}`);
-  return data.map((p) => ({ code: p.code as PlanCode, name: p.name, priceFcfa: p.price_fcfa, durationDays: p.duration_days }));
+  return data.map((p) => ({
+    code: p.code as PlanCode,
+    name: p.name,
+    priceFcfa: p.price_fcfa,
+    durationDays: p.duration_days,
+    maxChildren: p.max_children,
+  }));
 }
 
 const CHANNELS: PaymentChannel[] = ["wave", "orange_money", "free_money", "card"];

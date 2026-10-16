@@ -42,6 +42,8 @@ export async function AssessmentCard({ assessment }: { assessment: AssessmentSum
           </li>
         ) : null}
       </ul>
+      {/* Épreuve d'examen : on dit toujours d'où vient le corrigé (officiel ou rédigé par DIANGAL). */}
+      {assessment.correctionSource ? <p className="mt-2 text-xs text-ink-muted">{assessment.correctionSource}</p> : null}
 
       <ButtonLink
         href={`/eleve/evaluations/${assessment.id}`}

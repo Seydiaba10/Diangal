@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { formatFCFA } from "@/lib/format";
 import { checkoutAction } from "../actions";
-import { getPlans, PAYMENT_CHANNELS } from "../data";
+import { getFamilyPlans, getIndividualPlans, PAYMENT_CHANNELS } from "../data";
 
 const OPTION_CLASS =
   "flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-line bg-surface p-4 has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50";
@@ -12,12 +12,20 @@ const OPTION_CLASS =
 /**
  * Choix de l'offre et du moyen de paiement. Formulaire sans JavaScript.
  * Phase 5 : redirection vers la page PayDunya (ou l'app Wave), activation sur webhook.
+ * scope « family » : formules Famille du parent (sans bénéficiaire unique).
  */
-export async function CheckoutForm({ beneficiaries }: { beneficiaries?: { id: string; name: string }[] }) {
-  const [plans, t] = await Promise.all([getPlans(), getTranslations("checkout")]);
+export async function CheckoutForm({
+  beneficiaries,
+  scope = "individual",
+}: {
+  beneficiaries?: { id: string; name: string }[];
+  scope?: "individual" | "family";
+}) {
+  const [plans, t] = await Promise.all([scope === "family" ? getFamilyPlans() : getIndividualPlans(), getTranslations("checkout")]);
+  const defaultPlan = scope === "family" ? "family_monthly" : "quarterly";
   return (
     <form action={checkoutAction} className="space-y-6">
-      {beneficiaries ? (
+      {beneficiaries && scope === "individual" ? (
         <fieldset>
           <legend className="font-semibold text-ink">{t("beneficiary")}</legend>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -40,7 +48,7 @@ export async function CheckoutForm({ beneficiaries }: { beneficiaries?: { id: st
                 type="radio"
                 name="plan"
                 value={plan.code}
-                defaultChecked={plan.code === "quarterly"}
+                defaultChecked={plan.code === defaultPlan}
                 className="mt-1 size-5 shrink-0 accent-brand-600"
               />
               <span>

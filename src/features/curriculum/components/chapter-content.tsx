@@ -11,7 +11,7 @@ import { getChapterAssessments } from "@/features/assessments/data";
 import { DownloadChapterButton } from "@/features/offline/components/download-chapter-button";
 import { cn } from "@/lib/cn";
 import { formatBytes } from "@/lib/format";
-import { SUBJECT_STYLES } from "@/lib/subjects";
+import { subjectStyle } from "@/lib/subjects";
 import type { Chapter, LessonResourceKind, Subject } from "@/types/domain";
 import { getChapterProgress, lessonHref } from "../data";
 
@@ -31,7 +31,7 @@ export async function ChapterContent({ subject, chapter }: { subject: Subject; c
     getTranslations("badges"),
     getMessages(),
   ]);
-  const style = SUBJECT_STYLES[subject.code];
+  const style = subjectStyle(subject.code);
   const nextLesson = chapter.lessons.find((l) => statuses[l.id] !== "completed");
   const totalSize = chapter.lessons.flatMap((l) => l.resources).reduce((sum, r) => sum + r.sizeBytes, 0);
 

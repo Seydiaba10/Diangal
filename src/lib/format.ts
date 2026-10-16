@@ -21,6 +21,14 @@ export function formatDate(value: Date | string): string {
   return dateFormat.format(typeof value === "string" ? new Date(value) : value);
 }
 
+const timeFormat = new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: APP_TIME_ZONE });
+
+/** Instant → « 14/10/2026 à 17:00 » (heure de Dakar). */
+export function formatDateTime(value: Date | string): string {
+  const date = typeof value === "string" ? new Date(value) : value;
+  return `${dateFormat.format(date)} à ${timeFormat.format(date)}`;
+}
+
 /** 13.45 → « 13,5 » ; null → « – ». */
 export function formatScoreValue(score: number | null): string {
   return score === null ? "–" : scoreFormat.format(score);

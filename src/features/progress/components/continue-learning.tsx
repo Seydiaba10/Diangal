@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/cn";
-import { SUBJECT_STYLES } from "@/lib/subjects";
+import { subjectStyle } from "@/lib/subjects";
 import type { ContinueItem } from "@/types/domain";
 
 // Colonnes du tableau desktop, partagées par l'en-tête et les lignes.
@@ -60,7 +60,7 @@ export async function ContinueLearning({ items }: { items: ContinueItem[] }) {
 
 async function ContinueRow({ item }: { item: ContinueItem }) {
   const t = await getTranslations("dashboard.continue");
-  const style = SUBJECT_STYLES[item.subject];
+  const style = subjectStyle(item.subject);
   const Icon = style.icon;
   const notStarted = item.status === "not_started";
 

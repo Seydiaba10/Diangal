@@ -1,7 +1,7 @@
 import type { EmailOtpType, User } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
-import { ROLE_HOME } from "@/features/account/roles";
+import { LOGIN_PATH, parseSpace, ROLE_HOME } from "@/features/account/roles";
 import { completePendingSignup } from "@/features/account/signup";
 import { safeInternalPath } from "@/lib/safe-path";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -14,6 +14,12 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const next = safeInternalPath(params.get("next"));
+  const login = LOGIN_PATH[parseSpace(params.get("espace"))];
+  // Réseau social sans compte DIANGAL (le déclencheur refuse un compte sans rôle) ou accès refusé.
+  const providerError = params.get("error_description") ?? params.get("error");
+  if (providerError) {
+    redirect(`${login}?erreur=${/database error|saving new user/i.test(providerError) ? "social-inconnu" : "social"}`);
+  }
   const supabase = await createSupabaseServerClient();
 
   let user: User | null = null;
@@ -26,10 +32,10 @@ export async function GET(request: NextRequest) {
     const { data } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: (params.get("type") ?? "email") as EmailOtpType });
     user = data.user;
   }
-  if (!user) redirect("/connexion?mode=email&erreur=lien");
+  if (!user) redirect(`${login}?mode=email&erreur=lien`);
 
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
-  if (!profile) redirect("/connexion?mode=email&erreur=profil");
+  if (!profile) redirect(`${login}?mode=email&erreur=profil`);
   await completePendingSignup(supabase, user, profile.role);
 
   if (profile.role === "admin") redirect("/connexion/securite");

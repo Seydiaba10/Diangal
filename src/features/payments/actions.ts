@@ -14,6 +14,8 @@ import { PAYMENT_CHANNELS } from "./data";
 
 const DAY_MS = 86_400_000;
 const PLAN_CODES = ["monthly", "quarterly", "yearly", "bfem_pass"];
+/** Formule Famille : payée par un parent, pour ses enfants reliés (4 au plus). */
+const FAMILY_PLAN_CODES = ["family_monthly", "family_quarterly", "family_yearly"];
 const BENEFICIARIES: Record<string, string> = {
   [DEMO_STUDENT_ID]: "Awa Ndiaye",
   [DEMO_SECOND_CHILD.id]: `${DEMO_SECOND_CHILD.firstName} ${DEMO_SECOND_CHILD.lastName}`,
@@ -29,22 +31,26 @@ export async function checkoutAction(formData: FormData) {
   const planCode = String(formData.get("plan") ?? "");
   const channel = formData.get("channel") as PaymentChannel;
   const back = role === "parent" ? "/parent/abonnements" : "/eleve/abonnement";
-  if (!PLAN_CODES.includes(planCode) || !PAYMENT_CHANNELS.includes(channel)) redirect(`${back}?erreur=formulaire`);
+  const family = FAMILY_PLAN_CODES.includes(planCode);
+  if ((!PLAN_CODES.includes(planCode) && !family) || !PAYMENT_CHANNELS.includes(channel)) redirect(`${back}?erreur=formulaire`);
   if (role !== "student" && role !== "parent") redirect("/");
+  if (family && role !== "parent") redirect(`${back}?erreur=famille`);
 
   if (isSupabaseConfigured()) {
     const { userId } = await requireIdentity();
-    const beneficiary = role === "parent" ? String(formData.get("beneficiary") ?? "") : userId;
+    // Formule Famille : pas de bénéficiaire unique (tous les enfants reliés, 4 au plus).
+    const beneficiary = family ? null : role === "parent" ? String(formData.get("beneficiary") ?? "") : userId;
     const provider = paydunyaFromEnv();
     if (!provider) redirect(`${back}?erreur=indisponible`);
 
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase.rpc("create_payment_intent", {
       p_plan_code: planCode,
-      p_beneficiary: beneficiary,
+      p_beneficiary: beneficiary as string,
       p_channel: channel,
     });
     if (error?.message.includes("consent_required")) redirect(`${back}?erreur=consentement`);
+    if (error?.message.includes("family_requires_children")) redirect(`${back}?erreur=famille`);
     if (error || !data) redirect(`${back}?erreur=formulaire`);
     const intent = data as { reference: string; amount_fcfa: number; plan_name: string };
 
@@ -66,6 +72,27 @@ export async function checkoutAction(formData: FormData) {
   }
 
   const plan = MOCK_PLANS.find((p) => p.code === planCode)!;
+  if (family) {
+    // Démo : la formule Famille couvre les deux enfants fictifs du parent.
+    const now = Date.now();
+    const sequence = String(mockState.payments.length + 6).padStart(4, "0");
+    const start = Math.max(now, ...Object.keys(BENEFICIARIES).map((id) => mockState.premiumUntil.get(id) ?? 0));
+    for (const id of Object.keys(BENEFICIARIES)) mockState.premiumUntil.set(id, start + plan.durationDays * DAY_MS);
+    const payment: PaymentRecord = {
+      id: crypto.randomUUID(),
+      reference: `DGL-2610-${sequence}`,
+      payerName: `${DEMO_PARENT.firstName} ${DEMO_PARENT.lastName}`,
+      beneficiaryName: Object.values(BENEFICIARIES).join(", "),
+      planCode: plan.code,
+      amountFcfa: plan.priceFcfa,
+      channel,
+      status: "succeeded",
+      createdAt: new Date(now).toISOString(),
+    };
+    mockState.payments.unshift(payment);
+    logAudit(payment.payerName, `paiement ${payment.reference} (${channel})`, payment.beneficiaryName);
+    redirect(`/paiement/retour?ref=${payment.reference}`);
+  }
   const beneficiaryId = role === "parent" ? String(formData.get("beneficiary") ?? "") : DEMO_STUDENT_ID;
   if (!BENEFICIARIES[beneficiaryId]) redirect(`${back}?erreur=formulaire`);
   if (role === "student") {

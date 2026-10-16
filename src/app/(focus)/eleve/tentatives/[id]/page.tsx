@@ -15,7 +15,7 @@ async function AttemptLoader({ id }: { id: string }) {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
         <p className="text-ink">{t("notFound")}</p>
-        <ButtonLink href="/eleve/entrainement" variant="outline" className="mt-6">
+        <ButtonLink href="/eleve/exercices" variant="outline" className="mt-6">
           {tResult("backToPractice")}
         </ButtonLink>
       </div>
@@ -24,7 +24,7 @@ async function AttemptLoader({ id }: { id: string }) {
   const messages = await getMessages();
   return (
     // Seuls les textes du lecteur sont envoyés au navigateur.
-    <NextIntlClientProvider messages={{ player: messages.player }}>
+    <NextIntlClientProvider messages={{ player: messages.player, readAloud: messages.readAloud }}>
       <AttemptPlayer session={session} />
     </NextIntlClientProvider>
   );

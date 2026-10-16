@@ -2,6 +2,8 @@
 
 import { ArrowLeft, ArrowRight, Check, CircleAlert, Flag, Timer } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { SpeakButton } from "@/components/ui/read-aloud";
+import { hasReadAloud } from "@/lib/levels";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -44,6 +46,12 @@ interface AttemptPlayerProps {
 }
 
 /** Les réponses sauvegardées ne sont lues qu'après le montage, pour éviter un écart d'hydratation. */
+/** Texte lu à voix haute : la question, puis les réponses proposées. */
+function spokenQuestion(question: PlayerQuestion): string {
+  const plain = (html: string) => html.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ");
+  return [plain(question.promptHtml), ...question.options.map((o) => plain(o.labelHtml))].join(". ");
+}
+
 export function AttemptPlayer(props: AttemptPlayerProps) {
   const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false);
   if (!mounted) return <PlayerSkeleton />;
@@ -163,6 +171,10 @@ function Player({ session }: AttemptPlayerProps) {
 
         <section className="mt-3 rounded-2xl border border-line bg-surface p-5">
           <RichText html={question.promptHtml} className="text-lg text-ink" />
+          {/* CI à CM1 : la question et ses réponses peuvent s'écouter. */}
+          {hasReadAloud(session.assessment.subject.levelCode) ? (
+            <SpeakButton key={question.id} text={spokenQuestion(question)} className="mt-3" />
+          ) : null}
         </section>
 
         <QuestionInput

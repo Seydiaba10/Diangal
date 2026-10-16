@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
       { source: "/serwist/:path*", headers: [{ key: "Cache-Control", value: "no-cache" }] },
     ];
   },
+  // Anciennes adresses : l'« Entraînement » s'appelle désormais « Exercices ».
+  async redirects() {
+    return [{ source: "/eleve/entrainement", destination: "/eleve/exercices", permanent: true }];
+  },
   cacheComponents: true,
   partialPrefetching: true,
   experimental: {

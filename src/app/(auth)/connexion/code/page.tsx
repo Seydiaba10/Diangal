@@ -7,6 +7,7 @@ import { Notice } from "@/components/ui/notice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { resendLoginCodeAction, verifyLoginCodeAction } from "@/features/account/actions";
 import { AuthCard, INPUT_CLASS } from "@/features/account/components/auth-card";
+import { LOGIN_PATH, parseSpace } from "@/features/account/roles";
 import { cn } from "@/lib/cn";
 import { emailHasCode, isSupabaseConfigured } from "@/lib/env";
 
@@ -31,7 +32,8 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
   const identifiant = first(params.identifiant);
   const rawCanal = first(params.canal);
   const canal = rawCanal === "sms" || rawCanal === "whatsapp" ? rawCanal : "email";
-  const role = first(params.role) || "student";
+  const space = parseSpace(first(params.espace));
+  const role = first(params.role) || (space === "repetiteur" ? "tutor" : "student");
   const next = first(params.next);
   const error = first(params.erreur) === "code";
   const demo = !isSupabaseConfigured();
@@ -43,6 +45,7 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
     <>
       <input type="hidden" name="identifiant" value={identifiant} />
       <input type="hidden" name="canal" value={canal} />
+      <input type="hidden" name="espace" value={space} />
       {demo ? <input type="hidden" name="role" value={role} /> : null}
       {next ? <input type="hidden" name="next" value={next} /> : null}
     </>
@@ -96,7 +99,7 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
         </Button>
       </form>
       <div className="mt-4 flex items-center justify-between gap-3 text-sm">
-        <Link href={`/connexion?mode=${canal}`} className="font-medium text-brand-700 hover:underline">
+        <Link href={`${LOGIN_PATH[space]}?mode=${canal}`} className="font-medium text-brand-700 hover:underline">
           {canal === "email" ? t("changeEmail") : t("changeNumber")}
         </Link>
         <form action={resendLoginCodeAction}>
@@ -113,7 +116,7 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
 export default async function CodePage({ searchParams }: PageProps<"/connexion/code">) {
   const t = await getTranslations("auth.code");
   return (
-    <AuthCard title={t("title")}>
+    <AuthCard title={t("title")} centered>
       <Suspense fallback={<Skeleton className="h-64" />}>
         <CodeForm searchParams={searchParams} />
       </Suspense>

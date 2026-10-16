@@ -31,7 +31,7 @@ export async function Sidebar({ role }: { role: AppRole }) {
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-62 flex-col border-r border-line bg-surface lg:flex">
       <div className="px-5 pb-5 pt-6">
-        <Logo href={nav.main[0]!.href} />
+        <Logo href="/" />
       </div>
       <div className="px-4">
         <Suspense fallback={<SessionCardSkeleton />}>

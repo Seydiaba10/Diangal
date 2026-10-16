@@ -22,6 +22,13 @@ export const SERIES_BY_LEVEL: Partial<Record<LevelCode, readonly string[]>> = {
   TLE: UPPER_SERIES,
 };
 
+/** Classes où leçons et exercices se lisent aussi à voix haute (CI à CM1). */
+export const READ_ALOUD_LEVELS: readonly LevelCode[] = ["CI", "CP", "CE1", "CE2", "CM1"];
+
+export function hasReadAloud(levelCode: string): boolean {
+  return (READ_ALOUD_LEVELS as readonly string[]).includes(levelCode);
+}
+
 export function isLevelCode(value: string): value is LevelCode {
   return (LEVEL_CODES as readonly string[]).includes(value);
 }

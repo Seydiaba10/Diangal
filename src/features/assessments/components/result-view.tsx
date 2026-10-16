@@ -47,7 +47,7 @@ export async function ResultView({ attemptId }: { attemptId: string }) {
     return (
       <div className="py-12 text-center">
         <p className="text-ink">{t("notFound")}</p>
-        <ButtonLink href="/eleve/entrainement" variant="outline" className="mt-6">
+        <ButtonLink href="/eleve/exercices" variant="outline" className="mt-6">
           {t("backToPractice")}
         </ButtonLink>
       </div>
@@ -115,9 +115,17 @@ async function ScoreCard({ result, band }: { result: AttemptResult; band: Band }
               {t("reviewLesson")}
             </ButtonLink>
           ) : null}
-          <ButtonLink href={`/eleve/evaluations/${assessment.id}`} className="flex-1">
+          {/* Séance personnelle : on en prépare une nouvelle (autres questions tirées au hasard). */}
+          <ButtonLink
+            href={
+              assessment.isPersonal
+                ? `/eleve/exercices/preparer?matiere=${encodeURIComponent(assessment.subject.slug)}`
+                : `/eleve/evaluations/${assessment.id}`
+            }
+            className="flex-1"
+          >
             <RotateCcw className="size-4" aria-hidden />
-            {t("retry")}
+            {assessment.isPersonal ? t("prepareAnother") : t("retry")}
           </ButtonLink>
         </div>
       </div>

@@ -2,9 +2,20 @@ import "server-only";
 
 import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
+import { parseSources } from "@/lib/sources";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { AnswerValue, AssessmentKind, ExamType, PlayerQuestion, QuestionReview, QuestionType, SubjectCode } from "@/types/domain";
+import type {
+  AnswerValue,
+  AssessmentKind,
+  ContentSource,
+  ContentVerification,
+  ExamType,
+  PlayerQuestion,
+  QuestionReview,
+  QuestionType,
+  SubjectCode,
+} from "@/types/domain";
 
 // Lecture Supabase des évaluations et des tentatives (questions via fonctions : jamais de corrigé avant l'envoi).
 
@@ -23,6 +34,10 @@ export interface CatalogAssessment {
   isPremium: boolean;
   questionsCount: number;
   totalPoints: number;
+  seriesCode: string | null;
+  verification: ContentVerification;
+  sources: ContentSource[];
+  correctionSource: string | null;
 }
 
 /** Évaluations publiées (identiques pour tous) : mises en cache, invalidées avec le catalogue. */
@@ -47,6 +62,87 @@ export async function loadAssessmentCatalog(): Promise<CatalogAssessment[]> {
     isPremium: a.is_premium,
     questionsCount: a.questions_count,
     totalPoints: Number(a.total_points),
+    seriesCode: a.series_code ?? null,
+    verification: a.verification,
+    sources: parseSources(a.sources),
+    correctionSource: a.correction_source ?? null,
+  }));
+}
+
+/** Nombre de questions publiées par chapitre (banque des séances « Préparer mon prochain devoir »). */
+export async function loadChapterQuestionCounts(): Promise<Record<string, number>> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("catalog");
+  const supabase = createSupabasePublicClient();
+  const { data, error } = await supabase.rpc("get_chapter_question_counts");
+  if (error) throw new Error(`questions par chapitre : ${error.message}`);
+  return Object.fromEntries(data.map((r) => [r.chapter_id, r.questions]));
+}
+
+/** Séance personnelle (ou évaluation) lue avec la session : la RLS limite à l'élève, ses parents et l'admin. */
+export async function fetchPersonalAssessment(idOrSlug: string): Promise<CatalogAssessment | null> {
+  const supabase = await createSupabaseServerClient();
+  const column = UUID.test(idOrSlug) ? "id" : "slug";
+  const { data } = await supabase
+    .from("assessments")
+    .select("id, slug, kind, title, chapter_id, exam_type, exam_year, duration_s, is_premium, owner_id, verification, sources, correction_source, subjects!inner(code), levels!inner(code), series(code), assessment_questions(questions(points))")
+    .eq(column, idOrSlug)
+    .not("owner_id", "is", null)
+    .maybeSingle();
+  if (!data) return null;
+  return {
+    uuid: data.id,
+    slug: data.slug,
+    kind: data.kind,
+    title: data.title,
+    subjectCode: data.subjects.code as SubjectCode,
+    levelCode: data.levels.code,
+    chapterId: data.chapter_id,
+    examType: data.exam_type,
+    examYear: data.exam_year,
+    durationS: data.duration_s,
+    isPremium: data.is_premium,
+    questionsCount: data.assessment_questions.length,
+    totalPoints: data.assessment_questions.reduce((sum, aq) => sum + Number(aq.questions?.points ?? 0), 0),
+    seriesCode: data.series?.code ?? null,
+    verification: data.verification,
+    sources: parseSources(data.sources),
+    correctionSource: data.correction_source ?? null,
+  };
+}
+
+export interface RemotePracticeAttempt {
+  attemptId: string;
+  status: "in_progress" | "submitted";
+  score20: number | null;
+  date: string;
+  subjectCode: SubjectCode;
+  levelCode: string;
+  questionsCount: number;
+  timed: boolean;
+}
+
+/** Historique des séances « Préparer mon prochain devoir » d'un élève (lui-même ou son enfant). */
+export async function fetchPracticeAttempts(studentId: string): Promise<RemotePracticeAttempt[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("attempts")
+    .select("id, status, score_20, started_at, submitted_at, assessments!inner(owner_id, duration_s, subjects!inner(code), levels!inner(code), assessment_questions(count))")
+    .eq("user_id", studentId)
+    .not("assessments.owner_id", "is", null)
+    .order("started_at", { ascending: false })
+    .limit(20);
+  if (error) throw new Error(`séances : ${error.message}`);
+  return data.map((a) => ({
+    attemptId: a.id,
+    status: a.status === "in_progress" ? "in_progress" : "submitted",
+    score20: a.score_20 === null ? null : Number(a.score_20),
+    date: a.submitted_at ?? a.started_at,
+    subjectCode: a.assessments.subjects.code as SubjectCode,
+    levelCode: a.assessments.levels.code,
+    questionsCount: a.assessments.assessment_questions[0]?.count ?? 0,
+    timed: a.assessments.duration_s !== null,
   }));
 }
 

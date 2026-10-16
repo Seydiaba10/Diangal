@@ -5,13 +5,35 @@ import { ChapterStatusBadge, PremiumBadge } from "@/components/ui/badge";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/cn";
-import { SUBJECT_STYLES } from "@/lib/subjects";
-import type { Subject } from "@/types/domain";
+import { subjectStyle } from "@/lib/subjects";
+import type { ChapterSummary, Subject } from "@/types/domain";
 import { chapterHref, getChapterSummaries } from "../data";
 
 export async function ChapterList({ subject }: { subject: Subject }) {
-  const [chapters, t] = await Promise.all([getChapterSummaries(subject), getTranslations("subject")]);
-  const style = SUBJECT_STYLES[subject.code];
+  const chapters = await getChapterSummaries(subject);
+  // Rubriques du programme (ex. « Activités numériques ») : chapitres regroupés, dans l’ordre de première apparition.
+  const groups: { strand: string | null; items: typeof chapters }[] = [];
+  for (const chapter of chapters) {
+    const strand = chapter.strand ?? null;
+    const group = groups.find((g) => g.strand === strand);
+    if (group) group.items.push(chapter);
+    else groups.push({ strand, items: [chapter] });
+  }
+  return (
+    <div className="space-y-6">
+      {groups.map((group) => (
+        <section key={group.strand ?? "-"} aria-label={group.strand ?? undefined}>
+          {group.strand ? <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-ink-muted">{group.strand}</h2> : null}
+          <ChapterItems subject={subject} chapters={group.items} />
+        </section>
+      ))}
+    </div>
+  );
+}
+
+async function ChapterItems({ subject, chapters }: { subject: Subject; chapters: ChapterSummary[] }) {
+  const t = await getTranslations("subject");
+  const style = subjectStyle(subject.code);
   return (
     <ol className="space-y-3">
       {chapters.map((chapter) => (

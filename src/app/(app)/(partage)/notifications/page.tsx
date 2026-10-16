@@ -1,4 +1,15 @@
-import { Bell, CalendarDays, ClipboardCheck, CreditCard, MessageCircle, ShieldCheck, type LucideIcon } from "lucide-react";
+import {
+  Bell,
+  CalendarDays,
+  ClipboardCheck,
+  ClipboardList,
+  CreditCard,
+  GraduationCap,
+  MessageCircle,
+  ShieldCheck,
+  Video,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -25,6 +36,11 @@ const ICONS: Record<NotificationKind, LucideIcon> = {
   payment: CreditCard,
   exam: CalendarDays,
   tutor_review: ShieldCheck,
+  tutor_invite: GraduationCap,
+  tutor_invite_answer: GraduationCap,
+  tutor_assignment: ClipboardList,
+  tutor_session: Video,
+  tutor_session_cancelled: Video,
 };
 
 async function NotificationList() {

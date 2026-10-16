@@ -1,4 +1,4 @@
-import { MessageCircle, ShieldAlert, Users } from "lucide-react";
+import { GraduationCap, MessageCircle, ShieldAlert, Users } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -8,6 +8,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Notice } from "@/components/ui/notice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getParentChildren, getSessionUser } from "@/features/account/data";
+import { getFamilyTutorLinks } from "@/features/tutoring/data";
 import { ChildCard } from "@/features/parents/components/child-card";
 import { isSupabaseConfigured } from "@/lib/env";
 
@@ -17,12 +18,15 @@ export async function generateMetadata() {
 }
 
 async function ParentHome({ searchParams }: { searchParams: PageProps<"/parent">["searchParams"] }) {
-  const [params, user, children, t] = await Promise.all([
+  const [params, user, children, tutorLinks, t, tTutor] = await Promise.all([
     searchParams,
     getSessionUser("parent"),
     getParentChildren(),
+    getFamilyTutorLinks(),
     getTranslations("parentHome"),
+    getTranslations("tutoring.family"),
   ]);
+  const tutorInvites = tutorLinks.filter((l) => l.status === "pending" && l.canAnswer);
   const pending = children.filter((c) => c.consentStatus === "pending");
   const demo = !isSupabaseConfigured();
 
@@ -33,6 +37,17 @@ async function ParentHome({ searchParams }: { searchParams: PageProps<"/parent">
       {params.consentement === "refused" ? <Notice tone="warning">{t("notices.consentRefused")}</Notice> : null}
       {params.lien === "ok" ? <Notice tone="success">{t("notices.linked")}</Notice> : null}
       {params.lien === "attente" ? <Notice tone="success">{t("notices.linkPending")}</Notice> : null}
+      {tutorInvites.length ? (
+        <div className="flex flex-col gap-3 rounded-2xl bg-brand-50 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="flex gap-2 text-sm text-ink">
+            <GraduationCap className="mt-0.5 size-5 shrink-0 text-brand-700" aria-hidden />
+            {tTutor("pendingBanner", { count: tutorInvites.length })}
+          </p>
+          <ButtonLink href={`/parent/enfants/${tutorInvites[0]!.studentId}`} size="sm" className="shrink-0">
+            {tTutor("pendingBannerLink")}
+          </ButtonLink>
+        </div>
+      ) : null}
 
       {pending.map((child) => (
         <div key={child.id} className="flex flex-col gap-3 rounded-2xl bg-premium-50 p-5 sm:flex-row sm:items-center sm:justify-between">

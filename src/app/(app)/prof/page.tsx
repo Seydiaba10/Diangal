@@ -1,4 +1,4 @@
-import { CalendarClock, CircleCheck, CircleDashed, Eye, MessageCircle, ShieldCheck, Star } from "lucide-react";
+import { CalendarClock, CircleCheck, CircleDashed, Eye, GraduationCap, MessageCircle, ShieldAlert, ShieldCheck, Star } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -10,7 +10,8 @@ import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatCard } from "@/components/ui/stat-card";
 import { getConversations } from "@/features/messaging/data";
-import { getTutorDashboard } from "@/features/tutors/data";
+import { getOwnVerification, getTutorDashboard } from "@/features/tutors/data";
+import { getTutorStudents } from "@/features/tutoring/data";
 import { formatDecimal } from "@/lib/format";
 
 export async function generateMetadata() {
@@ -19,19 +20,50 @@ export async function generateMetadata() {
 }
 
 async function TutorHome() {
-  const [{ profile, checklist, completion, stats }, conversations, t] = await Promise.all([
+  const [{ profile, checklist, completion, stats }, conversations, verification, students, t] = await Promise.all([
     getTutorDashboard(),
     getConversations(),
+    getOwnVerification(),
+    getTutorStudents(),
     getTranslations("tutorHome"),
   ]);
+  const verified = verification?.status === "approved";
+  const followed = students.filter((s) => s.status === "active").length;
+  const invited = students.length - followed;
   return (
     <div className="space-y-5 lg:space-y-7">
       <PageHeader title={t("greeting", { name: profile.displayName.split(" ")[0] ?? "" })} subtitle={t("subtitle")} />
 
-      <p className="flex items-center gap-2 rounded-2xl bg-success-50 px-5 py-4 text-sm font-medium text-success-700">
-        <ShieldCheck className="size-5 shrink-0" aria-hidden />
-        {t("verified")}
-      </p>
+      {verified ? (
+        <p className="flex items-center gap-2 rounded-2xl bg-success-50 px-5 py-4 text-sm font-medium text-success-700">
+          <ShieldCheck className="size-5 shrink-0" aria-hidden />
+          {t("verified")}
+        </p>
+      ) : (
+        <div className="flex flex-col gap-3 rounded-2xl bg-premium-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="flex items-center gap-2 text-sm font-medium text-premium-700">
+            <ShieldAlert className="size-5 shrink-0" aria-hidden />
+            {t("notVerified")}
+          </p>
+          <ButtonLink href="/prof/verification" size="sm" variant="outline" className="shrink-0">
+            {t("notVerifiedCta")}
+          </ButtonLink>
+        </div>
+      )}
+
+      <SectionCard
+        id="eleves-titre"
+        title={t("studentsTitle")}
+        subtitle={t("studentsSummary", { followed, invited })}
+        action={
+          <ButtonLink href="/prof/eleves" size="sm">
+            <GraduationCap className="size-4" aria-hidden />
+            {t("studentsCta")}
+          </ButtonLink>
+        }
+      >
+        <p className="text-sm text-ink-muted">{t("studentsBody")}</p>
+      </SectionCard>
 
       <section aria-label={t("statsLabel")} className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
         <StatCard icon={<Eye className="size-5" aria-hidden />} iconClassName="bg-brand-50 text-brand-700" label={t("views")} value={stats.profileViews === null ? t("notMeasured") : String(stats.profileViews)} />

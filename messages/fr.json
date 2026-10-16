@@ -14,7 +14,7 @@
     "others": "Autres",
     "home": "Accueil",
     "courses": "Cours",
-    "practice": "Entraînement",
+    "practice": "Exercices",
     "exams": "Examens",
     "tutors": "Répétiteurs",
     "profile": "Profil",
@@ -35,7 +35,12 @@
     "reports": "Signalements",
     "users": "Utilisateurs",
     "payments": "Paiements",
-    "audit": "Journal"
+    "audit": "Journal",
+    "students": "Mes élèves",
+    "onlineSessions": "Cours en ligne",
+    "contentTracking": "Suivi des contenus",
+    "referential": "Référentiel",
+    "family": "Famille"
   },
   "header": {
     "searchLabel": "Rechercher un cours",
@@ -46,7 +51,7 @@
   },
   "premiumCard": {
     "title": "Passe à Premium",
-    "body": "Contrôles chronométrés, examens blancs et corrigés détaillés.",
+    "body": "Tous les chapitres, les contrôles chronométrés, les sujets blancs et les corrigés détaillés.",
     "cta": "Voir les offres"
   },
   "dashboard": {
@@ -71,7 +76,7 @@
       "colProgress": "Progression",
       "nextLesson": "Prochaine leçon : {title}",
       "lessons": "{done}/{total} leçons",
-      "progress": "{pct} % du chapitre « {chapter} »",
+      "progress": "{pct} % du chapitre « {chapter} »",
       "resume": "Reprendre",
       "start": "Commencer",
       "empty": "Choisis un chapitre dans tes cours pour commencer."
@@ -107,7 +112,7 @@
   },
   "pages": {
     "courses": "Mes cours",
-    "practice": "Entraînement",
+    "practice": "Exercices",
     "exams": "Examens",
     "tutors": "Répétiteurs",
     "profile": "Mon profil",
@@ -119,7 +124,7 @@
   "breadcrumb": {
     "label": "Fil d’Ariane",
     "courses": "Cours",
-    "practice": "Entraînement",
+    "practice": "Exercices",
     "tutors": "Répétiteurs"
   },
   "subjects": {
@@ -133,7 +138,10 @@
     "LV2": "Langue vivante 2",
     "PHILO": "Philosophie",
     "EPS": "EPS",
-    "ESVS": "Science et vie sociale"
+    "ESVS": "Science et vie sociale",
+    "AR": "Arabe",
+    "ER": "Éducation religieuse",
+    "ESP": "Espagnol"
   },
   "levels": {
     "CI": "CI",
@@ -165,7 +173,7 @@
     "subjectsLabel": "Matières",
     "chaptersDone": "{done}/{total} chapitres terminés",
     "progressLabel": "Progression en {subject}",
-    "searchResults": "{count, plural, =0 {Aucun chapitre pour « {query} »} one {# chapitre pour « {query} »} other {# chapitres pour « {query} »}}",
+    "searchResults": "{count, plural, =0 {Aucun chapitre pour « {query} »} one {# chapitre pour « {query} »} other {# chapitres pour « {query} »}}",
     "chapterNumber": "Chapitre {number}",
     "otherLevel": "Les cours de ta classe ({level}) ne sont pas encore publiés : ils arrivent bientôt."
   },
@@ -173,13 +181,13 @@
     "chaptersTitle": "Chapitres",
     "chapters": "{count, plural, one {# chapitre} other {# chapitres}}",
     "meta": "{lessons, plural, one {# leçon} other {# leçons}} · {minutes} min",
-    "progressLabel": "Progression du chapitre « {title} »"
+    "progressLabel": "Progression du chapitre « {title} »"
   },
   "chapter": {
     "number": "Chapitre {number}",
     "progress": "{done}/{total} leçons terminées",
     "lessonsTitle": "Leçons",
-    "practiceTitle": "S’entraîner",
+    "practiceTitle": "Exercices",
     "practiceEmpty": "Les exercices de ce chapitre arrivent bientôt.",
     "lessonMeta": "{minutes} min",
     "lessonDone": "Terminée",
@@ -203,11 +211,11 @@
     "done": "Leçon terminée",
     "previous": "Précédente",
     "next": "Suivante",
-    "practice": "S’entraîner sur ce chapitre"
+    "practice": "Faire les exercices du chapitre"
   },
   "paywall": {
     "title": "Contenu Premium",
-    "body": "Débloque cette leçon, tous les contrôles chronométrés et les examens blancs.",
+    "body": "Débloque cette leçon et tout le programme : chapitres, contrôles et sujets blancs.",
     "price": "À partir de {price} par mois",
     "cta": "Voir les offres"
   },
@@ -231,7 +239,18 @@
     "all": "Tous les exercices et contrôles",
     "allSubjects": "Toutes",
     "filterLabel": "Filtrer par matière",
-    "empty": "Aucun exercice pour cette matière pour l’instant."
+    "empty": "Aucun exercice pour cette matière pour l’instant.",
+    "prepare": {
+      "title": "Préparer mon prochain devoir",
+      "hint": "Choisis les chapitres de ton devoir : DIANGAL te pose des questions tirées au hasard, puis te montre la correction.",
+      "cta": "Composer ma séance"
+    },
+    "history": {
+      "title": "Mes devoirs préparés",
+      "questions": "{count, plural, one {# question} other {# questions}}",
+      "timed": "chronométré",
+      "inProgress": "En cours"
+    }
   },
   "intro": {
     "duration": "Durée",
@@ -241,7 +260,7 @@
     "untimed": "Sans limite",
     "rulesTitle": "Avant de commencer",
     "rules": {
-      "timer": "Le chronomètre démarre dès que tu cliques sur « Commencer ».",
+      "timer": "Le chronomètre démarre dès que tu cliques sur « Commencer ».",
       "saved": "Tes réponses restent sur ce téléphone, même si la connexion coupe.",
       "auto": "À la fin du temps, ta copie est envoyée automatiquement.",
       "online": "Il faut être connecté pour commencer et pour envoyer ta copie.",
@@ -281,7 +300,7 @@
     "submitting": "Envoi en cours…",
     "error": "Impossible d’envoyer ta copie. Vérifie ta connexion : tes réponses sont gardées sur ce téléphone.",
     "retry": "Réessayer",
-    "notFound": "Cette tentative n’existe plus. Recommence depuis la page Entraînement."
+    "notFound": "Cette tentative n’existe plus. Recommence depuis la page Exercices."
   },
   "result": {
     "title": "Résultat",
@@ -313,8 +332,9 @@
     "pointsAwarded": "{awarded}/{points} pt",
     "reviewLesson": "Revoir le chapitre",
     "retry": "Refaire",
-    "backToPractice": "Retour à l’entraînement",
-    "notFound": "Résultat introuvable : il a peut-être expiré. Recommence l’évaluation."
+    "backToPractice": "Retour aux exercices",
+    "notFound": "Résultat introuvable : il a peut-être expiré. Recommence l’évaluation.",
+    "prepareAnother": "Préparer une autre séance"
   },
   "tutors": {
     "subtitle": "Des répétiteurs vérifiés par DIANGAL, en ligne ou à domicile.",
@@ -417,7 +437,8 @@
       "pricing": "Tarifs",
       "becomeTutor": "Devenir répétiteur",
       "signIn": "Se connecter",
-      "signUp": "S’inscrire"
+      "signUp": "S’inscrire",
+      "mySpace": "Mon espace"
     },
     "footer": {
       "tagline": "La plateforme scolaire du Sénégal, du CI à la Terminale. Pensée pour les petites connexions.",
@@ -445,25 +466,21 @@
     "metaTitle": "DIANGAL · Apprendre, réviser et réussir, du CI à la Terminale",
     "metaDescription": "Cours conformes au programme sénégalais, exercices corrigés, contrôles chronométrés, préparation au CFEE, au BFEM et au Bac, et répétiteurs vérifiés.",
     "hero": {
-      "eyebrow": "Programme officiel du Sénégal · du CI à la Terminale",
       "title": "Apprendre, réviser et réussir, même avec une petite connexion.",
       "subtitle": "Des cours clairs par chapitre, des exercices corrigés, des contrôles chronométrés et des répétiteurs vérifiés pour préparer le CFEE, le BFEM et le Bac.",
       "ctaStudent": "Commencer gratuitement",
       "ctaParent": "Je suis parent",
       "trust": {
-        "free": "Cours de base gratuits",
+        "free": "3 chapitres gratuits par matière",
         "offline": "Fonctionne hors ligne",
         "mobileMoney": "Paiement Wave et Orange Money"
-      },
-      "phoneAlt": "Le tableau de bord DIANGAL d’une élève de 3e sur un téléphone",
-      "resultCard": {
-        "label": "Contrôle de maths",
-        "value": "15/20, bravo !"
       },
       "sticker": {
         "top": "Prêt pour",
         "main": "le BFEM ?"
-      }
+      },
+      "imageAlt": "Le soir à la maison, une maman sénégalaise aide ses trois enfants à réviser ; le plus jeune montre DIANGAL sur une tablette.",
+      "offlineBadge": "Même sans internet, on révise"
     },
     "features": {
       "title": "Tout pour réussir son année",
@@ -483,7 +500,7 @@
         },
         "exams": {
           "title": "CFEE, BFEM et Bac",
-          "body": "Compte à rebours jusqu’au jour J et contrôles chronométrés. Annales corrigées et examens blancs publiés au fil de l’année."
+          "body": "Compte à rebours jusqu’au jour J, contrôles et sujets blancs chronométrés. Les annales officielles sont publiées une fois vérifiées."
         },
         "offline": {
           "title": "Hors ligne",
@@ -564,7 +581,7 @@
     },
     "pricing": {
       "title": "Gratuit pour commencer",
-      "subtitle": "Les cours de base sont gratuits. Le Premium débloque les contrôles et les examens blancs."
+      "subtitle": "Les 3 premiers chapitres de chaque matière sont gratuits. Le Premium ouvre tout le programme, les contrôles et les sujets blancs."
     },
     "tutorBand": {
       "title": "Vous êtes enseignant ?",
@@ -576,7 +593,7 @@
       "items": {
         "free": {
           "q": "DIANGAL est-il gratuit ?",
-          "a": "Oui : les cours de base, des exercices corrigés et un contrôle découverte par matière sont gratuits. Le Premium (à partir de 2 000 FCFA par mois) débloque tous les contrôles chronométrés, les examens blancs et les corrigés détaillés."
+          "a": "Oui : les 3 premiers chapitres de chaque matière, avec leurs exercices corrigés, sont gratuits. Le Premium (à partir de 2 000 FCFA par mois) ouvre tous les chapitres, les contrôles et les sujets blancs. L’offre Famille couvre jusqu’à 4 enfants pour 5 000 FCFA par mois."
         },
         "levels": {
           "q": "Quelles classes sont disponibles ?",
@@ -601,22 +618,25 @@
     "pageTitle": "Tarifs",
     "pageSubtitle": "Commence gratuitement. Passe au Premium quand tu veux, sans engagement.",
     "note": "Prix en FCFA, toutes taxes comprises. Pass prépayés : aucun prélèvement automatique.",
-    "perMonth": "/ mois",
+    "perMonth": "/ mois",
     "plans": {
       "monthly": "1 mois",
       "quarterly": "3 mois",
       "yearly": "1 an",
-      "bfem_pass": "Pass BFEM (jusqu’à l’examen)"
+      "bfem_pass": "Pass BFEM (jusqu’à l’examen)",
+      "family_monthly": "Famille 1 mois",
+      "family_quarterly": "Famille 3 mois",
+      "family_yearly": "Famille 1 an"
     },
     "free": {
       "name": "Gratuit",
-      "tagline": "Pour découvrir et réviser l’essentiel.",
+      "tagline": "Pour découvrir DIANGAL et commencer chaque matière.",
       "cta": "Créer un compte gratuit",
       "features": {
-        "lessons": "Cours de base de toutes les matières",
-        "exercises": "Exercices corrigés",
-        "discoveryQuiz": "Un contrôle découverte par matière",
-        "pastPapers": "Sujets des examens nationaux",
+        "lessons": "Les 3 premiers chapitres de chaque matière",
+        "exercises": "Leurs exercices corrigés",
+        "discoveryQuiz": "« Préparer mon prochain devoir » sur ces chapitres",
+        "pastPapers": "Les annales officielles, une fois vérifiées",
         "offline": "Téléchargement des cours gratuits"
       }
     },
@@ -626,12 +646,24 @@
       "tagline": "Pour s’entraîner en conditions d’examen.",
       "cta": "Commencer, puis passer Premium",
       "features": {
-        "allQuizzes": "Tous les contrôles chronométrés",
-        "mockExams": "Examens blancs CFEE, BFEM et Bac",
-        "corrections": "Corrigés détaillés des annales",
+        "allQuizzes": "Tous les chapitres, leçons et exercices",
+        "mockExams": "Tous les contrôles et sujets blancs chronométrés",
+        "corrections": "Les corrigés détaillés",
         "recommendations": "Recommandations de révision personnalisées",
         "everythingFree": "Tout le contenu gratuit, bien sûr"
       }
+    },
+    "family": {
+      "badge": "Jusqu’à {count} enfants",
+      "name": "Famille",
+      "tagline": "Un seul paiement pour vos {count} enfants au plus.",
+      "features": {
+        "children": "Le Premium pour chaque enfant relié ({count} au plus)",
+        "profiles": "Chaque enfant garde son profil, ses notes et sa propre session",
+        "pin": "Les petits se connectent avec le code famille et un code PIN",
+        "addLater": "Un enfant relié en cours de période est couvert, s’il reste une place"
+      },
+      "cta": "Choisir l’offre Famille"
     }
   },
   "tutorJoin": {
@@ -749,50 +781,71 @@
     "backToSite": "Retour au site",
     "privacyLink": "Protection de vos données",
     "login": {
+      "metaTitle": {
+        "famille": "Connexion élèves et parents",
+        "repetiteur": "Connexion répétiteurs"
+      },
       "title": "Se connecter",
-      "noAccount": "Pas encore de compte ?",
-      "signUpLink": "S’inscrire",
+      "subtitle": {
+        "famille": "Élèves et parents : accédez à votre espace personnel.",
+        "repetiteur": "Répétiteurs : accédez à votre espace personnel."
+      },
       "tabs": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "Email"
       },
-      "phoneLabel": "Numéro de téléphone",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Entrez votre email",
+      "emailHint": "Vous recevrez un code à 6 chiffres par email.",
+      "whatsappLabel": "Numéro WhatsApp",
       "phonePlaceholder": "77 123 45 67",
-      "phoneHint": "Tu recevras un code à 6 chiffres par SMS.",
-      "whatsappHint": "Tu recevras un code à 6 chiffres sur WhatsApp.",
-      "emailLabel": "Adresse email",
-      "emailPlaceholder": "prenom@exemple.sn",
+      "whatsappHint": "Vous recevrez un code à 6 chiffres sur WhatsApp.",
+      "whatsappSoon": "La connexion par WhatsApp arrive bientôt : utilisez votre email.",
       "submit": "Recevoir le code",
-      "emailHint": "Tu recevras un code à 6 chiffres par email.",
-      "phoneSoon": "La connexion par WhatsApp et par SMS arrive bientôt. Utilise ton adresse email.",
+      "or": "Ou se connecter avec",
+      "socialLabel": "Se connecter avec {provider}",
+      "socialUnavailable": "{provider} : bientôt disponible",
+      "socialSoon": "{providers} : bientôt disponible.",
+      "noAccount": "Pas encore de compte ?",
+      "signUpLink": "S’inscrire",
+      "otherSpace": {
+        "famille": "Vous êtes répétiteur ?",
+        "repetiteur": "Vous êtes élève ou parent ?"
+      },
+      "otherSpaceLink": {
+        "famille": "Connexion répétiteurs",
+        "repetiteur": "Connexion élèves et parents"
+      },
       "errors": {
-        "email": "Entre une adresse email valide.",
-        "phone": "Entre un numéro à 9 chiffres.",
-        "unknown": "Aucun compte avec cet identifiant. Crée ton compte en t’inscrivant.",
-        "limit": "Trop de codes demandés. Réessaie dans quelques minutes.",
-        "sms": "La connexion par SMS n’est pas encore ouverte : utilise ton email.",
-        "send": "Le code n’a pas pu être envoyé. Réessaie dans un instant.",
-        "profil": "Ton profil est introuvable. Écris au support DIANGAL.",
-        "lien": "Ce lien de connexion n’est plus valable. Demande un nouvel email.",
-        "whatsapp": "La connexion par WhatsApp n’est pas encore ouverte : utilise ton email."
-      }
+        "email": "Entrez une adresse email valide.",
+        "phone": "Entrez un numéro à 9 chiffres.",
+        "unknown": "Aucun compte avec cet identifiant. Créez votre compte en vous inscrivant.",
+        "limit": "Trop de codes demandés. Réessayez dans quelques minutes.",
+        "sms": "La connexion par SMS n’est pas ouverte : utilisez WhatsApp ou votre email.",
+        "whatsapp": "La connexion par WhatsApp n’est pas encore ouverte : utilisez votre email.",
+        "send": "Le code n’a pas pu être envoyé. Réessayez dans un instant.",
+        "profil": "Votre profil est introuvable. Écrivez au support DIANGAL.",
+        "lien": "Ce lien de connexion n’est plus valable. Demandez un nouvel email.",
+        "social": "La connexion avec ce réseau n’a pas abouti. Utilisez plutôt le code par email.",
+        "socialUnknown": "Aucun compte DIANGAL n’utilise l’email de ce réseau. Inscrivez-vous d’abord, puis vous pourrez vous connecter avec ce réseau."
+      },
+      "childLogin": "Un enfant sans email ni téléphone ?",
+      "childLoginLink": "Connexion avec le code famille"
     },
     "code": {
-      "title": "Entre ton code",
+      "title": "Entrez votre code",
       "sentTo": "Nous avons envoyé un code à 6 chiffres à {to}.",
       "sentToWhatsapp": "Nous avons envoyé un code à 6 chiffres sur WhatsApp au {to}.",
       "label": "Code de vérification",
-      "error": "Ce code n’est pas le bon. Vérifie-le et réessaie.",
+      "error": "Ce code n’est pas le bon ou il a expiré. Vérifiez-le et réessayez.",
       "demoHint": "Démo : le code est 123456.",
       "submit": "Valider",
       "changeNumber": "Changer de numéro",
-      "resendIn": "Renvoyer le code dans 60 s",
       "changeEmail": "Changer d’adresse",
       "resend": "Renvoyer un code",
       "resent": "Un nouveau code vient d’être envoyé.",
-      "linkSent": "Nous avons envoyé un email à {to}. Ouvre-le sur cet appareil et touche le lien de connexion : tu seras connecté automatiquement.",
-      "codeOptional": "L’email contient un code à 6 chiffres ? Saisis-le ici."
+      "linkSent": "Nous avons envoyé un email à {to}. Ouvrez-le sur cet appareil et touchez le lien de connexion : vous serez connecté automatiquement.",
+      "codeOptional": "L’email contient un code à 6 chiffres ? Saisissez-le ici."
     }
   },
   "signup": {
@@ -827,7 +880,6 @@
     },
     "methods": {
       "whatsapp": "WhatsApp",
-      "phone": "SMS",
       "email": "Email"
     },
     "fields": {
@@ -846,14 +898,13 @@
       "parentPhone": "Numéro de téléphone de ton parent"
     },
     "hints": {
-      "phone": "Numéro sénégalais à 9 chiffres : le code arrivera par SMS.",
       "whatsapp": "Numéro WhatsApp sénégalais à 9 chiffres : le code arrivera dans WhatsApp.",
       "code": "Code envoyé à {to}.",
       "demoCode": "Démo : le code est 123456.",
       "birthDate": "Elle sert à protéger les plus jeunes. Elle n’est jamais affichée.",
       "childCode": "Votre enfant le trouve dans son profil. Vous pourrez aussi l’ajouter plus tard.",
       "tutorReview": "Votre profil sera visible après la vérification de vos pièces par notre équipe.",
-      "emailOnly": "Pour l’instant, l’inscription se fait par email. WhatsApp et SMS arrivent bientôt.",
+      "emailOnly": "Pour l’instant, l’inscription se fait par email. WhatsApp arrive bientôt.",
       "codeExpiry": "Le code est valable 10 minutes.",
       "linkSent": "Nous avons envoyé un email à {to}. Ouvre-le sur cet appareil et touche le lien : ton compte sera créé automatiquement. S’il contient un code à 6 chiffres, saisis-le ici."
     },
@@ -920,29 +971,39 @@
     }
   },
   "examsPage": {
-    "subtitle": "Prépare le BFEM : examens blancs, anciens sujets corrigés et compte à rebours.",
-    "mockExams": "Examens blancs",
-    "mockExamsHint": "En conditions réelles, avec la durée officielle.",
-    "pastPapers": "Annales du {exam}",
-    "pastPapersHint": "Sujets gratuits, corrigés détaillés pour les abonnés Premium.",
+    "subtitle": "CFEE, BFEM et Bac : sujets blancs chronométrés, annales officielles vérifiées et compte à rebours.",
+    "tabsLabel": "Choisir l’examen",
+    "seriesLabel": "Ta série",
+    "chooseSeries": "Choisis ta série pour voir ses sujets.",
+    "series": "Série {series}",
+    "mockExams": "Sujets blancs DIANGAL",
+    "mockExamsHint": "Écrits par DIANGAL sur le programme, ce ne sont pas des sujets officiels. Chronométrés comme le jour de l’examen.",
+    "noMockExams": "Pas encore de sujet blanc pour le {exam}.",
+    "pastPapers": "Annales officielles du {exam}",
+    "pastPapersHint": "Un sujet officiel n’est publié qu’après vérification de sa source (ministère, Office du Bac).",
+    "noPastPapers": "Aucune annale vérifiée pour le {exam} pour l’instant : chaque sujet est contrôlé avant d’être publié.",
     "session": "Session {year}",
-    "withOnline": "Sujet, corrigé et version en ligne",
-    "subjectAndCorrection": "Sujet et corrigé",
+    "verified": {
+      "official": "Source officielle vérifiée",
+      "reviewed": "Relu par un enseignant",
+      "unverified": "À vérifier"
+    },
     "premiumCorrection": "Corrigé détaillé réservé au Premium",
+    "historyTitle": "Mon historique",
+    "historyEmpty": "Tu n’as pas encore passé d’épreuve du {exam}.",
     "tipsTitle": "Conseils de révision",
     "tips": {
       "plan": "Fais un planning : un peu chaque jour vaut mieux qu’une nuit blanche.",
       "papers": "Entraîne-toi sur les anciens sujets pour connaître le format des épreuves.",
-      "timed": "Passe au moins un examen blanc chronométré par matière.",
+      "timed": "Passe au moins un sujet blanc chronométré par matière.",
       "rest": "La veille de l’examen, révise léger et dors bien."
     },
     "paperTitle": "{exam} {year} · {subject}",
-    "subjectPdf": "Sujet officiel",
-    "correctionPdf": "Corrigé détaillé",
+    "provenanceTitle": "Provenance",
+    "correctionSource": "Corrigé : {source}",
     "onlineTitle": "Ce sujet existe en version interactive",
     "onlineBody": "Réponds en ligne et obtiens ta note sur 20 avec le corrigé de chaque question.",
-    "onlineCta": "Faire le sujet en ligne",
-    "pdfDemo": "Démo : les fichiers PDF ne sont pas encore disponibles."
+    "onlineCta": "Faire le sujet en ligne"
   },
   "progressPage": {
     "title": "Ma progression",
@@ -951,7 +1012,7 @@
     "progressLabel": "Progression en {subject}",
     "chapters": "{done}/{total} chapitres terminés",
     "recentResults": "Derniers résultats",
-    "noResults": "Pas encore de résultat : lance un contrôle depuis l’Entraînement."
+    "noResults": "Pas encore de résultat : lance un contrôle depuis la page Exercices."
   },
   "downloadsPage": {
     "subtitle": "Les cours téléchargés se lisent sans connexion.",
@@ -974,13 +1035,19 @@
       "monthly": "1 mois",
       "quarterly": "3 mois",
       "yearly": "1 an",
-      "bfem_pass": "Pass BFEM"
+      "bfem_pass": "Pass BFEM",
+      "family_monthly": "Famille 1 mois",
+      "family_quarterly": "Famille 3 mois",
+      "family_yearly": "Famille 1 an"
     },
     "planHints": {
       "monthly": "Pour essayer",
       "quarterly": "Le plus choisi",
       "yearly": "Le moins cher par mois",
-      "bfem_pass": "Jusqu’à la fin de l’examen"
+      "bfem_pass": "Jusqu’à la fin de l’examen",
+      "family_monthly": "Jusqu’à 4 enfants",
+      "family_quarterly": "Jusqu’à 4 enfants, le plus choisi",
+      "family_yearly": "Jusqu’à 4 enfants, le moins cher par mois"
     },
     "channel": "Moyen de paiement",
     "channels": {
@@ -1005,9 +1072,9 @@
     "secure": "Paiement sécurisé par notre prestataire agréé. Démo : aucun débit réel."
   },
   "subscription": {
-    "subtitle": "Débloque tous les contrôles chronométrés, les examens blancs et les corrigés détaillés.",
+    "subtitle": "Débloque tous les chapitres, les contrôles chronométrés, les sujets blancs et les corrigés détaillés.",
     "statusFree": "Tu as le compte gratuit",
-    "statusFreeHint": "Cours de base, exercices corrigés et un contrôle découverte par matière.",
+    "statusFreeHint": "Les 3 premiers chapitres de chaque matière, avec leurs exercices corrigés.",
     "statusPremium": "Ton Premium est actif",
     "statusPremiumHint": "Tu peux le prolonger : la nouvelle période s’ajoute à la fin de la période en cours.",
     "choose": "Choisir une offre",
@@ -1024,7 +1091,7 @@
     }
   },
   "studentProfile": {
-    "levelChange": "Pour changer de classe, contacte l’assistance (une fois par année scolaire).",
+    "levelChange": "Tu passes en classe supérieure ? Utilise la carte « Passage en classe supérieure » ci-dessous.",
     "consent": {
       "title": "Validation parentale",
       "granted": "Ton compte est validé par ton parent.",
@@ -1110,8 +1177,13 @@
       "quiz_result": "Ton contrôle de {subject} est corrigé : {score}.",
       "tutor_message": "Nouveau message de {tutor}.",
       "payment": "Votre paiement est confirmé.",
-      "exam": "Les révisions du {exam} commencent : consulte les annales corrigées.",
-      "tutor_review": "{decision, select, approved {Votre profil de répétiteur a été vérifié et publié.} rejected {Votre dossier de répétiteur a été refusé : consultez le motif.} suspended {Votre profil de répétiteur a été suspendu.} other {Votre dossier de répétiteur a été mis à jour.}}"
+      "exam": "Les révisions du {exam} commencent : entraîne-toi sur les sujets blancs.",
+      "tutor_review": "{decision, select, approved {Votre profil de répétiteur a été vérifié et publié.} rejected {Votre dossier de répétiteur a été refusé : consultez le motif.} suspended {Votre profil de répétiteur a été suspendu.} other {Votre dossier de répétiteur a été mis à jour.}}",
+      "tutor_invite": "{child, select, none {{tutor} souhaite te suivre. {needsParent, select, true {Ton parent doit accepter.} other {Accepte ou refuse dans ton espace.}}} other {{tutor} souhaite suivre {child} : acceptez ou refusez son invitation.}}",
+      "tutor_invite_answer": "{accepted, select, true {{student} a accepté votre suivi : vous voyez maintenant ses notes.} other {Votre invitation pour {student} a été refusée.}}",
+      "tutor_assignment": "{child, select, none {Nouveau devoir de {tutor} : « {title} ».} other {{tutor} a donné un devoir à {child} : « {title} ».}}",
+      "tutor_session": "{child, select, none {{tutor} a planifié un cours en ligne le {startsAt} : {topic}.} other {{tutor} a planifié un cours en ligne avec {child} le {startsAt} : {topic}.}}",
+      "tutor_session_cancelled": "{child, select, none {{tutor} a annulé le cours du {startsAt}.} other {{tutor} a annulé le cours de {child} du {startsAt}.}}"
     }
   },
   "parentHome": {
@@ -1173,7 +1245,21 @@
     "activeUntil": "Premium jusqu’au {date}",
     "free": "Compte gratuit",
     "buy": "Acheter ou prolonger un pass",
-    "buyHint": "Le pass s’ajoute à la fin de l’abonnement en cours."
+    "buyHint": "Le pass s’ajoute à la fin de l’abonnement en cours.",
+    "familyTitle": "Offre Famille",
+    "familyHint": "Un seul paiement ouvre le Premium à vos enfants reliés, 4 au plus. Chacun garde son profil et sa session.",
+    "familyActive": "{names} : Premium jusqu’au {date} ({count}/{max} enfants couverts).",
+    "familyNoChild": "Reliez d’abord au moins un enfant à votre compte.",
+    "familyAddChild": "Ajouter un enfant",
+    "familyError": "L’offre Famille est réservée aux parents qui ont au moins un enfant relié.",
+    "paymentsTitle": "Mes paiements",
+    "paymentsHint": "Un paiement est confirmé par l’opérateur (Wave, Orange Money, Free Money ou carte) avant d’ouvrir le Premium.",
+    "noPayments": "Aucun paiement pour l’instant.",
+    "paymentStatus": {
+      "succeeded": "Payé",
+      "pending": "En attente",
+      "failed": "Échoué"
+    }
   },
   "parentProfile": {
     "children": "Enfants reliés",
@@ -1219,7 +1305,13 @@
     "noMessages": "Aucun message pour l’instant.",
     "bookingsSoonTitle": "Réservations et paiement des séances",
     "bookingsSoonBody": "Bientôt, les familles pourront réserver et payer vos séances sur DIANGAL, avec la visioconférence intégrée.",
-    "notMeasured": "–"
+    "notMeasured": "–",
+    "notVerified": "Votre profil n’est pas encore vérifié : il n’apparaît pas dans l’annuaire et vous ne pouvez pas encore inviter d’élève.",
+    "notVerifiedCta": "Compléter mon dossier",
+    "studentsTitle": "Mes élèves",
+    "studentsSummary": "{followed, plural, =0 {Aucun élève suivi} one {# élève suivi} other {# élèves suivis}}{invited, plural, =0 {} one { · # invitation en attente} other { · # invitations en attente}}",
+    "studentsBody": "Voyez leurs notes, envoyez-leur des devoirs, écrivez-leur et planifiez des cours en ligne.",
+    "studentsCta": "Voir mes élèves"
   },
   "tutorProfileForm": {
     "title": "Mon profil",
@@ -1324,28 +1416,50 @@
   },
   "adminContent": {
     "title": "Contenus",
-    "subtitle": "Niveaux, matières, chapitres et leçons.",
-    "level": "Niveau {level}",
-    "otherLevels": "Autres niveaux : bientôt",
-    "counts": "{chapters} chapitres · {lessons} leçons · {written} rédigées",
+    "subtitle": "Chapitres et leçons de chaque classe, brouillons compris.",
+    "classes": "Classes",
+    "hasProgram": "programme en ligne",
+    "empty": "Aucune matière n’est encore rattachée à la classe {level}.",
+    "toReferential": "Ajouter des matières dans le référentiel",
+    "series": "Série {series}",
+    "counts": "{chapters} chapitres · {published} publiés · {lessons} leçons · {written} rédigées",
+    "lessonsWritten": "{count, plural, =0 {Aucune leçon} one {# leçon} other {# leçons}} · {written, plural, =0 {aucune rédigée} one {# rédigée} other {# rédigées}}",
+    "newChapter": "Nouveau chapitre",
+    "noChapters": "Aucun chapitre pour l’instant.",
+    "deleted": "Chapitre supprimé.",
     "premium": "Premium",
     "written": "Rédigée",
     "toWrite": "À rédiger",
-    "edit": "Modifier"
+    "edit": "Modifier",
+    "status": {
+      "draft": "Brouillon",
+      "review": "En relecture",
+      "published": "Publié",
+      "archived": "Archivé"
+    },
+    "verification": {
+      "unverified": "À vérifier",
+      "reviewed": "Relu par un enseignant",
+      "official": "Source officielle vérifiée"
+    }
   },
   "adminLesson": {
     "title": "Modifier une leçon",
+    "created": "Leçon créée en brouillon : rédigez son contenu puis enregistrez.",
     "saved": "Leçon enregistrée : elle est visible par les élèves.",
+    "savedDraft": "Leçon enregistrée. Elle sera visible des élèves à la publication du chapitre.",
     "error": "Le contenu ne peut pas être vide.",
     "editor": "Contenu",
-    "editorHint": "HTML simplifié pour la démo. Bientôt : Markdown et formules mathématiques (LaTeX).",
+    "editorHint": "HTML simplifié. Bientôt : Markdown et formules mathématiques (LaTeX).",
     "save": "Enregistrer",
-    "workflow": "Bientôt : brouillon, relecture par un enseignant, puis publication.",
-    "preview": "Aperçu"
+    "workflowPublished": "Le chapitre est publié : la modification est visible tout de suite.",
+    "workflowDraft": "Brouillon : rien n’est visible des élèves avant la publication du chapitre.",
+    "preview": "Aperçu",
+    "emptyPreview": "Le contenu s’affichera ici."
   },
   "adminAssessments": {
     "title": "Évaluations",
-    "subtitle": "Exercices, contrôles chronométrés, examens blancs et banque de questions.",
+    "subtitle": "Exercices, contrôles chronométrés, sujets blancs et banque de questions.",
     "import": "Importer un fichier CSV",
     "cols": {
       "title": "Titre",
@@ -1367,7 +1481,13 @@
       "numeric": "Réponse numérique"
     },
     "points": "{points} pts",
-    "expected": "Réponse attendue : {answer}"
+    "expected": "Réponse attendue : {answer}",
+    "provenanceTitle": "Vérification et provenance",
+    "provenanceHint": "Une annale officielle n’est proposée aux élèves qu’une fois vérifiée. Un sujet blanc DIANGAL l’indique dans ses sources.",
+    "verificationHint": "« Source officielle vérifiée » seulement si le sujet a été comparé au document du ministère ou de l’Office du Bac.",
+    "correctionSource": "Origine du corrigé",
+    "correctionSourceHint": "Par exemple : « Corrigé officiel » ou « Corrigé rédigé par DIANGAL, relu par un enseignant ».",
+    "provenanceSaved": "Vérification et provenance enregistrées."
   },
   "adminExams": {
     "title": "Examens nationaux",
@@ -1519,7 +1639,7 @@
     "pageBody": "Cette page n’est pas disponible sans connexion. Tes chapitres téléchargés restent accessibles.",
     "openDownloads": "Ouvrir mes cours téléchargés",
     "readerTitle": "Mes cours hors ligne",
-    "nothingOffline": "Aucun chapitre téléchargé sur ce téléphone. Avec une connexion, ouvre un chapitre et touche « Télécharger ».",
+    "nothingOffline": "Aucun chapitre téléchargé sur ce téléphone. Avec une connexion, ouvre un chapitre et touche « Télécharger ».",
     "allDownloads": "Tous mes téléchargements",
     "premiumLocked": "Leçon Premium : elle sera disponible hors ligne après abonnement et un nouveau téléchargement.",
     "previous": "Précédente",
@@ -1532,11 +1652,11 @@
     "saved": "Disponible hors ligne sur ce téléphone",
     "readOffline": "Lire hors ligne",
     "remove": "Supprimer",
-    "removeNamed": "Supprimer « {title} » du téléphone",
+    "removeNamed": "Supprimer « {title} » du téléphone",
     "used": "{count, plural, =0 {Aucun chapitre téléchargé} one {# chapitre · {size} utilisés} other {# chapitres · {size} utilisés}}",
     "meta": "{subject} · {size} · téléchargé le {date}",
     "emptyTitle": "Aucun cours téléchargé",
-    "emptyBody": "Ouvre un chapitre et touche « Télécharger pour lire hors ligne » quand tu as du Wi-Fi.",
+    "emptyBody": "Ouvre un chapitre et touche « Télécharger pour lire hors ligne » quand tu as du Wi-Fi.",
     "browse": "Parcourir mes cours",
     "install": "Installer DIANGAL sur ce téléphone",
     "installHint": "Accès direct depuis l’écran d’accueil, même sans connexion."
@@ -1554,5 +1674,435 @@
     "error": "Code incorrect ou expiré. Entrez le code affiché en ce moment.",
     "resumeBody": "Vous avez déjà scanné le QR code : entrez le code à 6 chiffres affiché en ce moment par votre application.",
     "newQr": "Afficher un nouveau QR code"
+  },
+  "tutoring": {
+    "students": {
+      "metaTitle": "Mes élèves",
+      "title": "Mes élèves",
+      "subtitle": "Suivez les notes de vos élèves, envoyez-leur des devoirs et planifiez des cours en ligne.",
+      "inviteTitle": "Ajouter un élève",
+      "inviteBody": "Demandez à la famille le code élève (il figure dans le profil de l’élève). Un parent devra accepter avant que vous voyiez ses notes.",
+      "codeLabel": "Code élève",
+      "codePlaceholder": "Ex. AWA-7K3Q",
+      "invite": "Envoyer l’invitation",
+      "listTitle": "Élèves suivis",
+      "emptyTitle": "Aucun élève pour l’instant",
+      "emptyBody": "Invitez un élève avec son code élève : dès qu’un parent accepte, il apparaît ici.",
+      "pending": "En attente de l’accord du parent",
+      "active": "Suivi actif",
+      "openAssignments": "{count, plural, =0 {Aucun devoir en cours} one {# devoir en cours} other {# devoirs en cours}}",
+      "nextSession": "Prochain cours : {date}",
+      "noSession": "Aucun cours prévu",
+      "notices": {
+        "envoyee": "Invitation envoyée pour {prenom}. Vous verrez ses notes dès qu’un parent l’aura acceptée.",
+        "deja": "{prenom} est déjà suivi par vous ou a déjà reçu votre invitation.",
+        "code": "Ce code élève est introuvable. Vérifiez-le avec la famille.",
+        "verification": "Votre profil doit être vérifié par DIANGAL avant d’inviter un élève."
+      }
+    },
+    "student": {
+      "metaTitle": "Suivi de l’élève",
+      "back": "Mes élèves",
+      "notLinked": "Le suivi de cet élève n’est pas actif : un parent doit d’abord accepter votre invitation.",
+      "average": "Moyenne",
+      "quizzes": "Contrôles passés",
+      "chapters": "Chapitres terminés",
+      "subjectsTitle": "Moyennes par matière",
+      "attempts": "{count, plural, one {# contrôle} other {# contrôles}}",
+      "resultsTitle": "Derniers contrôles",
+      "noResults": "Aucun contrôle passé pour l’instant.",
+      "assignmentsTitle": "Devoirs",
+      "assignmentTitleLabel": "Titre du devoir",
+      "instructionsLabel": "Consignes",
+      "dueLabel": "À rendre le (facultatif)",
+      "send": "Envoyer le devoir",
+      "noAssignments": "Aucun devoir envoyé.",
+      "due": "À rendre le {date}",
+      "done": "Fait",
+      "todo": "À faire",
+      "delete": "Supprimer",
+      "sessionsTitle": "Cours en ligne",
+      "dateLabel": "Date",
+      "timeLabel": "Heure (Dakar)",
+      "durationLabel": "Durée",
+      "minutes": "{count} min",
+      "topicLabel": "Sujet du cours",
+      "schedule": "Planifier le cours",
+      "noSessions": "Aucun cours prévu.",
+      "cancel": "Annuler le cours",
+      "cancelled": "Annulé",
+      "messageTitle": "Écrire à l’élève",
+      "messageHint": "Si l’élève est mineur, ses parents lisent aussi la conversation.",
+      "messageLabel": "Message",
+      "sendMessage": "Envoyer le message",
+      "endTitle": "Arrêter le suivi",
+      "endBody": "Vous ne verrez plus ses notes et les cours prévus seront annulés.",
+      "end": "Arrêter le suivi",
+      "notices": {
+        "devoir": {
+          "envoye": "Devoir envoyé : l’élève et ses parents sont prévenus.",
+          "erreur": "Le devoir n’a pas pu être envoyé. Vérifiez le titre et la date.",
+          "date": "La date de rendu est déjà passée.",
+          "supprime": "Devoir supprimé."
+        },
+        "cours": {
+          "planifie": "Cours planifié : l’élève et ses parents sont prévenus.",
+          "passe": "Choisissez une date et une heure à venir.",
+          "erreur": "Le cours n’a pas pu être planifié. Vérifiez les champs.",
+          "annule": "Cours annulé : l’élève et ses parents sont prévenus."
+        },
+        "message": {
+          "vide": "Écrivez un message avant de l’envoyer.",
+          "erreur": "Le message n’a pas pu être envoyé."
+        }
+      }
+    },
+    "online": {
+      "metaTitle": "Cours en ligne",
+      "title": "Cours en ligne",
+      "subtitle": "Vos prochains cours avec vos élèves.",
+      "visioSoon": "La salle de visio intégrée arrive bientôt. En attendant, chaque cours est inscrit dans l’espace de l’élève et de ses parents, qui sont prévenus.",
+      "visioBadge": "Visio bientôt",
+      "empty": "Aucun cours prévu. Planifiez-en un depuis la fiche d’un élève.",
+      "with": "avec {name}",
+      "planFromStudents": "Planifier depuis « Mes élèves »",
+      "pastTitle": "Cours passés ou annulés"
+    },
+    "family": {
+      "title": "Répétiteur",
+      "studentTitle": "Mon répétiteur",
+      "inviteParent": "{tutor} souhaite suivre {child}. S’il est accepté, il pourra voir ses notes, lui envoyer des devoirs et lui donner des cours en ligne.",
+      "inviteStudent": "{tutor} souhaite te suivre. Il pourra voir tes notes, t’envoyer des devoirs et te donner des cours en ligne.",
+      "needsParent": "Ton parent doit accepter depuis son espace DIANGAL.",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "activeParent": "{tutor} suit {child}.",
+      "activeStudent": "{tutor} te suit.",
+      "end": "Mettre fin au suivi",
+      "assignmentsTitle": "Devoirs du répétiteur",
+      "studentAssignmentsTitle": "Mes devoirs",
+      "noAssignments": "Aucun devoir pour l’instant.",
+      "sessionsTitle": "Cours en ligne prévus",
+      "noSessions": "Aucun cours prévu.",
+      "markDone": "J’ai fini",
+      "markTodo": "Pas encore fini",
+      "done": "Fait",
+      "due": "À rendre le {date}",
+      "sessionLine": "{date} · {duration} min",
+      "visioSoon": "La visio intégrée arrive bientôt.",
+      "pendingBanner": "{count, plural, one {Un répétiteur attend votre accord pour suivre un enfant.} other {# répétiteurs attendent votre accord.}}",
+      "pendingBannerLink": "Voir",
+      "notices": {
+        "accepte": "Suivi accepté : le répétiteur voit maintenant les notes.",
+        "refuse": "Invitation refusée.",
+        "fin": "Le suivi est terminé : le répétiteur ne voit plus les notes.",
+        "erreur": "L’action n’a pas pu être faite. Réessayez."
+      }
+    }
+  },
+  "adminChapter": {
+    "title": "Chapitre",
+    "newTitle": "Nouveau chapitre",
+    "newHint": "Le chapitre est créé en brouillon, à la suite des autres. Vous ajouterez ensuite ses leçons et ses sources.",
+    "program": "{subject} · {level}",
+    "demo": "Mode démo : le programme vient des fichiers de démonstration. Les modifications ne sont enregistrées que sur la vraie base.",
+    "created": "Chapitre créé en brouillon. Ajoutez ses sources et ses leçons, puis publiez-le.",
+    "saved": "Chapitre enregistré.",
+    "statusDone": {
+      "draft": "Chapitre en brouillon : il n’est plus visible des élèves.",
+      "review": "Chapitre envoyé en relecture.",
+      "published": "Chapitre publié : il est visible des élèves."
+    },
+    "errors": {
+      "champs": "Vérifiez le titre (3 caractères au moins), le numéro et le statut de vérification.",
+      "lien": "Un lien de source doit commencer par http:// ou https://.",
+      "sources": "Ajoutez au moins une source avant de publier.",
+      "lecons": "Ajoutez au moins une leçon avant de publier.",
+      "redaction": "Chaque leçon doit être rédigée avant la publication.",
+      "statut": "Le statut n’a pas pu être changé.",
+      "lecon": "Le titre de la leçon doit faire au moins 3 caractères.",
+      "suppression": "Seul un chapitre non publié, qu’aucun élève n’a commencé, peut être supprimé.",
+      "titre": "Le titre doit faire au moins 3 caractères."
+    },
+    "infos": "Informations",
+    "fields": {
+      "title": "Titre",
+      "number": "Numéro",
+      "strand": "Rubrique",
+      "strandHint": "Partie du programme officiel, par exemple « Activités géométriques ». Facultatif.",
+      "summary": "Résumé",
+      "verification": "Vérification",
+      "verificationHint": "« Source officielle vérifiée » seulement si le chapitre a été comparé au programme du Ministère.",
+      "sources": "Sources",
+      "sourcesHint": "Programme officiel, guide pédagogique ou document qui justifie ce chapitre. Laissez une ligne vide pour ne rien ajouter.",
+      "sourceTitle": "Source {n} : titre",
+      "sourceTitlePlaceholder": "Titre du document",
+      "sourceUrl": "Source {n} : lien",
+      "sourceKind": "Source {n} : type",
+      "lessonTitle": "Titre de la leçon",
+      "minutes": "Durée (min)"
+    },
+    "kinds": {
+      "official": "Officielle",
+      "external": "Externe",
+      "diangal": "DIANGAL"
+    },
+    "save": "Enregistrer",
+    "create": "Créer le chapitre",
+    "publication": "Publication",
+    "checks": {
+      "ok": "Fait :",
+      "missing": "Manquant :",
+      "sources": "Au moins une source",
+      "lessons": "Au moins une leçon",
+      "written": "Leçons rédigées : {written}/{total}"
+    },
+    "unverifiedWarning": "Ce chapitre n’est pas encore vérifié : faites-le relire par un enseignant.",
+    "publish": "Publier",
+    "republish": "Publier les nouvelles leçons",
+    "toReview": "Envoyer en relecture",
+    "toDraft": "Repasser en brouillon",
+    "unpublish": "Dépublier",
+    "lessons": "Leçons",
+    "noLessons": "Aucune leçon pour l’instant.",
+    "write": "Rédiger",
+    "addLesson": "Ajouter une leçon",
+    "addSubmit": "Ajouter et rédiger",
+    "deleteTitle": "Supprimer le chapitre",
+    "deleteHint": "Possible tant que le chapitre n’est pas publié et qu’aucun élève ne l’a commencé.",
+    "delete": "Supprimer ce chapitre"
+  },
+  "adminReferential": {
+    "title": "Référentiel",
+    "subtitle": "Classes, séries et matières de chaque programme.",
+    "demo": "Mode démo : le référentiel vient des fichiers de démonstration. Les modifications ne sont enregistrées que sur la vraie base.",
+    "saved": {
+      "programme": "Matière ajoutée à la classe.",
+      "gratuits": "Nombre de chapitres gratuits enregistré.",
+      "retrait": "Matière retirée de la classe.",
+      "matiere": "Matière créée : vous pouvez maintenant l’ajouter à une classe.",
+      "offreActive": "Offre gratuite appliquée : les chapitres au-delà des premiers sont maintenant Premium.",
+      "offreInactive": "L’offre gratuite n’est plus appliquée automatiquement. Les accès actuels sont conservés."
+    },
+    "errors": {
+      "programme": "Choisissez une matière, et une série valable pour cette classe.",
+      "doublon": "Cette matière existe déjà dans cette classe.",
+      "gratuits": "Le nombre de chapitres gratuits doit être compris entre 0 et 50.",
+      "retrait": "Une matière qui a déjà des chapitres ne peut pas être retirée.",
+      "matiere": "Le code doit faire 2 à 6 lettres et le nom au moins 2 caractères.",
+      "matiereExiste": "Une matière porte déjà ce code ou ce nom.",
+      "offre": "Le réglage de l’offre gratuite n’a pas pu être enregistré."
+    },
+    "classTitle": "Classe : {level}",
+    "classInfo": "Cycle {cycle} · examen de fin de cycle : {exam}",
+    "seriesList": "Séries : {series}",
+    "noSeries": "Pas de série dans cette classe.",
+    "programs": "Matières de la classe",
+    "freeHint": "Chapitres gratuits : les premiers chapitres de chaque matière restent gratuits (3 par défaut).",
+    "programsEmpty": "Aucune matière pour cette classe.",
+    "seriesBadge": "Série {series}",
+    "common": "Tronc commun",
+    "chaptersCount": "{count, plural, =0 {Aucun chapitre} one {# chapitre} other {# chapitres}}",
+    "freeChapters": "Gratuits",
+    "save": "Enregistrer",
+    "remove": "Retirer",
+    "openContents": "Chapitres",
+    "add": "Ajouter une matière",
+    "addHint": "Rattache une matière du référentiel à la classe {level}.",
+    "subject": "Matière",
+    "seriesLabel": "Série",
+    "seriesCommon": "Toutes les séries (tronc commun)",
+    "addSubmit": "Ajouter",
+    "newSubject": "Créer une matière",
+    "newSubjectHint": "Pour une matière absente de la liste (ex. : latin). Elle prend une couleur neutre.",
+    "code": "Code",
+    "codeHint": "2 à 6 lettres",
+    "name": "Nom",
+    "create": "Créer",
+    "freeTier": {
+      "title": "Offre gratuite",
+      "hint": "Les premiers chapitres de chaque matière (leçons, exercices et contrôles) restent ouverts à tous ; les suivants demandent un abonnement.",
+      "on": "Appliquée",
+      "off": "Pas encore appliquée : tout reste ouvert comme aujourd’hui",
+      "enable": "Appliquer l’offre gratuite",
+      "disable": "Ne plus l’appliquer",
+      "warning": "À appliquer quand le paiement mobile money est ouvert : sinon, les chapitres Premium seraient fermés à tous les élèves."
+    }
+  },
+  "adminTracking": {
+    "title": "Suivi des contenus",
+    "subtitle": "Ce qui est prêt et ce qui reste à produire, classe par classe.",
+    "summary": "Résumé",
+    "tiles": {
+      "levels": "Classes avec un programme",
+      "chapters": "Chapitres publiés",
+      "lessons": "Leçons rédigées",
+      "verified": "Chapitres vérifiés"
+    },
+    "caption": "Avancement des contenus par classe et par matière",
+    "cols": {
+      "level": "Classe",
+      "subject": "Matière",
+      "chapters": "Chapitres publiés",
+      "lessons": "Leçons rédigées",
+      "exercises": "Exercices",
+      "quizzes": "QCM",
+      "exams": "Sujets d’examen",
+      "verified": "Vérifiés",
+      "free": "Gratuits",
+      "gaps": "À faire"
+    },
+    "ratio": "{done}/{total}",
+    "notApplicable": "–",
+    "gaps": {
+      "noChapters": "Aucun chapitre",
+      "lessonsToWrite": "{count, plural, one {# leçon à rédiger} other {# leçons à rédiger}}",
+      "noExercises": "Pas d’exercices",
+      "noQuiz": "Pas de QCM",
+      "noExam": "Pas de sujet d’examen",
+      "unverified": "{count, plural, one {# chapitre à vérifier} other {# chapitres à vérifier}}",
+      "unsourced": "{count, plural, one {# chapitre sans source} other {# chapitres sans source}}",
+      "complete": "Complet"
+    },
+    "legend": "Vérifiés : chapitres relus par un enseignant ou comparés au programme officiel. Gratuits : nombre de chapitres ouverts à tous.",
+    "missingLevels": "Classes sans programme",
+    "missingLevelsHint": "Aucun chapitre publié pour ces classes : ouvrez le référentiel pour y ajouter des matières."
+  },
+  "prepare": {
+    "title": "Préparer mon prochain devoir",
+    "subtitle": "Coche les chapitres de ton devoir, choisis le nombre de questions et le mode. Les questions sont tirées au hasard à chaque séance.",
+    "noQuestions": "Pas encore de questions pour ta classe. Elles arrivent bientôt.",
+    "subjectLabel": "Choisir la matière",
+    "chaptersTitle": "Chapitres du devoir",
+    "chaptersHint": "Seuls les chapitres qui ont déjà des questions sont proposés.",
+    "questionsCount": "{count, plural, one {# question} other {# questions}} dans la banque",
+    "premium": "Premium",
+    "premiumHint": "Les chapitres Premium s’ouvrent avec un abonnement.",
+    "seeOffers": "Voir les offres",
+    "countTitle": "Nombre de questions",
+    "modeTitle": "Mode",
+    "modes": {
+      "free": "Entraînement libre",
+      "freeHint": "Sans chronomètre : prends ton temps.",
+      "timed": "Comme le jour du devoir",
+      "timedHint": "Chronométré : 1 min 30 par question."
+    },
+    "start": "Commencer la séance",
+    "errors": {
+      "chapitres": "Coche au moins un chapitre de la matière choisie.",
+      "nombre": "Choisis le nombre de questions.",
+      "limite": "Tu as déjà préparé beaucoup de séances aujourd’hui. Reviens demain !"
+    }
+  },
+  "promotion": {
+    "chooseSeries": "Choisir la série",
+    "kept": "Les notes, la progression et l’historique de la classe actuelle sont conservés.",
+    "historyTitle": "Classes précédentes",
+    "period": "du {from} au {to}",
+    "status": {
+      "ok": "C’est fait : la nouvelle classe est enregistrée. Les cours affichés sont maintenant ceux de cette classe.",
+      "confirmation": "La case de confirmation doit être cochée pour valider le passage.",
+      "serie": "Une série valable pour la nouvelle classe est nécessaire.",
+      "fin": "Le parcours est terminé : il n’y a pas de classe après la Terminale.",
+      "erreur": "Le passage n’a pas pu être enregistré pour l’instant.",
+      "demo": "Mode démo : le passage de classe n’est pas enregistré."
+    },
+    "student": {
+      "title": "Passage en classe supérieure",
+      "subtitle": "À faire à la rentrée, quand tu changes de classe.",
+      "seriesLabel": "Ta série en {level}",
+      "confirm": "Je confirme que je passe en {level} cette année.",
+      "submit": "Passer en {level}",
+      "endOfTrack": "Bravo {name} ! Tu es en {level} : c’est la dernière année du parcours DIANGAL."
+    },
+    "parent": {
+      "title": "Passage en classe supérieure",
+      "subtitle": "À la rentrée, faites passer {name} dans sa nouvelle classe.",
+      "seriesLabel": "Série de votre enfant en {level}",
+      "confirm": "Je confirme que {name} passe en {level} cette année.",
+      "submit": "Passer en {level}",
+      "endOfTrack": "{name} est en {level} : c’est la dernière année du parcours DIANGAL."
+    }
+  },
+  "family": {
+    "title": "Famille",
+    "subtitle": "Le code famille et les codes PIN de vos enfants, pour qu’ils se connectent seuls à leur espace.",
+    "demo": "Mode démo : rien n’est enregistré. Code famille de démonstration : DEMOKIDS, code PIN d’Awa : 1234.",
+    "created": "Le profil de {name} est créé : il peut se connecter avec le code famille et son code PIN.",
+    "pinSaved": "Code PIN enregistré.",
+    "errors": {
+      "pin": "Le code PIN doit faire 4 à 6 chiffres, saisi deux fois à l’identique.",
+      "enfant": "Cet enfant n’est pas relié à votre compte.",
+      "profil": "Vérifiez le prénom, le nom, la classe et la date de naissance.",
+      "creation": "Le profil n’a pas pu être créé. Réessayez plus tard."
+    },
+    "codeTitle": "Code famille",
+    "codeHint": "À donner à vos enfants : il remplace l’email ou le téléphone.",
+    "codeHow": "Votre enfant ouvre la page « Connexion enfant », tape ce code, choisit son prénom puis son code PIN.",
+    "codeLink": "Voir la page de connexion enfant",
+    "coverageTitle": "Offre Famille",
+    "coverageActive": "Active jusqu’au {date} : {count}/{max} enfants couverts.",
+    "coverageNone": "Pas d’offre Famille en cours.",
+    "coverageManage": "Gérer l’offre Famille",
+    "coverageBuy": "Découvrir l’offre Famille",
+    "childrenTitle": "Vos enfants",
+    "childrenHint": "Chaque enfant a son profil, ses notes et sa propre session. Le code PIN est demandé à chaque connexion.",
+    "noChildren": "Aucun enfant relié pour l’instant.",
+    "status": {
+      "pin": "Code PIN actif",
+      "noPin": "Pas de code PIN",
+      "locked": "Bloqué 15 min (trop d’erreurs)"
+    },
+    "givePin": "Donner un code PIN",
+    "changePin": "Changer le code PIN",
+    "pin": "Code PIN",
+    "pinHint": "4 à 6 chiffres, facile à retenir pour l’enfant.",
+    "pinConfirm": "Retapez le code PIN",
+    "savePin": "Enregistrer le code PIN",
+    "newTitle": "Créer le profil d’un jeune enfant",
+    "newHint": "Pour un enfant sans téléphone ni email : vous validez son inscription, il se connecte avec le code famille et son code PIN.",
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "level": "Classe",
+      "birthDate": "Date de naissance",
+      "birthDateHint": "Sert seulement à adapter l’espace à son âge : elle n’est jamais affichée."
+    },
+    "create": "Créer le profil"
+  },
+  "childLogin": {
+    "title": "Connexion enfant",
+    "subtitle": "Avec le code famille donné par ton parent.",
+    "codeLabel": "Code famille",
+    "codeHint": "8 lettres et chiffres, sur la page « Famille » de l’espace de ton parent.",
+    "next": "Continuer",
+    "whoAreYou": "Qui es-tu ?",
+    "otherCode": "Ce n’est pas ma famille",
+    "hello": "Bonjour {name} !",
+    "pinLabel": "Ton code PIN",
+    "signIn": "Entrer dans mon espace",
+    "sharedDevice": "Sur un téléphone partagé, la personne déjà connectée sera déconnectée.",
+    "notMe": "Ce n’est pas moi",
+    "withEmail": "Tu as un email ou un téléphone ?",
+    "withEmailLink": "Connexion classique",
+    "errors": {
+      "code": "Ce code famille est inconnu. Vérifie-le avec ton parent.",
+      "pin": "Code PIN incorrect. Réessaie.",
+      "bloque": "Trop d’erreurs : attends 15 minutes ou demande à ton parent de changer ton code PIN.",
+      "session": "La connexion n’a pas marché. Réessaie dans un moment."
+    }
+  },
+  "readAloud": {
+    "label": "Écouter la leçon",
+    "title": "Écouter",
+    "play": "Écouter",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "stop": "Arrêter",
+    "slow": "Plus lentement",
+    "listen": "Écouter",
+    "speaking": "Lecture en cours",
+    "paused": "Lecture en pause",
+    "unavailable": "L’écoute n’est pas disponible sur ce navigateur : essaie avec Chrome, ou installe une voix française dans les réglages du téléphone."
   }
 }

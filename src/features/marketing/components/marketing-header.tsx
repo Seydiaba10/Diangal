@@ -1,9 +1,13 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 import { Logo } from "@/components/layout/logo";
 import { ButtonLink } from "@/components/ui/button";
+import { ROLE_HOME } from "@/features/account/roles";
+import { getAuthIdentity } from "@/features/account/session";
 import { cn } from "@/lib/cn";
+import { isSupabaseConfigured } from "@/lib/env";
 
 const LINKS = [
   { href: "/#cours", key: "courses" },
@@ -12,6 +16,35 @@ const LINKS = [
   { href: "/tarifs", key: "pricing" },
   { href: "/devenir-repetiteur", key: "becomeTutor" },
 ] as const;
+
+/** Visiteur : se connecter / s'inscrire. */
+async function GuestLinks() {
+  const t = await getTranslations("marketing.header");
+  return (
+    <>
+      <Link href="/connexion" className="hidden h-11 items-center rounded-xl px-3 text-sm font-medium text-ink hover:bg-canvas sm:inline-flex">
+        {t("signIn")}
+      </Link>
+      <ButtonLink href="/inscription" size="sm">
+        {t("signUp")}
+        <ArrowRight className="size-4" aria-hidden />
+      </ButtonLink>
+    </>
+  );
+}
+
+/** Déjà connecté (arrivé ici par le logo) : retour direct à son espace. */
+async function AccountLinks() {
+  const identity = isSupabaseConfigured() ? await getAuthIdentity() : null;
+  if (!identity) return <GuestLinks />;
+  const t = await getTranslations("marketing.header");
+  return (
+    <ButtonLink href={ROLE_HOME[identity.role]} size="sm">
+      {t("mySpace")}
+      <ArrowRight className="size-4" aria-hidden />
+    </ButtonLink>
+  );
+}
 
 /** Barre de navigation en « pilule » flottante, inspirée de la maquette Kindering. */
 export async function MarketingHeader({ overlay = false }: { overlay?: boolean }) {
@@ -35,16 +68,9 @@ export async function MarketingHeader({ overlay = false }: { overlay?: boolean }
           </ul>
         </nav>
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <Link
-            href="/connexion"
-            className="hidden h-11 items-center rounded-xl px-3 text-sm font-medium text-ink hover:bg-canvas sm:inline-flex"
-          >
-            {t("signIn")}
-          </Link>
-          <ButtonLink href="/inscription" size="sm">
-            {t("signUp")}
-            <ArrowRight className="size-4" aria-hidden />
-          </ButtonLink>
+          <Suspense fallback={<GuestLinks />}>
+            <AccountLinks />
+          </Suspense>
         </div>
       </div>
     </header>

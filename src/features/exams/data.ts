@@ -1,19 +1,22 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { connection } from "next/server";
 import { cache } from "react";
-import { getAssessmentCatalog } from "@/features/assessments/data";
+import { requireIdentity } from "@/features/account/session";
+import { getAssessmentCatalog, getAssessmentsByKind } from "@/features/assessments/data";
+import { getSubmittedAttempts } from "@/features/assessments/supabase";
 import { getSubjects } from "@/features/curriculum/data";
 import { isSupabaseConfigured } from "@/lib/env";
 import { daysUntil } from "@/lib/format";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
-import { EXAM_PAPERS, EXAM_SESSIONS } from "@/mocks/exams";
+import { EXAM_SESSIONS } from "@/mocks/exams";
 import { mockState } from "@/mocks/progress-store";
-import type { ExamPaper, ExamSession, ExamType, NextExam } from "@/types/domain";
+import type { AssessmentSummary, ExamPaper, ExamSession, ExamType, NextExam, Subject } from "@/types/domain";
 
 // Démo : src/mocks. Supabase : table exam_sessions (dates saisies par l'admin) et
 // évaluations de type past_paper (annales).
 
-const EXAM_BY_LEVEL: Record<string, ExamType> = { CM2: "CFEE", "3E": "BFEM", TLE: "BAC" };
+/** Examen de fin de cycle passé dans une classe. */
+export const EXAM_BY_LEVEL: Record<string, ExamType> = { CM2: "CFEE", "3E": "BFEM", TLE: "BAC" };
 
 /** Dates des examens nationaux : mises en cache, invalidées quand l'admin les modifie. */
 async function loadExamSessions(): Promise<ExamSession[]> {
@@ -35,7 +38,11 @@ export const getExamSessions = cache(async (): Promise<ExamSession[]> => {
 /** Prochain examen national du niveau, avec le compte à rebours du jour. */
 export const getNextExamFor = cache(async (levelCode: string): Promise<NextExam | null> => {
   const type = EXAM_BY_LEVEL[levelCode];
-  if (!type) return null;
+  return type ? getNextExamOfType(type) : null;
+});
+
+/** Prochaine session d'un examen (CFEE, BFEM, Bac), avec le compte à rebours du jour. */
+export const getNextExamOfType = cache(async (type: ExamType): Promise<NextExam | null> => {
   // getExamSessions appelle connection() : la date du jour se lit ensuite (jamais au prérendu).
   const sessions = await getExamSessions();
   const today = new Date().toISOString().slice(0, 10);
@@ -50,28 +57,79 @@ export const getNextExamFor = cache(async (levelCode: string): Promise<NextExam 
   };
 });
 
-/** Annales publiées (évaluations « past_paper »), avec leur version corrigée automatiquement. */
+/**
+ * Annales officielles (évaluations « past_paper ») : seulement celles dont la source a été
+ * vérifiée. Aucun sujet officiel n'est inventé ni proposé avant vérification.
+ */
 async function examPapers(): Promise<ExamPaper[]> {
-  if (!isSupabaseConfigured()) return EXAM_PAPERS;
   const [catalog, subjects] = await Promise.all([getAssessmentCatalog(), getSubjects()]);
   return catalog
-    .filter((a) => a.kind === "past_paper" && a.examType)
+    .filter((a) => a.kind === "past_paper" && a.examType && a.verification !== "unverified")
     .map((a) => ({
       id: a.id,
       examType: a.examType!,
       year: a.examYear ?? 0,
+      seriesCode: a.seriesCode,
       subjectCode: a.subjectCode,
       subjectName: subjects.find((s) => s.code === a.subjectCode && s.levelCode === a.levelCode)?.name ?? a.subjectCode,
-      subjectSizeBytes: 0,
-      correctionSizeBytes: 0,
       correctionPremium: a.isPremium,
-      assessmentId: a.id,
+      assessmentId: a.questionsCount > 0 ? a.id : null,
+      questionsCount: a.questionsCount,
+      durationS: a.durationS,
+      verification: a.verification,
+      sources: a.sources,
+      correctionSource: a.correctionSource,
     }));
 }
 
-export async function getExamPapers(type: ExamType): Promise<ExamPaper[]> {
-  return (await examPapers()).filter((p) => p.examType === type);
+/** Annales vérifiées d'un examen ; au Bac, celles de la série (et les épreuves communes). */
+export async function getExamPapers(type: ExamType, seriesCode?: string | null): Promise<ExamPaper[]> {
+  return (await examPapers()).filter((p) => p.examType === type && (type !== "BAC" || !p.seriesCode || p.seriesCode === seriesCode));
 }
+
+/** Sujets blancs DIANGAL d'un examen (et de la série au Bac), avec la meilleure note de l'élève. */
+export async function getMockExams(type: ExamType, seriesCode?: string | null): Promise<AssessmentSummary[]> {
+  return (await getAssessmentsByKind("mock_exam")).filter(
+    (a) => a.examType === type && (type !== "BAC" || !a.seriesCode || a.seriesCode === seriesCode),
+  );
+}
+
+export interface ExamHistoryItem {
+  attemptId: string;
+  title: string;
+  subject: Subject;
+  score20: number;
+  date: string;
+}
+
+/** Épreuves d'examen déjà passées par l'élève (sujets blancs et annales en ligne), les plus récentes d'abord. */
+export const getExamHistory = cache(async (type: ExamType): Promise<ExamHistoryItem[]> => {
+  await connection();
+  if (!isSupabaseConfigured()) {
+    return [...mockState.attempts.values()]
+      .filter((a) => a.result && a.result.assessment.examType === type)
+      .map((a) => ({
+        attemptId: a.id,
+        title: a.result!.assessment.title,
+        subject: a.result!.assessment.subject,
+        score20: a.result!.score20,
+        date: a.result!.submittedAt,
+      }))
+      .sort((a, b) => b.date.localeCompare(a.date));
+  }
+  const [attempts, mockExams, pastPapers, catalog] = await Promise.all([
+    getSubmittedAttempts((await requireIdentity()).userId),
+    getAssessmentsByKind("mock_exam"),
+    getAssessmentsByKind("past_paper"),
+    getAssessmentCatalog(),
+  ]);
+  const exams = [...mockExams, ...pastPapers];
+  const slugByUuid = new Map(catalog.map((c) => [c.uuid, c.id]));
+  return attempts.flatMap((attempt) => {
+    const exam = exams.find((e) => e.id === slugByUuid.get(attempt.assessmentUuid) && e.examType === type);
+    return exam ? [{ attemptId: attempt.id, title: exam.title, subject: exam.subject, score20: attempt.score20, date: attempt.submittedAt }] : [];
+  });
+});
 
 export async function getExamPaper(id: string): Promise<ExamPaper | undefined> {
   return (await examPapers()).find((p) => p.id === id);

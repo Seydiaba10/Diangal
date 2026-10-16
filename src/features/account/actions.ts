@@ -13,7 +13,8 @@ import { logAudit, mockState } from "@/mocks/progress-store";
 import { DEMO_PARENT, DEMO_STUDENT_LINK_CODE } from "@/mocks/users";
 import type { AppRole, SubjectCode } from "@/types/domain";
 import { DEMO_ROLE_COOKIE } from "./data";
-import { ROLE_HOME, ROLES } from "./roles";
+import { getEnabledSocialProviders, type SocialProvider } from "./oauth";
+import { LOGIN_PATH, parseSpace, ROLE_HOME, ROLES, type LoginSpace } from "./roles";
 import { requireIdentity } from "./session";
 import { completePendingSignup, pendingSignupMetadata, type SignupExtras } from "./signup";
 
@@ -75,9 +76,10 @@ function sendErrorKey(error: AuthError): "unknown" | "limit" | "sms" | "send" {
   return "send";
 }
 
-/** Page où mène le lien de l'email (ouverture de la session côté serveur). */
-function emailRedirect(next: string | null) {
-  return `${publicEnv.NEXT_PUBLIC_SITE_URL}/auth/confirmation${next ? `?${new URLSearchParams({ next })}` : ""}`;
+/** Page où mène le lien de l'email ou le retour d'un réseau social (ouverture de la session côté serveur). */
+function emailRedirect(next: string | null, space: LoginSpace = "famille") {
+  const params = new URLSearchParams({ ...(next ? { next } : {}), ...(space === "repetiteur" ? { espace: space } : {}) });
+  return `${publicEnv.NEXT_PUBLIC_SITE_URL}/auth/confirmation${params.size ? `?${params}` : ""}`;
 }
 
 async function roleOf(userId: string): Promise<AppRole | null> {
@@ -92,12 +94,13 @@ async function roleOf(userId: string): Promise<AppRole | null> {
 export async function requestLoginCodeAction(formData: FormData) {
   const channel = parseChannel(formData.get("mode"));
   const email = channel === "email";
+  const space = parseSpace(formData.get("espace"));
   const raw = String(formData.get("identifiant") ?? "").trim();
   const next = safeNext(formData.get("next"));
-  const back: (erreur: string) => never = (erreur) => redirect(`/connexion?${new URLSearchParams({ mode: channel, erreur })}`);
+  const back: (erreur: string) => never = (erreur) => redirect(`${LOGIN_PATH[space]}?${new URLSearchParams({ mode: channel, erreur })}`);
 
   if (!isSupabaseConfigured()) {
-    const params = new URLSearchParams({ identifiant: raw, canal: channel, role: parseRole(formData.get("role")) });
+    const params = new URLSearchParams({ identifiant: raw, canal: channel, espace: space, role: parseRole(formData.get("role")) });
     redirect(`/connexion/code?${params}`);
   }
 
@@ -108,7 +111,7 @@ export async function requestLoginCodeAction(formData: FormData) {
     if (!EMAIL.test(identifiant)) back("email");
     const { error } = await supabase.auth.signInWithOtp({
       email: identifiant,
-      options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(next) },
+      options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(next, space) },
     });
     if (error) back(sendErrorKey(error));
   } else {
@@ -120,7 +123,7 @@ export async function requestLoginCodeAction(formData: FormData) {
     const { error } = await supabase.auth.signInWithOtp({ phone: identifiant, options: { shouldCreateUser: false } });
     if (error) back(sendErrorKey(error));
   }
-  redirect(`/connexion/code?${new URLSearchParams({ identifiant: identifiant!, canal: channel, ...(next ? { next } : {}) })}`);
+  redirect(`/connexion/code?${new URLSearchParams({ identifiant: identifiant!, canal: channel, espace: space, ...(next ? { next } : {}) })}`);
 }
 
 /** Étape 2 : vérification du code, ouverture de la session, page d'accueil du rôle. */
@@ -128,10 +131,11 @@ export async function verifyLoginCodeAction(formData: FormData) {
   const identifiant = String(formData.get("identifiant") ?? "");
   const code = String(formData.get("code") ?? "").replace(/\s/g, "");
   const canal = parseChannel(formData.get("canal"));
+  const space = parseSpace(formData.get("espace"));
   const next = safeNext(formData.get("next"));
   const retry: (role?: AppRole) => never = (role) =>
     redirect(
-      `/connexion/code?${new URLSearchParams({ identifiant, canal, erreur: "code", ...(role ? { role } : {}), ...(next ? { next } : {}) })}`,
+      `/connexion/code?${new URLSearchParams({ identifiant, canal, espace: space, erreur: "code", ...(role ? { role } : {}), ...(next ? { next } : {}) })}`,
     );
 
   if (!isSupabaseConfigured()) {
@@ -165,17 +169,39 @@ export async function verifyLoginCodeAction(formData: FormData) {
 export async function resendLoginCodeAction(formData: FormData) {
   const identifiant = String(formData.get("identifiant") ?? "");
   const canal = parseChannel(formData.get("canal"));
+  const space = parseSpace(formData.get("espace"));
   const next = safeNext(formData.get("next"));
   if (isSupabaseConfigured()) {
     const supabase = await createSupabaseServerClient();
     if (canal === "email") {
-      await supabase.auth.signInWithOtp({ email: identifiant, options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(next) } });
+      await supabase.auth.signInWithOtp({
+        email: identifiant,
+        options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(next, space) },
+      });
     } else if (phoneChannelReady(canal) && toSenegalPhone(identifiant)) {
       await rememberOtpChannel(identifiant, canal);
       await supabase.auth.signInWithOtp({ phone: identifiant, options: { shouldCreateUser: false } });
     }
   }
-  redirect(`/connexion/code?${new URLSearchParams({ identifiant, canal, renvoye: "1", ...(next ? { next } : {}) })}`);
+  redirect(`/connexion/code?${new URLSearchParams({ identifiant, canal, espace: space, renvoye: "1", ...(next ? { next } : {}) })}`);
+}
+
+/**
+ * Connexion avec Facebook, Apple, Google ou X : seulement si le réseau est ouvert dans Supabase.
+ * Le compte DIANGAL doit déjà exister avec le même email (voir /auth/confirmation).
+ */
+export async function signInWithSocialAction(provider: SocialProvider, space: LoginSpace) {
+  const back = LOGIN_PATH[space];
+  if (!isSupabaseConfigured()) redirect(`${back}?erreur=social`);
+  const supabaseProvider = (await getEnabledSocialProviders())[provider];
+  if (!supabaseProvider) redirect(`${back}?erreur=social`);
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: supabaseProvider!,
+    options: { redirectTo: emailRedirect(null, space) },
+  });
+  if (error || !data.url) redirect(`${back}?erreur=social`);
+  redirect(data.url);
 }
 
 /** Double authentification de l'admin (TOTP) : la session passe en aal2, exigée par la RLS admin. */

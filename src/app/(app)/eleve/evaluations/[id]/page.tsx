@@ -77,7 +77,7 @@ async function AssessmentIntro({ params }: { params: PageProps<"/eleve/evaluatio
 
   return (
     <>
-      <Breadcrumb items={[{ label: tBreadcrumb("practice"), href: "/eleve/entrainement" }, { label: assessment.title }]} />
+      <Breadcrumb items={[{ label: tBreadcrumb("practice"), href: "/eleve/exercices" }, { label: assessment.title }]} />
 
       <header className="flex items-start gap-4">
         <SubjectIcon code={assessment.subject.code} size="lg" />

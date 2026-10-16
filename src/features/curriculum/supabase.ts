@@ -15,8 +15,8 @@ export interface Catalog {
 }
 
 /**
- * Catalogue publié de toutes les classes (identique pour tous) : mis en cache une heure, invalidé
- * par l'admin (tag « catalog »). Les programmes par série du lycée viendront avec leur contenu.
+ * Catalogue publié de toutes les classes et séries (identique pour tous) : mis en cache une heure,
+ * invalidé par l'admin (tag « catalog »). Une matière sans chapitre publié n'apparaît pas.
  */
 export async function loadCatalog(): Promise<Catalog> {
   "use cache";
@@ -26,15 +26,14 @@ export async function loadCatalog(): Promise<Catalog> {
 
   const { data: programs, error } = await supabase
     .from("programs")
-    .select("id, coefficient, sort_order, subjects!inner(code, slug, name), levels!inner(code, sort_order)")
-    .is("series_id", null)
+    .select("id, coefficient, sort_order, subjects!inner(code, slug, name), levels!inner(code, sort_order), series(code)")
     .order("sort_order");
   if (error) throw new Error(`catalogue (programmes) : ${error.message}`);
 
   const { data: chapters, error: chaptersError } = await supabase
     .from("chapters")
     .select(
-      "id, program_id, number, slug, title, summary, sort_order, lessons(id, number, slug, title, is_premium, estimated_minutes, media(kind, title, size_bytes, duration_s))",
+      "id, program_id, number, slug, title, summary, strand, sort_order, lessons(id, number, slug, title, is_premium, estimated_minutes, media(kind, title, size_bytes, duration_s))",
     )
     .in(
       "program_id",
@@ -51,16 +50,19 @@ export async function loadCatalog(): Promise<Catalog> {
       p.id,
       {
         code: p.subjects.code as SubjectCode,
-        slug: programSlug(p.subjects.slug, p.levels.code),
+        slug: programSlug(p.subjects.slug, p.levels.code, p.series?.code),
         name: p.subjects.name,
         coefficient: Number(p.coefficient),
         levelCode: p.levels.code,
+        seriesCode: p.series?.code ?? null,
       },
     ]),
   );
+  // Pas de page vide : seules les matières qui ont au moins un chapitre publié.
+  const withChapters = new Set(chapters.map((c) => c.program_id));
 
   return {
-    subjects: [...subjectByProgram.values()],
+    subjects: [...subjectByProgram].filter(([id]) => withChapters.has(id)).map(([, subject]) => subject),
     chapters: chapters.map((c) => ({
       id: c.id,
       slug: c.slug,
@@ -69,6 +71,8 @@ export async function loadCatalog(): Promise<Catalog> {
       summary: c.summary,
       subjectCode: subjectByProgram.get(c.program_id)!.code,
       levelCode: subjectByProgram.get(c.program_id)!.levelCode,
+      seriesCode: subjectByProgram.get(c.program_id)!.seriesCode,
+      strand: c.strand,
       lessons: c.lessons.map((l) => ({
         id: l.id,
         slug: l.slug,

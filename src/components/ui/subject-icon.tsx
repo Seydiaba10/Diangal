@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { SUBJECT_STYLES } from "@/lib/subjects";
+import { subjectStyle } from "@/lib/subjects";
 import type { SubjectCode } from "@/types/domain";
 
 const SIZES = {
@@ -19,7 +19,7 @@ export function SubjectIcon({
   /** Fond blanc (sur une carte déjà pastel). */
   inverted?: boolean;
 }) {
-  const style = SUBJECT_STYLES[code];
+  const style = subjectStyle(code);
   const Icon = style.icon;
   return (
     <span

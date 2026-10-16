@@ -14,7 +14,7 @@ export default async function AttemptResultPage({ params }: PageProps<"/eleve/te
   const [t, tBreadcrumb] = await Promise.all([getTranslations("result"), getTranslations("breadcrumb")]);
   return (
     <PageContainer width="narrow" className="space-y-5">
-      <Breadcrumb items={[{ label: tBreadcrumb("practice"), href: "/eleve/entrainement" }, { label: t("title") }]} />
+      <Breadcrumb items={[{ label: tBreadcrumb("practice"), href: "/eleve/exercices" }, { label: t("title") }]} />
       <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
         {params.then(({ id }) => (
           <ResultView attemptId={id} />

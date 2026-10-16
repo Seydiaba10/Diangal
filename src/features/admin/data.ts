@@ -1,27 +1,51 @@
 import "server-only";
 
+import { getTranslations } from "next-intl/server";
 import { connection } from "next/server";
 import { cache } from "react";
 import { getAssessmentCatalog } from "@/features/assessments/data";
-import { findLessonById, getChapters, getSubjects } from "@/features/curriculum/data";
+import { findLessonById, getSubjects } from "@/features/curriculum/data";
 import { getAllPayments } from "@/features/payments/data";
 import { getTutorReviewQueue } from "@/features/tutors/data";
 import { isSupabaseConfigured } from "@/lib/env";
+import { DEFAULT_FREE_CHAPTERS } from "@/lib/free-tier";
 import { normalizeText } from "@/lib/grading";
+import { SUBJECT_STYLES } from "@/lib/subjects";
 import { ADMIN_USERS, REPORTS, SIGNUPS_LAST_7_DAYS } from "@/mocks/admin";
-import { ANSWER_KEYS } from "@/mocks/answer-keys-3e";
-import { ASSESSMENTS_3E, MOCK_QUESTIONS } from "@/mocks/assessments-3e";
-import { genericLessonBody, LESSON_BODIES } from "@/mocks/lesson-content";
+import { CATALOG_ANSWER_KEYS } from "@/mocks/answer-keys";
+import { CATALOG_ASSESSMENTS, CATALOG_QUESTIONS } from "@/mocks/assessments";
+import { CATALOG_CHAPTERS, CATALOG_LESSON_BODIES, CATALOG_SUBJECTS, chapterSources } from "@/mocks/curriculum";
+import { genericLessonBody } from "@/mocks/lesson-content";
 import { mockState } from "@/mocks/progress-store";
-import type { AdminStats, AdminUserRow, AuditEntry, PaymentChannel, ReportRow } from "@/types/domain";
+import type {
+  AdminChapterRow,
+  AdminProgram,
+  AdminStats,
+  AdminSubjectOption,
+  AdminUserRow,
+  AuditEntry,
+  Chapter,
+  ContentTrackingRow,
+  ContentVerification,
+  PaymentChannel,
+  PublishStatus,
+  ReportRow,
+  SubjectCode,
+} from "@/types/domain";
 import {
   fetchAdminAssessment,
+  fetchAdminChapter,
+  fetchAdminLessonContext,
+  fetchAdminProgram,
+  fetchAdminPrograms,
   fetchAdminStats,
   fetchAdminUsers,
   fetchAuditLog,
+  fetchContentTracking,
+  fetchFreeTierEnabled,
   fetchLessonBody,
   fetchReports,
-  fetchWrittenLessonIds,
+  fetchSubjectOptions,
   type AdminQuestion,
 } from "./supabase";
 
@@ -82,34 +106,131 @@ export const getAuditLog = cache(async (): Promise<AuditEntry[]> => {
   return [...mockState.auditLog, ...SEED_AUDIT];
 });
 
-export async function getContentOverview() {
-  await connection();
-  const [subjects, written] = await Promise.all([
-    getSubjects(),
-    isSupabaseConfigured() ? fetchWrittenLessonIds() : Promise.resolve(new Set(Object.keys(LESSON_BODIES))),
-  ]);
-  return Promise.all(
-    subjects.map(async (subject) => ({
-      subject,
-      chapters: (await getChapters(subject)).map((c) => ({
-        id: c.id,
-        number: c.number,
-        title: c.title,
-        lessons: c.lessons.map((l) => ({ id: l.id, title: l.title, isPremium: l.isPremium, written: written.has(l.id) })),
-      })),
-    })),
-  );
+// ── Référentiel et contenus ──────────────────────────────────────────────────
+// Démo : le catalogue de src/mocks, tout publié et « à vérifier ». Supabase : brouillons compris.
+
+function mockWritten(lessonId: string) {
+  return lessonId in CATALOG_LESSON_BODIES || mockState.lessonBodyOverrides.has(lessonId);
 }
 
+function mockChapter(chapter: Chapter): AdminChapterRow {
+  return {
+    id: chapter.id,
+    number: chapter.number,
+    slug: chapter.slug,
+    title: chapter.title,
+    summary: chapter.summary,
+    strand: chapter.strand ?? null,
+    status: "published",
+    verification: "unverified",
+    sources: chapterSources(chapter),
+    lessons: chapter.lessons.map((l) => ({ id: l.id, number: l.number, title: l.title, status: "published", written: mockWritten(l.id) })),
+  };
+}
+
+function mockPrograms(): AdminProgram[] {
+  return CATALOG_SUBJECTS.map((s) => ({
+    id: s.slug,
+    levelCode: s.levelCode,
+    seriesCode: s.seriesCode ?? null,
+    subjectCode: s.code,
+    subjectName: s.name,
+    freeChapters: DEFAULT_FREE_CHAPTERS,
+    chapters: CATALOG_CHAPTERS.filter(
+      (c) => c.subjectCode === s.code && c.levelCode === s.levelCode && (c.seriesCode ?? null) === (s.seriesCode ?? null),
+    ).map(mockChapter),
+  }));
+}
+
+/** Tableau de suivi : une ligne par programme, de la classe la plus petite à la Terminale. */
+export const getContentTracking = cache(async (): Promise<ContentTrackingRow[]> => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchContentTracking();
+  const assessments = await getAssessmentCatalog();
+  return mockPrograms().map((p) => {
+    const own = assessments.filter((a) => a.subjectCode === p.subjectCode && a.levelCode === p.levelCode);
+    const lessons = p.chapters.flatMap((c) => c.lessons);
+    const count = (verification: ContentVerification) => p.chapters.filter((c) => c.verification === verification).length;
+    return {
+      programId: p.id,
+      levelCode: p.levelCode,
+      seriesCode: p.seriesCode,
+      subjectCode: p.subjectCode,
+      subjectName: p.subjectName,
+      freeChapters: p.freeChapters,
+      chapters: p.chapters.length,
+      chaptersPublished: p.chapters.filter((c) => c.status === "published").length,
+      lessons: lessons.length,
+      lessonsWritten: lessons.filter((l) => l.written).length,
+      exercises: own.filter((a) => a.kind === "exercise").length,
+      quizzes: own.filter((a) => a.kind === "quiz").length,
+      exams: own.filter((a) => a.kind === "mock_exam" || a.kind === "past_paper").length,
+      questions: own.reduce((sum, a) => sum + a.questionsCount, 0),
+      chaptersUnverified: count("unverified"),
+      chaptersReviewed: count("reviewed"),
+      chaptersOfficial: count("official"),
+      sourcedChapters: p.chapters.filter((c) => c.sources.length > 0).length,
+    };
+  });
+});
+
+/** Programmes d'une classe, avec chapitres et leçons (brouillons compris sur la base). */
+export const getAdminPrograms = cache(async (levelCode: string): Promise<AdminProgram[]> => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchAdminPrograms(levelCode);
+  return mockPrograms().filter((p) => p.levelCode === levelCode);
+});
+
+export const getAdminProgram = cache(async (programId: string): Promise<AdminProgram | null> => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchAdminProgram(programId);
+  const program = mockPrograms().find((p) => p.id === programId);
+  return program ? { ...program, chapters: [] } : null;
+});
+
+export const getAdminChapter = cache(async (chapterId: string) => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchAdminChapter(chapterId);
+  for (const program of mockPrograms()) {
+    const chapter = program.chapters.find((c) => c.id === chapterId);
+    if (chapter) return { program: { ...program, chapters: [] }, chapter };
+  }
+  return null;
+});
+
+/** Offre gratuite appliquée ? Démo : toujours (les accès des mocks suivent la règle). */
+export const getFreeTierEnabled = cache(async (): Promise<boolean> => {
+  await connection();
+  return isSupabaseConfigured() ? fetchFreeTierEnabled() : true;
+});
+
+/** Matières du référentiel (pour les ajouter à une classe). */
+export const getSubjectOptions = cache(async (): Promise<AdminSubjectOption[]> => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchSubjectOptions();
+  const names = await getTranslations("subjects");
+  return (Object.keys(SUBJECT_STYLES) as SubjectCode[])
+    .map((code) => ({ id: code, code, name: names(code) }))
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"));
+});
+
+/** Leçon à modifier, avec son chapitre et sa matière (brouillon compris sur la base). */
 export const getAdminLesson = cache(async (lessonId: string) => {
   await connection();
+  if (isSupabaseConfigured()) {
+    const [context, body] = await Promise.all([fetchAdminLessonContext(lessonId), fetchLessonBody(lessonId)]);
+    return context ? { ...context, body: body ?? "" } : null;
+  }
   const found = await findLessonById(lessonId);
   if (!found) return null;
   const { subject, chapter, lesson } = found;
-  const body = isSupabaseConfigured()
-    ? ((await fetchLessonBody(lessonId)) ?? "")
-    : (mockState.lessonBodyOverrides.get(lessonId) ?? LESSON_BODIES[lessonId] ?? genericLessonBody(lesson.title, chapter.title));
-  return { subject, chapter, lesson, body };
+  return {
+    lesson: { id: lesson.id, title: lesson.title, status: "published" as PublishStatus },
+    chapter: { id: chapter.id, title: chapter.title },
+    subjectName: subject.name,
+    levelCode: subject.levelCode,
+    body: mockState.lessonBodyOverrides.get(lessonId) ?? CATALOG_LESSON_BODIES[lessonId] ?? genericLessonBody(lesson.title, chapter.title),
+  };
 });
 
 export async function getAdminAssessments() {
@@ -130,9 +251,9 @@ export async function getAdminAssessment(id: string) {
     const questions: AdminQuestion[] | null = await fetchAdminAssessment(assessment.uuid!);
     return questions ? { assessment, questions } : null;
   }
-  const mock = ASSESSMENTS_3E.find((a) => a.id === id)!;
+  const mock = CATALOG_ASSESSMENTS.find((a) => a.id === id)!;
   return {
     assessment,
-    questions: mock.questionIds.map((qid) => ({ question: MOCK_QUESTIONS[qid]!, key: ANSWER_KEYS[qid] ?? {} })),
+    questions: mock.questionIds.map((qid) => ({ question: CATALOG_QUESTIONS[qid]!, key: CATALOG_ANSWER_KEYS[qid] ?? {} })),
   };
 }

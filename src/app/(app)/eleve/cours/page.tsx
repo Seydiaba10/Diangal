@@ -16,14 +16,14 @@ export async function generateMetadata() {
 
 async function CoursesSubtitle() {
   const [student, t] = await Promise.all([getCurrentStudent(), getTranslations("courses")]);
-  const subjects = await getSubjects(student.levelCode);
+  const subjects = await getSubjects(student.levelCode, student.seriesCode);
   return <>{t("subtitle", { level: student.levelName, count: subjects.length })}</>;
 }
 
 /** Classe dont le programme n'est pas encore publié : on le dit clairement. */
 async function OtherLevelNotice() {
   const [student, t] = await Promise.all([getCurrentStudent(), getTranslations("courses")]);
-  if ((await getSubjects(student.levelCode)).length > 0) return null;
+  if ((await getSubjects(student.levelCode, student.seriesCode)).length > 0) return null;
   return <Notice tone="info">{t("otherLevel", { level: student.levelName })}</Notice>;
 }
 
@@ -35,7 +35,7 @@ async function SearchSection({ searchParams }: { searchParams: PageProps<"/eleve
 
 async function StudentSubjects() {
   const student = await getCurrentStudent();
-  return <SubjectGrid levelCode={student.levelCode} />;
+  return <SubjectGrid levelCode={student.levelCode} seriesCode={student.seriesCode} />;
 }
 
 export default async function CoursesPage({ searchParams }: PageProps<"/eleve/cours">) {

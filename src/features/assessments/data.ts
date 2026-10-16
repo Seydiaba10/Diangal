@@ -1,9 +1,9 @@
 import { connection } from "next/server";
 import { cache } from "react";
 import { requireIdentity } from "@/features/account/session";
-import { chapterHref, findChapterById, getSubjects } from "@/features/curriculum/data";
+import { chapterHref, findChapterById, getChapters, getSubjects } from "@/features/curriculum/data";
 import { isSupabaseConfigured } from "@/lib/env";
-import { ASSESSMENTS_3E, BEST_SCORES, MOCK_QUESTIONS } from "@/mocks/assessments-3e";
+import { BEST_SCORES, CATALOG_ASSESSMENTS, CATALOG_QUESTIONS, QUESTION_CHAPTERS } from "@/mocks/assessments";
 import { mockState } from "@/mocks/progress-store";
 import type {
   Assessment,
@@ -11,11 +11,23 @@ import type {
   AssessmentSummary,
   AttemptResult,
   AttemptSession,
+  ContentSource,
+  ContentVerification,
   ExamType,
+  PracticeChapterOption,
+  PracticeHistoryItem,
   Subject,
   SubjectCode,
 } from "@/types/domain";
-import { fetchAttemptResult, fetchAttemptSession, getSubmittedAttempts, loadAssessmentCatalog } from "./supabase";
+import {
+  fetchAttemptResult,
+  fetchAttemptSession,
+  fetchPersonalAssessment,
+  fetchPracticeAttempts,
+  getSubmittedAttempts,
+  loadAssessmentCatalog,
+  loadChapterQuestionCounts,
+} from "./supabase";
 
 // Démo : src/mocks. Supabase : get_assessments_catalog (public) + attempts, start_attempt, get_attempt_review.
 
@@ -37,6 +49,10 @@ export interface AssessmentInfo {
   isPremium: boolean;
   questionsCount: number;
   totalPoints: number;
+  seriesCode: string | null;
+  verification: ContentVerification;
+  sources: ContentSource[];
+  correctionSource: string | null;
 }
 
 function mockInfo(a: Assessment): AssessmentInfo {
@@ -53,12 +69,16 @@ function mockInfo(a: Assessment): AssessmentInfo {
     durationS: a.durationS,
     isPremium: a.isPremium,
     questionsCount: a.questionIds.length,
-    totalPoints: a.questionIds.reduce((sum, id) => sum + (MOCK_QUESTIONS[id]?.points ?? 0), 0),
+    totalPoints: a.questionIds.reduce((sum, id) => sum + (CATALOG_QUESTIONS[id]?.points ?? 0), 0),
+    seriesCode: a.seriesCode ?? null,
+    verification: a.verification ?? "unverified",
+    sources: a.sources ?? [],
+    correctionSource: a.correctionSource ?? null,
   };
 }
 
 export async function getAssessmentCatalog(): Promise<AssessmentInfo[]> {
-  if (!isSupabaseConfigured()) return ASSESSMENTS_3E.map(mockInfo);
+  if (!isSupabaseConfigured()) return CATALOG_ASSESSMENTS.map(mockInfo);
   return (await loadAssessmentCatalog()).map((a) => ({
     id: a.slug,
     uuid: a.uuid,
@@ -73,11 +93,20 @@ export async function getAssessmentCatalog(): Promise<AssessmentInfo[]> {
     isPremium: a.isPremium,
     questionsCount: a.questionsCount,
     totalPoints: a.totalPoints,
+    seriesCode: a.seriesCode,
+    verification: a.verification,
+    sources: a.sources,
+    correctionSource: a.correctionSource,
   }));
 }
 
 export async function findAssessment(id: string): Promise<AssessmentInfo | undefined> {
   return (await getAssessmentCatalog()).find((a) => a.id === id || a.uuid === id);
+}
+
+/** Démo : évaluation du catalogue, ou séance « Préparer mon prochain devoir » créée pendant la démo. */
+export function findMockAssessment(id: string): Assessment | undefined {
+  return CATALOG_ASSESSMENTS.find((a) => a.id === id) ?? mockState.practiceSessions.get(id);
 }
 
 /** Meilleures notes /20 de l'élève connecté (ou de l'enfant d'un parent), par évaluation. */
@@ -124,6 +153,12 @@ async function toSummaries(infos: AssessmentInfo[], withBestScore: boolean): Pro
         questionsCount: a.questionsCount,
         isPremium: a.isPremium,
         bestScore20: withBestScore ? (best.get(a.id) ?? null) : null,
+        examType: a.examType,
+        examYear: a.examYear,
+        seriesCode: a.seriesCode,
+        verification: a.verification,
+        sources: a.sources,
+        correctionSource: a.correctionSource,
       };
     }),
   );
@@ -133,6 +168,26 @@ async function toSummaries(infos: AssessmentInfo[], withBestScore: boolean): Pro
 export async function getAssessmentSummary(id: string, withBestScore = false): Promise<AssessmentSummary | undefined> {
   const info = await findAssessment(id);
   return info && (await toSummaries([info], withBestScore))[0];
+}
+
+/**
+ * Évaluation du catalogue ou séance personnelle (lue avec la session : élève, parent lié, admin).
+ * Réservé aux pages rendues à la requête (lecteur, résultat).
+ */
+export async function getAnyAssessmentSummary(id: string): Promise<AssessmentSummary | undefined> {
+  const summary = await getAssessmentSummary(id);
+  if (summary) return summary;
+  await connection();
+  const remote = isSupabaseConfigured() ? await fetchPersonalAssessment(id) : null;
+  const mock = isSupabaseConfigured() ? undefined : mockState.practiceSessions.get(id);
+  const info: AssessmentInfo | null = remote
+    ? { ...remote, id: remote.slug }
+    : mock
+      ? mockInfo(mock)
+      : null;
+  if (!info) return undefined;
+  const [personal] = await toSummaries([info], false);
+  return personal && { ...personal, isPersonal: true };
 }
 
 /** Contenu publié de l'évaluation (sans donnée propre à l'élève). */
@@ -178,7 +233,7 @@ export const getAttemptSession = cache(async (attemptId: string): Promise<Attemp
   if (isSupabaseConfigured()) {
     const remote = await fetchAttemptSession(attemptId);
     if (remote === null || remote === "submitted") return remote;
-    const assessment = await getAssessmentSummary(remote.assessmentSlug);
+    const assessment = await getAnyAssessmentSummary(remote.assessmentSlug);
     if (!assessment) return null;
     return {
       id: attemptId,
@@ -193,15 +248,15 @@ export const getAttemptSession = cache(async (attemptId: string): Promise<Attemp
   const attempt = mockState.attempts.get(attemptId);
   if (!attempt) return null;
   if (attempt.status === "submitted") return "submitted";
-  const assessment = ASSESSMENTS_3E.find((a) => a.id === attempt.assessmentId)!;
+  const assessment = findMockAssessment(attempt.assessmentId)!;
   return {
     id: attempt.id,
-    assessment: (await getAssessmentSummary(assessment.id))!,
+    assessment: (await getAnyAssessmentSummary(assessment.id))!,
     startedAt: new Date(attempt.startedAt).toISOString(),
     deadlineAt: attempt.deadlineAt ? new Date(attempt.deadlineAt).toISOString() : null,
     serverNow: Date.now(),
     questions: assessment.questionIds.map((qid) => {
-      const q = MOCK_QUESTIONS[qid]!;
+      const q = CATALOG_QUESTIONS[qid]!;
       const order = attempt.optionOrder[qid] ?? q.options.map((o) => o.id);
       return {
         id: q.id,
@@ -220,7 +275,7 @@ export const getAttemptResult = cache(async (attemptId: string): Promise<Attempt
 
   const remote = await fetchAttemptResult(attemptId);
   if (!remote) return null;
-  const assessment = await getAssessmentSummary(remote.assessmentUuid);
+  const assessment = await getAnyAssessmentSummary(remote.assessmentUuid);
   if (!assessment) return null;
   const elapsed = Math.round((Date.parse(remote.submittedAt) - Date.parse(remote.startedAt)) / 1000);
   return {
@@ -287,4 +342,81 @@ export const getRecentResults = cache(async (studentId?: string): Promise<Recent
     }),
   );
   return [...fromSession, ...history].sort((a, b) => b.date.localeCompare(a.date));
+});
+
+// ── « Préparer mon prochain devoir » ────────────────────────────────────────
+
+/** Nombre de questions de la banque par chapitre. */
+async function chapterQuestionCounts(): Promise<Record<string, number>> {
+  if (isSupabaseConfigured()) return loadChapterQuestionCounts();
+  const counts: Record<string, number> = {};
+  for (const chapterId of Object.values(QUESTION_CHAPTERS)) counts[chapterId] = (counts[chapterId] ?? 0) + 1;
+  return counts;
+}
+
+/** Matières de la classe de l'élève et leurs chapitres qui ont des questions (pour composer une séance). */
+export const getPracticeOptions = cache(
+  async (levelCode: string, seriesCode?: string | null): Promise<{ subject: Subject; chapters: PracticeChapterOption[] }[]> => {
+    const [subjects, counts] = await Promise.all([getSubjects(levelCode, seriesCode), chapterQuestionCounts()]);
+    const options = await Promise.all(
+      subjects.map(async (subject) => ({
+        subject,
+        chapters: (await getChapters(subject))
+          .filter((c) => (counts[c.id] ?? 0) > 0)
+          .map((c) => ({
+            id: c.id,
+            number: c.number,
+            title: c.title,
+            strand: c.strand ?? null,
+            questionsCount: counts[c.id]!,
+            isPremium: c.lessons.some((l) => l.isPremium),
+          })),
+      })),
+    );
+    return options.filter((o) => o.chapters.length > 0);
+  },
+);
+
+/** Démo : questions de la banque appartenant aux chapitres donnés. */
+export function mockQuestionsOfChapters(chapterIds: string[]): string[] {
+  return Object.entries(QUESTION_CHAPTERS)
+    .filter(([, chapterId]) => chapterIds.includes(chapterId))
+    .map(([questionId]) => questionId);
+}
+
+/** Historique des séances « Préparer mon prochain devoir » (élève connecté, ou enfant d'un parent). */
+export const getPracticeHistory = cache(async (studentId?: string): Promise<PracticeHistoryItem[]> => {
+  await connection();
+  const subjects = await getSubjects();
+  const subjectOf = (code: SubjectCode, levelCode: string) =>
+    subjects.find((s) => s.code === code && s.levelCode === levelCode) ?? fallbackSubject(code, levelCode);
+
+  if (isSupabaseConfigured()) {
+    const rows = await fetchPracticeAttempts(studentId ?? (await requireIdentity()).userId);
+    return rows.map((r) => ({
+      attemptId: r.attemptId,
+      subject: subjectOf(r.subjectCode, r.levelCode),
+      questionsCount: r.questionsCount,
+      timed: r.timed,
+      status: r.status,
+      score20: r.score20,
+      date: r.date,
+    }));
+  }
+
+  return [...mockState.attempts.values()]
+    .filter((a) => mockState.practiceSessions.has(a.assessmentId))
+    .map((a) => {
+      const session = mockState.practiceSessions.get(a.assessmentId)!;
+      return {
+        attemptId: a.id,
+        subject: subjectOf(session.subjectCode, session.levelCode),
+        questionsCount: session.questionIds.length,
+        timed: session.durationS !== null,
+        status: a.status,
+        score20: a.result?.score20 ?? null,
+        date: a.result?.submittedAt ?? new Date(a.startedAt).toISOString(),
+      };
+    })
+    .sort((a, b) => b.date.localeCompare(a.date));
 });

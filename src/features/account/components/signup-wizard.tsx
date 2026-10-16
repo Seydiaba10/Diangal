@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, BookOpen, CircleAlert, GraduationCap, Info, Mail, MessageCircle, Smartphone, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, CircleAlert, GraduationCap, Info, Mail, MessageCircle, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState, useTransition, type ReactNode } from "react";
@@ -58,14 +58,11 @@ function Field({ id, label, hint, children }: { id: string; label: string; hint?
 
 export function SignupWizard({
   initialRole,
-  smsEnabled,
   whatsappEnabled,
   emailCode,
   demo,
 }: {
   initialRole: SignupRole | null;
-  /** Inscription par SMS possible (fournisseur branché) ; sinon par email uniquement. */
-  smsEnabled: boolean;
   /** Code envoyé sur WhatsApp possible (fonction send-sms + WhatsApp Business). */
   whatsappEnabled: boolean;
   /** L'email contient un code à 6 chiffres ; sinon, un lien à ouvrir sur l'appareil. */
@@ -79,7 +76,8 @@ export function SignupWizard({
   const [step, setStep] = useState(initialRole ? 1 : 0);
   const [role, setRole] = useState<SignupRole>(initialRole ?? "student");
   // Moyens ouverts, du plus courant au Sénégal au plus universel.
-  const methods: SignupInput["method"][] = [...(whatsappEnabled ? (["whatsapp"] as const) : []), ...(smsEnabled ? (["phone"] as const) : []), "email"];
+  // Code par WhatsApp (quand il est branché) ou par email : pas de SMS.
+  const methods: SignupInput["method"][] = [...(whatsappEnabled ? (["whatsapp"] as const) : []), "email"];
   const [method, setMethod] = useState<SignupInput["method"]>(methods[0]!);
   const [identifier, setIdentifier] = useState("");
   const [code, setCode] = useState("");
@@ -404,14 +402,8 @@ export function SignupWizard({
                       method === m ? "bg-surface text-ink shadow-sm" : "text-ink-muted",
                     )}
                   >
-                    {m === "whatsapp" ? (
-                      <MessageCircle className="size-4" aria-hidden />
-                    ) : m === "phone" ? (
-                      <Smartphone className="size-4" aria-hidden />
-                    ) : (
-                      <Mail className="size-4" aria-hidden />
-                    )}
-                    {t(`methods.${m}`)}
+                    {m === "whatsapp" ? <MessageCircle className="size-4" aria-hidden /> : <Mail className="size-4" aria-hidden />}
+                    {t(`methods.${m === "phone" ? "whatsapp" : m}`)}
                   </button>
                 ))}
               </div>
@@ -419,7 +411,7 @@ export function SignupWizard({
               <p className="text-sm text-ink-muted">{t("hints.emailOnly")}</p>
             )}
             {method !== "email" ? (
-              <Field id="tel" label={t("fields.phone")} hint={t(method === "whatsapp" ? "hints.whatsapp" : "hints.phone")}>
+              <Field id="tel" label={t("fields.phone")} hint={t("hints.whatsapp")}>
                 <div className="flex gap-2">
                   <span className="flex h-12 items-center rounded-xl border border-line bg-canvas px-3 font-medium text-ink">+221</span>
                   <input

@@ -2,18 +2,22 @@
 
 import { notFound, redirect } from "next/navigation";
 import { getCurrentStudent } from "@/features/account/data";
+import { getChapters, getSubjects } from "@/features/curriculum/data";
 import { isSupabaseConfigured } from "@/lib/env";
 import { gradeAnswer, toScore20 } from "@/lib/grading";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { ANSWER_KEYS } from "@/mocks/answer-keys-3e";
-import { ASSESSMENTS_3E, MOCK_QUESTIONS } from "@/mocks/assessments-3e";
+import { CATALOG_ANSWER_KEYS } from "@/mocks/answer-keys";
+import { CATALOG_QUESTIONS } from "@/mocks/assessments";
 import { mockState } from "@/mocks/progress-store";
-import type { AnswerMap, AnswerValue, QuestionReview } from "@/types/domain";
-import { findAssessment, getAssessmentSummary } from "./data";
+import type { AnswerMap, AnswerValue, Assessment, QuestionReview } from "@/types/domain";
+import { findAssessment, findMockAssessment, getAnyAssessmentSummary, mockQuestionsOfChapters } from "./data";
 
 /** Une soumission reçue jusqu'à 60 s après la limite reste « à l'heure » (latence réseau). */
 const GRACE_MS = 60_000;
 const MAX_TEXT_LENGTH = 200;
+/** « Préparer mon prochain devoir » : nombres de questions proposés, 1 min 30 par question en mode chronométré. */
+const PRACTICE_COUNTS = [5, 10, 15, 20];
+const SECONDS_PER_QUESTION = 90;
 
 // Mélange déterministe (graine = id de tentative) pour que l'ordre reste stable.
 function seededShuffle<T>(items: T[], seed: string): T[] {
@@ -26,6 +30,28 @@ function seededShuffle<T>(items: T[], seed: string): T[] {
     [out[i], out[j]] = [out[j]!, out[i]!];
   }
   return out;
+}
+
+/** Démo : ouvre une tentative (ordre des options figé, date limite fixée maintenant). */
+function startMockAttempt(assessment: Assessment): never {
+  const id = crypto.randomUUID();
+  const now = Date.now();
+  const optionOrder = Object.fromEntries(
+    assessment.questionIds.map((qid) => {
+      const q = CATALOG_QUESTIONS[qid]!;
+      const ids = q.options.map((o) => o.id);
+      return [qid, q.type === "true_false" ? ids : seededShuffle(ids, `${id}:${qid}`)];
+    }),
+  );
+  mockState.attempts.set(id, {
+    id,
+    assessmentId: assessment.id,
+    startedAt: now,
+    deadlineAt: assessment.durationS ? now + assessment.durationS * 1000 : null,
+    optionOrder,
+    status: "in_progress",
+  });
+  redirect(`/eleve/tentatives/${id}`);
 }
 
 /**
@@ -44,29 +70,64 @@ export async function startAttemptAction(assessmentId: string) {
     redirect(`/eleve/tentatives/${(data as { attempt_id: string }).attempt_id}`);
   }
 
-  const assessment = ASSESSMENTS_3E.find((a) => a.id === info.id)!;
+  const assessment = findMockAssessment(info.id)!;
   const student = await getCurrentStudent();
   if (assessment.isPremium && !student.isPremium) redirect("/eleve/abonnement");
+  startMockAttempt(assessment);
+}
 
-  const id = crypto.randomUUID();
-  const now = Date.now();
-  const optionOrder = Object.fromEntries(
-    assessment.questionIds.map((qid) => {
-      const q = MOCK_QUESTIONS[qid]!;
-      const ids = q.options.map((o) => o.id);
-      return [qid, q.type === "true_false" ? ids : seededShuffle(ids, `${id}:${qid}`)];
-    }),
-  );
+/**
+ * « Préparer mon prochain devoir » : questions tirées au hasard dans les chapitres choisis
+ * d'une matière, avec ou sans chronomètre. Supabase : RPC create_practice_session (contrôle de
+ * la classe et du Premium côté serveur), puis start_attempt.
+ */
+export async function createPracticeSessionAction(formData: FormData) {
+  const subjectSlug = String(formData.get("subject") ?? "");
+  const chapterIds = [...new Set(formData.getAll("chapters").map(String))].slice(0, 20);
+  const count = Number(formData.get("count"));
+  const timed = formData.get("mode") === "chrono";
+  const back = `/eleve/exercices/preparer?matiere=${encodeURIComponent(subjectSlug)}`;
+  if (!chapterIds.length) redirect(`${back}&erreur=chapitres`);
+  if (!PRACTICE_COUNTS.includes(count)) redirect(`${back}&erreur=nombre`);
 
-  mockState.attempts.set(id, {
-    id,
-    assessmentId: assessment.id,
-    startedAt: now,
-    deadlineAt: assessment.durationS ? now + assessment.durationS * 1000 : null,
-    optionOrder,
-    status: "in_progress",
-  });
-  redirect(`/eleve/tentatives/${id}`);
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseServerClient();
+    const { data: assessmentId, error } = await supabase.rpc("create_practice_session", {
+      p_chapters: chapterIds,
+      p_count: count,
+      p_timed: timed,
+    });
+    if (error?.message.includes("premium_required")) redirect("/eleve/abonnement");
+    if (error?.message.includes("too_many_sessions")) redirect(`${back}&erreur=limite`);
+    if (error || !assessmentId) redirect(`${back}&erreur=chapitres`);
+    const { data, error: startError } = await supabase.rpc("start_attempt", { p_assessment: assessmentId });
+    if (startError || !data) redirect(`${back}&erreur=chapitres`);
+    redirect(`/eleve/tentatives/${(data as { attempt_id: string }).attempt_id}`);
+  }
+
+  // Démo : mêmes contrôles que la fonction SQL (matière de la classe de l'élève, chapitres Premium).
+  const student = await getCurrentStudent();
+  const subject = (await getSubjects(student.levelCode, student.seriesCode)).find((s) => s.slug === subjectSlug);
+  const chapters = subject ? (await getChapters(subject)).filter((c) => chapterIds.includes(c.id)) : [];
+  if (!subject || chapters.length !== chapterIds.length) redirect(`${back}&erreur=chapitres`);
+  if (chapters.some((c) => c.lessons.some((l) => l.isPremium)) && !student.isPremium) redirect("/eleve/abonnement");
+  const pool = mockQuestionsOfChapters(chapterIds);
+  if (!pool.length) redirect(`${back}&erreur=chapitres`);
+  const picked = seededShuffle(pool, crypto.randomUUID()).slice(0, count);
+  const session: Assessment & { createdAt: string } = {
+    id: `devoir-${crypto.randomUUID().replace(/-/g, "")}`,
+    kind: "exercise",
+    title: "Préparer mon prochain devoir",
+    subjectCode: subject.code,
+    levelCode: subject.levelCode,
+    chapterId: null,
+    durationS: timed ? Math.max(60, picked.length * SECONDS_PER_QUESTION) : null,
+    isPremium: false,
+    questionIds: picked,
+    createdAt: new Date().toISOString(),
+  };
+  mockState.practiceSessions.set(session.id, session);
+  startMockAttempt(session);
 }
 
 function sanitizeAnswer(value: unknown): AnswerValue | null {
@@ -102,12 +163,12 @@ export async function submitAttemptAction(attemptId: string, answers: AnswerMap)
   if (!attempt) return { ok: false, error: "not_found" };
   if (attempt.status === "submitted") return { ok: true };
 
-  const assessment = ASSESSMENTS_3E.find((a) => a.id === attempt.assessmentId)!;
+  const assessment = findMockAssessment(attempt.assessmentId)!;
   const now = Date.now();
 
   const questions: QuestionReview[] = assessment.questionIds.map((qid) => {
-    const q = MOCK_QUESTIONS[qid]!;
-    const key = ANSWER_KEYS[qid] ?? {};
+    const q = CATALOG_QUESTIONS[qid]!;
+    const key = CATALOG_ANSWER_KEYS[qid] ?? {};
     const response = sanitizeAnswer(answers?.[qid]);
     const outcome = gradeAnswer(q.type, key, response, q.points);
     const order = attempt.optionOrder[qid] ?? q.options.map((o) => o.id);
@@ -132,7 +193,7 @@ export async function submitAttemptAction(attemptId: string, answers: AnswerMap)
   attempt.status = "submitted";
   attempt.result = {
     id: attempt.id,
-    assessment: (await getAssessmentSummary(assessment.id))!,
+    assessment: (await getAnyAssessmentSummary(assessment.id))!,
     score,
     maxScore,
     score20: toScore20(score, maxScore),

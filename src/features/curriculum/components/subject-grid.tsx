@@ -3,12 +3,12 @@ import { getTranslations } from "next-intl/server";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
-import { SUBJECT_STYLES } from "@/lib/subjects";
+import { subjectStyle } from "@/lib/subjects";
 import { getSubjectsProgress } from "../data";
 
 /** Matières de la classe (levelCode) de l'élève connecté, avec sa progression. */
-export async function SubjectGrid({ levelCode }: { levelCode: string }) {
-  const [subjects, t] = await Promise.all([getSubjectsProgress(levelCode), getTranslations("courses")]);
+export async function SubjectGrid({ levelCode, seriesCode }: { levelCode: string; seriesCode?: string | null }) {
+  const [subjects, t] = await Promise.all([getSubjectsProgress(levelCode, undefined, seriesCode), getTranslations("courses")]);
   return (
     <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
       {subjects.map((subject) => (
@@ -23,7 +23,7 @@ export async function SubjectGrid({ levelCode }: { levelCode: string }) {
               <ProgressBar
                 value={subject.progressPct}
                 label={t("progressLabel", { subject: subject.name })}
-                fillClassName={SUBJECT_STYLES[subject.code].solid}
+                fillClassName={subjectStyle(subject.code).solid}
               />
               <p className="mt-2 text-xs text-ink-muted">
                 {t("chaptersDone", { done: subject.chaptersCompleted, total: subject.chaptersTotal })}

@@ -1,11 +1,14 @@
 import { CircleCheck, FileText, Headphones, PlayCircle } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
+import { ReadAloud } from "@/components/ui/read-aloud";
 import { RichText } from "@/components/ui/rich-text";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentStudent } from "@/features/account/data";
 import { PaywallCard } from "@/features/payments/components/paywall-card";
 import { formatBytes, formatDuration } from "@/lib/format";
+import { hasReadAloud } from "@/lib/levels";
 import type { Chapter, Lesson, LessonResourceKind } from "@/types/domain";
 import { markLessonCompletedAction } from "../actions";
 import { getChapterProgress, getLessonBody } from "../data";
@@ -76,7 +79,13 @@ export async function LessonBody({ chapter, lesson }: { chapter: Chapter; lesson
   const done = progress.statuses[lesson.id] === "completed";
   return (
     <>
-      <article className="rounded-2xl border border-line bg-surface p-5 text-ink sm:p-7">
+      {/* CI à CM1 : la leçon peut aussi s'écouter (voix française du téléphone). */}
+      {hasReadAloud(chapter.levelCode) ? (
+        <NextIntlClientProvider messages={{ readAloud: (await getMessages()).readAloud }}>
+          <ReadAloud targetId="lecon-texte" />
+        </NextIntlClientProvider>
+      ) : null}
+      <article id="lecon-texte" className="rounded-2xl border border-line bg-surface p-5 text-ink sm:p-7">
         <RichText html={html} className="text-base" />
       </article>
       {done ? (

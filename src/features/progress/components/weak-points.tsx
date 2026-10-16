@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Card, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/cn";
 import { formatScore } from "@/lib/format";
-import { SUBJECT_STYLES } from "@/lib/subjects";
+import { subjectStyle } from "@/lib/subjects";
 import type { WeakPoint } from "@/types/domain";
 
 export async function WeakPoints({ items }: { items: WeakPoint[] }) {
@@ -20,7 +20,7 @@ export async function WeakPoints({ items }: { items: WeakPoint[] }) {
       ) : (
         <ul className="mt-4 space-y-3">
           {items.map((item) => {
-            const style = SUBJECT_STYLES[item.subject];
+            const style = subjectStyle(item.subject);
             const Icon = style.icon;
             return (
               <li key={item.chapterId} className={cn("rounded-xl p-3.5", style.soft)}>

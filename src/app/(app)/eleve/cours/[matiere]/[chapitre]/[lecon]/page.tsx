@@ -6,8 +6,10 @@ import { Suspense } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { buttonClasses } from "@/components/ui/button";
+import { LessonIllustration } from "@/features/curriculum/components/lesson-illustration";
 import { LessonBody, LessonBodySkeleton, LessonResources } from "@/features/curriculum/components/lesson-parts";
 import { chapterHref, getAllLessonParams, getLesson, lessonHref } from "@/features/curriculum/data";
+import { hasReadAloud } from "@/lib/levels";
 
 type Params = PageProps<"/eleve/cours/[matiere]/[chapitre]/[lecon]">;
 
@@ -36,11 +38,14 @@ async function LessonContent({ params }: { params: Params["params"] }) {
           { label: chapter.title, href: chapterHref(subject, chapter) },
         ]}
       />
-      <header>
-        <p className="text-sm font-medium text-ink-muted">
-          {t("meta", { number: lesson.number, total: chapter.lessons.length, minutes: lesson.estimatedMinutes })}
-        </p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink lg:text-[28px]">{lesson.title}</h1>
+      <header className="flex flex-wrap items-center justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-ink-muted">
+            {t("meta", { number: lesson.number, total: chapter.lessons.length, minutes: lesson.estimatedMinutes })}
+          </p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink lg:text-[28px]">{lesson.title}</h1>
+        </div>
+        {hasReadAloud(subject.levelCode) ? <LessonIllustration subjectCode={subject.code} /> : null}
       </header>
 
       <LessonResources lesson={lesson} />

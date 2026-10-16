@@ -1,15 +1,19 @@
 import {
   Atom,
+  BookOpen,
   Brain,
   Calculator,
   Compass,
   Dumbbell,
   Earth,
+  HandHeart,
   Landmark,
   Languages,
   Leaf,
   MessageCircle,
+  MessagesSquare,
   PenLine,
+  ScrollText,
   type LucideIcon,
 } from "lucide-react";
 import type { SubjectCode } from "@/types/domain";
@@ -37,4 +41,14 @@ export const SUBJECT_STYLES: Record<SubjectCode, SubjectStyle> = {
   PHILO: { icon: Brain, text: "text-subject-philo", soft: "bg-subject-philo-soft", solid: "bg-subject-philo" },
   EPS: { icon: Dumbbell, text: "text-subject-eps", soft: "bg-subject-eps-soft", solid: "bg-subject-eps" },
   ESVS: { icon: Compass, text: "text-subject-esvs", soft: "bg-subject-esvs-soft", solid: "bg-subject-esvs" },
+  AR: { icon: ScrollText, text: "text-subject-ar", soft: "bg-subject-ar-soft", solid: "bg-subject-ar" },
+  ER: { icon: HandHeart, text: "text-subject-er", soft: "bg-subject-er-soft", solid: "bg-subject-er" },
+  ESP: { icon: MessagesSquare, text: "text-subject-esp", soft: "bg-subject-esp-soft", solid: "bg-subject-esp" },
 };
+
+/** Matière ajoutée par l'admin sans style dédié : couleurs neutres. */
+const FALLBACK_STYLE: SubjectStyle = { icon: BookOpen, text: "text-ink", soft: "bg-canvas", solid: "bg-ink-muted" };
+
+export function subjectStyle(code: string): SubjectStyle {
+  return SUBJECT_STYLES[code as SubjectCode] ?? FALLBACK_STYLE;
+}

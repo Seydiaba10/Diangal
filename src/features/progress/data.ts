@@ -13,8 +13,8 @@ import type { Chapter, ContinueItem, StudentDashboard, Subject, WeakPoint } from
 import { fetchDashboard } from "./supabase";
 
 /** Chapitres à reprendre : commencés, du plus récent au plus ancien ; à défaut, les premiers de chaque matière. */
-async function continueLearningFor(studentId: string, levelCode: string): Promise<ContinueItem[]> {
-  const [rows, subjects] = await Promise.all([getLessonProgressRows(studentId), getSubjects(levelCode)]);
+async function continueLearningFor(studentId: string, levelCode: string, seriesCode: string | null): Promise<ContinueItem[]> {
+  const [rows, subjects] = await Promise.all([getLessonProgressRows(studentId), getSubjects(levelCode, seriesCode)]);
   const done = new Set(rows.filter((r) => r.completed).map((r) => r.lessonId));
   const touched = new Map(rows.map((r) => [r.lessonId, r.updatedAt]));
   const chapters = (await Promise.all(subjects.map(async (s) => (await getChapters(s)).map((c) => [s, c] as const)))).flat();
@@ -95,7 +95,7 @@ export const getStudentDashboard = cache(async (studentId?: string): Promise<Stu
     student,
     stats: dashboard.stats,
     // Chapitres de sa classe (aucun si son programme n'est pas encore publié).
-    continueLearning: await continueLearningFor(id, student.levelCode),
+    continueLearning: await continueLearningFor(id, student.levelCode, student.seriesCode),
     weakPoints: await weakPointsWithLinks(dashboard.weakPoints),
     nextExam: dashboard.nextExam,
   };

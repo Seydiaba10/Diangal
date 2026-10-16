@@ -14,7 +14,7 @@ import { WeakPoints } from "@/features/progress/components/weak-points";
 import { getStudentDashboard, getSubjectAverages } from "@/features/progress/data";
 import { cn } from "@/lib/cn";
 import { formatDate, formatScore } from "@/lib/format";
-import { SUBJECT_STYLES } from "@/lib/subjects";
+import { subjectStyle } from "@/lib/subjects";
 
 export async function generateMetadata() {
   const t = await getTranslations("progressPage");
@@ -30,7 +30,7 @@ function scoreTone(score: number) {
 async function ProgressContent() {
   const student = await getCurrentStudent();
   const [subjects, averages, results, dashboard, t] = await Promise.all([
-    getSubjectsProgress(student.levelCode),
+    getSubjectsProgress(student.levelCode, undefined, student.seriesCode),
     getSubjectAverages(),
     getRecentResults(),
     getStudentDashboard(),
@@ -60,7 +60,7 @@ async function ProgressContent() {
                       <ProgressBar
                         value={s.progressPct}
                         label={t("progressLabel", { subject: s.name })}
-                        fillClassName={SUBJECT_STYLES[s.code].solid}
+                        fillClassName={subjectStyle(s.code).solid}
                         className="mt-2"
                       />
                       <span className="mt-1 block text-xs text-ink-muted">

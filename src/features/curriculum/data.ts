@@ -27,15 +27,21 @@ async function catalog(): Promise<{ subjects: Subject[]; chapters: Chapter[] }> 
   return isSupabaseConfigured() ? loadCatalog() : { subjects: CATALOG_SUBJECTS, chapters: CATALOG_CHAPTERS };
 }
 
-/** Matière (programme) d'un chapitre : même code et même classe. */
-function subjectOf(subjects: Subject[], chapter: Pick<Chapter, "subjectCode" | "levelCode">) {
-  return subjects.find((s) => s.code === chapter.subjectCode && s.levelCode === chapter.levelCode);
+/** Matière (programme) d'un chapitre : même code, même classe et même série. */
+function subjectOf(subjects: Subject[], chapter: Pick<Chapter, "subjectCode" | "levelCode" | "seriesCode">) {
+  return subjects.find(
+    (s) => s.code === chapter.subjectCode && s.levelCode === chapter.levelCode && (s.seriesCode ?? null) === (chapter.seriesCode ?? null),
+  );
 }
 
-/** Matières d'une classe (levelCode), ou de tout le catalogue publié. */
-export async function getSubjects(levelCode?: string): Promise<Subject[]> {
+/**
+ * Matières d'une classe (levelCode) — au lycée, les matières communes et celles de la série
+ * de l'élève (seriesCode) —, ou de tout le catalogue publié.
+ */
+export async function getSubjects(levelCode?: string, seriesCode?: string | null): Promise<Subject[]> {
   const { subjects } = await catalog();
-  return levelCode ? subjects.filter((s) => s.levelCode === levelCode) : subjects;
+  if (!levelCode) return subjects;
+  return subjects.filter((s) => s.levelCode === levelCode && (!s.seriesCode || s.seriesCode === seriesCode));
 }
 
 export async function getSubject(slug: string): Promise<Subject | undefined> {
@@ -43,7 +49,9 @@ export async function getSubject(slug: string): Promise<Subject | undefined> {
 }
 
 export async function getChapters(subject: Subject): Promise<Chapter[]> {
-  return (await catalog()).chapters.filter((c) => c.subjectCode === subject.code && c.levelCode === subject.levelCode);
+  return (await catalog()).chapters.filter(
+    (c) => c.subjectCode === subject.code && c.levelCode === subject.levelCode && (c.seriesCode ?? null) === (subject.seriesCode ?? null),
+  );
 }
 
 export async function getChapter(subjectSlug: string, chapterSlug: string) {
@@ -157,6 +165,7 @@ export function toChapterSummary(chapter: Chapter, completed: Set<string>): Chap
     number: chapter.number,
     title: chapter.title,
     status: statusOf(done, total),
+    strand: chapter.strand ?? null,
     progressPct: total ? Math.round((done / total) * 100) : 0,
     isPremium: chapter.lessons.some((l) => l.isPremium),
     lessonsCount: total,
@@ -166,19 +175,23 @@ export function toChapterSummary(chapter: Chapter, completed: Set<string>): Chap
 }
 
 /** Progression par matière dans la classe de l'élève (levelCode), lui-même ou l'enfant d'un parent. */
-export const getSubjectsProgress = cache(async (levelCode: string, studentId?: string): Promise<SubjectProgress[]> => {
-  const [completed, subjects] = await Promise.all([getCompletedLessons(studentId), getSubjects(levelCode)]);
-  return Promise.all(subjects.map(async (subject) => {
-    const summaries = (await getChapters(subject)).map((c) => toChapterSummary(c, completed));
-    const done = summaries.filter((c) => c.status === "completed").length;
-    return {
-      ...subject,
-      chaptersTotal: summaries.length,
-      chaptersCompleted: done,
-      progressPct: summaries.length ? Math.round((done / summaries.length) * 100) : 0,
-    };
-  }));
-});
+export const getSubjectsProgress = cache(
+  async (levelCode: string, studentId?: string, seriesCode?: string | null): Promise<SubjectProgress[]> => {
+    const [completed, subjects] = await Promise.all([getCompletedLessons(studentId), getSubjects(levelCode, seriesCode)]);
+    return Promise.all(
+      subjects.map(async (subject) => {
+        const summaries = (await getChapters(subject)).map((c) => toChapterSummary(c, completed));
+        const done = summaries.filter((c) => c.status === "completed").length;
+        return {
+          ...subject,
+          chaptersTotal: summaries.length,
+          chaptersCompleted: done,
+          progressPct: summaries.length ? Math.round((done / summaries.length) * 100) : 0,
+        };
+      }),
+    );
+  },
+);
 
 export const getChapterSummaries = cache(async (subject: Subject): Promise<ChapterSummary[]> => {
   const completed = await getCompletedLessons();

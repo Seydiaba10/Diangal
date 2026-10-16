@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { daysUntil, formatDate, formatFCFA, formatPhone, formatScore } from "@/lib/format";
+import { daysUntil, formatDate, formatDateTime, formatFCFA, formatPhone, formatScore } from "@/lib/format";
 
 // Intl fr-FR sépare les milliers par une espace fine insécable (U+202F).
 const NNBSP = " ";
@@ -14,6 +14,12 @@ describe("formatFCFA", () => {
   it("arrondit (le FCFA n'a pas de centimes)", () => {
     expect(formatFCFA(999.6)).toBe(`1${NNBSP}000${NBSP}FCFA`);
     expect(formatFCFA(500)).toBe(`500${NBSP}FCFA`);
+  });
+});
+
+describe("formatDateTime", () => {
+  it("donne la date et l’heure de Dakar", () => {
+    expect(formatDateTime("2026-10-14T17:00:00Z")).toBe("14/10/2026 à 17:00");
   });
 });
 

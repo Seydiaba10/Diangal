@@ -9,13 +9,15 @@ import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StudentAvatar } from "@/components/ui/student-avatar";
 import { SubjectIcon } from "@/components/ui/subject-icon";
-import { getParentChild } from "@/features/account/data";
-import { getSubjectsProgress } from "@/features/curriculum/data";
+import { getParentChild, getStudentSummaryFor } from "@/features/account/data";
+import { getSubjects, getSubjectsProgress } from "@/features/curriculum/data";
 import { ExamCountdown } from "@/features/progress/components/exam-countdown";
 import { StatsGrid } from "@/features/progress/components/stats-grid";
 import { WeakPoints } from "@/features/progress/components/weak-points";
 import { getStudentDashboard } from "@/features/progress/data";
-import { SUBJECT_STYLES } from "@/lib/subjects";
+import { PromotionCard } from "@/features/schooling/components/promotion-card";
+import { ParentTutorPanel, TutorLinkNotice } from "@/features/tutoring/components/family-tutor-panel";
+import { subjectStyle } from "@/lib/subjects";
 
 export async function generateMetadata() {
   const t = await getTranslations("parentChild");
@@ -23,13 +25,20 @@ export async function generateMetadata() {
 }
 
 /** Suivi d'un enfant en lecture seule. Phase 3 : get_student_dashboard autorisé au parent lié (RLS). */
-async function ChildContent({ params }: { params: PageProps<"/parent/enfants/[id]">["params"] }) {
-  const { id } = await params;
+async function ChildContent({
+  params,
+  searchParams,
+}: {
+  params: PageProps<"/parent/enfants/[id]">["params"];
+  searchParams: PageProps<"/parent/enfants/[id]">["searchParams"];
+}) {
+  const [{ id }, { repetiteur, passage }] = await Promise.all([params, searchParams]);
   const child = await getParentChild(id);
   if (!child) notFound();
+  const summary = await getStudentSummaryFor(child.id);
   const [t, tParent] = await Promise.all([getTranslations("parentChild"), getTranslations("parentHome")]);
-  // Seul le programme de 3e est publié dans cette version.
-  const hasProgram = child.levelCode === "3E";
+  // Programme publié pour sa classe (CI, 3e…) : progression et tableau de bord détaillés.
+  const hasProgram = (await getSubjects(child.levelCode)).length > 0;
   const [dashboard, subjects] = hasProgram
     ? await Promise.all([getStudentDashboard(child.id), getSubjectsProgress(child.levelCode, child.id)])
     : [null, []];
@@ -55,13 +64,21 @@ async function ChildContent({ params }: { params: PageProps<"/parent/enfants/[id
           average20: child.average20,
           chaptersCompleted: child.chaptersCompleted,
           chaptersTotal: child.chaptersTotal,
-          quizzesTaken: dashboard?.stats.quizzesTaken ?? 4,
+          quizzesTaken: dashboard?.stats.quizzesTaken ?? 0,
           streakDays: child.streakDays,
         }}
       />
 
+      <TutorLinkNotice value={repetiteur} />
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-5">
+          <ParentTutorPanel studentId={child.id} back={`/parent/enfants/${child.id}`} />
+          <PromotionCard
+            student={{ id: child.id, firstName: child.firstName, levelCode: child.levelCode, seriesCode: summary?.seriesCode ?? null }}
+            audience="parent"
+            back={`/parent/enfants/${child.id}`}
+            status={passage}
+          />
           {hasProgram ? (
             <SectionCard id="matieres-titre" title={t("subjects")}>
               <ul className="space-y-4">
@@ -73,7 +90,7 @@ async function ChildContent({ params }: { params: PageProps<"/parent/enfants/[id
                         <span className="font-medium text-ink">{s.name}</span>
                         <span className="text-ink-muted">{s.progressPct} %</span>
                       </span>
-                      <ProgressBar value={s.progressPct} label={s.name} fillClassName={SUBJECT_STYLES[s.code].solid} className="mt-1.5" />
+                      <ProgressBar value={s.progressPct} label={s.name} fillClassName={subjectStyle(s.code).solid} className="mt-1.5" />
                     </span>
                   </li>
                 ))}
@@ -93,11 +110,11 @@ async function ChildContent({ params }: { params: PageProps<"/parent/enfants/[id
   );
 }
 
-export default function ChildPage({ params }: PageProps<"/parent/enfants/[id]">) {
+export default function ChildPage({ params, searchParams }: PageProps<"/parent/enfants/[id]">) {
   return (
     <PageContainer width="wide" className="space-y-5 lg:space-y-7">
       <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
-        <ChildContent params={params} />
+        <ChildContent params={params} searchParams={searchParams} />
       </Suspense>
     </PageContainer>
   );

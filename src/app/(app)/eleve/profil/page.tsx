@@ -15,6 +15,8 @@ import { INPUT_CLASS } from "@/components/ui/form";
 import { confirmParentLinkAction, resendConsentRequestAction, signOutAction } from "@/features/account/actions";
 import { DataSaverForm } from "@/features/account/components/data-saver-form";
 import { getCurrentStudent, getPendingParentLinks, getStudentLinkInfo } from "@/features/account/data";
+import { PromotionCard } from "@/features/schooling/components/promotion-card";
+import { StudentTutorPanel, TutorLinkNotice } from "@/features/tutoring/components/family-tutor-panel";
 import { isSupabaseConfigured } from "@/lib/env";
 
 export async function generateMetadata() {
@@ -25,7 +27,7 @@ export async function generateMetadata() {
 const CONSENT_ERRORS = { telephone: "phone", limite: "tooMany", erreur: "generic" } as const;
 
 async function ProfileContent({ searchParams }: { searchParams: PageProps<"/eleve/profil">["searchParams"] }) {
-  const [{ demande, lien }, student, link, pendingParents, t] = await Promise.all([
+  const [{ demande, lien, repetiteur, passage }, student, link, pendingParents, t] = await Promise.all([
     searchParams,
     getCurrentStudent(),
     getStudentLinkInfo(),
@@ -41,6 +43,8 @@ async function ProfileContent({ searchParams }: { searchParams: PageProps<"/elev
         {demande === "envoyee" ? <Notice tone="success">{t("consent.resent")}</Notice> : null}
         {consentError ? <Notice tone="error">{t(`consent.errors.${consentError}`)}</Notice> : null}
         {lien === "confirme" ? <Notice tone="success">{t("parentLinks.confirmed")}</Notice> : null}
+        <TutorLinkNotice value={repetiteur} />
+        <StudentTutorPanel back="/eleve/profil" />
 
         {pendingParents.length ? (
           <SectionCard id="parents-titre" title={t("parentLinks.title")} subtitle={t("parentLinks.body")}>
@@ -74,6 +78,13 @@ async function ProfileContent({ searchParams }: { searchParams: PageProps<"/elev
             <p className="mt-1 text-xs text-ink-subtle">{t("levelChange")}</p>
           </div>
         </section>
+
+        <PromotionCard
+          student={{ id: null, firstName: student.firstName, levelCode: student.levelCode, seriesCode: student.seriesCode }}
+          audience="student"
+          back="/eleve/profil"
+          status={passage}
+        />
 
         <SectionCard id="parent-titre" title={t("consent.title")}>
           {student.consentStatus === "granted" || student.consentStatus === "not_required" ? (

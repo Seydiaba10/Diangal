@@ -1,8 +1,23 @@
 import "server-only";
 
+import { parseSources } from "@/lib/sources";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { MockAnswerKey } from "@/mocks/answer-keys-3e";
-import type { AdminStats, AdminUserRow, AuditEntry, PaymentChannel, QuestionType, ReportRow } from "@/types/domain";
+import type { Json } from "@/types/database";
+import type {
+  AdminChapterRow,
+  AdminProgram,
+  AdminStats,
+  AdminSubjectOption,
+  AdminUserRow,
+  AuditEntry,
+  ContentTrackingRow,
+  ContentVerification,
+  PaymentChannel,
+  PublishStatus,
+  QuestionType,
+  ReportRow,
+} from "@/types/domain";
 
 // Espace admin sur Supabase : toutes les lectures passent par la RLS « private.is_admin() »
 // (rôle admin ET double authentification aal2).
@@ -128,11 +143,180 @@ export async function fetchAuditLog(): Promise<AuditEntry[]> {
   }));
 }
 
-/** Leçons dont le cours a été rédigé (le corps n'est plus le texte de démonstration). */
-export async function fetchWrittenLessonIds(): Promise<Set<string>> {
+/** Leçons dont le cours a été rédigé (le corps n'est plus le texte de démonstration), parmi lessonIds si fourni. */
+export async function fetchWrittenLessonIds(lessonIds?: string[]): Promise<Set<string>> {
+  if (lessonIds && !lessonIds.length) return new Set();
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.from("lesson_bodies").select("lesson_id").not("body_html", "ilike", "%Contenu de démonstration%");
+  let request = supabase.from("lesson_bodies").select("lesson_id").not("body_html", "ilike", "%Contenu de démonstration%");
+  if (lessonIds) request = request.in("lesson_id", lessonIds);
+  const { data } = await request;
   return new Set((data ?? []).map((b) => b.lesson_id));
+}
+
+// ── Référentiel : lectures avec la session admin (la RLS laisse voir les brouillons) ──
+
+export async function fetchContentTracking(): Promise<ContentTrackingRow[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("admin_content_tracking");
+  if (error) throw new Error(`suivi des contenus : ${error.message}`);
+  return data.map((r) => ({
+    programId: String(r.program_id),
+    levelCode: r.level_code,
+    seriesCode: r.series_code ?? null,
+    subjectCode: r.subject_code,
+    subjectName: r.subject_name,
+    freeChapters: r.free_chapters,
+    chapters: r.chapters,
+    chaptersPublished: r.chapters_published,
+    lessons: r.lessons,
+    lessonsWritten: r.lessons_written,
+    exercises: r.exercises,
+    quizzes: r.quizzes,
+    exams: r.exams,
+    questions: r.questions,
+    chaptersUnverified: r.chapters_unverified,
+    chaptersReviewed: r.chapters_reviewed,
+    chaptersOfficial: r.chapters_official,
+    sourcedChapters: r.sourced_chapters,
+  }));
+}
+
+const CHAPTER_COLUMNS = "id, number, slug, title, summary, strand, status, verification, sources, lessons(id, number, title, status)";
+
+interface ChapterRecord {
+  id: string;
+  number: number;
+  slug: string;
+  title: string;
+  summary: string;
+  strand: string | null;
+  status: PublishStatus;
+  verification: ContentVerification;
+  sources: Json;
+  lessons: { id: string; number: number; title: string; status: PublishStatus }[];
+}
+
+function toAdminChapter(c: ChapterRecord, written: Set<string>): AdminChapterRow {
+  return {
+    id: c.id,
+    number: c.number,
+    slug: c.slug,
+    title: c.title,
+    summary: c.summary,
+    strand: c.strand,
+    status: c.status,
+    verification: c.verification,
+    sources: parseSources(c.sources),
+    lessons: [...c.lessons]
+      .sort((a, b) => a.number - b.number)
+      .map((l) => ({ id: l.id, number: l.number, title: l.title, status: l.status, written: written.has(l.id) })),
+  };
+}
+
+/** Programmes d'une classe avec tous leurs chapitres et leçons (brouillons compris). */
+export async function fetchAdminPrograms(levelCode: string): Promise<AdminProgram[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("programs")
+    .select(`id, free_chapters, sort_order, subjects!inner(code, name), levels!inner(code), series(code), chapters(${CHAPTER_COLUMNS})`)
+    .eq("levels.code", levelCode)
+    .order("sort_order");
+  if (error) throw new Error(`programmes : ${error.message}`);
+  const written = await fetchWrittenLessonIds(data.flatMap((p) => p.chapters.flatMap((c) => c.lessons.map((l) => l.id))));
+  // Matières communes d'abord, puis par série (lycée).
+  return [...data]
+    .sort((a, b) => (a.series?.code ?? "").localeCompare(b.series?.code ?? "") || a.sort_order - b.sort_order)
+    .map((p) => ({
+      id: String(p.id),
+      levelCode: p.levels.code,
+      seriesCode: p.series?.code ?? null,
+      subjectCode: p.subjects.code,
+      subjectName: p.subjects.name,
+      freeChapters: p.free_chapters,
+      chapters: [...p.chapters].sort((a, b) => a.number - b.number).map((c) => toAdminChapter(c, written)),
+    }));
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Un chapitre et son programme, ou null (identifiant inconnu ou mal formé). */
+export async function fetchAdminChapter(chapterId: string): Promise<{ program: AdminProgram; chapter: AdminChapterRow } | null> {
+  if (!UUID.test(chapterId)) return null;
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("chapters")
+    .select(`${CHAPTER_COLUMNS}, programs!inner(id, free_chapters, subjects!inner(code, name), levels!inner(code), series(code))`)
+    .eq("id", chapterId)
+    .maybeSingle();
+  if (!data) return null;
+  const written = await fetchWrittenLessonIds(data.lessons.map((l) => l.id));
+  const p = data.programs;
+  return {
+    program: {
+      id: String(p.id),
+      levelCode: p.levels.code,
+      seriesCode: p.series?.code ?? null,
+      subjectCode: p.subjects.code,
+      subjectName: p.subjects.name,
+      freeChapters: p.free_chapters,
+      chapters: [],
+    },
+    chapter: toAdminChapter(data, written),
+  };
+}
+
+/** Programme seul (création d'un chapitre). */
+export async function fetchAdminProgram(programId: string): Promise<AdminProgram | null> {
+  if (!/^\d{1,9}$/.test(programId)) return null;
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("programs")
+    .select("id, free_chapters, subjects!inner(code, name), levels!inner(code), series(code)")
+    .eq("id", Number(programId))
+    .maybeSingle();
+  if (!data) return null;
+  return {
+    id: String(data.id),
+    levelCode: data.levels.code,
+    seriesCode: data.series?.code ?? null,
+    subjectCode: data.subjects.code,
+    subjectName: data.subjects.name,
+    freeChapters: data.free_chapters,
+    chapters: [],
+  };
+}
+
+/** Offre gratuite appliquée ? (platform_settings, lisible par l'admin seulement). */
+export async function fetchFreeTierEnabled(): Promise<boolean> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase.from("platform_settings").select("value").eq("key", "free_tier").maybeSingle();
+  const value = data?.value as { enabled?: boolean } | null | undefined;
+  return value?.enabled === true;
+}
+
+export async function fetchSubjectOptions(): Promise<AdminSubjectOption[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.from("subjects").select("id, code, name").order("name");
+  if (error) throw new Error(`matières : ${error.message}`);
+  return data.map((s) => ({ id: String(s.id), code: s.code, name: s.name }));
+}
+
+/** Leçon (brouillon compris) avec son chapitre et sa matière, pour l'éditeur. */
+export async function fetchAdminLessonContext(lessonId: string) {
+  if (!UUID.test(lessonId)) return null;
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("lessons")
+    .select("id, title, status, chapters!inner(id, title, programs!inner(subjects!inner(name), levels!inner(code)))")
+    .eq("id", lessonId)
+    .maybeSingle();
+  if (!data) return null;
+  return {
+    lesson: { id: data.id, title: data.title, status: data.status },
+    chapter: { id: data.chapters.id, title: data.chapters.title },
+    subjectName: data.chapters.programs.subjects.name,
+    levelCode: data.chapters.programs.levels.code,
+  };
 }
 
 export async function fetchLessonBody(lessonId: string): Promise<string | null> {

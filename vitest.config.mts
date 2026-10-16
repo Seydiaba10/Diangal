@@ -3,7 +3,11 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   resolve: {
-    alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      // Les tests lisent aussi les modules « server-only » (corrigés de démonstration).
+      "server-only": fileURLToPath(new URL("./scripts/empty-module.js", import.meta.url)),
+    },
   },
   test: {
     environment: "node",

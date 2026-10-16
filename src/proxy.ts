@@ -41,7 +41,7 @@ export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   if (!claims && PROTECTED.some((p) => path === p || path.startsWith(`${p}/`))) {
-    const login = new URL("/connexion", request.url);
+    const login = new URL(path === "/prof" || path.startsWith("/prof/") ? "/connexion/repetiteur" : "/connexion", request.url);
     login.searchParams.set("next", path);
     return NextResponse.redirect(login);
   }
