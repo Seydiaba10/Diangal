@@ -9,6 +9,7 @@ export const FR_CI: CiChapterSpec[] = [
   // ── Palier 1 : le contact social ─────────────────────────────────────────
   {
     title: "Bonjour l’école !",
+    strand: "Communication orale",
     summary: "Comprendre les consignes de la classe, saluer, se présenter, présenter quelqu’un et prendre congé.",
     lessons: [
       {
@@ -49,6 +50,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Découvrir l’écrit",
+    strand: "Lecture",
     summary: "Entendre les syllabes et les sons, reconnaître les lettres de l’alphabet et ses premiers mots.",
     lessons: [
       {
@@ -80,6 +82,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Les premiers gestes d’écriture",
+    strand: "Écriture",
     summary: "Découvrir les outils pour écrire et maîtriser les graphismes de base.",
     lessons: [
       {
@@ -104,6 +107,7 @@ export const FR_CI: CiChapterSpec[] = [
   // ── Palier 2 : rechercher des informations · sons a, i, t, o, l ──────────
   {
     title: "Les sons a, i et t",
+    strand: "Lecture",
     summary: "Entendre, lire et écrire les premiers sons : a, i et t.",
     lessons: [
       {
@@ -143,6 +147,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Les sons o et l",
+    strand: "Lecture",
     summary: "Entendre, lire et écrire o et l, puis lire de petites phrases.",
     lessons: [
       {
@@ -172,6 +177,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Demander et donner un renseignement",
+    strand: "Communication orale",
     summary: "Poser des questions et y répondre : où ? comment ? quand ? qui ? combien ?",
     lessons: [
       {
@@ -200,6 +206,7 @@ export const FR_CI: CiChapterSpec[] = [
   // ── Palier 3 : besoins, goûts et préférences · sons n, e, p, d, m, b ────
   {
     title: "Les sons n et e",
+    strand: "Lecture",
     summary: "Entendre, lire et écrire n et e (comme dans « le »).",
     lessons: [
       {
@@ -230,6 +237,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Les sons p, d, m et b",
+    strand: "Lecture",
     summary: "Entendre, lire et écrire p, d, m et b, et ne pas confondre b, d et p.",
     lessons: [
       {
@@ -284,6 +292,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Dire ce que je ressens et ce que j’aime",
+    strand: "Communication orale",
     summary: "Exprimer un besoin, un sentiment, une sensation, son avis et ses préférences.",
     lessons: [
       {
@@ -308,6 +317,7 @@ export const FR_CI: CiChapterSpec[] = [
   // ── Palier 4 : permission et services · sons f, u, ou, é, è, s, r, au, on ─
   {
     title: "Les sons f, u et ou",
+    strand: "Lecture",
     summary: "Entendre, lire et écrire f, u et ou, sans confondre u et ou.",
     lessons: [
       {
@@ -350,6 +360,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Les sons é et è",
+    strand: "Lecture",
     summary: "Entendre, lire et écrire é (é, et) et è (è, ê, ai, e).",
     lessons: [
       {
@@ -380,6 +391,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Les sons s, r, au et on",
+    strand: "Lecture",
     summary: "Entendre, lire et écrire s, r, au (au, eau, o) et on (on, om).",
     lessons: [
       {
@@ -434,6 +446,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Demander la permission ou un service",
+    strand: "Communication orale",
     summary: "Demander poliment la permission, demander un service, accepter ou refuser.",
     lessons: [
       {
@@ -456,6 +469,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "Mes premières lettres attachées",
+    strand: "Écriture",
     summary: "Écrire en lettres cursives : o, c, a, d et q.",
     lessons: [
       {
@@ -470,6 +484,7 @@ export const FR_CI: CiChapterSpec[] = [
   },
   {
     title: "J’écris mes premières phrases",
+    strand: "Production d’écrits",
     summary: "Choisir des étiquettes-mots, dire une phrase à l’adulte, puis écrire une ou deux phrases.",
     lessons: [
       {

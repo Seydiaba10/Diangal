@@ -3,7 +3,18 @@ import "server-only";
 // État en mémoire des phases 1-2 (remplacé par Supabase en phase 3). Conservé sur
 // globalThis pour survivre au rechargement à chaud ; perdu au redémarrage du serveur.
 
-import type { AttemptResult, AuditEntry, PaymentRecord, TeachingMode, TutorProfile, TutorStatus } from "@/types/domain";
+import type {
+  Assessment,
+  AttemptResult,
+  AuditEntry,
+  PaymentRecord,
+  TeachingMode,
+  TutorAssignment,
+  TutorLinkStatus,
+  TutorProfile,
+  TutorSession,
+  TutorStatus,
+} from "@/types/domain";
 
 export interface MockAttempt {
   id: string;
@@ -53,6 +64,12 @@ interface MockState {
   dataSaver: boolean;
   lessonBodyOverrides: Map<string, string>;
   handledReports: Set<string>;
+  /** Suivi par un répétiteur : clé « tuteur:élève ». */
+  tutorLinks: Map<string, { tutorId: string; studentId: string; status: TutorLinkStatus; invitedAt: string }>;
+  tutorAssignments: TutorAssignment[];
+  tutorSessions: TutorSession[];
+  /** Séances « Préparer mon prochain devoir » créées pendant la démo. */
+  practiceSessions: Map<string, Assessment & { createdAt: string }>;
 }
 
 const g = globalThis as typeof globalThis & { __diangalMockState?: MockState };
@@ -73,6 +90,10 @@ export const mockState: MockState = (g.__diangalMockState ??= {
   dataSaver: false,
   lessonBodyOverrides: new Map(),
   handledReports: new Set(),
+  tutorLinks: new Map(),
+  tutorAssignments: [],
+  tutorSessions: [],
+  practiceSessions: new Map(),
 });
 
 // Champs ajoutés après le premier démarrage : complétés si l'état existait déjà (rechargement à chaud).
@@ -89,6 +110,10 @@ mockState.lessonBodyOverrides ??= new Map();
 mockState.handledReports ??= new Set();
 mockState.consentGranted ??= false;
 mockState.dataSaver ??= false;
+mockState.tutorLinks ??= new Map();
+mockState.tutorAssignments ??= [];
+mockState.tutorSessions ??= [];
+mockState.practiceSessions ??= new Map();
 
 export function logAudit(actorName: string, action: string, target: string) {
   mockState.auditLog.unshift({

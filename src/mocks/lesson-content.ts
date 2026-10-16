@@ -1,5 +1,5 @@
-// Contenus de leçon fictifs (HTML déjà « pré-rendu », comme le fera l'enregistrement admin
-// en phase 3). Seules les leçons de Thalès sont rédigées ; les autres affichent un gabarit.
+// Leçons de Thalès (3e), le premier chapitre rédigé, et gabarit affiché pour une leçon sans
+// contenu (ex. une leçon que l’admin vient de créer). Les autres leçons de 3e sont dans src/mocks/3e/.
 
 const frac = (num: string, den: string) => `<span class="frac"><span>${num}</span><span>${den}</span></span>`;
 

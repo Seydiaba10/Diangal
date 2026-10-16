@@ -10,6 +10,8 @@ export interface CiLessonSpec {
 
 export interface CiChapterSpec {
   title: string;
+  /** Rubrique du programme officiel (ex. « Activités numériques »). */
+  strand: string;
   summary: string;
   lessons: CiLessonSpec[];
 }

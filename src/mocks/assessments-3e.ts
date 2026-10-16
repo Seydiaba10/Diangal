@@ -373,6 +373,9 @@ export const ASSESSMENTS_3E: Assessment[] = [
     durationS: 2 * 60 * 60,
     isPremium: true,
     questionIds: ["thales-q1", "thales-q2", "thales-q3", "trigo-q1", "trigo-q2", "trigo-q3"],
+    // Sujet blanc : écrit par DIANGAL sur le programme de 3e, ce n'est pas un sujet officiel.
+    sources: [{ title: "Sujet blanc rédigé par DIANGAL d’après le programme de 3e (géométrie)", kind: "diangal" }],
+    correctionSource: "Corrigé rédigé par DIANGAL, à faire relire par un enseignant",
   },
   {
     id: "past-simple-quiz",

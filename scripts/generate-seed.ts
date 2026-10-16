@@ -2,9 +2,9 @@
 // la base et les écrans partent ainsi du même contenu. Usage : pnpm db:seed
 import { writeFileSync } from "node:fs";
 import { CITIES } from "../src/lib/places";
-import { ANSWER_KEYS } from "../src/mocks/answer-keys-3e";
-import { ASSESSMENTS_3E, MOCK_QUESTIONS } from "../src/mocks/assessments-3e";
-import { CATALOG_CHAPTERS, CATALOG_LESSON_BODIES, CATALOG_SUBJECTS } from "../src/mocks/curriculum";
+import { CATALOG_ANSWER_KEYS } from "../src/mocks/answer-keys";
+import { CATALOG_ASSESSMENTS, CATALOG_QUESTIONS, QUESTION_CHAPTERS } from "../src/mocks/assessments";
+import { CATALOG_CHAPTERS, CATALOG_LESSON_BODIES, CATALOG_SUBJECTS, chapterSources } from "../src/mocks/curriculum";
 import { EXAM_SESSIONS } from "../src/mocks/exams";
 import { genericLessonBody } from "../src/mocks/lesson-content";
 import { MOCK_PLANS } from "../src/mocks/plans";
@@ -15,7 +15,7 @@ const textArray = (values: string[]) => `array[${values.map(q).join(", ")}]::tex
 
 const out: string[] = [
   "-- Généré par scripts/generate-seed.ts : ne pas modifier à la main.",
-  "-- Contenu publié : CI (Curriculum de l'Éducation de Base, étape 1) et 3e. Leçons à faire valider par des enseignants.",
+  "-- Contenu publié : CI et CP (Curriculum de l'Éducation de Base, étape 1) et 3e. Leçons et exercices à faire valider par des enseignants.",
   "",
 ];
 
@@ -106,8 +106,9 @@ const chapterRef = (chapterId: string) => {
 
 for (const chapter of CATALOG_CHAPTERS) {
   out.push(
-    `insert into public.chapters (program_id, number, slug, title, summary, sort_order, status) values ` +
-      `(${programOf(chapter.subjectCode, chapter.levelCode)}, ${chapter.number}, ${q(chapter.slug)}, ${q(chapter.title)}, ${q(chapter.summary)}, ${chapter.number}, 'published');`,
+    `insert into public.chapters (program_id, number, slug, title, summary, sort_order, status, strand, sources) values ` +
+      `(${programOf(chapter.subjectCode, chapter.levelCode)}, ${chapter.number}, ${q(chapter.slug)}, ${q(chapter.title)}, ${q(chapter.summary)}, ${chapter.number}, 'published', ` +
+      `${chapter.strand ? q(chapter.strand) : "null"}, ${q(JSON.stringify(chapterSources(chapter)))}::jsonb);`,
   );
   for (const lesson of chapter.lessons) {
     const lessonRef = `(select id from public.lessons where chapter_id = ${chapterRef(chapter.id)} and slug = ${q(lesson.slug)})`;
@@ -122,12 +123,13 @@ for (const chapter of CATALOG_CHAPTERS) {
 }
 
 // ── Évaluations, questions, corrigés ────────────────────────────────────────
-for (const question of Object.values(MOCK_QUESTIONS)) {
-  const assessment = ASSESSMENTS_3E.find((a) => a.questionIds.includes(question.id))!;
+for (const question of Object.values(CATALOG_QUESTIONS)) {
+  const assessment = CATALOG_ASSESSMENTS.find((a) => a.questionIds.includes(question.id))!;
+  const chapterId = QUESTION_CHAPTERS[question.id];
   out.push(
     `insert into public.questions (slug, subject_id, chapter_id, type, prompt_html, explanation_html, points) values (` +
       `${q(question.id)}, (select id from public.subjects where code = ${q(assessment.subjectCode)}), ` +
-      `${assessment.chapterId ? chapterRef(assessment.chapterId) : "null"}, ${q(question.type)}, ${html(question.promptHtml)}, ` +
+      `${chapterId ? chapterRef(chapterId) : "null"}, ${q(question.type)}, ${html(question.promptHtml)}, ` +
       `${html(question.explanationHtml)}, ${question.points});`,
   );
   question.options.forEach((option, i) => {
@@ -136,7 +138,7 @@ for (const question of Object.values(MOCK_QUESTIONS)) {
         `(select id from public.questions where slug = ${q(question.id)}), ${q(option.id)}, ${html(option.labelHtml)}, ${i});`,
     );
   });
-  const key = ANSWER_KEYS[question.id] ?? {};
+  const key = CATALOG_ANSWER_KEYS[question.id] ?? {};
   out.push(
     `insert into private.answer_keys (question_id, correct_option_ids, accepted_texts, numeric_value, expected_answer) values (` +
       `(select id from public.questions where slug = ${q(question.id)}), ` +
@@ -146,12 +148,13 @@ for (const question of Object.values(MOCK_QUESTIONS)) {
   );
 }
 
-for (const a of ASSESSMENTS_3E) {
+for (const a of CATALOG_ASSESSMENTS) {
   out.push(
-    `insert into public.assessments (slug, kind, title, level_id, subject_id, chapter_id, exam_type, duration_s, is_premium, status) values (` +
+    `insert into public.assessments (slug, kind, title, level_id, subject_id, chapter_id, exam_type, duration_s, is_premium, status, verification, sources, correction_source) values (` +
       `${q(a.id)}, ${q(a.kind)}, ${q(a.title)}, (select id from public.levels where code = ${q(a.levelCode)}), ` +
       `(select id from public.subjects where code = ${q(a.subjectCode)}), ${a.chapterId ? chapterRef(a.chapterId) : "null"}, ` +
-      `${a.kind === "mock_exam" ? "'BFEM'" : "null"}, ${a.durationS ?? "null"}, ${a.isPremium}, 'published');`,
+      `${a.kind === "mock_exam" ? "'BFEM'" : "null"}, ${a.durationS ?? "null"}, ${a.isPremium}, 'published', ` +
+      `${q(a.verification ?? "unverified")}, ${q(JSON.stringify(a.sources ?? []))}::jsonb, ${q(a.correctionSource ?? null)});`,
   );
   a.questionIds.forEach((qid, i) => {
     out.push(
@@ -169,11 +172,15 @@ out.push(
 );
 const PLAN_NAMES: Record<string, string> = { monthly: "1 mois", quarterly: "3 mois", yearly: "1 an", bfem_pass: "Pass BFEM" };
 out.push(
-  `insert into public.plans (code, name, price_fcfa, duration_days, sort_order) values\n${MOCK_PLANS.map(
+  `insert into public.plans (code, name, price_fcfa, duration_days, sort_order) values\n${MOCK_PLANS.filter((p) => !p.maxChildren).map(
     (p, i) => `  (${q(p.code)}, ${q(PLAN_NAMES[p.code] ?? p.code)}, ${p.priceFcfa}, ${p.durationDays}, ${i + 1})`,
   ).join(",\n")};`,
 );
 out.push(`insert into public.platform_settings (key, value) values ('commission_rate', '0.15'::jsonb);`);
+// Formules Famille (créées inactives par la migration) : ouvertes dans la démo et les tests.
+out.push(`update public.plans set is_active = true where max_children is not null;`);
+// Offre gratuite appliquée dans la démo et les tests (les accès Premium des mocks suivent déjà la règle).
+out.push(`update public.platform_settings set value = '{"enabled": true}'::jsonb where key = 'free_tier';`);
 
 writeFileSync("supabase/seed.sql", `${out.join("\n")}\n`);
 console.log(`supabase/seed.sql : ${out.length} instructions`);

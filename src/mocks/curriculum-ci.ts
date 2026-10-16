@@ -41,6 +41,7 @@ export const CHAPTERS_CI: Chapter[] = PROGRAMS.flatMap(({ code, chapters }) =>
       summary: spec.summary,
       subjectCode: code,
       levelCode: LEVEL,
+      strand: spec.strand,
       lessons: spec.lessons.map((lesson, lessonIndex) => {
         const lessonSlug = slugify(lesson.title);
         const lessonId = `${id}--${lessonSlug}`;

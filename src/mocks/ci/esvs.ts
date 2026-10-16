@@ -9,6 +9,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   // ── Histoire ──────────────────────────────────────────────────────────────
   {
     title: "Histoire : ma journée et le temps qui passe",
+    strand: "Histoire",
     summary: "Rythmes, ordre des événements, avant et après, hier, aujourd’hui et demain.",
     lessons: [
       {
@@ -39,6 +40,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   },
   {
     title: "Histoire : mesurer une durée",
+    strand: "Histoire",
     summary: "Estimer, comparer et mesurer une durée sans montre ; jeune et vieux, ancien et nouveau.",
     lessons: [
       {
@@ -63,6 +65,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   // ── Géographie ────────────────────────────────────────────────────────────
   {
     title: "Géographie : se repérer autour de soi",
+    strand: "Géographie",
     summary: "Repères fixes et repères mobiles, se situer, suivre et indiquer un itinéraire.",
     lessons: [
       {
@@ -93,6 +96,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   },
   {
     title: "Géographie : mon milieu",
+    strand: "Géographie",
     summary: "Découvrir ce qui m’entoure et localiser des éléments à partir de repères.",
     lessons: [
       {
@@ -117,6 +121,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   // ── Initiation scientifique et technologique ─────────────────────────────
   {
     title: "Sciences : le monde qui m’entoure",
+    strand: "Initiation scientifique et technologique",
     summary: "Éléments naturels et objets techniques, animaux, insectes, plantes et êtres humains.",
     lessons: [
       {
@@ -139,6 +144,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   },
   {
     title: "Sciences : la matière et la croissance",
+    strand: "Initiation scientifique et technologique",
     summary: "Solides, liquides et gaz ; les étapes du développement d’une plante, d’un animal, d’un enfant.",
     lessons: [
       {
@@ -163,6 +169,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   // ── Vivre dans son milieu ─────────────────────────────────────────────────
   {
     title: "Vivre dans son milieu : santé et hygiène",
+    strand: "Vivre dans son milieu",
     summary: "Se protéger des maladies comme le paludisme, être propre, éviter les aliments abîmés.",
     lessons: [
       {
@@ -193,6 +200,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   },
   {
     title: "Vivre dans son milieu : protéger l’environnement",
+    strand: "Vivre dans son milieu",
     summary: "Prendre soin des plantes et des animaux, ne pas salir, ne pas gaspiller, respecter les biens communs.",
     lessons: [
       {
@@ -217,6 +225,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   // ── Vivre ensemble ────────────────────────────────────────────────────────
   {
     title: "Vivre ensemble : bien se conduire",
+    strand: "Vivre ensemble",
     summary: "Se respecter et respecter les autres, être ponctuel, rendre service, dire la vérité.",
     lessons: [
       {
@@ -239,6 +248,7 @@ export const ESVS_CI: CiChapterSpec[] = [
   },
   {
     title: "Vivre ensemble : moi et les autres",
+    strand: "Vivre ensemble",
     summary: "Se présenter, dire à quels groupes on appartient, être solidaire.",
     lessons: [
       {

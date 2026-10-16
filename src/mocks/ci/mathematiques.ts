@@ -9,6 +9,7 @@ export const MATH_CI: CiChapterSpec[] = [
   // ── Palier 1 ──────────────────────────────────────────────────────────────
   {
     title: "Se repérer dans l’espace",
+    strand: "Activités géométriques",
     summary: "Devant, derrière, sur, sous, à droite, à gauche, près, loin : dire où sont les choses.",
     lessons: [
       {
@@ -57,6 +58,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Les ensembles",
+    strand: "Activités numériques",
     summary: "Regrouper des objets, comparer des collections : peu, beaucoup, plus que, moins que, autant que.",
     lessons: [
       {
@@ -100,6 +102,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Longueurs, distances et quantités",
+    strand: "Activités de mesure",
     summary: "Estimer et comparer des longueurs, des distances et des contenances sans instrument de mesure.",
     lessons: [
       {
@@ -139,6 +142,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Observer une image",
+    strand: "Résolution de problèmes",
     summary: "Chercher des indices, trouver l’intrus, remettre des images dans l’ordre, continuer un rythme, lire un tableau.",
     lessons: [
       {
@@ -184,6 +188,7 @@ export const MATH_CI: CiChapterSpec[] = [
   // ── Palier 2 ──────────────────────────────────────────────────────────────
   {
     title: "Les solides",
+    strand: "Activités géométriques",
     summary: "Reconnaître, décrire et classer le cube, le pavé et le cylindre.",
     lessons: [
       {
@@ -205,6 +210,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Les figures planes",
+    strand: "Activités géométriques",
     summary: "Reconnaître, décrire et classer le carré, le rectangle, le triangle et le rond.",
     lessons: [
       {
@@ -227,6 +233,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Les nombres de 0 à 5",
+    strand: "Activités numériques",
     summary: "Découvrir 1, 2, 3, 4, 5 et 0 ; ranger les nombres avec les signes < et >.",
     lessons: [
       {
@@ -270,6 +277,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Les nombres de 6 à 10",
+    strand: "Activités numériques",
     summary: "Découvrir 6, 7, 8, 9 et 10, les composer et les décomposer ; découvrir la dizaine.",
     lessons: [
       {
@@ -310,6 +318,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Ajouter et enlever jusqu’à 10",
+    strand: "Activités numériques",
     summary: "Comprendre le sens de l’addition et de la soustraction ; le double et la moitié.",
     lessons: [
       {
@@ -349,6 +358,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Lourd ou léger ?",
+    strand: "Activités de mesure",
     summary: "Estimer et comparer des masses : plus lourd, plus léger, aussi lourd.",
     lessons: [
       {
@@ -366,6 +376,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Comprendre un problème",
+    strand: "Résolution de problèmes",
     summary: "Reconnaître un problème de mathématiques, ses données et sa question.",
     lessons: [
       {
@@ -394,6 +405,7 @@ export const MATH_CI: CiChapterSpec[] = [
   // ── Palier 3 ──────────────────────────────────────────────────────────────
   {
     title: "Lignes et chemins",
+    strand: "Activités géométriques",
     summary: "Lignes ouvertes et fermées, intérieur et extérieur, quadrillage, tracer un itinéraire.",
     lessons: [
       {
@@ -427,6 +439,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Les nombres de 11 à 20",
+    strand: "Activités numériques",
     summary: "Découvrir les nombres de 11 à 20 avec les dizaines et les unités, les composer et les ranger.",
     lessons: [
       {
@@ -461,6 +474,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Calculer jusqu’à 20",
+    strand: "Activités numériques",
     summary: "Additionner et soustraire jusqu’à 20, ajouter 10, trouver le double et la moitié.",
     lessons: [
       {
@@ -489,6 +503,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Le temps qui passe",
+    strand: "Activités de mesure",
     summary: "Comparer des durées, repérer les moments de la journée et les jours de la semaine.",
     lessons: [
       {
@@ -530,6 +545,7 @@ export const MATH_CI: CiChapterSpec[] = [
   },
   {
     title: "Résoudre un petit problème",
+    strand: "Résolution de problèmes",
     summary: "Trouver les données utiles, la question finale et les étapes pour répondre.",
     lessons: [
       {
