@@ -15,7 +15,7 @@ Contraintes qui guident tous les choix :
 
 - Classes publiées (chaque chapitre a sa série d'exercices corrigés) :
   - dans la démo et le seed (depuis le 17/10/2026) : **toutes les classes, du CI à la Terminale** (13 classes, 2 069 chapitres, 3 606 leçons rédigées). Au lycée : séries **S et L** en 2nde ; **L1, L2, LA, S1 à S5, G, T1 et T2** en 1re et en Terminale ;
-  - dans la base hébergée (depuis le 16/10/2026) : seulement **CI**, **CP** et **3e**. Les autres classes ne sont **pas encore publiées** en ligne (voir « Publier le contenu d'une classe »).
+  - dans la base hébergée : **CI**, **CP** et **3e** depuis le 16/10/2026, **toutes les autres classes et séries** depuis le 17/10/2026 (31 lots d'ajouts, essayés d'abord sur une copie PGlite de la production ; CI, CP et 3e inchangés).
   - Chaque élève voit les cours de sa classe et de sa série ; une classe ou une série sans programme affiche « pas encore publiés ».
 - **Application full stack sur Supabase** depuis le 12/10/2026 : projet hébergé `mlepbueoqrzmniksdhpl` (région **eu-west-1, Irlande**). Toutes les fonctionnalités des 4 rôles lisent et écrivent dans la base, sous RLS. Vérifiées de bout en bout avec de vrais comptes (élève de CI et de 3e, parent, répétiteur, admin), pages contrôlées à 360 px.
 - **Deux modes**, choisis par `DIANGAL_DATA_SOURCE` (`.env.local`) :
@@ -150,7 +150,6 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - suppression de compte par anonymisation et export « Mes données » (droits CDP) ;
   - réservations, salle de visio LiveKit (les cours en ligne sont déjà planifiables) et avis (release 2) ;
   - ouverture des réseaux sociaux dans Supabase (comptes développeur Meta, Apple, Google, X) ;
-  - publication dans la base hébergée des classes ajoutées le 17/10/2026 (CE1 à CM2, 6e à 4e, 2nde, 1re, Terminale) ;
   - séries rares du lycée (L1a, L1b, F6, S1A, S2A, STEG) ; arabe, EPS et arts avant le lycée ; interface en wolof ;
   - sujets blancs du CFEE et du Bac, annales officielles vérifiées (le PDF des sujets attend le stockage de fichiers dans l'admin) ;
   - réglages de notifications du parent (affichés « Bientôt ») ;
@@ -319,6 +318,6 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
    - clés PayDunya sandbox, puis test d'un paiement complet ;
    - E2E Playwright en CI ;
    - suppression de compte par anonymisation, export des données ;
-   - publier dans la base hébergée les classes ajoutées le 17/10/2026, après accord du porteur du projet : script rejouable qui tient compte de la série, rejoué d'abord sur PGlite ; vérifier ensuite la durée du build Vercel (chapitres, leçons et évaluations sont prérendus : environ 4 500 pages une fois tout publié) ;
+   - publier une nouvelle classe : générer des lots d'ajouts rejouables (une classe, ou une classe et une série), les essayer sur PGlite dans l'état de la production, puis les exécuter un par un via l'API de gestion en contrôlant l'empreinte des classes déjà en ligne ;
    - validation des leçons et exercices de toutes les classes par des enseignants ;
    - sujets blancs du CFEE et du Bac ; annales officielles vérifiées.
