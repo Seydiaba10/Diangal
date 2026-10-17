@@ -8,13 +8,13 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { buttonClasses } from "@/components/ui/button";
 import { LessonIllustration } from "@/features/curriculum/components/lesson-illustration";
 import { LessonBody, LessonBodySkeleton, LessonResources } from "@/features/curriculum/components/lesson-parts";
-import { chapterHref, getAllLessonParams, getLesson, lessonHref } from "@/features/curriculum/data";
+import { chapterHref, getLesson, getPrerenderedLessonParams, lessonHref } from "@/features/curriculum/data";
 import { hasReadAloud } from "@/lib/levels";
 
 type Params = PageProps<"/eleve/cours/[matiere]/[chapitre]/[lecon]">;
 
 export async function generateStaticParams() {
-  return getAllLessonParams();
+  return getPrerenderedLessonParams();
 }
 
 export async function generateMetadata({ params }: Params) {

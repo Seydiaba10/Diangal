@@ -102,6 +102,20 @@
   --color-subject-er-soft: #fafaf9;
   --color-subject-esp: #b91c1c;
   --color-subject-esp-soft: #fef2f2;
+  --color-subject-eco: #047857;
+  --color-subject-eco-soft: #ecfdf5;
+  --color-subject-gest: #334155;
+  --color-subject-gest-soft: #f1f5f9;
+  --color-subject-const: #6b21a8;
+  --color-subject-const-soft: #faf5ff;
+  --color-subject-tech: #3f3f46;
+  --color-subject-tech-soft: #f4f4f5;
+  --color-subject-elec: #854d0e;
+  --color-subject-elec-soft: #fefce8;
+  --color-subject-agri: #3f6212;
+  --color-subject-agri-soft: #f7fee7;
+  --color-subject-agro: #9d174d;
+  --color-subject-agro-soft: #fdf2f8;
 }
 
 @layer base {

@@ -1,7 +1,7 @@
 import { connection } from "next/server";
 import { cache } from "react";
 import { requireIdentity } from "@/features/account/session";
-import { chapterHref, findChapterById, getChapters, getSubjects } from "@/features/curriculum/data";
+import { chapterHref, findChapterById, getChapters, getPrerenderedChapterIds, getSubjects } from "@/features/curriculum/data";
 import { isSupabaseConfigured } from "@/lib/env";
 import { BEST_SCORES, CATALOG_ASSESSMENTS, CATALOG_QUESTIONS, QUESTION_CHAPTERS } from "@/mocks/assessments";
 import { mockState } from "@/mocks/progress-store";
@@ -146,7 +146,11 @@ async function toSummaries(infos: AssessmentInfo[], withBestScore: boolean): Pro
         kind: a.kind,
         title: a.title,
         subject:
-          subjects.find((s) => s.code === a.subjectCode && s.levelCode === a.levelCode) ?? fallbackSubject(a.subjectCode, a.levelCode),
+          subjects.find(
+            (s) => s.code === a.subjectCode && s.levelCode === a.levelCode && (s.seriesCode ?? null) === (a.seriesCode ?? null),
+          ) ??
+          subjects.find((s) => s.code === a.subjectCode && s.levelCode === a.levelCode) ??
+          fallbackSubject(a.subjectCode, a.levelCode),
         chapterTitle: found?.chapter.title ?? null,
         chapterHref: found ? chapterHref(found.subject, found.chapter) : null,
         durationS: a.durationS,
@@ -195,8 +199,10 @@ export async function getAssessment(id: string): Promise<AssessmentSummary | und
   return getAssessmentSummary(id);
 }
 
-export async function getAllAssessmentIds() {
-  return (await getAssessmentCatalog()).map((a) => ({ id: a.id }));
+/** Évaluations prérendues au build : épreuves d’examen et séries des chapitres prérendus (les autres à la première visite). */
+export async function getPrerenderedAssessmentIds() {
+  const [assessments, chapterIds] = await Promise.all([getAssessmentCatalog(), getPrerenderedChapterIds()]);
+  return assessments.filter((a) => !a.chapterId || chapterIds.has(a.chapterId)).map((a) => ({ id: a.id }));
 }
 
 export async function totalPoints(assessmentId: string): Promise<number> {
@@ -207,15 +213,23 @@ export const getAssessmentBestScore = cache(async (id: string): Promise<number |
   return (await getBestScores()).get(id) ?? null;
 });
 
-/** Exercices et contrôles d'une classe (levelCode), éventuellement d'une seule matière. */
-export const getPracticeAssessments = cache(async (levelCode: string, subject?: SubjectCode): Promise<AssessmentSummary[]> => {
-  await connection();
-  const all = await getAssessmentCatalog();
-  return toSummaries(
-    all.filter((a) => a.kind !== "past_paper" && a.levelCode === levelCode && (!subject || a.subjectCode === subject)),
-    true,
-  );
-});
+/** Exercices et contrôles d'une classe (levelCode) et de sa série au lycée, éventuellement d'une seule matière. */
+export const getPracticeAssessments = cache(
+  async (levelCode: string, subject?: SubjectCode, seriesCode?: string | null): Promise<AssessmentSummary[]> => {
+    await connection();
+    const all = await getAssessmentCatalog();
+    return toSummaries(
+      all.filter(
+        (a) =>
+          a.kind !== "past_paper" &&
+          a.levelCode === levelCode &&
+          (!a.seriesCode || a.seriesCode === seriesCode) &&
+          (!subject || a.subjectCode === subject),
+      ),
+      true,
+    );
+  },
+);
 
 export const getChapterAssessments = cache(async (chapterId: string): Promise<AssessmentSummary[]> => {
   await connection();

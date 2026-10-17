@@ -163,6 +163,7 @@ export async function fetchParentChildren(parentId: string): Promise<ChildOvervi
         lastName: summary.lastName,
         levelCode: summary.levelCode,
         levelName: summary.levelName,
+        seriesCode: summary.seriesCode,
         schoolName: summary.schoolName,
         avatarKey: summary.avatarKey,
         average20: dashboard?.stats.average20 ?? null,

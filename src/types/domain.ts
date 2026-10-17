@@ -16,7 +16,15 @@ export type SubjectCode =
   | "ESVS"
   | "AR"
   | "ER"
-  | "ESP";
+  | "ESP"
+  /** Matières propres à certaines séries du lycée (G, S3, S4, S5, T1, T2). */
+  | "ECO"
+  | "GEST"
+  | "CONST"
+  | "TECH"
+  | "ELEC"
+  | "AGRI"
+  | "AGRO";
 
 export type ChapterStatus = "completed" | "in_progress" | "not_started";
 
@@ -363,6 +371,8 @@ export interface ChildOverview {
   lastName: string;
   levelCode: string;
   levelName: string;
+  /** Série au lycée (S1, L2…), qui détermine ses matières. */
+  seriesCode?: string | null;
   schoolName?: string;
   avatarKey: AvatarKey;
   average20: number | null;

@@ -2,7 +2,9 @@ import {
   Atom,
   BookOpen,
   Brain,
+  Briefcase,
   Calculator,
+  Cog,
   Compass,
   Dumbbell,
   Earth,
@@ -14,6 +16,11 @@ import {
   MessagesSquare,
   PenLine,
   ScrollText,
+  Sprout,
+  TrendingUp,
+  Wheat,
+  Wrench,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 import type { SubjectCode } from "@/types/domain";
@@ -44,6 +51,13 @@ export const SUBJECT_STYLES: Record<SubjectCode, SubjectStyle> = {
   AR: { icon: ScrollText, text: "text-subject-ar", soft: "bg-subject-ar-soft", solid: "bg-subject-ar" },
   ER: { icon: HandHeart, text: "text-subject-er", soft: "bg-subject-er-soft", solid: "bg-subject-er" },
   ESP: { icon: MessagesSquare, text: "text-subject-esp", soft: "bg-subject-esp-soft", solid: "bg-subject-esp" },
+  ECO: { icon: TrendingUp, text: "text-subject-eco", soft: "bg-subject-eco-soft", solid: "bg-subject-eco" },
+  GEST: { icon: Briefcase, text: "text-subject-gest", soft: "bg-subject-gest-soft", solid: "bg-subject-gest" },
+  CONST: { icon: Cog, text: "text-subject-const", soft: "bg-subject-const-soft", solid: "bg-subject-const" },
+  TECH: { icon: Wrench, text: "text-subject-tech", soft: "bg-subject-tech-soft", solid: "bg-subject-tech" },
+  ELEC: { icon: Zap, text: "text-subject-elec", soft: "bg-subject-elec-soft", solid: "bg-subject-elec" },
+  AGRI: { icon: Sprout, text: "text-subject-agri", soft: "bg-subject-agri-soft", solid: "bg-subject-agri" },
+  AGRO: { icon: Wheat, text: "text-subject-agro", soft: "bg-subject-agro-soft", solid: "bg-subject-agro" },
 };
 
 /** Matière ajoutée par l'admin sans style dédié : couleurs neutres. */

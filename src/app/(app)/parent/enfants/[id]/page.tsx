@@ -38,9 +38,9 @@ async function ChildContent({
   const summary = await getStudentSummaryFor(child.id);
   const [t, tParent] = await Promise.all([getTranslations("parentChild"), getTranslations("parentHome")]);
   // Programme publié pour sa classe (CI, 3e…) : progression et tableau de bord détaillés.
-  const hasProgram = (await getSubjects(child.levelCode)).length > 0;
+  const hasProgram = (await getSubjects(child.levelCode, child.seriesCode)).length > 0;
   const [dashboard, subjects] = hasProgram
-    ? await Promise.all([getStudentDashboard(child.id), getSubjectsProgress(child.levelCode, child.id)])
+    ? await Promise.all([getStudentDashboard(child.id), getSubjectsProgress(child.levelCode, child.id, child.seriesCode)])
     : [null, []];
 
   return (

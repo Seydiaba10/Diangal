@@ -98,18 +98,27 @@ export async function findLessonById(lessonId: string) {
   return chapter && lesson && subject ? { subject, chapter, lesson } : undefined;
 }
 
-export async function getAllChapterParams() {
+// Pages prérendues au build : le premier chapitre de chaque matière et ses leçons. Les autres sont
+// rendues à la première visite puis gardées en cache (ISR avec Cache Components) : prérendre tout le
+// catalogue (plus de 2 000 chapitres et 3 500 leçons) allongerait trop le build.
+async function prerenderedChapters() {
   const { subjects, chapters } = await catalog();
-  return chapters.map((chapter) => ({
-    matiere: subjectOf(subjects, chapter)!.slug,
-    chapitre: chapter.slug,
-  }));
+  return chapters.filter((chapter) => chapter.number === 1).map((chapter) => ({ chapter, matiere: subjectOf(subjects, chapter)!.slug }));
 }
 
-export async function getAllLessonParams() {
-  const { chapters } = await catalog();
-  const params = await getAllChapterParams();
-  return chapters.flatMap((chapter, i) => chapter.lessons.map((lesson) => ({ ...params[i]!, lecon: lesson.slug })));
+export async function getPrerenderedChapterParams() {
+  return (await prerenderedChapters()).map(({ chapter, matiere }) => ({ matiere, chapitre: chapter.slug }));
+}
+
+export async function getPrerenderedLessonParams() {
+  return (await prerenderedChapters()).flatMap(({ chapter, matiere }) =>
+    chapter.lessons.map((lesson) => ({ matiere, chapitre: chapter.slug, lecon: lesson.slug })),
+  );
+}
+
+/** Identifiants des chapitres prérendus (leurs séries d’exercices le sont aussi). */
+export async function getPrerenderedChapterIds(): Promise<Set<string>> {
+  return new Set((await prerenderedChapters()).map(({ chapter }) => chapter.id));
 }
 
 /** Recherche dans les chapitres d'une classe. */

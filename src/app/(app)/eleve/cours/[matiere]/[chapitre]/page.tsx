@@ -6,12 +6,12 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { ChapterContent, ChapterContentSkeleton } from "@/features/curriculum/components/chapter-content";
-import { getAllChapterParams, getChapter } from "@/features/curriculum/data";
+import { getChapter, getPrerenderedChapterParams } from "@/features/curriculum/data";
 
 type Params = PageProps<"/eleve/cours/[matiere]/[chapitre]">["params"];
 
 export async function generateStaticParams() {
-  return getAllChapterParams();
+  return getPrerenderedChapterParams();
 }
 
 export async function generateMetadata({ params }: PageProps<"/eleve/cours/[matiere]/[chapitre]">) {

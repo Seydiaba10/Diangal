@@ -12,13 +12,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { getCurrentStudent } from "@/features/account/data";
 import { startAttemptAction } from "@/features/assessments/actions";
-import { getAllAssessmentIds, getAssessment, getAssessmentBestScore } from "@/features/assessments/data";
+import { getAssessment, getAssessmentBestScore, getPrerenderedAssessmentIds } from "@/features/assessments/data";
 import { PaywallCard } from "@/features/payments/components/paywall-card";
 import { formatDuration, formatScore } from "@/lib/format";
 import type { AssessmentSummary } from "@/types/domain";
 
 export async function generateStaticParams() {
-  return getAllAssessmentIds();
+  return getPrerenderedAssessmentIds();
 }
 
 export async function generateMetadata({ params }: PageProps<"/eleve/evaluations/[id]">) {

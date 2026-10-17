@@ -23,6 +23,8 @@ export interface ExerciseSeries {
   subject: SubjectCode;
   /** Titre du chapitre, tel qu'il figure dans le catalogue. */
   chapter: string;
+  /** Série du programme au lycée (S1, L2…). */
+  series?: string;
   questions: ExerciseSpec[];
 }
 
@@ -35,9 +37,11 @@ export function buildExerciseSeries(levelCode: string, chapters: Chapter[], seri
   const keys: Record<string, MockAnswerKey> = {};
   const questionChapters: Record<string, string> = {};
 
-  const assessments: Assessment[] = series.map(({ subject, chapter: title, questions: specs }) => {
-    const chapter = chapters.find((c) => c.subjectCode === subject && slugify(c.title) === slugify(title));
-    if (!chapter) throw new Error(`Exercices (${levelCode}) : chapitre introuvable (${subject}, ${title})`);
+  const assessments: Assessment[] = series.map(({ subject, chapter: title, series: seriesCode, questions: specs }) => {
+    const chapter = chapters.find(
+      (c) => c.subjectCode === subject && (c.seriesCode ?? null) === (seriesCode ?? null) && slugify(c.title) === slugify(title),
+    );
+    if (!chapter) throw new Error(`Exercices (${levelCode}) : chapitre introuvable (${subject}${seriesCode ? ` ${seriesCode}` : ""}, ${title})`);
 
     const questionIds = specs.map((spec, index) => {
       const id = `${chapter.id}--q${index + 1}`;
@@ -72,6 +76,7 @@ export function buildExerciseSeries(levelCode: string, chapters: Chapter[], seri
       title: `Exercices : ${chapter.title}`,
       subjectCode: subject,
       levelCode,
+      seriesCode: chapter.seriesCode ?? null,
       chapterId: chapter.id,
       durationS: null,
       isPremium: !isFreeChapter(chapter.number),

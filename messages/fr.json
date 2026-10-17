@@ -141,7 +141,14 @@
     "ESVS": "Science et vie sociale",
     "AR": "Arabe",
     "ER": "Éducation religieuse",
-    "ESP": "Espagnol"
+    "ESP": "Espagnol",
+    "ECO": "Économie",
+    "GEST": "Techniques de gestion",
+    "CONST": "Construction mécanique",
+    "TECH": "Fabrication et automatismes",
+    "ELEC": "Électrotechnique-électronique",
+    "AGRI": "Sciences agricoles",
+    "AGRO": "Technologie agroalimentaire"
   },
   "levels": {
     "CI": "CI",

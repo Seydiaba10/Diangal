@@ -42,7 +42,7 @@ async function PracticeContent({ searchParams }: { searchParams: SearchParams })
   const [subjects, t] = await Promise.all([getSubjects(student.levelCode, student.seriesCode), getTranslations("practice")]);
   const selected = subjects.find((s) => s.slug === matiere);
   const [all, dashboard, history] = await Promise.all([
-    getPracticeAssessments(student.levelCode, selected?.code),
+    getPracticeAssessments(student.levelCode, selected?.code, student.seriesCode),
     getStudentDashboard(),
     getPracticeHistory(),
   ]);

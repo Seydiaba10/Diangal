@@ -13,7 +13,10 @@ Contraintes qui guident tous les choix :
 
 ## État actuel (octobre 2026)
 
-- Classes publiées, dans la démo, le seed **et** la base hébergée (depuis le 16/10/2026) : **CI** et **CP** (programme officiel de l'étape 1 du CEB) et **3e** (78 chapitres, 203 leçons rédigées). Chaque chapitre a sa série d'exercices corrigés. Chaque élève voit les cours de sa classe ; une classe sans programme affiche « pas encore publiés ».
+- Classes publiées (chaque chapitre a sa série d'exercices corrigés) :
+  - dans la démo et le seed (depuis le 17/10/2026) : **toutes les classes, du CI à la Terminale** (13 classes, 2 069 chapitres, 3 606 leçons rédigées). Au lycée : séries **S et L** en 2nde ; **L1, L2, LA, S1 à S5, G, T1 et T2** en 1re et en Terminale ;
+  - dans la base hébergée (depuis le 16/10/2026) : seulement **CI**, **CP** et **3e**. Les autres classes ne sont **pas encore publiées** en ligne (voir « Publier le contenu d'une classe »).
+  - Chaque élève voit les cours de sa classe et de sa série ; une classe ou une série sans programme affiche « pas encore publiés ».
 - **Application full stack sur Supabase** depuis le 12/10/2026 : projet hébergé `mlepbueoqrzmniksdhpl` (région **eu-west-1, Irlande**). Toutes les fonctionnalités des 4 rôles lisent et écrivent dans la base, sous RLS. Vérifiées de bout en bout avec de vrais comptes (élève de CI et de 3e, parent, répétiteur, admin), pages contrôlées à 360 px.
 - **Deux modes**, choisis par `DIANGAL_DATA_SOURCE` (`.env.local`) :
   - `supabase` : vraie base, vraie session, proxy actif. C'est le mode actuel en local ;
@@ -31,7 +34,7 @@ Contraintes qui guident tous les choix :
 
 ```bash
 pnpm dev          # http://localhost:3000 (Turbopack)
-pnpm build        # build de production (~750 pages)
+pnpm build        # build de production (seuls le 1er chapitre de chaque matière, ses leçons et ses exercices sont prérendus)
 pnpm lint
 pnpm typecheck    # tsc --noEmit
 pnpm test         # Vitest : tests/unit + tests/db (PGlite)
@@ -95,7 +98,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
 - **Élève** (`/eleve`) :
   - tableau de bord : moyenne, chapitres, contrôles, jours d'affilée, « Continuer », points faibles, compte à rebours de l'examen ;
   - cours de **sa classe** par matière, chapitre puis leçon, avec « Marquer comme terminée » et mur Premium. Une « matière » est un programme (matière × classe) : `/eleve/cours/mathematiques-ci`, `/eleve/cours/francais-3e` ;
-  - exercices (`/eleve/exercices`) : séries par chapitre (une série d'exercices corrigés par chapitre du CI, du CP et de la 3e : `src/mocks/{ci,cp,3e}/exercises.ts`), contrôles, historique ;
+  - exercices (`/eleve/exercices`) : séries par chapitre (une série d'exercices corrigés par chapitre de chaque classe : `src/mocks/<classe>/exercises.ts`), contrôles, historique ;
   - **« Préparer mon prochain devoir »** (`/eleve/exercices/preparer`) : l'élève coche des chapitres d'une matière, choisit 5 à 20 questions et le mode (libre ou chronométré, 1 min 30 par question) ; questions tirées au hasard dans la banque, correction détaillée, historique « Mes devoirs préparés » ;
   - **contrôle chronométré** en mode concentration (`(focus)`) : échéance fixée par le serveur, sauvegarde locale, envoi automatique ;
   - résultat avec corrigé détaillé ;
@@ -127,7 +130,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
 - **Paiement** :
   - client PayDunya (`src/lib/payments`) ;
   - webhook `/api/webhooks/paydunya` : vérifie le hash, relit le statut chez PayDunya, journalise dans `payment_events` (idempotent), puis appelle la RPC `apply_payment_event`.
-- **Base Supabase** (`supabase/migrations`, 28 fichiers) :
+- **Base Supabase** (`supabase/migrations`, 29 fichiers) :
   - RLS sur toutes les tables, droits par colonne, schéma `private` pour les fonctions `SECURITY DEFINER` et les corrigés ;
   - hook d'access token (claim `user_role`) ; un admin doit avoir le niveau MFA `aal2` ;
   - RPC `start_attempt`, `submit_attempt` (correction côté serveur), `get_student_dashboard`, `search_tutors`, consentement parental, messagerie, vérification des répétiteurs, paiements ;
@@ -135,6 +138,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - canal du code de connexion (`20261012000006_otp_channel.sql`) : `public.set_otp_channel` (clé secrète seulement) et `private.otp_channel_for` lu par `send-sms` ;
   - suivi par un répétiteur (`20261012000007_tutor_students.sql`) : tables `tutor_students`, `tutor_assignments`, `tutor_sessions` (lecture RLS : répétiteur, élève, parents liés, admin ; écriture par RPC seulement), RPC `invite_student_by_code`, `answer_tutor_invite`, `end_tutor_link`, `get_tutor_students`, `get_tutor_student` (prénom + initiale, jamais la date de naissance), `get_family_tutor_links`, devoirs, cours et `tutor_message_student` ;
   - référentiel (`20261016000001_referential.sql`, `…02_tracking_written.sql`) : `chapters.strand` (rubrique), `chapters.verification`, `chapters.sources` (liste JSON titre, lien, type), `programs.free_chapters`, matières AR, ER et ESP, RPC `admin_content_tracking` (admin aal2). Une leçon compte comme rédigée si son corps n'est ni vide ni le gabarit « Contenu de démonstration » ;
+  - matières des séries techniques (`20261017000001_lycee_subjects.sql`) : ECO, GEST (série G), CONST, TECH (S3, T1), ELEC (T2), AGRI (S4), AGRO (S5) ; leurs couleurs `subject-*` sont dans `globals.css`, leurs styles dans `lib/subjects.ts` ;
   - exercices et offre gratuite (`20261016000003_practice_and_free_tier.sql`) : `assessments.owner_id` (séance personnelle, lisible par l'élève, ses parents et l'admin, absente du catalogue), RPC `create_practice_session` et `get_chapter_question_counts` ; offre gratuite pilotée par `platform_settings.free_tier` (désactivée en ligne tant que le paiement n'est pas ouvert, activée dans le seed) : `private.sync_free_tier` met `is_premium` des leçons et exercices de chapitre selon `chapters.number > programs.free_chapters`, déclencheurs sur programmes, chapitres, leçons et évaluations, interrupteur admin `admin_set_free_tier` (carte « Offre gratuite » du Référentiel) ;
   - provenance des sujets (`20261016000004_exam_sources.sql`) : `assessments.verification`, `sources`, `correction_source` ; `get_assessments_catalog` renvoie aussi la série, la vérification et la provenance. L'admin les règle sur `/admin/evaluations/[id]` ;
   - passage de classe (`20261016000005_promotion.sql`) : table `student_level_history` (lecture : élève, parents liés, admin), RPC `promote_student(p_student, p_series)` autorisée à l'élève, à un parent lié et à l'admin ;
@@ -146,7 +150,8 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - suppression de compte par anonymisation et export « Mes données » (droits CDP) ;
   - réservations, salle de visio LiveKit (les cours en ligne sont déjà planifiables) et avis (release 2) ;
   - ouverture des réseaux sociaux dans Supabase (comptes développeur Meta, Apple, Google, X) ;
-  - autres classes (CE1 à 4e, lycée par série), arabe, EPS et arts à l'élémentaire, interface en wolof ;
+  - publication dans la base hébergée des classes ajoutées le 17/10/2026 (CE1 à CM2, 6e à 4e, 2nde, 1re, Terminale) ;
+  - séries rares du lycée (L1a, L1b, F6, S1A, S2A, STEG) ; arabe, EPS et arts avant le lycée ; interface en wolof ;
   - sujets blancs du CFEE et du Bac, annales officielles vérifiées (le PDF des sujets attend le stockage de fichiers dans l'admin) ;
   - réglages de notifications du parent (affichés « Bientôt ») ;
   - E2E Playwright en CI, Lighthouse CI, déploiement.
@@ -182,8 +187,9 @@ src/
                          supabase/{server,public,browser,admin}
   mocks/                 données de démo (élève de 3e, contrôles, corrigés, répétiteurs, offres)
                          + progress-store (état en mémoire). curriculum.ts = catalogue de toutes
-                         les classes publiées (curriculum-ci.ts + ci/, curriculum-cp.ts + cp/,
-                         curriculum-3e.ts + 3e/, Thalès dans lesson-content.ts) ; assessments.ts et answer-keys.ts regroupent les
+                         les classes publiées (un curriculum-<classe>.ts et un dossier <classe>/ par
+                         classe, de ci/ à tle/ ; catalog-builder.ts assemble matières, chapitres et
+                         leçons, série comprise au lycée ; Thalès dans lesson-content.ts) ; assessments.ts et answer-keys.ts regroupent les
                          évaluations et les corrigés (server-only) ; exercise-series.ts = format compact
   types/domain.ts        types métier partagés entre l'UI et data.ts
   types/database.ts      GÉNÉRÉ depuis la base (supabase gen types)
@@ -193,7 +199,8 @@ supabase/                migrations/, seed.sql (GÉNÉRÉ), config.toml, functio
 scripts/generate-seed.ts produit supabase/seed.sql à partir des mocks
 tests/unit/              format, grading, paydunya, safe-path, speech, catalog (leçons, séries, corrigés)
 tests/db/                harness PGlite + tests RLS/RPC (parité de correction SQL/TS)
-docs/programme/          programme du CI (sources officielles) et relevé CI → 3e
+docs/programme/          sources et découpage de chaque classe (programme-ci.md à programme-tle.md,
+                         programme-college.md, programme-lycee.md) et relevé CI → 3e
 public/                  icons/ (PWA), landing/revision-du-soir.jpg (photo de l'accueil), landing/app-accueil.png
 ```
 
@@ -218,7 +225,7 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 - pas de `Date.now()` ni de `new Date()` pendant le rendu avant `connection()` ;
 - lire `params` et `searchParams` dans un composant enfant placé sous `<Suspense>` ;
 - `usePathname` seulement via `NavLink`, déjà sous Suspense ;
-- `generateStaticParams` doit renvoyer au moins une valeur ;
+- `generateStaticParams` doit renvoyer au moins une valeur ; les pages de cours et d'exercices ne prérendent que le 1er chapitre de chaque matière (`getPrerenderedChapterParams`, `getPrerenderedLessonParams`, `getPrerenderedAssessmentIds`) : les autres sont rendues à la première visite puis gardées en cache (ISR avec Cache Components) ;
 - un fichier `page.tsx` n'exporte que ce que Next autorise : placer les constantes partagées dans `features/` ;
 - `src/proxy.ts` remplace `middleware.ts` ;
 - les helpers globaux `PageProps<"/route">` et `LayoutProps` typent les pages.
@@ -282,13 +289,19 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 - **Catalogue du CI** : français, mathématiques et ESVS d'après le guide officiel de l'étape 1 du CEB et le guide « Langue et communication » (`docs/programme/programme-ci.md`). 41 chapitres, 98 leçons rédigées par DIANGAL (`src/mocks/ci/`), une série d'exercices par chapitre, à faire valider.
 - **Catalogue du CP** : mêmes guides (paliers du CP), `docs/programme/programme-cp.md`. 45 chapitres, 98 leçons et 45 séries d’exercices rédigées par DIANGAL (`src/mocks/cp/`, assemblées par `curriculum-cp.ts`), à faire valider. Les séries d'exercices s'écrivent au format compact de `mocks/exercise-series.ts`.
 - **Leçons de 3e** : 78 chapitres, 203 leçons et une série d'exercices par chapitre, rédigées par DIANGAL (`src/mocks/3e/`, un fichier par matière, briques HTML de `3e/blocks.ts`, assemblées par `curriculum-3e.ts` ; Thalès dans `lesson-content.ts`), à faire valider par des enseignants. Les chapitres de français, d'anglais et d'éducation civique restent indicatifs.
+- **Classes ajoutées le 17/10/2026** (leçons et exercices rédigés par DIANGAL, à faire valider) :
+  - CE1 et CE2 : guide officiel de l'étape 2 et cahiers PAAME (`programme-ce1-ce2.md`) ; CM1 et CM2 : cahiers PAAME, guide du CFEE, PROMET (`programme-cm1.md`, `programme-cm2.md`) ;
+  - 6e, 5e, 4e : maths officielles (APAMS), histoire-géographie officielle (Office du Bac), SVT et PC d'après le relevé (`programme-college.md`) ;
+  - 2nde et 1re : maths officielles par série (APAMS, séries S, L, G et T), histoire-géographie officielle, PC et SVT d'après les titres de Sunudaara (`programme-lycee.md`) ; Terminale : programmes de l'Office du Bac (`programme-tle.md`) ;
+  - matières propres aux séries LA, S3, S4, S5, G, T1 et T2 (arabe, économie, gestion, construction mécanique, fabrication, électrotechnique, sciences agricoles, agroalimentaire) : chapitres indicatifs d'après la liste des épreuves du Bac, leçons dans `src/mocks/lycee/` (une fois pour la 1re et la Terminale) ;
+  - français et anglais du collège et du lycée : chapitres indicatifs ; leurs sources sont notées dans chaque chapitre (`chapterSources` de `mocks/curriculum.ts`).
+- **Lycée** : une matière (programme) par série, `buildCatalog(classe, programmes, série)` ; chapitres `<classe>-<série>-<matière>-<slug>`. Les exercices des classes à séries sont rangés par titre de chapitre (`2nde/exercises.ts`, `1re/exercises.ts`, `tle/exercises.ts`) : un chapitre commun à plusieurs séries reçoit la même série.
 - Tout contenu pédagogique doit être **original** et **validé par des enseignants**.
 - **Manque encore** :
-  - programmes officiels (MEN, INEADE) ;
+  - programmes officiels (MEN, INEADE) : français, anglais, SVT et PC du collège et du lycée, guide de l'étape 3 (CM1-CM2) ;
   - coefficients du BFEM et du CFEE ;
-  - chapitres de français et d'anglais ;
   - statut de l'éducation civique ;
-  - matières du lycée par série.
+  - programmes des matières propres aux séries LA, S3, S4, S5, G, T1 et T2 ; séries rares (L1a, L1b, F6, S1A, S2A, STEG).
 
 ## Pour un futur modèle IA
 
@@ -301,12 +314,11 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 7. Prochaines étapes :
    - compte WhatsApp Business (Meta), modèle `diangal_code`, puis déploiement de `send-sms` ;
    - salle de visio LiveKit pour les cours en ligne ; réseaux sociaux à ouvrir dans Supabase ;
-   - programme du CE1 et du CE2 (guide officiel de l'étape 2, à chercher sur apams.gouv.sn), puis les autres classes ;
    - SMTP personnalisé, puis modèles d'email en français avec le code ;
    - fournisseur SMS et déploiement des Edge Functions `send-sms` et `process-sms-outbox` ;
    - clés PayDunya sandbox, puis test d'un paiement complet ;
    - E2E Playwright en CI ;
    - suppression de compte par anonymisation, export des données ;
-   - contenus des autres classes, dans l'ordre choisi par le porteur du projet (classes d'examen d'abord) : Terminale (séries S et L, programmes de l'Office du Bac à sourcer), puis CM2 (CFEE) ;
-   - validation des leçons et exercices du CI, du CP et de la 3e par des enseignants ;
+   - publier dans la base hébergée les classes ajoutées le 17/10/2026, après accord du porteur du projet : script rejouable qui tient compte de la série, rejoué d'abord sur PGlite ; vérifier ensuite la durée du build Vercel (chapitres, leçons et évaluations sont prérendus : environ 4 500 pages une fois tout publié) ;
+   - validation des leçons et exercices de toutes les classes par des enseignants ;
    - sujets blancs du CFEE et du Bac ; annales officielles vérifiées.

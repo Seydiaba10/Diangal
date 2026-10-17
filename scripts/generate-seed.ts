@@ -15,7 +15,7 @@ const textArray = (values: string[]) => `array[${values.map(q).join(", ")}]::tex
 
 const out: string[] = [
   "-- Généré par scripts/generate-seed.ts : ne pas modifier à la main.",
-  "-- Contenu publié : CI et CP (Curriculum de l'Éducation de Base, étape 1) et 3e. Leçons et exercices à faire valider par des enseignants.",
+  "-- Contenu publié : CI et CP (Curriculum de l'Éducation de Base, étape 1), CE1 et CE2 (étape 2), CM1, CM2, 6e, 5e, 4e, 3e, 2nde (séries S et L), 1re et Terminale (séries S1, S2, L1, L2). Leçons et exercices à faire valider par des enseignants.",
   "",
 ];
 
@@ -86,28 +86,32 @@ out.push(
   ).join(",\n")};`,
 );
 
-// ── Programmes publiés (CI, 3e) : matières, chapitres, leçons ───────────────
-// Ordre des matières : celui du catalogue, classe par classe.
+// ── Programmes publiés : matières, chapitres, leçons ────────────────────────
+// Ordre des matières : celui du catalogue, classe par classe (une matière par série au lycée).
 const sortOrder = (levelCode: string, slug: string) =>
   CATALOG_SUBJECTS.filter((s) => s.levelCode === levelCode).findIndex((s) => s.slug === slug) + 1;
+const seriesRef = (seriesCode: string | null | undefined) =>
+  seriesCode ? `(select id from public.series where code = ${q(seriesCode)})` : "null";
 out.push(
-  `insert into public.programs (level_id, subject_id, coefficient, sort_order) values\n${CATALOG_SUBJECTS.map(
+  `insert into public.programs (level_id, series_id, subject_id, coefficient, sort_order) values\n${CATALOG_SUBJECTS.map(
     (s) =>
-      `  ((select id from public.levels where code = ${q(s.levelCode)}), (select id from public.subjects where code = ${q(s.code)}), ${s.coefficient}, ${sortOrder(s.levelCode, s.slug)})`,
+      `  ((select id from public.levels where code = ${q(s.levelCode)}), ${seriesRef(s.seriesCode)}, (select id from public.subjects where code = ${q(s.code)}), ${s.coefficient}, ${sortOrder(s.levelCode, s.slug)})`,
   ).join(",\n")};`,
 );
 
-const programOf = (code: string, levelCode: string) =>
-  `(select p.id from public.programs p join public.subjects s on s.id = p.subject_id join public.levels l on l.id = p.level_id where s.code = ${q(code)} and l.code = ${q(levelCode)} and p.series_id is null)`;
+const programOf = (code: string, levelCode: string, seriesCode?: string | null) =>
+  `(select p.id from public.programs p join public.subjects s on s.id = p.subject_id join public.levels l on l.id = p.level_id where s.code = ${q(code)} and l.code = ${q(levelCode)} and ${
+    seriesCode ? `p.series_id = ${seriesRef(seriesCode)}` : "p.series_id is null"
+  })`;
 const chapterRef = (chapterId: string) => {
   const c = CATALOG_CHAPTERS.find((x) => x.id === chapterId)!;
-  return `(select c.id from public.chapters c where c.program_id = ${programOf(c.subjectCode, c.levelCode)} and c.slug = ${q(c.slug)})`;
+  return `(select c.id from public.chapters c where c.program_id = ${programOf(c.subjectCode, c.levelCode, c.seriesCode)} and c.slug = ${q(c.slug)})`;
 };
 
 for (const chapter of CATALOG_CHAPTERS) {
   out.push(
     `insert into public.chapters (program_id, number, slug, title, summary, sort_order, status, strand, sources) values ` +
-      `(${programOf(chapter.subjectCode, chapter.levelCode)}, ${chapter.number}, ${q(chapter.slug)}, ${q(chapter.title)}, ${q(chapter.summary)}, ${chapter.number}, 'published', ` +
+      `(${programOf(chapter.subjectCode, chapter.levelCode, chapter.seriesCode)}, ${chapter.number}, ${q(chapter.slug)}, ${q(chapter.title)}, ${q(chapter.summary)}, ${chapter.number}, 'published', ` +
       `${chapter.strand ? q(chapter.strand) : "null"}, ${q(JSON.stringify(chapterSources(chapter)))}::jsonb);`,
   );
   for (const lesson of chapter.lessons) {
@@ -150,8 +154,8 @@ for (const question of Object.values(CATALOG_QUESTIONS)) {
 
 for (const a of CATALOG_ASSESSMENTS) {
   out.push(
-    `insert into public.assessments (slug, kind, title, level_id, subject_id, chapter_id, exam_type, duration_s, is_premium, status, verification, sources, correction_source) values (` +
-      `${q(a.id)}, ${q(a.kind)}, ${q(a.title)}, (select id from public.levels where code = ${q(a.levelCode)}), ` +
+    `insert into public.assessments (slug, kind, title, level_id, series_id, subject_id, chapter_id, exam_type, duration_s, is_premium, status, verification, sources, correction_source) values (` +
+      `${q(a.id)}, ${q(a.kind)}, ${q(a.title)}, (select id from public.levels where code = ${q(a.levelCode)}), ${seriesRef(a.seriesCode)}, ` +
       `(select id from public.subjects where code = ${q(a.subjectCode)}), ${a.chapterId ? chapterRef(a.chapterId) : "null"}, ` +
       `${a.kind === "mock_exam" ? "'BFEM'" : "null"}, ${a.durationS ?? "null"}, ${a.isPremium}, 'published', ` +
       `${q(a.verification ?? "unverified")}, ${q(JSON.stringify(a.sources ?? []))}::jsonb, ${q(a.correctionSource ?? null)});`,
