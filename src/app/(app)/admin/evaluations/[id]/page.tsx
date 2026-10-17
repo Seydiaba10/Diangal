@@ -1,4 +1,4 @@
-import { CircleCheck, KeyRound } from "lucide-react";
+import { KeyRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -7,13 +7,12 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Field, INPUT_CLASS } from "@/components/ui/form";
 import { Notice } from "@/components/ui/notice";
-import { RichText } from "@/components/ui/rich-text";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { updateAssessmentProvenanceAction } from "@/features/admin/actions";
+import { AnswerKeyList } from "@/features/admin/components/answer-key-list";
 import { SourcesFieldset } from "@/features/admin/components/sources-fieldset";
 import { getAdminAssessment } from "@/features/admin/data";
-import { cn } from "@/lib/cn";
 
 export async function generateMetadata() {
   const t = await getTranslations("adminAssessments");
@@ -79,39 +78,7 @@ async function AssessmentDetail({ params, searchParams }: Props) {
         <KeyRound className="size-4 shrink-0" aria-hidden />
         {t("keysWarning")}
       </p>
-      <ol className="space-y-3">
-        {questions.map(({ question, key }, i) => (
-          <li key={question.id} className="rounded-2xl border border-line bg-surface p-5">
-            <p className="flex justify-between text-sm text-ink-muted">
-              <span>
-                {i + 1}. {t(`types.${question.type}`)}
-              </span>
-              <span>{t("points", { points: question.points })}</span>
-            </p>
-            <RichText html={question.promptHtml} className="mt-2 text-ink" />
-            {question.options.length > 0 ? (
-              <ul className="mt-3 space-y-1.5">
-                {question.options.map((o) => {
-                  const right = key.correctOptionIds?.includes(o.id);
-                  return (
-                    <li
-                      key={o.id}
-                      className={cn("flex items-center gap-2 rounded-lg px-3 py-2 text-sm", right ? "bg-success-50 text-success-700" : "bg-canvas text-ink")}
-                    >
-                      {right ? <CircleCheck className="size-4 shrink-0" aria-hidden /> : <span className="size-4 shrink-0" />}
-                      <RichText html={o.labelHtml} />
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className="mt-3 rounded-lg bg-success-50 px-3 py-2 text-sm text-success-700">
-                {t("expected", { answer: key.expectedAnswer ?? key.acceptedTexts?.join(" / ") ?? String(key.numericValue ?? "") })}
-              </p>
-            )}
-          </li>
-        ))}
-      </ol>
+      <AnswerKeyList questions={questions} />
     </>
   );
 }

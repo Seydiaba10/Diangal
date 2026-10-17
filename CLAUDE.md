@@ -123,6 +123,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - `/admin/suivi` : tableau de suivi par programme (chapitres publiés, leçons rédigées, exercices, QCM, sujets d'examen, vérification, sources, chapitres gratuits) et classes sans programme ;
   - `/admin/referentiel?classe=` : matières d'une classe (et d'une série au lycée), chapitres gratuits par matière (`programs.free_chapters`, 3 par défaut), création d'une matière ;
   - `/admin/contenus?classe=` puis `/admin/contenus/chapitres/[id]` : chapitres brouillons compris, rubrique, statut de vérification (`unverified`, `reviewed`, `official`), sources, leçons ajoutées en brouillon, éditeur de leçon. Publier exige au moins une source et une leçon, toutes rédigées ; publier ou dépublier change aussi le statut des leçons ; un chapitre non publié et jamais commencé peut être supprimé ;
+  - **relecture** : bouton « Relire » de chaque chapitre (filtre `?serie=` au lycée) → `/admin/contenus/chapitres/[id]/relire` : toutes les leçons telles que l'élève les voit, puis les exercices avec la bonne réponse et l'explication (`AnswerKeyList`, aussi utilisé par `/admin/evaluations/[id]`) ; liens vers l'éditeur et chapitre précédent ou suivant ;
   - en démo, ces écrans lisent les mocks et n'enregistrent rien (avis « Mode démo »).
 - **Hors ligne** :
   - manifeste, icônes, `/demarrer` (adresse de lancement de la PWA), page `/hors-ligne` ;

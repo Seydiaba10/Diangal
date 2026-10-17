@@ -1,4 +1,4 @@
-import { PenLine, Plus } from "lucide-react";
+import { Eye, PenLine, Plus } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -11,6 +11,7 @@ import { SubjectIcon } from "@/components/ui/subject-icon";
 import { PublishStatusBadge, VerificationBadge } from "@/features/admin/components/content-badges";
 import { LevelTabs, pickLevel } from "@/features/admin/components/level-tabs";
 import { getAdminPrograms, getContentTracking } from "@/features/admin/data";
+import { cn } from "@/lib/cn";
 import type { LevelCode } from "@/lib/levels";
 import type { AdminChapterRow, SubjectCode } from "@/types/domain";
 
@@ -34,17 +35,44 @@ function byStrand(chapters: AdminChapterRow[]) {
 async function ContentTree({ searchParams }: { searchParams: PageProps<"/admin/contenus">["searchParams"] }) {
   const params = await searchParams;
   const level = pickLevel(params.classe);
-  const [programs, tracking, t, tLevels] = await Promise.all([
+  const [allPrograms, tracking, t, tLevels] = await Promise.all([
     getAdminPrograms(level),
     getContentTracking(),
     getTranslations("adminContent"),
     getTranslations("levels"),
   ]);
+  // Au lycée, une matière par série : filtre facultatif par série (?serie=S1).
+  const seriesList = [...new Set(allPrograms.map((p) => p.seriesCode).filter((s) => s !== null))];
+  const serie = typeof params.serie === "string" && seriesList.includes(params.serie) ? params.serie : null;
+  const programs = serie ? allPrograms.filter((p) => p.seriesCode === serie || p.seriesCode === null) : allPrograms;
+  const chip = (active: boolean) =>
+    cn(
+      "inline-flex h-11 items-center rounded-full border px-4 text-sm font-medium",
+      active ? "border-brand-600 bg-brand-50 text-brand-800" : "border-line bg-surface text-ink hover:border-brand-600",
+    );
 
   return (
     <div className="space-y-5">
       {params.supprime ? <Notice tone="success">{t("deleted")}</Notice> : null}
       <LevelTabs basePath="/admin/contenus" current={level} filled={new Set(tracking.filter((r) => r.chapters > 0).map((r) => r.levelCode))} />
+      {seriesList.length > 0 ? (
+        <nav aria-label={t("seriesFilter")}>
+          <ul className="flex flex-wrap gap-2">
+            <li>
+              <Link href={`/admin/contenus?classe=${level}`} aria-current={serie === null ? "page" : undefined} className={chip(serie === null)}>
+                {t("allSeries")}
+              </Link>
+            </li>
+            {seriesList.map((code) => (
+              <li key={code}>
+                <Link href={`/admin/contenus?classe=${level}&serie=${code}`} aria-current={serie === code ? "page" : undefined} className={chip(serie === code)}>
+                  {t("series", { series: code })}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null}
       {programs.length === 0 ? (
         <div className="rounded-2xl border border-line bg-surface p-5 text-sm text-ink">
           <p>{t("empty", { level: tLevels(level) })}</p>
@@ -109,6 +137,13 @@ async function ContentTree({ searchParams }: { searchParams: PageProps<"/admin/c
                             </span>
                             <PublishStatusBadge status={chapter.status} />
                             <VerificationBadge verification={chapter.verification} />
+                            <Link
+                              href={`/admin/contenus/chapitres/${encodeURIComponent(chapter.id)}/relire`}
+                              className="inline-flex h-11 items-center gap-1 rounded-lg px-2 font-medium text-brand-700 hover:bg-surface"
+                            >
+                              <Eye className="size-4" aria-hidden />
+                              {t("review")}
+                            </Link>
                             <Link
                               href={`/admin/contenus/chapitres/${encodeURIComponent(chapter.id)}`}
                               className="inline-flex h-11 items-center gap-1 rounded-lg px-2 font-medium text-brand-700 hover:bg-surface"

@@ -1448,7 +1448,27 @@
       "unverified": "À vérifier",
       "reviewed": "Relu par un enseignant",
       "official": "Source officielle vérifiée"
-    }
+    },
+    "review": "Relire",
+    "seriesFilter": "Séries",
+    "allSeries": "Toutes les séries"
+  },
+  "adminReview": {
+    "title": "Relire un chapitre",
+    "intro": "Le chapitre en entier, tel que l’élève le voit : toutes les leçons, puis les exercices avec la bonne réponse et l’explication. Pour corriger une erreur, ouvrez la leçon ou la série concernée.",
+    "editChapter": "Modifier le chapitre",
+    "sources": "Sources du programme",
+    "noSources": "Aucune source indiquée pour ce chapitre.",
+    "lessonsTitle": "{count, plural, =0 {Aucune leçon} one {# leçon} other {# leçons}}",
+    "lessonTitle": "Leçon {number} : {title}",
+    "editLesson": "Modifier la leçon",
+    "noBody": "Cette leçon n’est pas encore rédigée.",
+    "exercisesTitle": "Exercices et corrigés",
+    "noExercises": "Aucune série d’exercices pour ce chapitre.",
+    "openAssessment": "Ouvrir la série",
+    "chapterNav": "Chapitres de la matière",
+    "previous": "Chapitre précédent",
+    "next": "Chapitre suivant"
   },
   "adminLesson": {
     "title": "Modifier une leçon",
@@ -1494,7 +1514,9 @@
     "verificationHint": "« Source officielle vérifiée » seulement si le sujet a été comparé au document du ministère ou de l’Office du Bac.",
     "correctionSource": "Origine du corrigé",
     "correctionSourceHint": "Par exemple : « Corrigé officiel » ou « Corrigé rédigé par DIANGAL, relu par un enseignant ».",
-    "provenanceSaved": "Vérification et provenance enregistrées."
+    "provenanceSaved": "Vérification et provenance enregistrées.",
+    "explanation": "Explication",
+    "rightAnswer": "bonne réponse"
   },
   "adminExams": {
     "title": "Examens nationaux",
