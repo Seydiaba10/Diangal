@@ -76,6 +76,20 @@ export const PHILO_TLE_EXERCISES: Record<string, ExerciseSpec[]> = {
     { qcm: "L’épopée de Soundjata racontée par les griots a une fonction…", choices: ["subversive", "*commémorative", "publicitaire"], why: "Elle conserve la mémoire du passé." },
     { vf: "Pour Senghor, l’art négro-africain est fonctionnel et collectif.", answer: true, why: "Il est lié à la vie de la communauté." },
   ],
+  "Les œuvres au programme : Descartes et Platon": [
+    { qcm: "Dans le Discours de la méthode, la première règle de la méthode est la règle…", choices: ["de l’analyse", "*de l’évidence", "du dénombrement"], why: "Ne recevoir pour vrai que ce que l’on connaît évidemment être tel." },
+    { qcm: "« Je pense, donc je suis » se trouve dans la partie du Discours consacrée…", choices: ["à la morale par provision", "*à la métaphysique (IVe partie)", "à la physique (Ve partie)"], why: "Le doute méthodique y conduit à la première certitude." },
+    { qcm: "Dans le Ménon, la question de départ est :", choices: ["Qu’est-ce que la justice ?", "*La vertu peut-elle s’enseigner ?", "L’âme est-elle immortelle ?"], why: "Ménon demande si la vertu s’enseigne, s’acquiert par l’exercice ou vient de la nature." },
+    { qcm: "Pour Platon, apprendre, c’est…", choices: ["recevoir le savoir du maître", "*se ressouvenir (réminiscence)", "imiter les anciens"], why: "L’âme, immortelle, a déjà tout appris : chercher et apprendre ne sont que réminiscence." },
+    { vf: "L’esclave du Ménon découvre que le carré d’aire double se construit sur la diagonale du carré initial.", answer: true, why: "Socrate l’y conduit par des questions, sans lui enseigner la réponse." },
+  ],
+  "L’œuvre au programme : le Discours de la méthode": [
+    { qcm: "Selon Descartes, « la chose du monde la mieux partagée » est…", choices: ["la richesse", "*le bon sens (la raison)", "la mémoire"], why: "La puissance de bien juger est naturellement égale chez tous les hommes." },
+    { qcm: "La première règle de la méthode est la règle…", choices: ["de l’analyse", "*de l’évidence", "du dénombrement"], why: "Ne recevoir pour vrai que ce que l’on connaît évidemment être tel." },
+    { qcm: "La morale par provision recommande notamment…", choices: ["de changer l’ordre du monde plutôt que ses désirs", "*d’être ferme et résolu dans ses actions", "de douter de tout dans la vie pratique"], why: "Comme des voyageurs égarés en forêt qui marchent toujours tout droit." },
+    { vf: "Pour Descartes, le doute est méthodique : il vise à trouver une certitude.", answer: true, why: "Il conduit au « je pense, donc je suis »." },
+    { qcm: "Dans la VIe partie, Descartes espère que la science nous rendra…", choices: ["plus heureux sans travail", "*comme maîtres et possesseurs de la nature", "indifférents à la médecine"], why: "Il pense surtout aux progrès de la médecine." },
+  ],
   "Méthodologie de la dissertation et du commentaire": [
     { qcm: "Dans une introduction de dissertation, on trouve…", choices: ["la conclusion", "*la problématique et l’annonce du plan", "toutes les citations"], why: "Amorce, sujet, problème, plan." },
     { vf: "Expliquer un texte, c’est le paraphraser.", answer: false, why: "Il faut dire ce que le texte veut dire et comment il le dit." },

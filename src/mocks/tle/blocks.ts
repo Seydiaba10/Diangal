@@ -32,3 +32,24 @@ export const vec = (name: string) => `${name}⃗`;
 
 /** Terme de suite : u<sub>n</sub>. */
 export const u = (index: string, name = "u") => `${name}<sub>${index}</sub>`;
+
+/** Encadré d'ouverture : ce que l'élève saura faire à la fin de la leçon. */
+export const objectifs = (items: string[]) =>
+  `<div class="callout"><p class="callout-title">Objectifs</p><ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul></div>`;
+
+/** Exercice corrigé : énoncé, puis solution en étapes numérotées. */
+export const exercice = (enonce: string, solution: string[], title = "Exercice corrigé") =>
+  `<div class="example"><p class="callout-title">${title}</p><p>${enonce}</p><p><strong>Solution</strong></p><ol>${solution
+    .map((step) => `<li>${step}</li>`)
+    .join("")}</ol></div>`;
+
+/** Conseil pour l'épreuve du baccalauréat. */
+export const auBac = (html: string) => `<div class="callout"><p class="callout-title">Au Bac</p><p>${html}</p></div>`;
+
+/** Erreurs fréquentes à éviter. */
+export const erreurs = (items: string[]) =>
+  `<div class="example"><p class="callout-title">Erreurs à éviter</p><ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul></div>`;
+
+/** Définition mise en avant. */
+export const definition = (term: string, html: string) =>
+  `<div class="callout"><p class="callout-title">Définition : ${term}</p><p>${html}</p></div>`;

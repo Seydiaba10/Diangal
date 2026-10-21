@@ -91,7 +91,7 @@ export const PC_TLE_EXERCISES: Record<string, ExerciseSpec[]> = {
   "Les amines": [
     { qcm: "CH₃−NH−CH₃ est une amine…", choices: ["primaire", "*secondaire", "tertiaire"], why: "L’azote porte deux groupes carbonés." },
     { vf: "Une solution aqueuse d’amine est basique.", answer: true, why: "Le doublet de l’azote capte un proton." },
-    { qcm: "La propriété nucléophile des amines est due…", choices: ["à l’atome d’hydrogène", "*au doublet non liant de l’azote", "à la chaîne carbonée"], why: "Le doublet attaque les carbones déficitaires en électrons." },
+    { qcm: "Quelques gouttes de BBT dans une solution d’éthanamine prennent une teinte…", choices: ["jaune", "verte", "*bleue"], why: "La solution est basique : la forme basique du BBT est bleue." },
   ],
   "Acides carboxyliques et dérivés": [
     { qcm: "La réaction acide + alcool ⇌ ester + eau est…", choices: ["rapide et totale", "*lente et limitée", "violente"], why: "L’estérification directe conduit à un équilibre." },
@@ -181,6 +181,12 @@ export const PC_TLE_EXERCISES: Record<string, ExerciseSpec[]> = {
   ],
 };
 
+const PRESSION_ARTERIELLE: ExerciseSpec[] = [
+  { qcm: "Les barorécepteurs qui mesurent la pression artérielle se trouvent…", choices: ["dans le cerveau", "*dans le sinus carotidien et la crosse aortique", "dans les reins"], why: "Ils envoient leurs messages au bulbe par les nerfs de Hering et de Cyon." },
+  { vf: "Une hausse de la pression artérielle provoque un ralentissement du cœur.", answer: true, why: "Les barorécepteurs activent le centre cardiomodérateur et le nerf X." },
+  { qcm: "L’athérosclérose est…", choices: ["une infection du cœur", "*un dépôt de graisses dans la paroi des artères", "une baisse de la pression"], why: "Elle favorise infarctus et AVC." },
+];
+
 export const SVT_TLE_EXERCISES: Record<string, ExerciseSpec[]> = {
   "Organisation du système nerveux cérébro-spinal": [
     { qcm: "Le centre de l’équilibre et de la coordination des mouvements est…", choices: ["le bulbe rachidien", "*le cervelet", "la moelle épinière"], why: "C’est le rôle du cervelet." },
@@ -203,6 +209,9 @@ export const SVT_TLE_EXERCISES: Record<string, ExerciseSpec[]> = {
     { vf: "La contraction musculaire consomme de l’ATP.", answer: true, why: "L’ATP permet le glissement des filaments." },
     { qcm: "La fermentation lactique produit…", choices: ["beaucoup d’ATP", "*peu d’ATP et de l’acide lactique", "du dioxygène"], why: "2 ATP par glucose, sans dioxygène." },
   ],
+  // Séries S1 et L2 : la pression artérielle seulement (l’automatisme cardiaque est au programme de S2).
+  "Activité cardiaque et régulation de la pression artérielle [S1]": PRESSION_ARTERIELLE,
+  "Activité cardiaque et régulation de la pression artérielle [L2]": PRESSION_ARTERIELLE,
   "Activité cardiaque et régulation de la pression artérielle": [
     { qcm: "Le « pacemaker » naturel du cœur est…", choices: ["le faisceau de His", "*le nœud sinusal", "le ventricule gauche"], why: "Il donne le rythme cardiaque." },
     { vf: "Une hausse de la pression artérielle provoque un ralentissement du cœur.", answer: true, why: "Les barorécepteurs activent le centre cardiomodérateur." },
@@ -237,6 +246,17 @@ export const SVT_TLE_EXERCISES: Record<string, ExerciseSpec[]> = {
     { qcm: "Le croisement de deux hybrides F1 (monohybridisme, dominance complète) donne en F2…", choices: ["100 % d’un phénotype", "*3/4 et 1/4", "1/2 et 1/2"], why: "C’est la 2e loi de Mendel." },
     { qcm: "Un croisement-test se fait avec un individu…", choices: ["hétérozygote", "*homozygote récessif", "de la F1"], why: "Il révèle les gamètes de l’individu testé." },
     { num: "Un croisement-test donne 8 % de recombinés. Quelle est la distance entre les deux gènes (en centimorgans) ?", answer: 8, why: "1 % de recombinés = 1 cM." },
+  ],
+  // Mêmes types de questions qu’en S2 (QCM, vrai/faux, nombre), adaptés au programme de chaque série.
+  "Hérédité humaine [S1]": [
+    { qcm: "Deux parents à la peau pigmentée ont un enfant albinos. L’allèle de l’albinisme est…", choices: ["dominant", "*récessif", "codominant"], why: "Les parents le portent sans l’exprimer : il est récessif." },
+    { vf: "L’hémophilie touche plus souvent les garçons.", answer: true, why: "Allèle récessif porté par le chromosome X : un seul X suffit chez le garçon." },
+    { num: "Une mère conductrice de l’hémophilie et un père sain attendent un garçon. Quelle est, en %, la probabilité qu’il soit hémophile ?", answer: 50, why: "Le fils reçoit l’un des deux X de sa mère : X<sup>h</sup> une fois sur deux." },
+  ],
+  "Hérédité humaine [L2]": [
+    { qcm: "Deux parents à la peau pigmentée ont un enfant albinos. L’allèle de l’albinisme est…", choices: ["dominant", "*récessif", "codominant"], why: "Les parents le portent sans l’exprimer : il est récessif." },
+    { vf: "L’allèle Rh+ est dominant sur l’allèle Rh−.", answer: true, why: "Une personne Rh+ peut être Rh+//Rh+ ou Rh+//Rh−." },
+    { num: "Combien de groupes sanguins différents (phénotypes) le système ABO compte-t-il ?", answer: 4, why: "[A], [B], [AB] et [O] : A et B sont codominants, O est récessif." },
   ],
   "Hérédité humaine": [
     { qcm: "Deux parents porteurs sains de la drépanocytose (AS) ont, à chaque naissance, un risque d’enfant malade de…", choices: ["1/2", "*1/4", "0"], why: "AS × AS donne 1/4 SS." },

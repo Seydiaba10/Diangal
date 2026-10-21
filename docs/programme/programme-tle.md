@@ -1,6 +1,6 @@
 # Programme de Terminale (toutes séries)
 
-Relevé fait le 17/10/2026 à partir des programmes officiels **mis en ligne par l’Office du Baccalauréat** (UCAD) en janvier 2026. Les leçons et exercices de DIANGAL sont **rédigés par DIANGAL** d’après ces programmes et doivent être **validés par des enseignants**.
+Relevé fait le 17/10/2026, revu le 21/10/2026 (séries S et L) à partir des programmes officiels **mis en ligne par l’Office du Baccalauréat** (UCAD) en janvier 2026. Les leçons et exercices de DIANGAL sont **rédigés par DIANGAL** d’après ces programmes et doivent être **validés par des enseignants**.
 
 ## Sources
 
@@ -42,12 +42,18 @@ Les matières marquées « indicatif » sont propres à la série : **chapitres 
 ## Découpage
 
 - **Mathématiques** : S1 16 chapitres, S2 11, L 10, G 9 (dont calcul matriciel et simplexe, mathématiques financières), T 10 (dont produit vectoriel). Les leçons communes (analyse, probabilités, complexes) sont écrites une fois (`src/mocks/tle/maths-*.ts`).
-- **Sciences physiques** : S 24 chapitres (P1 à P15, C1 à C9 du programme) ; L2 10 chapitres.
-- **SVT** : un thème du programme = un chapitre ; S2 13, S1 9, L2 6, avec les leçons officielles de chaque série.
-- **Philosophie** : un axe majeur = un chapitre, rangé dans son domaine (réflexion philosophique, vie sociale, épistémologie, esthétique) ; L 15 chapitres, S 13, dont un chapitre de méthodologie. Les œuvres au programme changent : elles ne sont pas fixées dans DIANGAL.
+- **Sciences physiques** : S 24 chapitres (P1 à P15, C1 à C9 du programme), 54 leçons ; L2 10 chapitres, 18 leçons.
+  - S : la leçon « Solide en rotation autour d’un axe fixe » (moment d’inertie, théorème de Huygens) complète P2 ; le théorème de l’accélération angulaire et le mouvement circulaire sinusoïdal sont signalés « séries S1 et S3 », comme le prévoit le programme. Hors programme retirés : potentiel d’arrêt et cellule photoélectrique (P13). Les amines (C2) se limitent à leurs propriétés basiques.
+  - L2 : consignes de l’épreuve respectées (pas d’exercice sur l’induction, la réfraction ni l’effet photoélectrique ; C4 et C5 en exposé, sans formule de lessive ni d’antiseptique) ; leçons ajoutées : « Réflexion, diffraction et interférences mécaniques » (P3) et « Propagation et réflexion de la lumière » (P4).
+- **SVT** : un thème du programme = un chapitre ; S2 13 chapitres et 30 leçons, S1 9 et 19, L2 6 et 11 : exactement les leçons officielles de chaque série. En S1 et L2, le thème « Activité cardiaque et régulation de la pression artérielle » ne contient que la régulation de la pression (l’automatisme cardiaque est propre à S2). L’hérédité humaine a une version par série : L2 (albinisme, ABO, rhésus), S1 (albinisme, hémophilie, daltonisme), S2 (tout, plus les anomalies chromosomiques et la bioéthique) ; les exercices suivent (clé « titre [série] » dans `exercises-sciences.ts`).
+- **Philosophie** : un axe majeur = un chapitre, rangé dans son domaine (réflexion philosophique, vie sociale, épistémologie, esthétique) ; L 16 chapitres, S 14, dont un chapitre de méthodologie et, en dernier, les **œuvres au programme** de la phase transitoire : Descartes, *Discours de la méthode* (toutes séries) et Platon, *Ménon* (séries L). « Conscience et inconscient » n’existe qu’en série L.
 - **Français** : surréalisme, esthétique des genres (poésie, roman, théâtre, avec la liste officielle d’œuvres au choix) et exercices du bac (résumé et discussion, dissertation, commentaire, écrits pratiques).
 - **Histoire-géographie** : 19 leçons d’histoire et 18 de géographie regroupées en 12 chapitres.
 - **Anglais** : un thème (topic) = un chapitre ; 9 thèmes L et 6 thèmes S (selon les marques L, S, L & S du programme), plus un chapitre de méthode pour l’examen.
+
+## Leçons (révision du 21/10/2026)
+
+Chaque leçon de Terminale des séries S et L suit le même plan : **objectifs**, cours structuré (définitions, propriétés, tableaux), **méthode**, au moins un **exercice ou sujet corrigé** de type Bac (sujet de dissertation avec plan détaillé en philosophie, en histoire-géographie et en français), **à retenir**, erreurs à éviter et conseils **« Au Bac »**. Les briques HTML sont dans `src/mocks/tle/blocks.ts` (`objectifs`, `exercice`, `auBac`, `erreurs`, `definition`). La SVT et la physique-chimie ont été réécrites ; les autres matières ont été complétées sans changer les titres des leçons (identifiants stables en base).
 
 ## À faire valider
 

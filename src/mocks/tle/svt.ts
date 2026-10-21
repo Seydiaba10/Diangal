@@ -24,11 +24,14 @@ const muscle: ChapterSpec = {
   lessons: [N.STRUCTURE_MUSCLE, N.FONCTIONNEMENT_MUSCLE],
 };
 
-const coeur: ChapterSpec = {
+/** S2 : automatisme cardiaque et pression artérielle ; S1 et L2 : régulation de la pression artérielle seulement. */
+const coeur = (complete: boolean): ChapterSpec => ({
   title: "Activité cardiaque et régulation de la pression artérielle",
-  summary: "Automatisme cardiaque, cycle cardiaque, régulation nerveuse et hormonale de la pression artérielle.",
-  lessons: [N.AUTOMATISME_CARDIAQUE, N.PRESSION_ARTERIELLE],
-};
+  summary: complete
+    ? "Automatisme cardiaque, cycle cardiaque, régulation nerveuse et hormonale de la pression artérielle."
+    : "Facteurs de variation, régulation nerveuse et hormonale de la pression artérielle, hypertension.",
+  lessons: complete ? [N.AUTOMATISME_CARDIAQUE, N.PRESSION_ARTERIELLE] : [N.PRESSION_ARTERIELLE],
+});
 
 const glycemie: ChapterSpec = {
   title: "Régulation de la glycémie",
@@ -62,11 +65,15 @@ const genetique: ChapterSpec = {
   lessons: [R.LOIS_MENDEL],
 };
 
-const heredite: ChapterSpec = {
+const heredite = (series: "L2" | "S1" | "S2"): ChapterSpec => ({
   title: "Hérédité humaine",
-  summary: "Arbres généalogiques, maladies héréditaires, groupes sanguins, anomalies chromosomiques.",
-  lessons: [R.HEREDITE_HUMAINE],
-};
+  summary: {
+    L2: "Arbres généalogiques, albinisme, groupes sanguins ABO et rhésus.",
+    S1: "Arbres généalogiques, albinisme, hérédité liée au sexe : hémophilie et daltonisme.",
+    S2: "Arbres généalogiques, hérédité autosomale et liée au sexe, groupes sanguins, anomalies chromosomiques, bioéthique.",
+  }[series],
+  lessons: [{ L2: R.HEREDITE_HUMAINE_L2, S1: R.HEREDITE_HUMAINE_S1, S2: R.HEREDITE_HUMAINE_S2 }[series]],
+});
 
 export const SVT_TLE_S2: ChapterSpec[] = [
   systemeNerveux,
@@ -77,7 +84,7 @@ export const SVT_TLE_S2: ChapterSpec[] = [
     lessons: [N.REFLEXES, N.MOUVEMENTS_VOLONTAIRES],
   },
   muscle,
-  coeur,
+  coeur(true),
   {
     title: "Le milieu intérieur",
     summary: "Composition et rôles du milieu intérieur, homéostasie.",
@@ -92,7 +99,7 @@ export const SVT_TLE_S2: ChapterSpec[] = [
     lessons: [R.REPRODUCTION_SPERMAPHYTES],
   },
   genetique,
-  heredite,
+  heredite("S2"),
   {
     title: "Biotechnologies",
     summary: "Génie génétique, OGM, applications médicales et questions éthiques.",
@@ -104,19 +111,19 @@ export const SVT_TLE_S1: ChapterSpec[] = [
   systemeNerveux,
   tissuNerveux,
   muscle,
-  coeur,
+  coeur(false),
   glycemie,
   immunologie(false),
   reproductionMammiferes(false),
   genetique,
-  heredite,
+  heredite("S1"),
 ];
 
 export const SVT_TLE_L2: ChapterSpec[] = [
   systemeNerveux,
-  coeur,
+  coeur(false),
   glycemie,
   immunologie(false),
   reproductionMammiferes(false),
-  heredite,
+  heredite("L2"),
 ];

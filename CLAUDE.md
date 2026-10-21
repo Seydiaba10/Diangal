@@ -14,7 +14,7 @@ Contraintes qui guident tous les choix :
 ## État actuel (octobre 2026)
 
 - Classes publiées (chaque chapitre a sa série d'exercices corrigés) :
-  - dans la démo et le seed (depuis le 17/10/2026) : **toutes les classes, du CI à la Terminale** (13 classes, 2 069 chapitres, 3 606 leçons rédigées). Au lycée : séries **S et L** en 2nde ; **L1, L2, LA, S1 à S5, G, T1 et T2** en 1re et en Terminale ;
+  - dans la démo et le seed (depuis le 17/10/2026) : **toutes les classes, du CI à la Terminale** (13 classes, 2 078 chapitres, 3 625 leçons rédigées ; leçons de Terminale S et L revues et enrichies le 21/10/2026 d’après les PDF de l’Office du Bac, voir `docs/programme/programme-tle.md`). Au lycée : séries **S et L** en 2nde ; **L1, L2, LA, S1 à S5, G, T1 et T2** en 1re et en Terminale ;
   - dans la base hébergée : **CI**, **CP** et **3e** depuis le 16/10/2026, **toutes les autres classes et séries** depuis le 17/10/2026 (31 lots d'ajouts, essayés d'abord sur une copie PGlite de la production ; CI, CP et 3e inchangés).
   - Chaque élève voit les cours de sa classe et de sa série ; une classe ou une série sans programme affiche « pas encore publiés ».
 - **Application full stack sur Supabase** depuis le 12/10/2026 : projet hébergé `mlepbueoqrzmniksdhpl` (région **eu-west-1, Irlande**). Toutes les fonctionnalités des 4 rôles lisent et écrivent dans la base, sous RLS. Vérifiées de bout en bout avec de vrais comptes (élève de CI et de 3e, parent, répétiteur, admin), pages contrôlées à 360 px.
@@ -241,6 +241,7 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 - **Uniquement des tokens** : aucune couleur hexadécimale dans les composants.
   - Exceptions : l'illustration de `student-avatar.tsx`, `manifest.ts`, `themeColor`. Le logo est une image (`public/brand/`, `src/app/icon.png`).
   - La palette Tailwind par défaut n'existe pas.
+- Le HTML des leçons (`.rich-text`, `globals.css`) style les titres, listes numérotées, citations et tableaux ; un tableau trop large défile seul, jamais la page.
 - Les classes construites dynamiquement sont écrites **en entier** dans des tables de correspondance (`lib/subjects.ts`, `lib/levels.ts`), pour que Tailwind les détecte.
 - **Formats** toujours via `lib/format.ts` : FCFA avec espace insécable, dates jj/mm/aaaa en heure de Dakar, notes « 13,5/20 ».
 - Montants en **entiers** FCFA ; dates en fuseau `Africa/Dakar`.

@@ -2,7 +2,8 @@ import "server-only";
 
 // Exercices corrigés de Terminale : une série par chapitre et par série (toutes séries). Les
 // questions sont rangées par titre de chapitre ; un chapitre commun à plusieurs séries reçoit la
-// même série d’exercices. Écrits par DIANGAL d’après les leçons, à faire relire par des enseignants.
+// même série d’exercices, sauf si la banque prévoit une version propre à une série (clé « titre [série] »).
+// Écrits par DIANGAL d’après les leçons, à faire relire par des enseignants.
 // Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
 
 import type { SubjectCode } from "@/types/domain";
@@ -29,7 +30,8 @@ function bankFor(subject: SubjectCode): Record<string, ExerciseSpec[]> {
 }
 
 const SERIES: ExerciseSeries[] = CHAPTERS_TLE.map((chapter) => {
-  const questions = bankFor(chapter.subjectCode)[chapter.title];
+  const bank = bankFor(chapter.subjectCode);
+  const questions = bank[`${chapter.title} [${chapter.seriesCode}]`] ?? bank[chapter.title];
   if (!questions) throw new Error(`Exercices (TLE) : aucune série pour « ${chapter.title} » (${chapter.subjectCode})`);
   return { subject: chapter.subjectCode, chapter: chapter.title, series: chapter.seriesCode ?? undefined, questions };
 });
