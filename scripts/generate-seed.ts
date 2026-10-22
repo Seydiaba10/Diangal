@@ -174,7 +174,7 @@ out.push(
     (s) => `  (${q(s.id)}, ${q(s.type)}, ${s.year}, ${q(s.startsOn)}, ${s.isOfficial})`,
   ).join(",\n")};`,
 );
-const PLAN_NAMES: Record<string, string> = { monthly: "1 mois", quarterly: "3 mois", yearly: "1 an", bfem_pass: "Pass BFEM" };
+const PLAN_NAMES: Record<string, string> = { monthly: "1 mois", quarterly: "3 mois", yearly: "1 an" };
 out.push(
   `insert into public.plans (code, name, price_fcfa, duration_days, sort_order) values\n${MOCK_PLANS.filter((p) => !p.maxChildren).map(
     (p, i) => `  (${q(p.code)}, ${q(PLAN_NAMES[p.code] ?? p.code)}, ${p.priceFcfa}, ${p.durationDays}, ${i + 1})`,

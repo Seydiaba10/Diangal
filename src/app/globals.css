@@ -241,65 +241,6 @@
   }
 }
 
-/* Accueil : voile posé sur la photo plein écran pour garder le texte lisible.
-   Téléphone et tablette : sombre en bas, sous le texte. Grand écran : autour du texte en haut à
-   gauche, en laissant bien visible la tablette DIANGAL (en bas à gauche de la photo). */
-@layer components {
-  .hero-veil {
-    background-image: linear-gradient(
-      to top,
-      var(--color-ink) 25%,
-      color-mix(in srgb, var(--color-ink) 75%, transparent) 55%,
-      color-mix(in srgb, var(--color-ink) 15%, transparent)
-    );
-  }
-  @media (min-width: 64rem) {
-    .hero-veil {
-      background-image:
-        radial-gradient(
-          ellipse 62% 52% at 18% 30%,
-          color-mix(in srgb, var(--color-ink) 85%, transparent),
-          color-mix(in srgb, var(--color-ink) 55%, transparent) 50%,
-          transparent
-        ),
-        linear-gradient(to top, color-mix(in srgb, var(--color-ink) 75%, transparent), transparent 24%),
-        linear-gradient(color-mix(in srgb, var(--color-ink) 20%, transparent), color-mix(in srgb, var(--color-ink) 20%, transparent));
-    }
-  }
-  .hero-shadow {
-    text-shadow: 0 1px 10px color-mix(in srgb, var(--color-ink) 75%, transparent);
-  }
-  /* Titre et chapeau : plus compacts sur un écran d'ordinateur peu haut, pour ne pas masquer la tablette. */
-  .hero-title {
-    font-size: 2rem;
-    line-height: 1.1;
-  }
-  .hero-lead {
-    font-size: 1rem;
-  }
-  @media (min-width: 25rem) {
-    .hero-title {
-      font-size: 2.25rem;
-    }
-  }
-  @media (min-width: 40rem) {
-    .hero-title {
-      font-size: 3rem;
-    }
-    .hero-lead {
-      font-size: 1.125rem;
-    }
-  }
-  @media (min-width: 64rem) and (max-height: 50rem) {
-    .hero-title {
-      font-size: 2.25rem;
-    }
-    .hero-lead {
-      font-size: 1rem;
-    }
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

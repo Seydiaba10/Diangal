@@ -33,19 +33,19 @@ const COLUMNS = [
 export async function MarketingFooter() {
   const t = await getTranslations("marketing.footer");
   return (
-    <footer className="bg-ink text-white">
+    <footer className="border-t border-line bg-surface text-ink">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
         <div>
-          <Logo href="/" inverted />
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">{t("tagline")}</p>
+          <Logo href="/" />
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-muted">{t("tagline")}</p>
         </div>
         {COLUMNS.map((column) => (
           <div key={column.key}>
-            <p className="text-sm font-semibold">{t(`columns.${column.key}`)}</p>
+            <p className="text-sm font-semibold text-ink">{t(`columns.${column.key}`)}</p>
             <ul className="mt-3 space-y-2">
               {column.links.map((link) => (
                 <li key={link.key}>
-                  <Link href={link.href} className="text-sm text-white/70 hover:text-white">
+                  <Link href={link.href} className="text-sm text-ink-muted hover:text-brand-700">
                     {t(`links.${link.key}`)}
                   </Link>
                 </li>
@@ -54,8 +54,8 @@ export async function MarketingFooter() {
           </div>
         ))}
       </div>
-      <div className="border-t border-white/10">
-        <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-white/60">{t("bottom", { year: 2026 })}</p>
+      <div className="border-t border-line">
+        <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-ink-muted">{t("bottom", { year: 2026 })}</p>
       </div>
     </footer>
   );

@@ -482,12 +482,13 @@
         "offline": "Fonctionne hors ligne",
         "mobileMoney": "Paiement Wave et Orange Money"
       },
-      "sticker": {
-        "top": "Prêt pour",
-        "main": "le BFEM ?"
-      },
       "imageAlt": "Le soir à la maison, une maman sénégalaise aide ses trois enfants à réviser ; le plus jeune montre DIANGAL sur une tablette.",
-      "offlineBadge": "Même sans internet, on révise"
+      "offlineBadge": "Même sans internet, on révise",
+      "eyebrow": "Programmes officiels du Sénégal, du CI à la Terminale",
+      "card": {
+        "title": "Exercices corrigés",
+        "body": "Note sur 20 et corrigé détaillé tout de suite"
+      }
     },
     "features": {
       "title": "Tout pour réussir son année",
@@ -536,6 +537,24 @@
         "secondary": {
           "name": "Cycle secondaire",
           "body": "Séries littéraires (L1, L2, LA), scientifiques (S1 à S5) et techniques (G, T1, T2). Tronc commun : français, histoire-géographie, anglais, EPS, et philosophie en Terminale."
+        }
+      }
+    },
+    "steps": {
+      "title": "Comment ça marche ?",
+      "cta": "Créer mon compte gratuit",
+      "items": {
+        "account": {
+          "title": "Crée ton compte",
+          "body": "Avec ton numéro de téléphone ou ton email : un code à 6 chiffres suffit, pas de mot de passe à retenir."
+        },
+        "class": {
+          "title": "Choisis ta classe",
+          "body": "Du CI à la Terminale, avec ta série au lycée. Tu peux aussi revoir les cours des classes précédentes."
+        },
+        "learn": {
+          "title": "Apprends et progresse",
+          "body": "Cours, exercices corrigés, QCM et sujets d’examen ; ta progression et tes notes sont gardées d’une année sur l’autre."
         }
       }
     },
@@ -630,7 +649,6 @@
       "monthly": "1 mois",
       "quarterly": "3 mois",
       "yearly": "1 an",
-      "bfem_pass": "Pass BFEM (jusqu’à l’examen)",
       "family_monthly": "Famille 1 mois",
       "family_quarterly": "Famille 3 mois",
       "family_yearly": "Famille 1 an"
@@ -1042,7 +1060,7 @@
       "monthly": "1 mois",
       "quarterly": "3 mois",
       "yearly": "1 an",
-      "bfem_pass": "Pass BFEM",
+      "bfem_pass": "Pass BFEM (ancienne offre)",
       "family_monthly": "Famille 1 mois",
       "family_quarterly": "Famille 3 mois",
       "family_yearly": "Famille 1 an"
@@ -1051,7 +1069,6 @@
       "monthly": "Pour essayer",
       "quarterly": "Le plus choisi",
       "yearly": "Le moins cher par mois",
-      "bfem_pass": "Jusqu’à la fin de l’examen",
       "family_monthly": "Jusqu’à 4 enfants",
       "family_quarterly": "Jusqu’à 4 enfants, le plus choisi",
       "family_yearly": "Jusqu’à 4 enfants, le moins cher par mois"

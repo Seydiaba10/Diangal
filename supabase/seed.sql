@@ -59432,8 +59432,7 @@ insert into public.exam_sessions (id, exam_type, year, starts_on, is_official) v
 insert into public.plans (code, name, price_fcfa, duration_days, sort_order) values
   ('monthly', '1 mois', 2000, 30, 1),
   ('quarterly', '3 mois', 5000, 90, 2),
-  ('yearly', '1 an', 15000, 365, 3),
-  ('bfem_pass', 'Pass BFEM', 7500, 270, 4);
+  ('yearly', '1 an', 15000, 365, 3);
 insert into public.platform_settings (key, value) values ('commission_rate', '0.15'::jsonb);
 update public.plans set is_active = true where max_children is not null;
 update public.platform_settings set value = '{"enabled": true}'::jsonb where key = 'free_tier';

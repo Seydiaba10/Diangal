@@ -1,7 +1,6 @@
 import { Check, Crown, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { ButtonLink } from "@/components/ui/button";
-import { cn } from "@/lib/cn";
 import { formatFCFA } from "@/lib/format";
 import { getPlans } from "../data";
 
@@ -58,7 +57,7 @@ export async function PlanCards({ ctaHref = "/inscription", familyHref = "/inscr
           {plans
             .filter((p) => p.code !== "monthly")
             .map((plan) => (
-              <div key={plan.code} className={cn("rounded-xl bg-premium-50 p-3", plan.code === "bfem_pass" && "col-span-2")}>
+              <div key={plan.code} className="rounded-xl bg-premium-50 p-3">
                 <p className="text-xs font-medium text-premium-700">{t(`plans.${plan.code}`)}</p>
                 <p className="whitespace-nowrap font-semibold text-ink xl:text-sm">{formatFCFA(plan.priceFcfa)}</p>
               </div>

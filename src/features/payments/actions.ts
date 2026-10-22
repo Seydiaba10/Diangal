@@ -13,7 +13,7 @@ import type { PaymentChannel, PaymentRecord } from "@/types/domain";
 import { PAYMENT_CHANNELS } from "./data";
 
 const DAY_MS = 86_400_000;
-const PLAN_CODES = ["monthly", "quarterly", "yearly", "bfem_pass"];
+const PLAN_CODES = ["monthly", "quarterly", "yearly"];
 /** Formule Famille : payée par un parent, pour ses enfants reliés (4 au plus). */
 const FAMILY_PLAN_CODES = ["family_monthly", "family_quarterly", "family_yearly"];
 const BENEFICIARIES: Record<string, string> = {

@@ -6,7 +6,6 @@ import { Logo } from "@/components/layout/logo";
 import { ButtonLink } from "@/components/ui/button";
 import { ROLE_HOME } from "@/features/account/roles";
 import { getAuthIdentity } from "@/features/account/session";
-import { cn } from "@/lib/cn";
 import { isSupabaseConfigured } from "@/lib/env";
 
 const LINKS = [
@@ -22,12 +21,12 @@ async function GuestLinks() {
   const t = await getTranslations("marketing.header");
   return (
     <>
-      <Link href="/connexion" className="hidden h-11 items-center rounded-xl px-3 text-sm font-medium text-ink hover:bg-canvas sm:inline-flex">
+      <Link href="/connexion" className="inline-flex h-11 items-center whitespace-nowrap rounded-xl px-2 text-sm font-medium text-ink hover:bg-canvas sm:px-3">
         {t("signIn")}
       </Link>
       <ButtonLink href="/inscription" size="sm">
         {t("signUp")}
-        <ArrowRight className="size-4" aria-hidden />
+        <ArrowRight className="hidden size-4 sm:block" aria-hidden />
       </ButtonLink>
     </>
   );
@@ -47,12 +46,12 @@ async function AccountLinks() {
 }
 
 /** Barre de navigation en « pilule » flottante, inspirée de la maquette Kindering. */
-export async function MarketingHeader({ overlay = false }: { overlay?: boolean }) {
+export async function MarketingHeader() {
   const t = await getTranslations("marketing.header");
   return (
-    <header className={cn("z-20 w-full px-4 pt-4", overlay ? "absolute inset-x-0 top-0" : "relative")}>
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 rounded-2xl border border-white/70 bg-surface/90 px-3 shadow-sm backdrop-blur sm:px-4">
-        <Logo href="/" />
+    <header className="relative z-20 w-full px-4 pt-4">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 rounded-2xl border border-line bg-surface/95 px-3 shadow-sm backdrop-blur sm:px-4">
+        <Logo href="/" compact />
         <nav aria-label={t("label")} className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {LINKS.map((link) => (

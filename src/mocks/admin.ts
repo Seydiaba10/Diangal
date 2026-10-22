@@ -86,7 +86,7 @@ export const REPORTS: ReportRow[] = [
 export const PAYMENTS_HISTORY: PaymentRecord[] = [
   { id: "pay-1", reference: "DGL-2610-0001", payerName: "Ibou Faye", beneficiaryName: "Ibou Faye", planCode: "monthly", amountFcfa: 2000, channel: "wave", status: "succeeded", createdAt: "2026-10-01T10:00:00Z" },
   { id: "pay-2", reference: "DGL-2610-0002", payerName: "Aminata Sow", beneficiaryName: "Cheikh Sow", planCode: "yearly", amountFcfa: 15000, channel: "orange_money", status: "succeeded", createdAt: "2026-10-03T19:22:00Z" },
-  { id: "pay-3", reference: "DGL-2610-0003", payerName: "Khadija Sarr", beneficiaryName: "Khadija Sarr", planCode: "bfem_pass", amountFcfa: 7500, channel: "wave", status: "succeeded", createdAt: "2026-10-05T08:41:00Z" },
+  { id: "pay-3", reference: "DGL-2610-0003", payerName: "Khadija Sarr", beneficiaryName: "Khadija Sarr", planCode: "quarterly", amountFcfa: 5000, channel: "wave", status: "succeeded", createdAt: "2026-10-05T08:41:00Z" },
   { id: "pay-4", reference: "DGL-2610-0004", payerName: "Ousseynou Diop", beneficiaryName: "Fatou Diop", planCode: "quarterly", amountFcfa: 5000, channel: "free_money", status: "failed", createdAt: "2026-10-06T21:05:00Z" },
   { id: "pay-5", reference: "DGL-2610-0005", payerName: "Ndèye Mbaye", beneficiaryName: "Aliou Mbaye", planCode: "monthly", amountFcfa: 2000, channel: "card", status: "succeeded", createdAt: "2026-10-08T12:12:00Z" },
 ];
