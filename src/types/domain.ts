@@ -390,11 +390,13 @@ export interface ChildOverview {
 
 export type PaymentChannel = "wave" | "orange_money" | "free_money" | "card";
 
-/** « bfem_pass » : ancienne offre retirée (22/10/2026), gardée pour afficher l’historique des paiements. */
-export type PlanCode = "monthly" | "quarterly" | "yearly" | "bfem_pass" | "family_monthly" | "family_quarterly" | "family_yearly";
+/** Formules proposées à la vente. */
+export type OfferPlanCode = "monthly" | "quarterly" | "yearly" | "family_monthly" | "family_quarterly" | "family_yearly";
+/** Formule d’un paiement : « bfem_pass » est une ancienne offre retirée (22/10/2026), gardée pour l’historique. */
+export type PlanCode = OfferPlanCode | "bfem_pass";
 
 export interface Plan {
-  code: PlanCode;
+  code: OfferPlanCode;
   priceFcfa: number;
   durationDays: number;
   /** Formule Famille : nombre d'enfants couverts ; null pour un pass individuel. */

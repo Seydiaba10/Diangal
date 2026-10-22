@@ -3,7 +3,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { PaymentChannel, PaymentRecord, Plan, PlanCode } from "@/types/domain";
+import type { OfferPlanCode, PaymentChannel, PaymentRecord, Plan, PlanCode } from "@/types/domain";
 
 // Paiements Supabase : offres (plans, publiques), paiements (lecture des siens ; tous pour l'admin).
 
@@ -22,7 +22,7 @@ export async function loadPlans(): Promise<(Plan & { name: string })[]> {
     .order("sort_order");
   if (error) throw new Error(`offres : ${error.message}`);
   return data.map((p) => ({
-    code: p.code as PlanCode,
+    code: p.code as OfferPlanCode,
     name: p.name,
     priceFcfa: p.price_fcfa,
     durationDays: p.duration_days,
