@@ -15,6 +15,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_deletion_requests: {
+        Row: {
+          decided_at: string | null
+          decided_by: string | null
+          id: string
+          requested_at: string
+          status: string
+          student_id: string
+        }
+        Insert: {
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          requested_at?: string
+          status?: string
+          student_id: string
+        }
+        Update: {
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          requested_at?: string
+          status?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_deletion_requests_decided_by_fkey"
+            columns: ["decided_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "account_deletion_requests_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_questions: {
         Row: {
           assessment_id: string
@@ -2403,6 +2445,10 @@ export type Database = {
         Returns: undefined
       }
       admin_set_free_tier: { Args: { p_enabled: boolean }; Returns: undefined }
+      answer_account_deletion_request: {
+        Args: { p_approve: boolean; p_student: string }
+        Returns: undefined
+      }
       answer_tutor_invite: {
         Args: { p_accept: boolean; p_student: string; p_tutor: string }
         Returns: undefined
@@ -2416,6 +2462,7 @@ export type Database = {
         }
         Returns: Json
       }
+      cancel_account_deletion_request: { Args: never; Returns: undefined }
       cancel_tutor_session: { Args: { p_session: string }; Returns: undefined }
       complete_lesson: { Args: { p_lesson: string }; Returns: undefined }
       confirm_parent_link: { Args: { p_parent: string }; Returns: undefined }
@@ -2448,6 +2495,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      delete_account: { Args: { p_target: string }; Returns: undefined }
       delete_tutor_assignment: {
         Args: { p_assignment: string }
         Returns: undefined
@@ -2455,6 +2503,10 @@ export type Database = {
       end_tutor_link: {
         Args: { p_student: string; p_tutor: string }
         Returns: undefined
+      }
+      get_account_deletion_status: {
+        Args: { p_target?: string }
+        Returns: Json
       }
       get_assessments_catalog: {
         Args: never
@@ -2521,6 +2573,7 @@ export type Database = {
       get_tutor_student: { Args: { p_student: string }; Returns: Json }
       get_tutor_students: { Args: never; Returns: Json }
       invite_student_by_code: { Args: { p_code: string }; Returns: Json }
+      is_account_anonymized: { Args: { p_target: string }; Returns: boolean }
       link_child_by_code: { Args: { p_code: string }; Returns: undefined }
       promote_student: {
         Args: { p_series?: string; p_student: string }
@@ -2534,6 +2587,7 @@ export type Database = {
         Args: { p_child: string; p_parent: string; p_pin: string }
         Returns: string
       }
+      request_account_deletion: { Args: never; Returns: string }
       request_parental_consent: {
         Args: { p_parent_phone: string }
         Returns: undefined
@@ -2612,6 +2666,7 @@ export type Database = {
         Returns: Json
       }
       submit_tutor_for_review: { Args: never; Returns: undefined }
+      sync_my_contact: { Args: never; Returns: undefined }
       tutor_message_student: {
         Args: { p_body: string; p_student: string }
         Returns: string

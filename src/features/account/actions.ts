@@ -4,16 +4,25 @@ import type { AuthError } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
-import { isSmsEnabled, isSupabaseConfigured, isWhatsAppEnabled, publicEnv } from "@/lib/env";
+import { isSupabaseConfigured, phoneCountries } from "@/lib/env";
 import { isLevelCode } from "@/lib/levels";
+import { isAllowedPhone } from "@/lib/phone";
 import { safeInternalPath } from "@/lib/safe-path";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { logAudit, mockState } from "@/mocks/progress-store";
 import { DEMO_PARENT, DEMO_STUDENT_LINK_CODE } from "@/mocks/users";
 import type { AppRole, SubjectCode } from "@/types/domain";
 import { DEMO_ROLE_COOKIE } from "./data";
 import { getEnabledSocialProviders, type SocialProvider } from "./oauth";
+import {
+  emailRedirect,
+  parseChannel,
+  phoneChannelReady,
+  readPhone,
+  rememberOtpChannel,
+  sendErrorKey,
+  type PhoneChannel,
+} from "./otp";
 import { LOGIN_PATH, parseSpace, ROLE_HOME, ROLES, type LoginSpace } from "./roles";
 import { requireIdentity } from "./session";
 import { completePendingSignup, pendingSignupMetadata, type SignupExtras } from "./signup";
@@ -36,51 +45,8 @@ function parseRole(value: FormDataEntryValue | null): AppRole {
   return ROLES.includes(value as AppRole) ? (value as AppRole) : "student";
 }
 
-/** « 77 123 45 67 » ou « +221771234567 » → « +221771234567 », sinon null. */
-function toSenegalPhone(raw: string): string | null {
-  const digits = raw.replace(/\D/g, "");
-  const local = digits.length === 12 && digits.startsWith("221") ? digits.slice(3) : digits;
-  return /^\d{9}$/.test(local) ? `+221${local}` : null;
-}
-
-/** Canal du code : email, SMS ou WhatsApp (les deux derniers pour un numéro de téléphone). */
-type CodeChannel = "email" | "sms" | "whatsapp";
-type PhoneChannel = Exclude<CodeChannel, "email">;
-
-function parseChannel(value: FormDataEntryValue | null): CodeChannel {
-  return value === "sms" || value === "whatsapp" ? value : "email";
-}
-
-function phoneChannelReady(channel: PhoneChannel): boolean {
-  return channel === "whatsapp" ? isWhatsAppEnabled() : isSmsEnabled();
-}
-
-/**
- * Le Send SMS Hook ne reçoit que le numéro et le code : on note le canal choisi juste avant
- * l'envoi, la fonction Edge « send-sms » le lit (private.otp_channels, clé secrète uniquement).
- */
-async function rememberOtpChannel(phone: string, channel: PhoneChannel) {
-  const { error } = await createSupabaseAdminClient().rpc("set_otp_channel", { p_phone: phone, p_channel: channel });
-  if (error) console.error("canal du code non enregistré :", error.message);
-}
-
 /** Page de retour après connexion : uniquement un chemin interne. */
 const safeNext = safeInternalPath;
-
-/** Erreur d'envoi de code → clé de message affichée. */
-function sendErrorKey(error: AuthError): "unknown" | "limit" | "sms" | "send" {
-  const text = `${error.code ?? ""} ${error.message}`.toLowerCase();
-  if (text.includes("signups not allowed") || text.includes("otp_disabled") || text.includes("user not found")) return "unknown";
-  if (error.status === 429 || text.includes("rate limit")) return "limit";
-  if (text.includes("phone") || text.includes("sms")) return "sms";
-  return "send";
-}
-
-/** Page où mène le lien de l'email ou le retour d'un réseau social (ouverture de la session côté serveur). */
-function emailRedirect(next: string | null, space: LoginSpace = "famille") {
-  const params = new URLSearchParams({ ...(next ? { next } : {}), ...(space === "repetiteur" ? { espace: space } : {}) });
-  return `${publicEnv.NEXT_PUBLIC_SITE_URL}/auth/confirmation${params.size ? `?${params}` : ""}`;
-}
 
 async function roleOf(userId: string): Promise<AppRole | null> {
   const supabase = await createSupabaseServerClient();
@@ -106,6 +72,11 @@ export async function requestLoginCodeAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   let identifiant: string;
+  // Compte inconnu : même réponse qu'un envoi réussi (pas d'indice sur les comptes existants).
+  const failed = (error: AuthError | null) => {
+    const key = error ? sendErrorKey(error) : null;
+    if (key && key !== "unknown") back(key);
+  };
   if (email) {
     identifiant = raw.toLowerCase();
     if (!EMAIL.test(identifiant)) back("email");
@@ -113,15 +84,15 @@ export async function requestLoginCodeAction(formData: FormData) {
       email: identifiant,
       options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(next, space) },
     });
-    if (error) back(sendErrorKey(error));
+    failed(error);
   } else {
     if (!phoneChannelReady(channel)) back(channel);
-    const phone = toSenegalPhone(raw);
+    const phone = readPhone(raw, formData.get("pays"));
     if (!phone) back("phone");
     identifiant = phone!;
     await rememberOtpChannel(identifiant, channel);
     const { error } = await supabase.auth.signInWithOtp({ phone: identifiant, options: { shouldCreateUser: false } });
-    if (error) back(sendErrorKey(error));
+    failed(error);
   }
   redirect(`/connexion/code?${new URLSearchParams({ identifiant: identifiant!, canal: channel, espace: space, ...(next ? { next } : {}) })}`);
 }
@@ -178,7 +149,7 @@ export async function resendLoginCodeAction(formData: FormData) {
         email: identifiant,
         options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(next, space) },
       });
-    } else if (phoneChannelReady(canal) && toSenegalPhone(identifiant)) {
+    } else if (phoneChannelReady(canal) && isAllowedPhone(identifiant, phoneCountries())) {
       await rememberOtpChannel(identifiant, canal);
       await supabase.auth.signInWithOtp({ phone: identifiant, options: { shouldCreateUser: false } });
     }
@@ -239,6 +210,9 @@ export interface SignupInput {
   /** « phone » = code par SMS ; « whatsapp » = même numéro, code sur WhatsApp. */
   method: "phone" | "whatsapp" | "email";
   identifier: string;
+  /** Indicatif choisi pour le numéro (221 par défaut) et pour celui du parent. */
+  dialCode: string;
+  parentDialCode: string;
   firstName: string;
   lastName: string;
   birthDate: string;
@@ -258,7 +232,7 @@ function cleanSignup(input: SignupInput) {
   const firstName = input.firstName.trim().slice(0, 60);
   const lastName = input.lastName.trim().slice(0, 60);
   const email = input.method === "email" ? input.identifier.trim().toLowerCase() : null;
-  const phone = input.method !== "email" ? toSenegalPhone(input.identifier) : null;
+  const phone = input.method !== "email" ? readPhone(input.identifier, input.dialCode) : null;
   const valid =
     role !== "admin" &&
     firstName &&
@@ -272,7 +246,7 @@ function cleanSignup(input: SignupInput) {
 /** Compléments appliqués une fois l'adresse vérifiée (voir signup.ts). */
 function extrasOf(input: SignupInput): SignupExtras {
   return {
-    parentPhone: toSenegalPhone(input.parentPhone) ?? undefined,
+    parentPhone: readPhone(input.parentPhone, input.parentDialCode) ?? undefined,
     childCode: input.childCode.trim().slice(0, 20) || undefined,
     city: input.city.trim().slice(0, 60) || undefined,
     subjects: input.subjects.slice(0, 10),
@@ -345,7 +319,7 @@ export async function completeSignupAction(input: SignupInput & { code: string }
 /** Demande (ou relance) de validation au parent : 3 SMS au plus par 24 h. */
 export async function resendConsentRequestAction(formData: FormData) {
   if (!isSupabaseConfigured()) redirect("/eleve/profil?demande=envoyee");
-  const phone = toSenegalPhone(String(formData.get("parentPhone") ?? ""));
+  const phone = readPhone(String(formData.get("parentPhone") ?? ""), formData.get("pays"));
   if (!phone) redirect("/eleve/profil?demande=telephone");
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.rpc("request_parental_consent", { p_parent_phone: phone! });

@@ -37,6 +37,7 @@ async function ParentHome({ searchParams }: { searchParams: PageProps<"/parent">
       {params.consentement === "refused" ? <Notice tone="warning">{t("notices.consentRefused")}</Notice> : null}
       {params.lien === "ok" ? <Notice tone="success">{t("notices.linked")}</Notice> : null}
       {params.lien === "attente" ? <Notice tone="success">{t("notices.linkPending")}</Notice> : null}
+      {params.enfant === "supprime" ? <Notice tone="success">{t("notices.childDeleted")}</Notice> : null}
       {tutorInvites.length ? (
         <div className="flex flex-col gap-3 rounded-2xl bg-brand-50 p-5 sm:flex-row sm:items-center sm:justify-between">
           <p className="flex gap-2 text-sm text-ink">

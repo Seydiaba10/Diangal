@@ -40,7 +40,9 @@
     "onlineSessions": "Cours en ligne",
     "contentTracking": "Suivi des contenus",
     "referential": "Référentiel",
-    "family": "Famille"
+    "family": "Famille",
+    "account": "Mon compte",
+    "signOut": "Se déconnecter"
   },
   "header": {
     "searchLabel": "Rechercher un cours",
@@ -119,7 +121,9 @@
     "messages": "Messages",
     "downloads": "Téléchargements",
     "notifications": "Notifications",
-    "subscription": "Abonnement"
+    "subscription": "Abonnement",
+    "account": "Mon compte",
+    "accountDeletion": "Supprimer le compte"
   },
   "breadcrumb": {
     "label": "Fil d’Ariane",
@@ -816,16 +820,14 @@
         "repetiteur": "Répétiteurs : accédez à votre espace personnel."
       },
       "tabs": {
-        "whatsapp": "WhatsApp",
+        "phone": "Téléphone",
         "email": "Email"
       },
       "emailLabel": "Email",
       "emailPlaceholder": "Entrez votre email",
       "emailHint": "Vous recevrez un code à 6 chiffres par email.",
-      "whatsappLabel": "Numéro WhatsApp",
       "phonePlaceholder": "77 123 45 67",
-      "whatsappHint": "Vous recevrez un code à 6 chiffres sur WhatsApp.",
-      "whatsappSoon": "La connexion par WhatsApp arrive bientôt : utilisez votre email.",
+      "whatsappSoon": "La connexion par WhatsApp ou par SMS arrive bientôt : utilisez votre email.",
       "submit": "Recevoir le code",
       "or": "Ou se connecter avec",
       "socialLabel": "Se connecter avec {provider}",
@@ -843,10 +845,9 @@
       },
       "errors": {
         "email": "Entrez une adresse email valide.",
-        "phone": "Entrez un numéro à 9 chiffres.",
-        "unknown": "Aucun compte avec cet identifiant. Créez votre compte en vous inscrivant.",
+        "phone": "Numéro invalide : vérifiez l’indicatif et le numéro.",
         "limit": "Trop de codes demandés. Réessayez dans quelques minutes.",
-        "sms": "La connexion par SMS n’est pas ouverte : utilisez WhatsApp ou votre email.",
+        "sms": "La connexion par SMS n’est pas encore ouverte : utilisez WhatsApp ou votre email.",
         "whatsapp": "La connexion par WhatsApp n’est pas encore ouverte : utilisez votre email.",
         "send": "Le code n’a pas pu être envoyé. Réessayez dans un instant.",
         "profil": "Votre profil est introuvable. Écrivez au support DIANGAL.",
@@ -855,12 +856,21 @@
         "socialUnknown": "Aucun compte DIANGAL n’utilise l’email de ce réseau. Inscrivez-vous d’abord, puis vous pourrez vous connecter avec ce réseau."
       },
       "childLogin": "Un enfant sans email ni téléphone ?",
-      "childLoginLink": "Connexion avec le code famille"
+      "childLoginLink": "Connexion avec le code famille",
+      "phoneLabel": "Numéro de téléphone",
+      "dialCode": "Indicatif du pays",
+      "channelLegend": "Recevoir le code par",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS"
+      },
+      "phoneHint": "Un code à 6 chiffres vous sera envoyé. Sur WhatsApp, il faut internet ; le SMS arrive même sans internet.",
+      "accountDeleted": "Votre compte a été supprimé. Merci d’avoir utilisé DIANGAL."
     },
     "code": {
       "title": "Entrez votre code",
-      "sentTo": "Nous avons envoyé un code à 6 chiffres à {to}.",
-      "sentToWhatsapp": "Nous avons envoyé un code à 6 chiffres sur WhatsApp au {to}.",
+      "sentTo": "Si un compte DIANGAL utilise {to}, un code à 6 chiffres vient d’y être envoyé.",
+      "sentToWhatsapp": "Si un compte DIANGAL utilise le {to}, un code à 6 chiffres vient d’être envoyé sur WhatsApp.",
       "label": "Code de vérification",
       "error": "Ce code n’est pas le bon ou il a expiré. Vérifiez-le et réessayez.",
       "demoHint": "Démo : le code est 123456.",
@@ -869,8 +879,11 @@
       "changeEmail": "Changer d’adresse",
       "resend": "Renvoyer un code",
       "resent": "Un nouveau code vient d’être envoyé.",
-      "linkSent": "Nous avons envoyé un email à {to}. Ouvrez-le sur cet appareil et touchez le lien de connexion : vous serez connecté automatiquement.",
-      "codeOptional": "L’email contient un code à 6 chiffres ? Saisissez-le ici."
+      "linkSent": "Si un compte DIANGAL utilise {to}, un email vient d’y être envoyé. Ouvrez-le sur cet appareil et touchez le lien de connexion : vous serez connecté automatiquement.",
+      "codeOptional": "L’email contient un code à 6 chiffres ? Saisissez-le ici.",
+      "sentToSms": "Si un compte DIANGAL utilise le {to}, un code à 6 chiffres vient d’être envoyé par SMS.",
+      "noCode": "Rien reçu après quelques minutes ? Vérifiez l’identifiant, ou",
+      "signUpLink": "créez votre compte"
     }
   },
   "signup": {
@@ -905,6 +918,7 @@
     },
     "methods": {
       "whatsapp": "WhatsApp",
+      "phone": "SMS",
       "email": "Email"
     },
     "fields": {
@@ -920,18 +934,20 @@
       "chooseSeries": "Choisir la série",
       "childCode": "Code élève de votre enfant (facultatif)",
       "subjects": "Matières enseignées",
-      "parentPhone": "Numéro de téléphone de ton parent"
+      "parentPhone": "Numéro de téléphone de ton parent",
+      "dialCode": "Indicatif du pays"
     },
     "hints": {
-      "whatsapp": "Numéro WhatsApp sénégalais à 9 chiffres : le code arrivera dans WhatsApp.",
+      "whatsapp": "Le code arrivera dans WhatsApp.",
       "code": "Code envoyé à {to}.",
       "demoCode": "Démo : le code est 123456.",
       "birthDate": "Elle sert à protéger les plus jeunes. Elle n’est jamais affichée.",
       "childCode": "Votre enfant le trouve dans son profil. Vous pourrez aussi l’ajouter plus tard.",
       "tutorReview": "Votre profil sera visible après la vérification de vos pièces par notre équipe.",
-      "emailOnly": "Pour l’instant, l’inscription se fait par email. WhatsApp arrive bientôt.",
+      "emailOnly": "Pour l’instant, l’inscription se fait par email. WhatsApp et SMS arrivent bientôt.",
       "codeExpiry": "Le code est valable 10 minutes.",
-      "linkSent": "Nous avons envoyé un email à {to}. Ouvre-le sur cet appareil et touche le lien : ton compte sera créé automatiquement. S’il contient un code à 6 chiffres, saisis-le ici."
+      "linkSent": "Nous avons envoyé un email à {to}. Ouvre-le sur cet appareil et touche le lien : ton compte sera créé automatiquement. S’il contient un code à 6 chiffres, saisis-le ici.",
+      "sms": "Le code arrivera par SMS, même sans internet."
     },
     "minor": {
       "title": "Validation par un parent",
@@ -945,7 +961,7 @@
       "dataNote": "Tes données ne sont jamais vendues ni utilisées pour de la publicité."
     },
     "errors": {
-      "phone": "Entre un numéro à 9 chiffres.",
+      "phone": "Numéro invalide : vérifie l’indicatif et le numéro.",
       "email": "Entre une adresse email valide.",
       "code": "Le code contient 6 chiffres.",
       "wrongCode": "Ce code n’est pas le bon ou il a expiré. Vérifie-le et réessaie.",
@@ -955,7 +971,7 @@
       "series": "Choisis ta série.",
       "subjects": "Choisis au moins une matière.",
       "terms": "Tu dois accepter les conditions pour continuer.",
-      "parentPhone": "Entre le numéro de ton parent (9 chiffres).",
+      "parentPhone": "Entre le numéro de ton parent (vérifie l’indicatif).",
       "generic": "Une erreur est survenue. Réessaie.",
       "limit": "Trop de codes demandés. Réessaie dans quelques minutes.",
       "sms": "L’envoi par SMS n’est pas encore ouvert : utilise ton adresse email.",
@@ -1129,10 +1145,11 @@
       "parentPhone": "Numéro de ton parent",
       "send": "Envoyer la demande",
       "errors": {
-        "phone": "Numéro invalide : 9 chiffres après +221.",
+        "phone": "Numéro invalide : vérifie l’indicatif et le numéro.",
         "tooMany": "Tu as déjà envoyé 3 demandes aujourd’hui. Réessaie demain.",
         "generic": "La demande n’a pas pu partir. Réessaie dans un instant."
-      }
+      },
+      "dialCode": "Indicatif du pays"
     },
     "linkCode": {
       "title": "Mon code élève",
@@ -1140,10 +1157,10 @@
     },
     "data": {
       "title": "Mes données",
-      "body": "Tu pourras bientôt télécharger ou supprimer tes données ici (avec l’accord de ton parent si tu es mineur).",
+      "body": "Tu peux supprimer ton compte (avec l’accord de ton parent si tu es mineur). Le téléchargement de tes données arrive bientôt.",
       "export": "Télécharger mes données",
       "delete": "Supprimer mon compte",
-      "soon": "Bientôt disponible."
+      "soon": "Téléchargement des données : bientôt disponible."
     },
     "language": {
       "title": "Langue",
@@ -1207,7 +1224,9 @@
       "tutor_invite_answer": "{accepted, select, true {{student} a accepté votre suivi : vous voyez maintenant ses notes.} other {Votre invitation pour {student} a été refusée.}}",
       "tutor_assignment": "{child, select, none {Nouveau devoir de {tutor} : « {title} ».} other {{tutor} a donné un devoir à {child} : « {title} ».}}",
       "tutor_session": "{child, select, none {{tutor} a planifié un cours en ligne le {startsAt} : {topic}.} other {{tutor} a planifié un cours en ligne avec {child} le {startsAt} : {topic}.}}",
-      "tutor_session_cancelled": "{child, select, none {{tutor} a annulé le cours du {startsAt}.} other {{tutor} a annulé le cours de {child} du {startsAt}.}}"
+      "tutor_session_cancelled": "{child, select, none {{tutor} a annulé le cours du {startsAt}.} other {{tutor} a annulé le cours de {child} du {startsAt}.}}",
+      "account_deletion_request": "{child} demande la suppression de son compte DIANGAL : acceptez ou refusez sa demande.",
+      "account_deletion_refused": "Ton parent a refusé la suppression de ton compte. Parles-en avec lui."
     }
   },
   "parentHome": {
@@ -1218,7 +1237,8 @@
       "consentGranted": "Merci ! Le compte de votre enfant est validé : toutes les fonctions sont débloquées.",
       "consentRefused": "Vous avez refusé : votre enfant garde l’accès aux cours gratuits uniquement.",
       "linked": "Votre enfant est maintenant relié à votre compte.",
-      "linkPending": "Demande envoyée : votre enfant doit la confirmer dans son profil DIANGAL."
+      "linkPending": "Demande envoyée : votre enfant doit la confirmer dans son profil DIANGAL.",
+      "childDeleted": "Le compte de votre enfant a été supprimé. Ses paiements restent dans votre historique."
     },
     "consentBanner": "{child} attend votre validation pour contacter des répétiteurs et utiliser la messagerie.",
     "consentCta": "Valider maintenant",
@@ -1248,7 +1268,8 @@
     "metaTitle": "Suivi de l’enfant",
     "subjects": "Progression par matière",
     "programSoon": "Le programme détaillé de cette classe sera publié prochainement.",
-    "readOnly": "Vous consultez la progression en lecture seule. Votre enfant garde la main sur ses révisions."
+    "readOnly": "Vous consultez la progression en lecture seule. Votre enfant garde la main sur ses révisions.",
+    "deleteAccount": "Supprimer le compte de {name}"
   },
   "addChild": {
     "title": "Ajouter un enfant",
@@ -1298,10 +1319,10 @@
     },
     "data": {
       "title": "Données de la famille",
-      "body": "Vous pourrez bientôt exporter ou supprimer ici vos données et celles de vos enfants mineurs.",
+      "body": "Vous pouvez supprimer votre compte, ou celui d’un enfant mineur depuis sa page. L’export des données arrive bientôt.",
       "export": "Exporter les données",
       "delete": "Supprimer le compte",
-      "soon": "Bientôt disponible."
+      "soon": "Export des données : bientôt disponible."
     },
     "signOut": "Se déconnecter",
     "contactUnknown": "Coordonnées non renseignées"
@@ -2150,5 +2171,122 @@
     "speaking": "Lecture en cours",
     "paused": "Lecture en pause",
     "unavailable": "L’écoute n’est pas disponible sur ce navigateur : essaie avec Chrome, ou installe une voix française dans les réglages du téléphone."
+  },
+  "account": {
+    "links": {
+      "manage": "Mon compte et sécurité"
+    },
+    "identity": {
+      "title": "Identifiants de connexion",
+      "subtitle": "{tu, select, true {Ce qui te permet de te connecter à DIANGAL.} other {Ce qui vous permet de vous connecter à DIANGAL.}}",
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "none": "Aucun",
+      "editProfile": "Modifier le profil"
+    },
+    "phone": {
+      "addTitle": "Ajouter un numéro de téléphone",
+      "changeTitle": "Changer de numéro",
+      "subtitle": "{tu, select, true {Avec un numéro vérifié, tu te reconnectes par WhatsApp ou par SMS, même sans email.} other {Avec un numéro vérifié, vous vous reconnectez par WhatsApp ou par SMS, même sans email.}}",
+      "soon": "L’ajout d’un numéro sera possible dès l’ouverture de l’envoi des codes par WhatsApp ou par SMS (bientôt).",
+      "label": "Numéro de téléphone",
+      "dialCode": "Indicatif du pays",
+      "hint": "{tu, select, true {Tu recevras un code à 6 chiffres pour confirmer ce numéro.} other {Vous recevrez un code à 6 chiffres pour confirmer ce numéro.}}",
+      "send": "Recevoir le code",
+      "sentWhatsapp": "Code envoyé sur WhatsApp au {to}.",
+      "sentSms": "Code envoyé par SMS au {to}.",
+      "codeLabel": "Code reçu",
+      "verify": "Confirmer le numéro",
+      "wrongCode": "{tu, select, true {Ce code n’est pas le bon ou il a expiré. Réessaie.} other {Ce code n’est pas le bon ou il a expiré. Réessayez.}}",
+      "notices": {
+        "ajoute": "{tu, select, true {Ton numéro est confirmé : tu peux maintenant te connecter avec.} other {Votre numéro est confirmé : vous pouvez maintenant vous connecter avec.}}",
+        "demo": "Mode démo : aucun numéro n’est enregistré.",
+        "ferme": "L’envoi des codes par WhatsApp ou par SMS n’est pas encore ouvert.",
+        "numero": "{tu, select, true {Numéro invalide : vérifie l’indicatif et le numéro.} other {Numéro invalide : vérifiez l’indicatif et le numéro.}}",
+        "envoi": "{tu, select, true {Ce numéro ne peut pas être ajouté. Vérifie-le ou utilise-en un autre.} other {Ce numéro ne peut pas être ajouté. Vérifiez-le ou utilisez-en un autre.}}",
+        "limite": "{tu, select, true {Trop de codes demandés. Réessaie dans quelques minutes.} other {Trop de codes demandés. Réessayez dans quelques minutes.}}"
+      }
+    },
+    "session": {
+      "title": "Session",
+      "subtitle": "{tu, select, true {Sur un téléphone partagé, pense à te déconnecter. Tes cours et tes notes restent enregistrés.} other {Sur un appareil partagé, pensez à vous déconnecter. Vos données restent enregistrées.}}",
+      "signOut": "Se déconnecter"
+    },
+    "deletion": {
+      "title": "Supprimer le compte",
+      "subtitle": "{tu, select, true {Tes données personnelles seront effacées. Si tu es mineur, ton parent devra donner son accord.} other {Vos données personnelles seront effacées. Le compte d’un enfant mineur se supprime depuis sa page.}}",
+      "cta": "Supprimer le compte"
+    }
+  },
+  "accountDeletion": {
+    "notFound": "Ce compte n’existe plus, ou vous n’y avez pas accès.",
+    "notAllowed": "Ce compte appartient à un élève majeur : lui seul peut le supprimer.",
+    "blockedAdmin": "Un compte administrateur ne se supprime pas depuis cette page : demandez-le à un autre administrateur.",
+    "demo": "Mode démo : rien n’a été supprimé.",
+    "codeSentEmail": "{tu, select, true {Un email vient de t’être envoyé : saisis le code ci-dessous, ou ouvre le lien sur cet appareil.} other {Un email vient de vous être envoyé : saisissez le code ci-dessous, ou ouvrez le lien sur cet appareil.}}",
+    "codeSentPhone": "{tu, select, true {Un code vient de t’être envoyé : saisis-le ci-dessous.} other {Un code vient de vous être envoyé : saisissez-le ci-dessous.}}",
+    "childRequest": "{child} a demandé la suppression de son compte le {date}. Vous pouvez accepter ci-dessous, ou refuser.",
+    "refuseChild": "Refuser la demande de {child}",
+    "managed": {
+      "title": "D’abord, les profils de vos enfants",
+      "body": "Vous gérez des profils d’enfants qui se connectent avec le code famille. Supprimez-les d’abord : sans votre compte, ils ne pourraient plus se connecter.",
+      "delete": "Supprimer ce profil"
+    },
+    "request": {
+      "title": "Demander la suppression de ton compte",
+      "body": "Tu as moins de 18 ans : ton parent doit accepter. Il recevra une notification.",
+      "send": "Demander à mon parent",
+      "pending": "Demande envoyée le {date}. Ton parent doit répondre.",
+      "cancel": "Annuler ma demande"
+    },
+    "requests": {
+      "envoyee": "{tu, select, true {Ta demande a été envoyée à ton parent.} other {La demande a été envoyée.}}",
+      "annulee": "La demande a été annulée.",
+      "refusee": "Vous avez refusé : le compte de {child} est conservé."
+    },
+    "effects": {
+      "title": "{tu, select, true {Ce qui se passe si tu supprimes ton compte} other {Ce qui se passe si vous supprimez votre compte}}",
+      "titleChild": "Ce qui se passe si vous supprimez le compte de {child}",
+      "erasedTitle": "Effacé",
+      "erased": {
+        "identity": "Nom, email, numéro de téléphone et connexion",
+        "progress": "Progression, notes, contrôles et historique des classes",
+        "messages": "Messages (remplacés par « message supprimé ») et notifications",
+        "family": "Liens avec les parents, code famille et codes PIN",
+        "tutor": "Profil de répétiteur, pièces justificatives et disponibilités"
+      },
+      "keptTitle": "Gardé (obligation légale)",
+      "kept": {
+        "payments": "Paiements et abonnements, sans nom, pour la comptabilité",
+        "consents": "Preuves des consentements donnés",
+        "audit": "Une ligne au journal de sécurité qui note la suppression"
+      }
+    },
+    "verify": {
+      "title": "Vérification d’identité",
+      "body": "{tu, select, true {Pour te protéger, nous vérifions que c’est bien toi : un nouveau code est envoyé à ton identifiant de connexion.} other {Pour vous protéger, nous vérifions que c’est bien vous : un nouveau code est envoyé à votre identifiant de connexion.}}",
+      "recent": "Identité vérifiée : connexion de moins de 15 minutes.",
+      "send": "Recevoir un code de confirmation"
+    },
+    "confirm": {
+      "title": "Supprimer définitivement le compte",
+      "titleChild": "Supprimer définitivement le compte de {child}",
+      "code": "Code de confirmation",
+      "word": "{tu, select, true {Pour confirmer, tape SUPPRIMER} other {Pour confirmer, tapez SUPPRIMER}}",
+      "understand": "{tu, select, true {Je comprends que c’est définitif : mes cours suivis, mes notes et mes messages seront effacés.} other {Je comprends que c’est définitif et que ces données ne pourront pas être récupérées.}}",
+      "submit": "Supprimer le compte",
+      "submitChild": "Supprimer le compte de {child}",
+      "cancel": "Annuler"
+    },
+    "errors": {
+      "confirmation": "{tu, select, true {Tape SUPPRIMER et coche la case pour confirmer.} other {Tapez SUPPRIMER et cochez la case pour confirmer.}}",
+      "code": "Ce code n’est pas le bon ou il a expiré.",
+      "reauth": "{tu, select, true {Pour ta sécurité, demande un code de confirmation, puis réessaie.} other {Pour votre sécurité, demandez un code de confirmation, puis réessayez.}}",
+      "refus": "La suppression n’a pas pu se faire. Rechargez la page et réessayez.",
+      "canal": "Aucun moyen d’envoyer un code à ce compte pour l’instant. Écrivez au support DIANGAL.",
+      "envoi": "Le code n’a pas pu être envoyé. Réessayez dans un instant.",
+      "limite": "Trop de codes demandés. Réessayez dans quelques minutes."
+    }
   }
 }

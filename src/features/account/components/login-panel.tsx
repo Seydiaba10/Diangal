@@ -1,26 +1,29 @@
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle, Smartphone } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { siApple, siFacebook, siGoogle, siX, type SimpleIcon } from "simple-icons";
+import { DialCodeSelect } from "@/components/ui/dial-code-select";
 import { Notice } from "@/components/ui/notice";
 import { cn } from "@/lib/cn";
-import { isSupabaseConfigured, isWhatsAppEnabled } from "@/lib/env";
+import { isSmsEnabled, isSupabaseConfigured, isWhatsAppEnabled, phoneCountries } from "@/lib/env";
 import { requestLoginCodeAction, signInWithSocialAction } from "../actions";
 import { getEnabledSocialProviders, SOCIAL_PROVIDERS, type SocialProvider } from "../oauth";
 import { LOGIN_PATH, SPACE_ROLES, type LoginSpace } from "../roles";
 
-const ERRORS = ["email", "phone", "unknown", "limit", "sms", "whatsapp", "send", "profil", "lien", "social", "social-inconnu"] as const;
+const ERRORS = ["email", "phone", "limit", "sms", "whatsapp", "send", "profil", "lien", "social", "social-inconnu"] as const;
 const ICONS: Record<SocialProvider, SimpleIcon> = { facebook: siFacebook, apple: siApple, google: siGoogle, x: siX };
 
 /** Champs arrondis de la maquette de connexion. */
 const PILL_INPUT =
   "h-12 w-full rounded-full border border-brand-700 bg-surface px-5 text-base text-ink placeholder:text-ink-subtle focus:border-brand-600 focus:outline-2 focus:outline-brand-600";
 
-type Channel = "whatsapp" | "email";
+type Tab = "phone" | "email";
+type PhoneChannel = "whatsapp" | "sms";
 
 /**
- * Connexion d'un espace (élèves et parents, ou répétiteurs) : code reçu sur WhatsApp ou par
- * email, ou réseau social pour un compte existant. Pas de mot de passe.
+ * Connexion d'un espace (élèves et parents, ou répétiteurs) : code reçu sur WhatsApp, par SMS
+ * ou par email, ou réseau social pour un compte existant. Pas de mot de passe.
+ * Seuls les canaux réellement branchés sont proposés (aucun envoi simulé hors démo).
  */
 export async function LoginPanel({
   space,
@@ -29,38 +32,44 @@ export async function LoginPanel({
   space: LoginSpace;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const [{ mode, erreur, next }, social, t, tDemo] = await Promise.all([
+  const [{ mode, erreur, next, info }, social, t, tDemo] = await Promise.all([
     searchParams,
     getEnabledSocialProviders(),
     getTranslations("auth.login"),
     getTranslations("demo"),
   ]);
   const demo = !isSupabaseConfigured();
-  const channels: Channel[] = demo || isWhatsAppEnabled() ? ["whatsapp", "email"] : ["email"];
-  const channel = channels.find((c) => c === mode) ?? channels[0]!;
+  const phoneChannels: PhoneChannel[] = [
+    ...(demo || isWhatsAppEnabled() ? (["whatsapp"] as const) : []),
+    ...(demo || isSmsEnabled() ? (["sms"] as const) : []),
+  ];
+  const tabs: Tab[] = phoneChannels.length ? ["phone", "email"] : ["email"];
+  const tab: Tab = tabs.includes("phone") && mode !== "email" ? "phone" : "email";
+  const preferred = phoneChannels.find((c) => c === mode) ?? phoneChannels[0];
   const error = ERRORS.find((e) => e === erreur);
   const nextValue = typeof next === "string" ? next : undefined;
   const otherSpace: LoginSpace = space === "famille" ? "repetiteur" : "famille";
-  const icons = { whatsapp: MessageCircle, email: Mail };
+  const icons = { phone: Smartphone, email: Mail };
   // Réseaux pas encore ouverts dans Supabase : affichés grisés, avec la mention « bientôt ».
   const closed = SOCIAL_PROVIDERS.filter((p) => !social[p]).map((p) => ICONS[p].title);
 
   return (
     <div className="space-y-6">
+      {info === "compte-supprime" ? <Notice tone="success">{t("accountDeleted")}</Notice> : null}
       {error ? <Notice tone="error">{t(`errors.${error === "social-inconnu" ? "socialUnknown" : error}`)}</Notice> : null}
 
-      {channels.length > 1 ? (
+      {tabs.length > 1 ? (
         <div className="flex gap-1 rounded-full bg-canvas p-1">
-          {channels.map((c) => {
+          {tabs.map((c) => {
             const Icon = icons[c];
             return (
               <Link
                 key={c}
-                href={`${LOGIN_PATH[space]}?${new URLSearchParams({ mode: c, ...(nextValue ? { next: nextValue } : {}) })}`}
-                aria-current={c === channel ? "page" : undefined}
+                href={`${LOGIN_PATH[space]}?${new URLSearchParams({ mode: c === "phone" ? preferred! : c, ...(nextValue ? { next: nextValue } : {}) })}`}
+                aria-current={c === tab ? "page" : undefined}
                 className={cn(
                   "flex h-11 flex-1 items-center justify-center gap-2 rounded-full text-sm font-medium",
-                  c === channel ? "bg-surface text-ink shadow-sm" : "text-ink-muted",
+                  c === tab ? "bg-surface text-ink shadow-sm" : "text-ink-muted",
                 )}
               >
                 <Icon className="size-4" aria-hidden />
@@ -74,10 +83,10 @@ export async function LoginPanel({
       )}
 
       <form action={requestLoginCodeAction} className="space-y-4">
-        <input type="hidden" name="mode" value={channel} />
+        {tab === "email" ? <input type="hidden" name="mode" value="email" /> : null}
         <input type="hidden" name="espace" value={space} />
         {nextValue ? <input type="hidden" name="next" value={nextValue} /> : null}
-        {channel === "email" ? (
+        {tab === "email" ? (
           <div>
             <label htmlFor="identifiant" className="text-sm font-semibold text-brand-800">
               {t("emailLabel")}
@@ -94,25 +103,42 @@ export async function LoginPanel({
             <p className="mt-1.5 text-xs text-ink-muted">{t("emailHint")}</p>
           </div>
         ) : (
-          <div>
-            <label htmlFor="identifiant" className="text-sm font-semibold text-brand-800">
-              {t("whatsappLabel")}
-            </label>
-            <div className="mt-1.5 flex gap-2">
-              <span className="flex h-12 items-center rounded-full border border-brand-700 bg-canvas px-4 font-medium text-ink">+221</span>
-              <input
-                id="identifiant"
-                name="identifiant"
-                type="tel"
-                inputMode="numeric"
-                required
-                pattern="[0-9 ]{9,12}"
-                autoComplete="tel-national"
-                placeholder={t("phonePlaceholder")}
-                className={PILL_INPUT}
-              />
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="identifiant" className="text-sm font-semibold text-brand-800">
+                {t("phoneLabel")}
+              </label>
+              <div className="mt-1.5 flex gap-2">
+                <DialCodeSelect countries={phoneCountries()} name="pays" label={t("dialCode")} className="rounded-full border-brand-700" />
+                <input
+                  id="identifiant"
+                  name="identifiant"
+                  type="tel"
+                  inputMode="tel"
+                  required
+                  pattern="[0-9 +]{6,16}"
+                  autoComplete="tel-national"
+                  placeholder={t("phonePlaceholder")}
+                  className={PILL_INPUT}
+                />
+              </div>
             </div>
-            <p className="mt-1.5 text-xs text-ink-muted">{t("whatsappHint")}</p>
+            <fieldset>
+              <legend className="text-sm font-semibold text-brand-800">{t("channelLegend")}</legend>
+              <div className="mt-1.5 grid grid-cols-2 gap-2">
+                {phoneChannels.map((c) => (
+                  <label
+                    key={c}
+                    className="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-full border border-line text-sm font-medium text-ink has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50 has-[:checked]:text-brand-800"
+                  >
+                    <input type="radio" name="mode" value={c} defaultChecked={c === preferred} className="accent-brand-600" />
+                    {c === "whatsapp" ? <MessageCircle className="size-4" aria-hidden /> : <Smartphone className="size-4" aria-hidden />}
+                    {t(`channels.${c}`)}
+                  </label>
+                ))}
+              </div>
+              <p className="mt-1.5 text-xs text-ink-muted">{t("phoneHint")}</p>
+            </fieldset>
           </div>
         )}
 

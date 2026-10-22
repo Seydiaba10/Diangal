@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AuthCard } from "@/features/account/components/auth-card";
 import { SignupWizard } from "@/features/account/components/signup-wizard";
-import { emailHasCode, isSupabaseConfigured, isWhatsAppEnabled } from "@/lib/env";
+import { emailHasCode, isSmsEnabled, isSupabaseConfigured, isWhatsAppEnabled, phoneCountries } from "@/lib/env";
 
 export async function generateMetadata() {
   const t = await getTranslations("signup");
@@ -21,6 +21,8 @@ async function Wizard({ searchParams }: { searchParams: PageProps<"/inscription"
       <SignupWizard
         initialRole={initialRole}
         whatsappEnabled={!isSupabaseConfigured() || isWhatsAppEnabled()}
+        smsEnabled={!isSupabaseConfigured() || isSmsEnabled()}
+        countries={phoneCountries()}
         emailCode={emailHasCode()}
         demo={!isSupabaseConfigured()}
       />

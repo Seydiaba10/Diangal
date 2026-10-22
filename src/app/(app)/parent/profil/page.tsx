@@ -1,15 +1,15 @@
-import { Bell, Download, LogOut, Phone, Trash } from "lucide-react";
+import { Bell, Download, Phone, Trash } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { DemoRoleSwitcher } from "@/components/layout/demo-role-switcher";
 import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
 import { UserAvatar } from "@/components/layout/session-card";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { LevelBadge } from "@/components/ui/level-badge";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { signOutAction } from "@/features/account/actions";
+import { AccountLinks } from "@/features/account/components/account-links";
 import { getOwnContact, getParentChildren, getSessionUser } from "@/features/account/data";
 
 export async function generateMetadata() {
@@ -66,22 +66,17 @@ async function ParentProfile() {
               <Download className="size-4" aria-hidden />
               {t("data.export")}
             </Button>
-            <Button variant="ghost" size="sm" disabled className="text-danger-700">
+            <ButtonLink href="/compte/suppression" variant="ghost" size="sm" className="text-danger-700 hover:bg-danger-50">
               <Trash className="size-4" aria-hidden />
               {t("data.delete")}
-            </Button>
+            </ButtonLink>
           </div>
           <p className="mt-2 text-xs text-ink-subtle">{t("data.soon")}</p>
         </SectionCard>
       </div>
       <aside className="space-y-4">
         <DemoRoleSwitcher current="parent" />
-        <form action={signOutAction}>
-          <Button type="submit" variant="outline" className="w-full">
-            <LogOut className="size-4" aria-hidden />
-            {t("signOut")}
-          </Button>
-        </form>
+        <AccountLinks />
       </aside>
     </div>
   );

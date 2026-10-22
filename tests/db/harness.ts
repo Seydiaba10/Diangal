@@ -50,6 +50,8 @@ export interface Actor {
   role: "student" | "parent" | "tutor" | "admin" | null;
   /** Assurance d'authentification (aal2 = double authentification). */
   aal?: "aal1" | "aal2";
+  /** Heure de la dernière connexion (secondes), claim « amr » du JWT. Par défaut : maintenant. */
+  loginAt?: number;
 }
 
 export const ANON: Actor = { id: null, role: null };
@@ -57,7 +59,8 @@ export const ANON: Actor = { id: null, role: null };
 /** Exécute fn dans une transaction avec le rôle Postgres et les claims JWT de l'acteur. */
 export async function as<T>(db: PGlite, actor: Actor, fn: (tx: Transaction) => Promise<T>): Promise<T> {
   return db.transaction(async (tx) => {
-    const claims = actor.id ? { sub: actor.id, role: "authenticated", user_role: actor.role, aal: actor.aal ?? "aal1" } : {};
+    const amr = [{ method: "otp", timestamp: actor.loginAt ?? Math.floor(Date.now() / 1000) }];
+    const claims = actor.id ? { sub: actor.id, role: "authenticated", user_role: actor.role, aal: actor.aal ?? "aal1", amr } : {};
     await tx.query("select set_config('request.jwt.claims', $1, true)", [JSON.stringify(claims)]);
     await tx.exec(`set local role ${actor.id ? "authenticated" : "anon"}`);
     return fn(tx);
@@ -69,10 +72,11 @@ export async function createUser(
   db: PGlite,
   meta: Record<string, string>,
   phone: string | null = null,
+  email: string | null = null,
 ): Promise<string> {
   const { rows } = await db.query<{ id: string }>(
-    "insert into auth.users (phone, raw_user_meta_data) values ($1, $2) returning id",
-    [phone, JSON.stringify(meta)],
+    "insert into auth.users (phone, email, raw_user_meta_data) values ($1, $2, $3) returning id",
+    [phone, email, JSON.stringify(meta)],
   );
   return rows[0]!.id;
 }

@@ -363,6 +363,37 @@ export interface SessionUser {
   childrenCount?: number;
 }
 
+// ── Compte ──────────────────────────────────────────────────────────────────
+
+/** Ce que l'utilisateur connecté peut faire d'un compte (le sien ou celui d'un enfant relié). */
+export type AccountDeletionMode =
+  | "direct"
+  | "parent_approval"
+  | "blocked_admin"
+  | "blocked_managed_children"
+  | "not_allowed"
+  | "not_found";
+
+export interface AccountDeletionStatus {
+  mode: AccountDeletionMode;
+  /** Connexion de moins de 15 minutes : pas besoin d'un nouveau code. */
+  recentLogin: boolean;
+  /** Demande d'un élève mineur en attente de son parent (date ISO). */
+  pendingRequestAt: string | null;
+  /** Profils d'enfants sans email ni téléphone que le parent doit d'abord supprimer. */
+  managedChildren: { id: string; firstName: string }[];
+}
+
+/** Identifiants de connexion de l'utilisateur, pour « Mon compte ». */
+export interface AccountOverview {
+  firstName: string;
+  lastName: string;
+  role: AppRole;
+  email: string | null;
+  /** Numéro E.164 (affiché masqué). */
+  phone: string | null;
+}
+
 // ── Parents ─────────────────────────────────────────────────────────────────
 
 export interface ChildOverview {
@@ -461,7 +492,9 @@ export type NotificationKind =
   | "tutor_invite_answer"
   | "tutor_assignment"
   | "tutor_session"
-  | "tutor_session_cancelled";
+  | "tutor_session_cancelled"
+  | "account_deletion_request"
+  | "account_deletion_refused";
 
 export interface AppNotification {
   id: string;

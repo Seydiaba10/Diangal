@@ -1,4 +1,5 @@
 // Envoi de SMS : API SMS Orange Sénégal, repli Twilio. Code Deno (fonctions Edge Supabase).
+import { isAllowedPhone } from "./phone.ts";
 
 /** Retire les accents : un SMS en GSM-7 tient en 160 caractères (70 en UCS-2, donc deux fois plus cher). */
 export function toGsm7(text: string): string {
@@ -53,10 +54,17 @@ async function sendWithTwilio(to: string, message: string) {
   if (!response.ok) throw new Error(`twilio_send_${response.status}`);
 }
 
-/** Envoie un SMS à un numéro sénégalais (+221…). Lève une erreur si les deux fournisseurs échouent. */
+/**
+ * Envoie un SMS (numéro E.164 d'un pays ouvert) : Orange pour le Sénégal, Twilio en repli et
+ * pour l'étranger. Lève une erreur si aucun fournisseur n'a pu l'envoyer.
+ */
 export async function sendSms(to: string, text: string): Promise<"orange" | "twilio"> {
-  if (!/^\+221[0-9]{9}$/.test(to)) throw new Error("only_senegal_numbers");
+  if (!isAllowedPhone(to)) throw new Error("country_not_allowed");
   const message = toGsm7(text);
+  if (!to.startsWith("+221")) {
+    await sendWithTwilio(to, message);
+    return "twilio";
+  }
   try {
     await sendWithOrange(to, message);
     return "orange";

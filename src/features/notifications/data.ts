@@ -22,6 +22,8 @@ const KINDS: NotificationKind[] = [
   "tutor_assignment",
   "tutor_session",
   "tutor_session_cancelled",
+  "account_deletion_request",
+  "account_deletion_refused",
 ];
 
 /**

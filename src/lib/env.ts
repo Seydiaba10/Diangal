@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { countriesFor, type DialCountry } from "./phone";
 
 // Variables publiques (exposées au navigateur) : URL et clé publiable Supabase.
 const publicSchema = z.object({
@@ -24,6 +25,15 @@ export function isSmsEnabled(): boolean {
  */
 export function isWhatsAppEnabled(): boolean {
   return process.env.DIANGAL_WHATSAPP_ENABLED === "true";
+}
+
+/**
+ * Pays dont les numéros peuvent recevoir un code (codes ISO séparés par des virgules, ex. « FR,CI »).
+ * Le Sénégal est toujours ouvert ; les autres restent fermés par défaut (coût et fraude aux SMS).
+ * Les fonctions Edge appliquent la même liste (ALLOWED_DIAL_CODES).
+ */
+export function phoneCountries(): DialCountry[] {
+  return countriesFor((process.env.DIANGAL_PHONE_COUNTRIES ?? "").split(","));
 }
 
 /**

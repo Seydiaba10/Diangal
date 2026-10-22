@@ -15,11 +15,21 @@ import {
   DEMO_STUDENT_LINK_CODE,
   DEMO_TUTOR_ID,
 } from "@/mocks/users";
-import type { AppRole, ChildOverview, SessionUser, StudentSummary } from "@/types/domain";
+import type {
+  AccountDeletionMode,
+  AccountDeletionStatus,
+  AccountOverview,
+  AppRole,
+  ChildOverview,
+  SessionUser,
+  StudentSummary,
+} from "@/types/domain";
 import { ROLE_HOME, ROLES } from "./roles";
 import { requireIdentity } from "./session";
 import {
+  fetchAccountOverview,
   fetchConsentRequest,
+  fetchDeletionStatus,
   fetchDataSaver,
   fetchParentChildren,
   fetchPendingParentLinks,
@@ -31,6 +41,8 @@ import {
 // Démo : rôle stocké dans un cookie et comptes fictifs (src/mocks).
 // Supabase : session Supabase Auth (claim user_role du JWT) et données lues sous RLS.
 export const DEMO_ROLE_COOKIE = "diangal_demo_role";
+/** Numéro fictif du compte de démonstration (affiché masqué). */
+const DEMO_PHONE = "+221770000021";
 
 export const getCurrentRole = cache(async (): Promise<AppRole> => {
   if (isSupabaseConfigured()) return (await requireIdentity()).role;
@@ -184,4 +196,27 @@ export const getPendingParentLinks = cache(async () => {
   await connection();
   if (isSupabaseConfigured()) return fetchPendingParentLinks();
   return [] as { parentId: string; firstName: string; lastName: string }[];
+});
+
+/** Identifiants de connexion de l'utilisateur (page « Mon compte »). */
+export const getAccountOverview = cache(async (): Promise<AccountOverview> => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchAccountOverview(await requireIdentity());
+  const role = await getCurrentRole();
+  const user = await getSessionUser(role);
+  return { firstName: user.firstName, lastName: user.lastName, role, email: null, phone: DEMO_PHONE };
+});
+
+/**
+ * Suppression du compte connecté (childId absent) ou de celui d'un enfant relié. La base décide
+ * du mode (direct, validation parentale, bloqué) ; la démo reproduit les mêmes cas sans rien effacer.
+ */
+export const getDeletionStatus = cache(async (childId: string | null): Promise<AccountDeletionStatus | null> => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchDeletionStatus(childId);
+  const role = await getCurrentRole();
+  const base = { recentLogin: true, pendingRequestAt: null, managedChildren: [] };
+  if (childId) return role === "parent" && DEMO_PARENT.childIds.includes(childId) ? { ...base, mode: "direct" } : null;
+  const mode: AccountDeletionMode = role === "student" ? "parent_approval" : role === "admin" ? "blocked_admin" : "direct";
+  return { ...base, mode };
 });

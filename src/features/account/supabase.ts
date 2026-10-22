@@ -3,7 +3,16 @@ import "server-only";
 import { cache } from "react";
 import { fetchDashboard } from "@/features/progress/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { AppRole, AvatarKey, ChildOverview, SessionUser, StudentSummary } from "@/types/domain";
+import type {
+  AccountDeletionMode,
+  AccountDeletionStatus,
+  AccountOverview,
+  AppRole,
+  AvatarKey,
+  ChildOverview,
+  SessionUser,
+  StudentSummary,
+} from "@/types/domain";
 import type { AuthIdentity } from "./session";
 
 // Lecture Supabase des comptes : profils, élèves, enfants d'un parent (la RLS filtre tout).
@@ -215,4 +224,37 @@ export async function fetchPendingParentLinks() {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.rpc("get_pending_parent_links");
   return (data ?? []).map((p) => ({ parentId: p.parent_id, firstName: p.first_name, lastName: p.last_name }));
+}
+
+/** Suppression de compte : état calculé par la base (mode, connexion récente, demande en attente). */
+export async function fetchDeletionStatus(targetId: string | null): Promise<AccountDeletionStatus | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("get_account_deletion_status", targetId ? { p_target: targetId } : {});
+  if (error || !data) return null;
+  const raw = data as {
+    mode: AccountDeletionMode;
+    recentLogin: boolean;
+    pendingRequest: { requestedAt: string } | null;
+    managedChildren: { id: string; firstName: string }[];
+  };
+  return {
+    mode: raw.mode,
+    recentLogin: raw.recentLogin,
+    pendingRequestAt: raw.pendingRequest?.requestedAt ?? null,
+    managedChildren: raw.managedChildren ?? [],
+  };
+}
+
+/** Prénom, nom et identifiants de connexion (le téléphone et l'email viennent du jeton vérifié). */
+export async function fetchAccountOverview(identity: AuthIdentity): Promise<AccountOverview> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase.from("profiles").select("first_name, last_name").eq("id", identity.userId).maybeSingle();
+  return {
+    firstName: data?.first_name ?? "",
+    lastName: data?.last_name ?? "",
+    role: identity.role,
+    // Les profils d'enfants gérés par un parent ont une adresse technique, jamais affichée.
+    email: identity.email?.endsWith("@enfant.diangal.invalid") ? null : identity.email,
+    phone: identity.phone,
+  };
 }

@@ -1,14 +1,16 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, BookOpen, CircleAlert, GraduationCap, Info, Mail, MessageCircle, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, CircleAlert, GraduationCap, Info, Mail, MessageCircle, Smartphone, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState, useTransition, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { DialCodeSelect } from "@/components/ui/dial-code-select";
 import { CycleDot } from "@/components/ui/level-badge";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/cn";
 import { CYCLE_STYLES, CYCLES, SERIES_BY_LEVEL, type LevelCode } from "@/lib/levels";
+import { DEFAULT_COUNTRY, parsePhone, type DialCountry } from "@/lib/phone";
 import type { AppRole, SubjectCode } from "@/types/domain";
 import { completeSignupAction, requestSignupCodeAction, type SignupError, type SignupInput } from "../actions";
 import { INPUT_CLASS } from "./auth-card";
@@ -59,12 +61,18 @@ function Field({ id, label, hint, children }: { id: string; label: string; hint?
 export function SignupWizard({
   initialRole,
   whatsappEnabled,
+  smsEnabled,
+  countries,
   emailCode,
   demo,
 }: {
   initialRole: SignupRole | null;
   /** Code envoyé sur WhatsApp possible (fonction send-sms + WhatsApp Business). */
   whatsappEnabled: boolean;
+  /** Code envoyé par SMS possible (fournisseur branché à la fonction send-sms). */
+  smsEnabled: boolean;
+  /** Pays dont les numéros sont acceptés (le Sénégal d'abord). */
+  countries: DialCountry[];
   /** L'email contient un code à 6 chiffres ; sinon, un lien à ouvrir sur l'appareil. */
   emailCode: boolean;
   demo: boolean;
@@ -75,11 +83,16 @@ export function SignupWizard({
   const tSubjects = useTranslations("subjects");
   const [step, setStep] = useState(initialRole ? 1 : 0);
   const [role, setRole] = useState<SignupRole>(initialRole ?? "student");
-  // Moyens ouverts, du plus courant au Sénégal au plus universel.
-  // Code par WhatsApp (quand il est branché) ou par email : pas de SMS.
-  const methods: SignupInput["method"][] = [...(whatsappEnabled ? (["whatsapp"] as const) : []), "email"];
+  // Moyens ouverts, du plus courant au Sénégal au plus universel : seuls ceux qui sont branchés.
+  const methods: SignupInput["method"][] = [
+    ...(whatsappEnabled ? (["whatsapp"] as const) : []),
+    ...(smsEnabled ? (["phone"] as const) : []),
+    "email",
+  ];
   const [method, setMethod] = useState<SignupInput["method"]>(methods[0]!);
   const [identifier, setIdentifier] = useState("");
+  const [dialCode, setDialCode] = useState(DEFAULT_COUNTRY.dial);
+  const [parentDialCode, setParentDialCode] = useState(DEFAULT_COUNTRY.dial);
   const [code, setCode] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -102,6 +115,8 @@ export function SignupWizard({
     role,
     method,
     identifier,
+    dialCode,
+    parentDialCode,
     firstName,
     lastName,
     birthDate,
@@ -127,10 +142,10 @@ export function SignupWizard({
         return null;
       case "consent":
         if (!acceptTerms) return t("errors.terms");
-        if (minor && parentPhone.replace(/\D/g, "").length !== 9) return t("errors.parentPhone");
+        if (minor && !parsePhone(parentPhone, parentDialCode, countries)) return t("errors.parentPhone");
         return null;
       case "identifier":
-        if (method !== "email" && identifier.replace(/\D/g, "").length !== 9) return t("errors.phone");
+        if (method !== "email" && !parsePhone(identifier, dialCode, countries)) return t("errors.phone");
         if (method === "email" && !/^\S+@\S+\.\S+$/.test(identifier)) return t("errors.email");
         return null;
       case "code":
@@ -348,11 +363,11 @@ export function SignupWizard({
                 <div className="mt-3">
                   <Field id="tel-parent" label={t("fields.parentPhone")}>
                     <div className="flex gap-2">
-                      <span className="flex h-12 items-center rounded-xl border border-line bg-surface px-3 font-medium text-ink">+221</span>
+                      <DialCodeSelect countries={countries} value={parentDialCode} onChange={setParentDialCode} label={t("fields.dialCode")} />
                       <input
                         id="tel-parent"
                         type="tel"
-                        inputMode="numeric"
+                        inputMode="tel"
                         value={parentPhone}
                         onChange={(e) => setParentPhone(e.target.value)}
                         className={INPUT_CLASS}
@@ -402,8 +417,14 @@ export function SignupWizard({
                       method === m ? "bg-surface text-ink shadow-sm" : "text-ink-muted",
                     )}
                   >
-                    {m === "whatsapp" ? <MessageCircle className="size-4" aria-hidden /> : <Mail className="size-4" aria-hidden />}
-                    {t(`methods.${m === "phone" ? "whatsapp" : m}`)}
+                    {m === "whatsapp" ? (
+                      <MessageCircle className="size-4" aria-hidden />
+                    ) : m === "phone" ? (
+                      <Smartphone className="size-4" aria-hidden />
+                    ) : (
+                      <Mail className="size-4" aria-hidden />
+                    )}
+                    {t(`methods.${m}`)}
                   </button>
                 ))}
               </div>
@@ -411,13 +432,13 @@ export function SignupWizard({
               <p className="text-sm text-ink-muted">{t("hints.emailOnly")}</p>
             )}
             {method !== "email" ? (
-              <Field id="tel" label={t("fields.phone")} hint={t("hints.whatsapp")}>
+              <Field id="tel" label={t("fields.phone")} hint={t(method === "whatsapp" ? "hints.whatsapp" : "hints.sms")}>
                 <div className="flex gap-2">
-                  <span className="flex h-12 items-center rounded-xl border border-line bg-canvas px-3 font-medium text-ink">+221</span>
+                  <DialCodeSelect countries={countries} value={dialCode} onChange={setDialCode} label={t("fields.dialCode")} />
                   <input
                     id="tel"
                     type="tel"
-                    inputMode="numeric"
+                    inputMode="tel"
                     autoComplete="tel-national"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}

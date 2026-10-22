@@ -10,7 +10,7 @@ const ROLE_PREFIXES: [string, string][] = [
   ["/admin", "admin"],
 ];
 const ROLE_HOME: Record<string, string> = { student: "/eleve", parent: "/parent", tutor: "/prof", admin: "/admin" };
-const PROTECTED = ["/eleve", "/parent", "/prof", "/admin", "/repetiteurs", "/messages", "/notifications", "/paiement"];
+const PROTECTED = ["/eleve", "/parent", "/prof", "/admin", "/repetiteurs", "/messages", "/notifications", "/paiement", "/compte"];
 
 /**
  * 1. Rafraîchit la session Supabase (cookies).

@@ -15,6 +15,7 @@ import {
   LayoutDashboard,
   MessageCircle,
   ScrollText,
+  Settings,
   ShieldCheck,
   Target,
   UserCheck,
@@ -34,6 +35,7 @@ export type NavLabelKey =
   | "exams"
   | "tutors"
   | "profile"
+  | "account"
   | "messages"
   | "downloads"
   | "notifications"
@@ -80,6 +82,7 @@ export const NAV: Record<AppRole, { main: NavItem[]; others: NavItem[]; profileH
     others: [
       { labelKey: "messages", href: "/messages", icon: MessageCircle },
       { labelKey: "downloads", href: "/eleve/telechargements", icon: Download },
+      { labelKey: "account", href: "/compte", icon: Settings },
     ],
     profileHref: "/eleve/profil",
   },
@@ -95,6 +98,7 @@ export const NAV: Record<AppRole, { main: NavItem[]; others: NavItem[]; profileH
       { labelKey: "family", href: "/parent/famille", icon: KeyRound },
       { labelKey: "addChild", href: "/parent/enfants/ajouter", icon: UserPlus },
       { labelKey: "notifications", href: "/notifications", icon: Bell },
+      { labelKey: "account", href: "/compte", icon: Settings },
     ],
     profileHref: "/parent/profil",
   },
@@ -111,6 +115,7 @@ export const NAV: Record<AppRole, { main: NavItem[]; others: NavItem[]; profileH
       { labelKey: "verification", href: "/prof/verification", icon: ShieldCheck },
       { labelKey: "availability", href: "/prof/disponibilites", icon: CalendarDays },
       { labelKey: "notifications", href: "/notifications", icon: Bell },
+      { labelKey: "account", href: "/compte", icon: Settings },
     ],
     profileHref: "/prof/profil",
   },
@@ -129,7 +134,8 @@ export const NAV: Record<AppRole, { main: NavItem[]; others: NavItem[]; profileH
       { labelKey: "users", href: "/admin/utilisateurs", icon: Users },
       { labelKey: "payments", href: "/admin/paiements", icon: Wallet, inBottomNav: true },
       { labelKey: "audit", href: "/admin/journal", icon: ScrollText },
+      { labelKey: "account", href: "/compte", icon: Settings },
     ],
-    profileHref: "/admin",
+    profileHref: "/compte",
   },
 };

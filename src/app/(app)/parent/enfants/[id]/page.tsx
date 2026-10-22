@@ -1,8 +1,10 @@
+import { Trash } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { ButtonLink } from "@/components/ui/button";
 import { LevelBadge } from "@/components/ui/level-badge";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { SectionCard } from "@/components/ui/section-card";
@@ -104,6 +106,15 @@ async function ChildContent({
         <aside className="space-y-4">
           {child.nextExam ? <ExamCountdown exam={child.nextExam} /> : null}
           <p className="rounded-2xl bg-brand-50 p-4 text-sm text-brand-800">{t("readOnly")}</p>
+          <ButtonLink
+            href={`/compte/suppression?enfant=${child.id}`}
+            variant="ghost"
+            size="sm"
+            className="w-full text-danger-700 hover:bg-danger-50"
+          >
+            <Trash className="size-4" aria-hidden />
+            {t("deleteAccount", { name: child.firstName })}
+          </ButtonLink>
         </aside>
       </div>
     </>

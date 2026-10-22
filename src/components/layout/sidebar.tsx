@@ -1,5 +1,7 @@
+import { LogOut } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { signOutAction } from "@/features/account/actions";
 import { NAV, type NavItem } from "@/lib/navigation";
 import type { AppRole } from "@/types/domain";
 import { DemoRoleSwitcher } from "./demo-role-switcher";
@@ -51,6 +53,15 @@ export async function Sidebar({ role }: { role: AppRole }) {
           </Suspense>
         ) : null}
         <DemoRoleSwitcher current={role} />
+        <form action={signOutAction}>
+          <button
+            type="submit"
+            className="flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-canvas hover:text-ink"
+          >
+            <LogOut className="size-5" aria-hidden />
+            {t("signOut")}
+          </button>
+        </form>
       </div>
     </aside>
   );

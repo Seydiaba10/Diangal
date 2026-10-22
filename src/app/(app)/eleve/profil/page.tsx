@@ -1,23 +1,25 @@
-import { Copy, Download, KeyRound, Languages, LogOut, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
+import { Copy, Download, KeyRound, Languages, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { DemoRoleSwitcher } from "@/components/layout/demo-role-switcher";
 import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { LevelBadge } from "@/components/ui/level-badge";
 import { Notice } from "@/components/ui/notice";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StudentAvatar } from "@/components/ui/student-avatar";
+import { DialCodeSelect } from "@/components/ui/dial-code-select";
 import { INPUT_CLASS } from "@/components/ui/form";
-import { confirmParentLinkAction, resendConsentRequestAction, signOutAction } from "@/features/account/actions";
+import { confirmParentLinkAction, resendConsentRequestAction } from "@/features/account/actions";
+import { AccountLinks } from "@/features/account/components/account-links";
 import { DataSaverForm } from "@/features/account/components/data-saver-form";
 import { getCurrentStudent, getPendingParentLinks, getStudentLinkInfo } from "@/features/account/data";
 import { PromotionCard } from "@/features/schooling/components/promotion-card";
 import { StudentTutorPanel, TutorLinkNotice } from "@/features/tutoring/components/family-tutor-panel";
-import { isSupabaseConfigured } from "@/lib/env";
+import { isSupabaseConfigured, phoneCountries } from "@/lib/env";
 
 export async function generateMetadata() {
   const t = await getTranslations("pages");
@@ -109,14 +111,14 @@ async function ProfileContent({ searchParams }: { searchParams: PageProps<"/elev
                       {t("consent.parentPhone")}
                     </label>
                     <div className="mt-1.5 flex gap-2">
-                      <span className="flex h-12 items-center rounded-xl border border-line bg-canvas px-3 font-medium text-ink">+221</span>
+                      <DialCodeSelect countries={phoneCountries()} name="pays" label={t("consent.dialCode")} />
                       <input
                         id="tel-parent"
                         name="parentPhone"
                         type="tel"
-                        inputMode="numeric"
+                        inputMode="tel"
                         required
-                        pattern="[0-9 ]{9,12}"
+                        pattern="[0-9 +]{6,16}"
                         autoComplete="off"
                         className={INPUT_CLASS}
                       />
@@ -155,10 +157,10 @@ async function ProfileContent({ searchParams }: { searchParams: PageProps<"/elev
               <Download className="size-4" aria-hidden />
               {t("data.export")}
             </Button>
-            <Button variant="ghost" size="sm" disabled className="text-danger-700">
+            <ButtonLink href="/compte/suppression" variant="ghost" size="sm" className="text-danger-700 hover:bg-danger-50">
               <Trash className="size-4" aria-hidden />
               {t("data.delete")}
-            </Button>
+            </ButtonLink>
           </div>
           <p className="mt-2 text-xs text-ink-subtle">{t("data.soon")}</p>
         </SectionCard>
@@ -174,12 +176,7 @@ async function ProfileContent({ searchParams }: { searchParams: PageProps<"/elev
           <p className="mt-1 text-xs text-ink-muted">{t("language.wolofSoon")}</p>
         </SectionCard>
         <DemoRoleSwitcher current="student" />
-        <form action={signOutAction}>
-          <Button type="submit" variant="outline" className="w-full">
-            <LogOut className="size-4" aria-hidden />
-            {t("signOut")}
-          </Button>
-        </form>
+        <AccountLinks />
       </aside>
     </div>
   );

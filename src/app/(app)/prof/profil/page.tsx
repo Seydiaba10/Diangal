@@ -11,6 +11,7 @@ import { CycleDot } from "@/components/ui/level-badge";
 import { Notice } from "@/components/ui/notice";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AccountLinks } from "@/features/account/components/account-links";
 import { saveTutorProfileAction } from "@/features/tutors/actions";
 import { getOwnTutorProfile } from "@/features/tutors/data";
 import { CYCLES } from "@/lib/levels";
@@ -129,8 +130,9 @@ export default async function TutorProfilePage({ searchParams }: PageProps<"/pro
         <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
           <ProfileForm searchParams={searchParams} />
         </Suspense>
-        <aside>
+        <aside className="space-y-4">
           <DemoRoleSwitcher current="tutor" />
+          <AccountLinks />
         </aside>
       </div>
     </PageContainer>

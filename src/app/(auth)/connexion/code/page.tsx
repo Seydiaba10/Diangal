@@ -10,20 +10,20 @@ import { AuthCard, INPUT_CLASS } from "@/features/account/components/auth-card";
 import { LOGIN_PATH, parseSpace } from "@/features/account/roles";
 import { cn } from "@/lib/cn";
 import { emailHasCode, isSupabaseConfigured } from "@/lib/env";
+import { maskPhone } from "@/lib/phone";
 
 export async function generateMetadata() {
   const t = await getTranslations("auth.code");
   return { title: t("title") };
 }
 
-/** « +221771234567 » → « 77 ••• •• 67 » ; un email est masqué de la même façon. */
+/** « +221771234567 » → « +221 77 ••• •• 67 » ; un email est masqué de la même façon. */
 function maskIdentifier(value: string): string {
   if (value.includes("@")) {
     const [name = "", domain = ""] = value.split("@");
     return `${name.slice(0, 2)}•••@${domain}`;
   }
-  const digits = value.replace(/\D/g, "").replace(/^221(?=\d{9}$)/, "");
-  return digits.length >= 4 ? `${digits.slice(0, 2)} ••• •• ${digits.slice(-2)}` : value;
+  return /^\+\d{8,15}$/.test(value) ? maskPhone(value) : value;
 }
 
 async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/code">["searchParams"] }) {
@@ -60,9 +60,15 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
         </p>
       ) : (
         <p className="mt-2 text-sm text-ink-muted">
-          {t(canal === "whatsapp" ? "sentToWhatsapp" : "sentTo", { to: maskIdentifier(identifiant) })}
+          {t(canal === "whatsapp" ? "sentToWhatsapp" : canal === "sms" ? "sentToSms" : "sentTo", { to: maskIdentifier(identifiant) })}
         </p>
       )}
+      <p className="mt-2 text-xs text-ink-muted">
+        {t("noCode")}{" "}
+        <Link href={space === "repetiteur" ? "/inscription?role=tutor" : "/inscription"} className="font-medium text-brand-700 hover:underline">
+          {t("signUpLink")}
+        </Link>
+      </p>
       <form action={verifyLoginCodeAction} className="mt-5 space-y-4">
         {hidden}
         <div>
@@ -99,7 +105,7 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
         </Button>
       </form>
       <div className="mt-4 flex items-center justify-between gap-3 text-sm">
-        <Link href={`${LOGIN_PATH[space]}?mode=${canal}`} className="font-medium text-brand-700 hover:underline">
+        <Link href={`${LOGIN_PATH[space]}?${new URLSearchParams({ mode: canal, ...(next ? { next } : {}) })}`} className="font-medium text-brand-700 hover:underline">
           {canal === "email" ? t("changeEmail") : t("changeNumber")}
         </Link>
         <form action={resendLoginCodeAction}>

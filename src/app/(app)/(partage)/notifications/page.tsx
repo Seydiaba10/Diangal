@@ -7,6 +7,7 @@ import {
   GraduationCap,
   MessageCircle,
   ShieldCheck,
+  UserX,
   Video,
   type LucideIcon,
 } from "lucide-react";
@@ -41,6 +42,8 @@ const ICONS: Record<NotificationKind, LucideIcon> = {
   tutor_assignment: ClipboardList,
   tutor_session: Video,
   tutor_session_cancelled: Video,
+  account_deletion_request: UserX,
+  account_deletion_refused: UserX,
 };
 
 async function NotificationList() {
