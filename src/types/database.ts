@@ -1608,6 +1608,164 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_rewards: {
+        Row: {
+          available_at: string
+          created_at: string
+          days: number
+          id: string
+          kind: string
+          referral_id: string
+          status: string
+          subscription_id: string | null
+          used_at: string | null
+          used_for: string | null
+          user_id: string
+        }
+        Insert: {
+          available_at: string
+          created_at?: string
+          days: number
+          id?: string
+          kind: string
+          referral_id: string
+          status?: string
+          subscription_id?: string | null
+          used_at?: string | null
+          used_for?: string | null
+          user_id: string
+        }
+        Update: {
+          available_at?: string
+          created_at?: string
+          days?: number
+          id?: string
+          kind?: string
+          referral_id?: string
+          status?: string
+          subscription_id?: string | null
+          used_at?: string | null
+          used_for?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_rewards_referral_id_fkey"
+            columns: ["referral_id"]
+            isOneToOne: false
+            referencedRelation: "referrals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_rewards_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_rewards_used_for_fkey"
+            columns: ["used_for"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_rewards_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          payment_id: string | null
+          qualified_at: string | null
+          reason: string | null
+          referee_id: string
+          referrer_id: string
+          status: Database["public"]["Enums"]["referral_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          payment_id?: string | null
+          qualified_at?: string | null
+          reason?: string | null
+          referee_id: string
+          referrer_id: string
+          status?: Database["public"]["Enums"]["referral_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payment_id?: string | null
+          qualified_at?: string | null
+          reason?: string | null
+          referee_id?: string
+          referrer_id?: string
+          status?: Database["public"]["Enums"]["referral_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referee_id_fkey"
+            columns: ["referee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reports: {
         Row: {
           created_at: string
@@ -2440,11 +2598,20 @@ export type Database = {
         }
         Returns: undefined
       }
+      admin_referral_stats: { Args: never; Returns: Json }
+      admin_refund_payment: {
+        Args: { p_reason: string; p_reference: string }
+        Returns: Json
+      }
       admin_save_lesson_body: {
         Args: { p_html: string; p_lesson: string }
         Returns: undefined
       }
       admin_set_free_tier: { Args: { p_enabled: boolean }; Returns: undefined }
+      admin_set_referral_settings: {
+        Args: { p_enabled: boolean; p_scenario: string }
+        Returns: Json
+      }
       answer_account_deletion_request: {
         Args: { p_approve: boolean; p_student: string }
         Returns: undefined
@@ -2464,6 +2631,7 @@ export type Database = {
       }
       cancel_account_deletion_request: { Args: never; Returns: undefined }
       cancel_tutor_session: { Args: { p_session: string }; Returns: undefined }
+      claim_referral: { Args: { p_code: string }; Returns: string }
       complete_lesson: { Args: { p_lesson: string }; Returns: undefined }
       confirm_parent_link: { Args: { p_parent: string }; Returns: undefined }
       create_payment_intent: {
@@ -2559,6 +2727,7 @@ export type Database = {
       }
       get_my_consent_request: { Args: never; Returns: Json }
       get_my_family_code: { Args: never; Returns: string }
+      get_my_referral: { Args: never; Returns: Json }
       get_pending_parent_links: {
         Args: never
         Returns: {
@@ -2671,6 +2840,7 @@ export type Database = {
         Args: { p_body: string; p_student: string }
         Returns: string
       }
+      use_referral_days: { Args: { p_student: string }; Returns: number }
       verify_child_pin: {
         Args: { p_code: string; p_pin: string; p_student: string }
         Returns: string
@@ -2714,6 +2884,12 @@ export type Database = {
         | "true_false"
         | "short_text"
         | "numeric"
+      referral_status:
+        | "pending"
+        | "qualified"
+        | "rewarded"
+        | "cancelled"
+        | "expired"
       report_target: "message" | "review" | "tutor" | "user"
       review_status: "pending" | "published" | "rejected"
       teaching_mode: "online" | "home" | "both"
@@ -2886,6 +3062,7 @@ export const Constants = {
         "short_text",
         "numeric",
       ],
+      referral_status: ["pending", "qualified", "rewarded", "cancelled", "expired"],
       report_target: ["message", "review", "tutor", "user"],
       review_status: ["pending", "published", "rejected"],
       teaching_mode: ["online", "home", "both"],

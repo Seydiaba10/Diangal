@@ -4,6 +4,7 @@ import type { AuthError } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
+import { normalizeReferralCode } from "@/features/referrals/presets";
 import { isSupabaseConfigured, phoneCountries } from "@/lib/env";
 import { isLevelCode } from "@/lib/levels";
 import { isAllowedPhone } from "@/lib/phone";
@@ -222,6 +223,8 @@ export interface SignupInput {
   subjects: SubjectCode[];
   childCode: string;
   parentPhone: string;
+  /** Code de parrainage (facultatif). */
+  referralCode: string;
   acceptTerms: boolean;
 }
 
@@ -250,6 +253,7 @@ function extrasOf(input: SignupInput): SignupExtras {
     childCode: input.childCode.trim().slice(0, 20) || undefined,
     city: input.city.trim().slice(0, 60) || undefined,
     subjects: input.subjects.slice(0, 10),
+    referralCode: normalizeReferralCode(input.referralCode) ?? undefined,
   };
 }
 

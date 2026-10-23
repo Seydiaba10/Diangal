@@ -60,6 +60,7 @@ function Field({ id, label, hint, children }: { id: string; label: string; hint?
 
 export function SignupWizard({
   initialRole,
+  referralCode: initialReferralCode,
   whatsappEnabled,
   smsEnabled,
   countries,
@@ -67,6 +68,8 @@ export function SignupWizard({
   demo,
 }: {
   initialRole: SignupRole | null;
+  /** Code de parrainage reçu dans le lien d'invitation (?parrain=). */
+  referralCode: string;
   /** Code envoyé sur WhatsApp possible (fonction send-sms + WhatsApp Business). */
   whatsappEnabled: boolean;
   /** Code envoyé par SMS possible (fournisseur branché à la fonction send-sms). */
@@ -104,6 +107,7 @@ export function SignupWizard({
   const [subjects, setSubjects] = useState<SubjectCode[]>([]);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [parentPhone, setParentPhone] = useState("");
+  const [referralCode, setReferralCode] = useState(initialReferralCode);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -126,6 +130,7 @@ export function SignupWizard({
     subjects,
     childCode,
     parentPhone: minor ? parentPhone : "",
+    referralCode: role === "tutor" ? "" : referralCode,
     acceptTerms,
   });
 
@@ -376,6 +381,18 @@ export function SignupWizard({
                   </Field>
                 </div>
               </div>
+            ) : null}
+            {role !== "tutor" ? (
+              <Field id="parrain" label={t("fields.referralCode")} hint={t("hints.referralCode")}>
+                <input
+                  id="parrain"
+                  value={referralCode}
+                  onChange={(e) => setReferralCode(e.target.value)}
+                  autoComplete="off"
+                  maxLength={14}
+                  className={cn(INPUT_CLASS, "uppercase")}
+                />
+              </Field>
             ) : null}
             <label className="flex cursor-pointer gap-3 text-sm text-ink">
               <input

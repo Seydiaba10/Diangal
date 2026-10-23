@@ -8,6 +8,7 @@ import {
   Download,
   Flag,
   FolderTree,
+  Gift,
   GraduationCap,
   House,
   KeyRound,
@@ -36,6 +37,7 @@ export type NavLabelKey =
   | "tutors"
   | "profile"
   | "account"
+  | "referral"
   | "messages"
   | "downloads"
   | "notifications"
@@ -82,6 +84,7 @@ export const NAV: Record<AppRole, { main: NavItem[]; others: NavItem[]; profileH
     others: [
       { labelKey: "messages", href: "/messages", icon: MessageCircle },
       { labelKey: "downloads", href: "/eleve/telechargements", icon: Download },
+      { labelKey: "referral", href: "/parrainage", icon: Gift },
       { labelKey: "account", href: "/compte", icon: Settings },
     ],
     profileHref: "/eleve/profil",
@@ -98,6 +101,7 @@ export const NAV: Record<AppRole, { main: NavItem[]; others: NavItem[]; profileH
       { labelKey: "family", href: "/parent/famille", icon: KeyRound },
       { labelKey: "addChild", href: "/parent/enfants/ajouter", icon: UserPlus },
       { labelKey: "notifications", href: "/notifications", icon: Bell },
+      { labelKey: "referral", href: "/parrainage", icon: Gift },
       { labelKey: "account", href: "/compte", icon: Settings },
     ],
     profileHref: "/parent/profil",

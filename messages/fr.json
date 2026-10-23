@@ -42,7 +42,8 @@
     "referential": "Référentiel",
     "family": "Famille",
     "account": "Mon compte",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "referral": "Parrainage"
   },
   "header": {
     "searchLabel": "Rechercher un cours",
@@ -123,7 +124,8 @@
     "notifications": "Notifications",
     "subscription": "Abonnement",
     "account": "Mon compte",
-    "accountDeletion": "Supprimer le compte"
+    "accountDeletion": "Supprimer le compte",
+    "referral": "Parrainage"
   },
   "breadcrumb": {
     "label": "Fil d’Ariane",
@@ -935,7 +937,8 @@
       "childCode": "Code élève de votre enfant (facultatif)",
       "subjects": "Matières enseignées",
       "parentPhone": "Numéro de téléphone de ton parent",
-      "dialCode": "Indicatif du pays"
+      "dialCode": "Indicatif du pays",
+      "referralCode": "Code de parrainage (facultatif)"
     },
     "hints": {
       "whatsapp": "Le code arrivera dans WhatsApp.",
@@ -947,7 +950,8 @@
       "emailOnly": "Pour l’instant, l’inscription se fait par email. WhatsApp et SMS arrivent bientôt.",
       "codeExpiry": "Le code est valable 10 minutes.",
       "linkSent": "Nous avons envoyé un email à {to}. Ouvre-le sur cet appareil et touche le lien : ton compte sera créé automatiquement. S’il contient un code à 6 chiffres, saisis-le ici.",
-      "sms": "Le code arrivera par SMS, même sans internet."
+      "sms": "Le code arrivera par SMS, même sans internet.",
+      "referralCode": "Si quelqu’un t’a invité, son code est déjà rempli. Il ne gagne rien tant qu’aucun abonnement n’est payé."
     },
     "minor": {
       "title": "Validation par un parent",
@@ -1079,7 +1083,8 @@
       "bfem_pass": "Pass BFEM (ancienne offre)",
       "family_monthly": "Famille 1 mois",
       "family_quarterly": "Famille 3 mois",
-      "family_yearly": "Famille 1 an"
+      "family_yearly": "Famille 1 an",
+      "referral_bonus": "Jours offerts (parrainage)"
     },
     "planHints": {
       "monthly": "Pour essayer",
@@ -1226,7 +1231,8 @@
       "tutor_session": "{child, select, none {{tutor} a planifié un cours en ligne le {startsAt} : {topic}.} other {{tutor} a planifié un cours en ligne avec {child} le {startsAt} : {topic}.}}",
       "tutor_session_cancelled": "{child, select, none {{tutor} a annulé le cours du {startsAt}.} other {{tutor} a annulé le cours de {child} du {startsAt}.}}",
       "account_deletion_request": "{child} demande la suppression de son compte DIANGAL : acceptez ou refusez sa demande.",
-      "account_deletion_refused": "Ton parent a refusé la suppression de ton compte. Parles-en avec lui."
+      "account_deletion_refused": "Ton parent a refusé la suppression de ton compte. Parles-en avec lui.",
+      "referral_reward": "Un filleul s’est abonné : {days} jours Premium gagnés, utilisables après la période de garde."
     }
   },
   "parentHome": {
@@ -1303,7 +1309,8 @@
     "paymentStatus": {
       "succeeded": "Payé",
       "pending": "En attente",
-      "failed": "Échoué"
+      "failed": "Échoué",
+      "refunded": "Remboursé"
     }
   },
   "parentProfile": {
@@ -1682,9 +1689,28 @@
     "status": {
       "pending": "En attente",
       "succeeded": "Réussi",
-      "failed": "Échoué"
+      "failed": "Échoué",
+      "refunded": "Remboursé"
     },
-    "note": "En production, chaque paiement est confirmé par le webhook signé du prestataire, puis rapproché automatiquement."
+    "note": "En production, chaque paiement est confirmé par le webhook signé du prestataire, puis rapproché automatiquement.",
+    "refund": {
+      "title": "Enregistrer un remboursement",
+      "subtitle": "Après le remboursement réel chez le prestataire (PayDunya) : les abonnements de ce paiement sont annulés et les récompenses de parrainage encore en garde sont retirées.",
+      "payment": "Paiement",
+      "reason": "Motif (gardé dans le journal d’audit)",
+      "confirm": "Le client a bien été remboursé chez le prestataire.",
+      "submit": "Marquer comme remboursé",
+      "notices": {
+        "ok": "Remboursement enregistré.",
+        "demo": "Mode démo : ce paiement fictif ne peut pas être modifié.",
+        "confirmation": "Indiquez un motif et cochez la confirmation.",
+        "erreur": "Le remboursement n’a pas pu être enregistré (paiement introuvable ou déjà remboursé)."
+      }
+    },
+    "referralNotices": {
+      "ok": "Réglages du parrainage enregistrés.",
+      "erreur": "Les réglages du parrainage n’ont pas pu être enregistrés."
+    }
   },
   "adminAudit": {
     "title": "Journal d’audit",
@@ -2298,5 +2324,94 @@
     "series": "Série à revoir en {level}",
     "reviewing": "Révision : cours de {level}. Ta classe actuelle reste {current}, et ta progression est gardée.",
     "back": "Revenir à ma classe ({current})"
+  },
+  "referral": {
+    "subtitle": "Inviter des proches et gagner des jours Premium.",
+    "notEligible": "Le parrainage est réservé aux élèves et aux parents.",
+    "notEligibleStudent": "Le parrainage s’ouvrira quand ton parent aura validé ton compte.",
+    "soon": "{tu, select, true {Le parrainage arrive bientôt : tu pourras inviter tes amis et gagner des jours Premium.} other {Le parrainage arrive bientôt : vous pourrez inviter vos proches et gagner des jours Premium.}}",
+    "code": {
+      "title": "Code de parrainage",
+      "subtitle": "{tu, select, true {Partage ce lien : quand un nouvel inscrit paie un abonnement, tu gagnes {days} jours Premium.} other {Partagez ce lien : quand un nouvel inscrit paie un abonnement, vous gagnez {days} jours Premium.}}"
+    },
+    "share": {
+      "linkLabel": "Lien d’invitation",
+      "copy": "Copier",
+      "copied": "Copié",
+      "whatsapp": "Partager sur WhatsApp",
+      "native": "Autres applications",
+      "message": "DIANGAL : cours et exercices du CI à la Terminale, même hors ligne. Inscription avec le code {code} :"
+    },
+    "stats": {
+      "available": "Jours disponibles",
+      "onHold": "Jours en garde",
+      "used": "Jours utilisés",
+      "days": "{count, plural, =0 {0 jour} one {# jour} other {# jours}}"
+    },
+    "spend": {
+      "title": "Utiliser les jours",
+      "subtitle": "{tu, select, true {Ajoute {count, plural, one {# jour} other {# jours}} de Premium à ton compte.} other {Offrez {count, plural, one {# jour} other {# jours}} de Premium à l’un de vos enfants.}}",
+      "child": "Enfant",
+      "submit": "{count, plural, one {Utiliser # jour} other {Utiliser # jours}}",
+      "notices": {
+        "ok": "{tu, select, true {C’est fait : ton Premium est prolongé.} other {C’est fait : le Premium de votre enfant est prolongé.}}",
+        "aucun": "Aucun jour disponible pour l’instant.",
+        "erreur": "{tu, select, true {Les jours n’ont pas pu être utilisés. Réessaie.} other {Les jours n’ont pas pu être utilisés. Réessayez.}}"
+      }
+    },
+    "rules": {
+      "title": "Règles du parrainage",
+      "reward": "{tu, select, true {Tu gagnes {days} jours Premium pour chaque filleul qui paie un abonnement.} other {Vous gagnez {days} jours Premium pour chaque filleul qui paie un abonnement.}}",
+      "welcome": "Le filleul reçoit aussi {days} jours offerts.",
+      "payment": "{tu, select, true {La récompense vient seulement après un vrai paiement d’au moins {amount}, dans les {days} jours qui suivent l’inscription : saisir ton code ne suffit pas.} other {La récompense vient seulement après un vrai paiement d’au moins {amount}, dans les {days} jours qui suivent l’inscription : saisir votre code ne suffit pas.}}",
+      "hold": "Les jours restent en garde {days} jours (délai de remboursement) avant d’être utilisables.",
+      "fraud": "{tu, select, true {Pas de récompense si tu te parraines toi-même, si tu parraines ta famille ou si tu paies à la place de ton filleul.} other {Pas de récompense si vous vous parrainez vous-même, si vous parrainez votre famille ou si vous payez à la place de votre filleul.}}",
+      "cap": "{count, plural, one {# récompense au plus par mois.} other {# récompenses au plus par mois.}}"
+    },
+    "history": {
+      "title": "Filleuls",
+      "empty": "{tu, select, true {Aucun filleul pour l’instant : partage ton lien !} other {Aucun filleul pour l’instant : partagez votre lien.}}",
+      "roles": {
+        "parent": "Parent",
+        "student": "Élève"
+      },
+      "since": "Inscrit le {date}",
+      "status": {
+        "pending": "En attente de paiement",
+        "qualified": "Paiement reçu",
+        "rewarded": "Récompensé",
+        "cancelled": "Annulé",
+        "expired": "Expiré"
+      },
+      "reasons": {
+        "family": "même famille",
+        "self_payment": "payé par le parrain",
+        "refund": "remboursé",
+        "cap": "plafond atteint",
+        "no_payment": "pas de paiement",
+        "account_deleted": "compte supprimé",
+        "referrer_closed": "parrain inactif"
+      }
+    }
+  },
+  "adminReferral": {
+    "title": "Parrainage",
+    "subtitle": "Jours Premium offerts seulement après un paiement confirmé, avec une période de garde et des contrôles anti-fraude.",
+    "stats": {
+      "pending": "En attente",
+      "rewarded": "Récompensés",
+      "cancelled": "Annulés ou expirés",
+      "daysGranted": "Jours accordés"
+    },
+    "enabled": "Parrainage ouvert aux élèves et aux parents",
+    "scenario": "Scénario de coût",
+    "scenarios": {
+      "prudent": "Prudent",
+      "intermediaire": "Intermédiaire",
+      "genereux": "Généreux"
+    },
+    "presetLine": "Parrain : {referrer} j · filleul : {referee} j · paiement minimum {min} · {cap} récompenses par mois au plus · valeur ≈ {cost} par filleul payant",
+    "note": "Les jours restent {hold} jours en garde : un remboursement pendant ce délai les retire.",
+    "save": "Enregistrer"
   }
 }

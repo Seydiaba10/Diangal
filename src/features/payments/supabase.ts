@@ -52,7 +52,7 @@ function toRecord(p: {
     planCode: (p.plans?.code ?? "monthly") as PlanCode,
     amountFcfa: p.amount_fcfa,
     channel: CHANNELS.includes(p.channel as PaymentChannel) ? (p.channel as PaymentChannel) : "card",
-    status: p.status === "succeeded" ? "succeeded" : p.status === "pending" ? "pending" : "failed",
+    status: p.status === "succeeded" || p.status === "pending" || p.status === "refunded" ? p.status : "failed",
     createdAt: p.created_at,
   };
 }

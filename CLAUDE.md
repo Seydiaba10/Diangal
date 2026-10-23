@@ -21,7 +21,8 @@ Contraintes qui guident tous les choix :
 - **Deux modes**, choisis par `DIANGAL_DATA_SOURCE` (`.env.local`) :
   - `supabase` : vraie base, vraie session, proxy actif. C'est le mode actuel en local ;
   - `demo` : données fictives de `src/mocks`, sans réseau. C'est la valeur par défaut si la variable manque.
-- **Connexion** : deux pages séparées, `/connexion` (élèves et parents) et `/connexion/repetiteur`. Pas de mot de passe : code à 6 chiffres reçu par **email** ou sur **WhatsApp** (masqué tant que `DIANGAL_WHATSAPP_ENABLED` n'est pas activé), plus Facebook, Apple, Google et X pour un compte existant (grisés tant que le réseau n'est pas ouvert dans Supabase). Le SMS ne sert plus qu'aux demandes de validation parentale. L'admin passe par une double authentification TOTP.
+- **Connexion** : deux pages séparées, `/connexion` (élèves et parents) et `/connexion/repetiteur`. Pas de mot de passe : code à 6 chiffres reçu par **email**, ou par **téléphone** (onglet affiché seulement si `DIANGAL_WHATSAPP_ENABLED` ou `DIANGAL_SMS_ENABLED` est activé ; choix WhatsApp ou SMS, indicatif +221 par défaut). Facebook, Apple, Google et X marchent pour un compte existant (grisés tant que le réseau n'est pas ouvert dans Supabase). Un identifiant inconnu reçoit la même réponse qu'un compte existant (pas d'énumération). L'admin passe par une double authentification TOTP.
+- **Branche `refonte-comptes-classes-paiements` (22/10/2026, non poussée, migrations `20261022000001` à `…04` non appliquées en ligne)** : landing claire, Pass BFEM retiré, comptes (déconnexion partout, « Mon compte », suppression CDP), navigation entre les classes, parrainage, remboursements. Documentation : `docs/comptes-et-classes.md`, `docs/connexion-telephone.md`, `docs/paiements.md` (Stripe non disponible au Sénégal, PayDunya gardé), `docs/parrainage.md`.
 - **Limites actuelles, qui demandent des comptes externes** :
   - **emails** : l'envoi intégré à Supabase (offre gratuite) n'envoie qu'aux membres de l'équipe du projet, 2 emails par heure, avec un modèle non modifiable qui contient un lien et pas de code. Il faut un SMTP personnalisé (Resend, Brevo…), puis le modèle en français avec `{{ .Token }}` (`DIANGAL_EMAIL_CODE=true`) ;
   - **SMS** : Orange SMS ou Twilio, plus le déploiement des Edge Functions (`DIANGAL_SMS_ENABLED=true`). Sans SMS, les demandes de validation parentale attendent dans `private.sms_outbox` ;
@@ -89,7 +90,7 @@ pnpm db:seed      # régénère supabase/seed.sql depuis src/mocks
 
 Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention contraire.
 
-- **Public** : landing (inspirée de Kindering) avec photo « révision du soir » **plein écran** (`min-h` = 100svh moins le bandeau tricolore, `object-fit: cover`, cadrage et voile `hero-veil` adaptés au téléphone, à la tablette et à l'ordinateur, styles `hero-*` de `globals.css`), `/tarifs`, `/devenir-repetiteur`, pages légales (`/confidentialite`, `/cgu`, `/mentions-legales`, à faire relire par un juriste).
+- **Public** : landing claire (22/10/2026) : en-tête en pilule, photo « révision du soir » encadrée avec une carte flottante, fonctionnalités, classes du CI à la Terminale par cycle, étapes, paiements locaux, parents, tarifs, répétiteurs, FAQ ; logo compact sous 400 px. `/tarifs`, `/devenir-repetiteur`, pages légales (`/confidentialite`, `/cgu`, `/mentions-legales`, à faire relire par un juriste).
 - **Authentification** :
   - `/connexion` (élèves et parents) ou `/connexion/repetiteur`, puis `/connexion/code` : email ou WhatsApp, code à 6 chiffres ou lien de l'email traité par `/auth/confirmation`. Le paramètre `espace` garde la page d'origine. Réseaux sociaux : `signInWithSocialAction`, réseaux ouverts lus dans `/auth/v1/settings` (`features/account/oauth.ts`) ; un réseau sans compte DIANGAL renvoie `erreur=social-inconnu` ;
   - `/inscription` : assistant en 6 étapes, dans l'ordre rôle, profil, classe, conditions, identifiant (email, WhatsApp ou SMS), code. Le compte Supabase est créé à l'envoi du code avec ses métadonnées (le déclencheur `handle_new_user` exige la classe et la date de naissance). Les compléments (téléphone du parent, code enfant, ville, matières) sont rangés dans les métadonnées du compte (`signup_pending`) ; `features/account/signup.ts` les applique une fois l'adresse vérifiée, sur n'importe quel appareil, puis efface le marqueur ;
@@ -98,6 +99,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
 - **Élève** (`/eleve`) :
   - tableau de bord : moyenne, chapitres, contrôles, jours d'affilée, « Continuer », points faibles, compte à rebours de l'examen ;
   - cours de **sa classe** par matière, chapitre puis leçon, avec « Marquer comme terminée » et mur Premium. Une « matière » est un programme (matière × classe) : `/eleve/cours/mathematiques-ci`, `/eleve/cours/francais-3e` ;
+  - **navigation entre les classes** (`features/schooling/class-navigation.ts`, carte « Mes classes ») : sur Cours, Exercices et « Préparer mon prochain devoir », la classe actuelle et les classes précédentes (`?classe=3E&serie=S`), progression par classe ; la classe de l'élève ne change pas, une classe supérieure est refusée ;
   - exercices (`/eleve/exercices`) : séries par chapitre (une série d'exercices corrigés par chapitre de chaque classe : `src/mocks/<classe>/exercises.ts`), contrôles, historique ;
   - **« Préparer mon prochain devoir »** (`/eleve/exercices/preparer`) : l'élève coche des chapitres d'une matière, choisit 5 à 20 questions et le mode (libre ou chronométré, 1 min 30 par question) ; questions tirées au hasard dans la banque, correction détaillée, historique « Mes devoirs préparés » ;
   - **contrôle chronométré** en mode concentration (`(focus)`) : échéance fixée par le serveur, sauvegarde locale, envoi automatique ;
@@ -105,12 +107,14 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - **examens** (`/eleve/examens?examen=cfee|bfem|bac&serie=`) : onglets CFEE, BFEM et Bac (série au Bac), compte à rebours, sujets blancs DIANGAL chronométrés (présentés comme tels, avec l'origine du corrigé), annales officielles **seulement si vérifiées** (`assessments.verification` ≠ `unverified`) avec leur provenance, historique des épreuves passées. Aucune annale inventée : la démo n'en contient pas ;
   - progression, téléchargements hors ligne, profil, abonnement ;
   - **écoute à voix haute** (CI à CM1, `READ_ALOUD_LEVELS` de `lib/levels.ts`) : barre « Écouter » sur les leçons (lecture, pause, reprise, arrêt, plus lentement) et bouton « Écouter » sur chaque question des exercices ; synthèse vocale du téléphone (`components/ui/read-aloud.tsx`, `lib/speech.ts`), donc hors ligne si une voix française est installée. Illustration SVG en tête des leçons de ces classes (`lesson-illustration.tsx`) ;
-  - **passage en classe supérieure** (carte du profil élève et de la page enfant du parent, `features/schooling`) : confirmation obligatoire, série demandée à l'entrée en 2nde, 1re et Terminale (l'actuelle est gardée si elle reste valable), fin de parcours après la Terminale, historique des classes ; notes et progression conservées. En démo, rien n'est enregistré.
+  - **passage en classe supérieure** (carte du profil élève et de la page enfant du parent, `features/schooling`) : confirmation obligatoire, série demandée à l'entrée en 2nde, 1re et Terminale (l'actuelle est gardée si elle reste valable), fin de parcours après la Terminale, historique des classes ; notes et progression conservées. En démo, le passage d'Awa est gardé en mémoire jusqu'au redémarrage du serveur.
 - **Écrans partagés** :
   - annuaire des répétiteurs (filtres dans l'URL) ;
   - fiche répétiteur : premier message qui crée la conversation, avec le parent en observateur pour un mineur ; contact bloqué en mode limité ;
   - messagerie **en temps réel** (Supabase Realtime sur `messages`, composant `LiveRefresh`), numéros masqués en base, notification des autres membres ;
-  - notifications, retour de paiement.
+  - notifications, retour de paiement ;
+  - **Mon compte** (`/compte`) : identifiants, ajout d'un numéro (code), déconnexion ; **suppression** (`/compte/suppression`) : confirmation, connexion de moins de 15 min ou nouveau code, anonymisation en base puis suppression de la connexion (Supabase Auth, suppression douce) ; élève mineur relié : demande validée par le parent ; parent qui gère des profils d'enfants : bloqué tant qu'ils existent ; admin : refusé ;
+  - **Parrainage** (`/parrainage`, élèves validés et parents) : code, lien et partage WhatsApp, jours Premium gagnés seulement après un paiement confirmé et 14 jours de garde, utilisés pour soi ou offerts à un enfant.
 - **Parent** : une carte par enfant, détail d'un enfant, rattachement par code élève (confirmé ensuite par l'élève dans son profil), abonnements, profil.
   - **Offre Famille** (5 000 / 12 000 / 35 000 FCFA, 4 enfants au plus) : un paiement du parent crée un abonnement par enfant relié ; un enfant relié pendant la période est couvert s'il reste une place. Page `/parent/abonnements` : offre Famille, pass individuel, « Mes paiements » avec leur statut (payé, en attente, échoué) ;
   - **Famille** (`/parent/famille`) : code famille, code PIN de chaque enfant, création du profil d'un jeune enfant sans email ni téléphone (compte technique `enfant-…@enfant.diangal.invalid` créé par le serveur, validation parentale d'office) ;
@@ -119,7 +123,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - **Mes élèves** (`/prof/eleves`) : invitation par le code élève, acceptée par un parent lié (ou l'élève majeur). Ensuite, sur `/prof/eleves/[id]` : notes (moyennes, derniers contrôles), devoirs, cours en ligne planifiés, message à l'élève (parents observateurs si mineur), fin du suivi ;
   - **Cours en ligne** (`/prof/cours-en-ligne`) : prochains cours. La salle de visio (LiveKit) reste à brancher ;
   - côté famille : panneau « Répétiteur » sur la page de l'enfant (accepter, refuser, mettre fin, devoirs, cours), bandeau sur l'accueil parent, panneau « Mon répétiteur » sur l'accueil et le profil de l'élève (devoirs à cocher).
-- **Admin** : statistiques, évaluations avec corrigés, examens, file de vérification des répétiteurs (pièces par lien signé de 5 min, consultation journalisée), signalements, utilisateurs, paiements, journal d'audit. Référentiel et contenus :
+- **Admin** : statistiques, évaluations avec corrigés, examens, file de vérification des répétiteurs (pièces par lien signé de 5 min, consultation journalisée), signalements, utilisateurs, paiements (avec « Marquer comme remboursé » et la carte Parrainage : ouverture, scénario prudent, intermédiaire ou généreux, chiffres), journal d'audit. Référentiel et contenus :
   - `/admin/suivi` : tableau de suivi par programme (chapitres publiés, leçons rédigées, exercices, QCM, sujets d'examen, vérification, sources, chapitres gratuits) et classes sans programme ;
   - `/admin/referentiel?classe=` : matières d'une classe (et d'une série au lycée), chapitres gratuits par matière (`programs.free_chapters`, 3 par défaut), création d'une matière ;
   - `/admin/contenus?classe=` puis `/admin/contenus/chapitres/[id]` : chapitres brouillons compris, rubrique, statut de vérification (`unverified`, `reviewed`, `official`), sources, leçons ajoutées en brouillon, éditeur de leçon. Publier exige au moins une source et une leçon, toutes rédigées ; publier ou dépublier change aussi le statut des leçons ; un chapitre non publié et jamais commencé peut être supprimé ;
@@ -131,7 +135,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
 - **Paiement** :
   - client PayDunya (`src/lib/payments`) ;
   - webhook `/api/webhooks/paydunya` : vérifie le hash, relit le statut chez PayDunya, journalise dans `payment_events` (idempotent), puis appelle la RPC `apply_payment_event`.
-- **Base Supabase** (`supabase/migrations`, 29 fichiers) :
+- **Base Supabase** (`supabase/migrations`, 33 fichiers) :
   - RLS sur toutes les tables, droits par colonne, schéma `private` pour les fonctions `SECURITY DEFINER` et les corrigés ;
   - hook d'access token (claim `user_role`) ; un admin doit avoir le niveau MFA `aal2` ;
   - RPC `start_attempt`, `submit_attempt` (correction côté serveur), `get_student_dashboard`, `search_tutors`, consentement parental, messagerie, vérification des répétiteurs, paiements ;
@@ -144,11 +148,15 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - provenance des sujets (`20261016000004_exam_sources.sql`) : `assessments.verification`, `sources`, `correction_source` ; `get_assessments_catalog` renvoie aussi la série, la vérification et la provenance. L'admin les règle sur `/admin/evaluations/[id]` ;
   - passage de classe (`20261016000005_promotion.sql`) : table `student_level_history` (lecture : élève, parents liés, admin), RPC `promote_student(p_student, p_series)` autorisée à l'élève, à un parent lié et à l'admin ;
   - offre Famille (`20261016000006_family.sql`) : `plans.max_children`, formules `family_*` **créées inactives** (l'ancienne version du site ne les connaît pas), `create_payment_intent` et `apply_payment_event` étendues, déclencheur `parent_links_family_cover` ; `private.family_codes`, `private.child_logins` (PIN haché par `crypt`), RPC `get_my_family_code`, `get_my_child_logins`, `set_child_pin` (parent), `register_managed_child`, `get_family_children`, `verify_child_pin` (clé secrète seulement) ;
+  - Pass BFEM retiré (`20261022000001_retire_bfem_pass.sql`) : formule désactivée, gardée pour l'historique ;
+  - comptes (`20261022000002_accounts.sql`) : numéros E.164, `account_deletion_requests`, `delete_account`, `request_account_deletion`, `answer_account_deletion_request`, `private.anonymize_account`, `sync_my_contact`, `is_account_anonymized` (clé secrète), hook d'access token sans rôle pour un compte supprimé, `private.recent_login` (claim `amr`) ;
+  - navigation entre les classes (`20261022000003_class_navigation.sql`) : `create_practice_session` accepte une classe précédente ;
+  - parrainage (`20261022000004_referrals.sql`) : `referral_codes`, `referrals`, `referral_rewards`, réglages `platform_settings.referral` (fermé par défaut), `get_my_referral`, `claim_referral`, `private.qualify_referral` (appelée par `apply_payment_event`), `use_referral_days`, `admin_set_referral_settings`, `admin_referral_stats`, `admin_refund_payment` ; formule technique inactive `referral_bonus` ;
   - Storage et pg_cron, installés seulement si l'extension existe.
 - **Mise en ligne du 16/10/2026** (demandée par le porteur du projet) : code poussé sur `main` et déployé par Vercel ; formules Famille activées ; CP, exercices du CI, du CP et de la 3e et leçons rédigées de la 3e publiés dans la base hébergée (sauvegarde des anciennes leçons génériques de 3e faite avant le remplacement). **Reste à faire** : une fois PayDunya branché et testé, activer l'offre gratuite (carte « Offre gratuite » du Référentiel).
 - **Pas encore fait** :
   - SMTP personnalisé (emails avec code), SMS (Edge Functions à déployer), clés PayDunya, Turnstile ;
-  - suppression de compte par anonymisation et export « Mes données » (droits CDP) ;
+  - export « Mes données » (droit d'accès CDP) ; Cloudflare Turnstile sur les demandes de code ;
   - réservations, salle de visio LiveKit (les cours en ligne sont déjà planifiables) et avis (release 2) ;
   - ouverture des réseaux sociaux dans Supabase (comptes développeur Meta, Apple, Google, X) ;
   - séries rares du lycée (L1a, L1b, F6, S1A, S2A, STEG) ; arabe, EPS et arts avant le lycée ; interface en wolof ;
@@ -179,10 +187,12 @@ src/
   features/account/      session.ts (identité depuis le JWT), signup.ts (fin d'inscription),
                          roles.ts (espaces de connexion), oauth.ts (réseaux sociaux ouverts)
   features/tutoring/     suivi d'élèves par un répétiteur (invitations, notes, devoirs, cours en ligne)
+  features/referrals/    parrainage (presets.ts = scénarios de coût, alignés sur private.referral_preset)
+  features/account/      otp.ts (canal, numéro, erreurs d'envoi), account-actions.ts (numéro, suppression)
                          domaines : account, curriculum, assessments, progress, exams, tutors,
                          messaging, notifications, payments, parents, admin, offline, marketing
   lib/                   format, grading, levels (cycles et séries), subjects, navigation,
-                         places (villes), env, slug (programSlug), sanitize (HTML des leçons),
+                         places (villes), env, slug (programSlug), sanitize (HTML des leçons), phone (E.164, pays ouverts),
                          safe-path (redirections internes), cn, payments/,
                          supabase/{server,public,browser,admin}
   mocks/                 données de démo (élève de 3e, contrôles, corrigés, répétiteurs, offres)
@@ -197,8 +207,8 @@ src/
 messages/fr.json         tous les textes de l'interface, un namespace par écran
 supabase/                migrations/, seed.sql (GÉNÉRÉ), config.toml, functions/ (SMS)
 scripts/generate-seed.ts produit supabase/seed.sql à partir des mocks
-tests/unit/              format, grading, paydunya, safe-path, speech, catalog (leçons, séries, corrigés)
-tests/db/                harness PGlite + tests RLS/RPC (parité de correction SQL/TS)
+tests/unit/              format, grading, paydunya, safe-path, speech, phone, class-navigation, catalog (leçons, séries, corrigés)
+tests/db/                harness PGlite + tests RLS/RPC (parité de correction SQL/TS), accounts, class-navigation, referrals
 docs/programme/          sources et découpage de chaque classe (programme-ci.md à programme-tle.md,
                          programme-college.md, programme-lycee.md) et relevé CI → 3e
 public/                  icons/ (PWA), landing/revision-du-soir.jpg (photo de l'accueil), landing/app-accueil.png
@@ -274,10 +284,11 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
   - tokens `cycle-*` et `senegal-*`, composants `LevelBadge`, `CycleDot`, `SenegalFlag`, `FlagStripe` ;
   - sur le jaune, le texte est toujours `ink`.
 - Une couleur par matière (`subject-*`). Badges de chapitre : vert terminé, bleu en cours, gris non commencé, plus un badge Premium.
-- **Tableau de bord** inspiré de la maquette Talab Edu. **Landing** inspirée de Kindering : en-tête en pilule, bord déchiré, autocollant.
+- **Tableau de bord** inspiré de la maquette Talab Edu. **Landing** inspirée de Kindering, éclaircie le 22/10/2026 : en-tête en pilule, fonds clairs, photo encadrée (plus de bord déchiré ni d’autocollant).
 - **URLs en français** sans préfixe de langue (`/eleve/cours`), pour des URLs stables en cache hors ligne.
-- **Offres prépayées**, car le mobile money ne gère pas le prélèvement : 2 000 FCFA par mois, 5 000 par trimestre, 15 000 par an, Pass BFEM à 7 500. Les cours gratuits restent toujours téléchargeables hors ligne.
-- **Paiement via PayDunya**, pour une seule intégration. Wave en direct pourra s'ajouter plus tard derrière `PaymentProvider`.
+- **Offres prépayées**, car le mobile money ne gère pas le prélèvement : 2 000 FCFA par mois, 5 000 par trimestre, 15 000 par an, offre Famille. Le Pass BFEM est retiré (22/10/2026) : ne pas le réintroduire. Les cours gratuits restent toujours téléchargeables hors ligne.
+- **Paiement via PayDunya**, pour une seule intégration. Wave en direct pourra s'ajouter plus tard derrière `PaymentProvider`. Stripe n'ouvre pas de compte à une entreprise sénégalaise et n'a pas le mobile money (`docs/paiements.md`).
+- **Parrainage** : récompense en jours Premium, jamais d'argent ; jamais à la saisie du code, seulement après un paiement confirmé.
 - **Hébergement** : Supabase en Irlande pour l'instant (projet créé ainsi), Vercel prévu à Paris. On pourra recréer le projet à Paris avant le lancement.
 
 ## Programme scolaire
@@ -319,7 +330,8 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
    - fournisseur SMS et déploiement des Edge Functions `send-sms` et `process-sms-outbox` ;
    - clés PayDunya sandbox, puis test d'un paiement complet ;
    - E2E Playwright en CI ;
-   - suppression de compte par anonymisation, export des données ;
+   - après accord explicite du porteur du projet : pousser la branche `refonte-comptes-classes-paiements`, appliquer les migrations `20261022000001` à `…04` en ligne, régénérer `database.ts` ; ouvrir le parrainage (scénario prudent) quand PayDunya fonctionne ;
+   - export des données (droit d'accès CDP), Turnstile ;
    - publier une nouvelle classe : générer des lots d'ajouts rejouables (une classe, ou une classe et une série), les essayer sur PGlite dans l'état de la production, puis les exécuter un par un via l'API de gestion en contrôlant l'empreinte des classes déjà en ligne ;
    - validation des leçons et exercices de toutes les classes par des enseignants ;
    - sujets blancs du CFEE et du Bac ; annales officielles vérifiées.

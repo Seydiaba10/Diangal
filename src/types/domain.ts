@@ -394,6 +394,46 @@ export interface AccountOverview {
   phone: string | null;
 }
 
+// ── Parrainage ──────────────────────────────────────────────────────────────
+
+export type ReferralStatus = "pending" | "qualified" | "rewarded" | "cancelled" | "expired";
+export type ReferralScenario = "prudent" | "intermediaire" | "genereux";
+
+/** Règles du scénario choisi par l'admin (jours Premium offerts, garde, plafonds). */
+export interface ReferralSettings {
+  scenario: ReferralScenario;
+  referrerDays: number;
+  refereeDays: number;
+  holdDays: number;
+  minAmountFcfa: number;
+  maxRewardsPerMonth: number;
+  claimWindowDays: number;
+  qualifyWithinDays: number;
+}
+
+export interface ReferralOverview {
+  /** Élève validé par son parent (s'il est mineur) ou parent. */
+  eligible: boolean;
+  enabled: boolean;
+  code: string | null;
+  settings: ReferralSettings | null;
+  /** Jours utilisables, encore en garde, déjà utilisés. */
+  daysAvailable: number;
+  daysOnHold: number;
+  daysUsed: number;
+  /** Filleuls : initiale seulement (minimisation des données). */
+  referrals: { initial: string; role: AppRole; status: ReferralStatus; reason: string | null; createdAt: string }[];
+}
+
+export interface ReferralAdminStats {
+  enabled: boolean;
+  settings: ReferralSettings;
+  byStatus: Partial<Record<ReferralStatus, number>>;
+  daysGranted: number;
+  daysUsed: number;
+  daysRevoked: number;
+}
+
 // ── Parents ─────────────────────────────────────────────────────────────────
 
 export interface ChildOverview {
@@ -457,7 +497,7 @@ export interface PaymentRecord {
   planCode: PlanCode;
   amountFcfa: number;
   channel: PaymentChannel;
-  status: "pending" | "succeeded" | "failed";
+  status: "pending" | "succeeded" | "failed" | "refunded";
   createdAt: string;
 }
 
@@ -494,7 +534,8 @@ export type NotificationKind =
   | "tutor_session"
   | "tutor_session_cancelled"
   | "account_deletion_request"
-  | "account_deletion_refused";
+  | "account_deletion_refused"
+  | "referral_reward";
 
 export interface AppNotification {
   id: string;

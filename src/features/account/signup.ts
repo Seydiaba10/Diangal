@@ -17,6 +17,8 @@ export interface SignupExtras {
   childCode?: string;
   city?: string;
   subjects?: string[];
+  /** Code de parrainage saisi ou reçu dans le lien d'invitation (vérifié en base). */
+  referralCode?: string;
 }
 
 /** Métadonnées ajoutées au compte à sa création : la fin d'inscription reste à faire. */
@@ -32,6 +34,10 @@ type Supabase = Awaited<ReturnType<typeof createSupabaseServerClient>>;
  */
 export async function finishSignup(supabase: Supabase, userId: string, role: AppRole, extras: SignupExtras) {
   await supabase.rpc("record_signup_consents", { p_version: TERMS_VERSION });
+  // Parrainage : lien parrain-filleul « en attente » ; aucune récompense avant un vrai paiement.
+  if ((role === "student" || role === "parent") && extras.referralCode) {
+    await supabase.rpc("claim_referral", { p_code: extras.referralCode });
+  }
   if (role === "student" && extras.parentPhone) {
     await supabase.rpc("request_parental_consent", { p_parent_phone: extras.parentPhone });
   } else if (role === "parent" && extras.childCode) {

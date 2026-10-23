@@ -4,6 +4,7 @@ import {
   ClipboardCheck,
   ClipboardList,
   CreditCard,
+  Gift,
   GraduationCap,
   MessageCircle,
   ShieldCheck,
@@ -44,6 +45,7 @@ const ICONS: Record<NotificationKind, LucideIcon> = {
   tutor_session_cancelled: Video,
   account_deletion_request: UserX,
   account_deletion_refused: UserX,
+  referral_reward: Gift,
 };
 
 async function NotificationList() {

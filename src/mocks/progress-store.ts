@@ -8,6 +8,7 @@ import type {
   AttemptResult,
   AuditEntry,
   PaymentRecord,
+  ReferralScenario,
   TeachingMode,
   TutorAssignment,
   TutorLinkStatus,
@@ -73,6 +74,8 @@ interface MockState {
   /** Passage en classe supérieure d'Awa pendant la démo (sinon : la 3e des données fictives). */
   studentLevel?: { levelCode: string; seriesCode: string | null };
   levelHistory: { levelCode: string; seriesCode: string | null; startedAt: string; endedAt: string }[];
+  /** Parrainage de démo : ouvert, scénario, jours du parent de démo. */
+  referral: { enabled: boolean; scenario: ReferralScenario; daysAvailable: number; daysUsed: number };
 }
 
 const g = globalThis as typeof globalThis & { __diangalMockState?: MockState };
@@ -98,6 +101,7 @@ export const mockState: MockState = (g.__diangalMockState ??= {
   tutorSessions: [],
   practiceSessions: new Map(),
   levelHistory: [],
+  referral: { enabled: true, scenario: "intermediaire", daysAvailable: 30, daysUsed: 0 },
 });
 
 // Champs ajoutés après le premier démarrage : complétés si l'état existait déjà (rechargement à chaud).
@@ -119,6 +123,7 @@ mockState.tutorAssignments ??= [];
 mockState.tutorSessions ??= [];
 mockState.practiceSessions ??= new Map();
 mockState.levelHistory ??= [];
+mockState.referral ??= { enabled: true, scenario: "intermediaire", daysAvailable: 30, daysUsed: 0 };
 
 export function logAudit(actorName: string, action: string, target: string) {
   mockState.auditLog.unshift({

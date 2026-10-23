@@ -1,4 +1,4 @@
-import { CircleCheck, CircleX, Clock, Crown, Users } from "lucide-react";
+import { CircleCheck, CircleX, Clock, Crown, Undo2, Users } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -20,6 +20,7 @@ const STATUS = {
   succeeded: { tone: "success", icon: CircleCheck },
   pending: { tone: "info", icon: Clock },
   failed: { tone: "danger", icon: CircleX },
+  refunded: { tone: "info", icon: Undo2 },
 } as const satisfies Record<PaymentRecord["status"], { tone: "success" | "info" | "danger"; icon: typeof CircleCheck }>;
 
 export async function generateMetadata() {
