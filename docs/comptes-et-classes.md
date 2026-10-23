@@ -1,6 +1,6 @@
 # Comptes et navigation entre les classes
 
-État au 22/10/2026 : branche `refonte-comptes-classes-paiements`, migrations `20261022000001` à `20261022000004`. **Rien n’est encore appliqué à la base en ligne.**
+État au 23/10/2026 : en ligne (migrations `20261022000001` à `20261022000004` appliquées, site déployé), vérifié avec un compte temporaire sur le site.
 
 ## Déconnexion et « Mon compte »
 
