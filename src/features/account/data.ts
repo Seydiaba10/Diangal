@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { cache } from "react";
@@ -65,8 +66,11 @@ export const getCurrentStudent = cache(async (): Promise<StudentSummary> => {
     if (!student) redirect("/connexion?erreur=profil");
     return student;
   }
+  // Démo : la classe change si Awa est passée en classe supérieure pendant la démo (en mémoire).
+  const level = mockState.studentLevel;
   return {
     ...mockStudent,
+    ...(level ? { levelCode: level.levelCode, seriesCode: level.seriesCode, levelName: (await getTranslations("levels"))(level.levelCode as "3E") } : {}),
     isPremium: premiumUntil(DEMO_STUDENT_ID) !== null,
     consentStatus: mockState.consentGranted ? "granted" : "pending",
   };

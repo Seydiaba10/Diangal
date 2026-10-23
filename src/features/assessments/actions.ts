@@ -2,9 +2,11 @@
 
 import { notFound, redirect } from "next/navigation";
 import { getCurrentStudent } from "@/features/account/data";
-import { getChapters, getSubjects } from "@/features/curriculum/data";
+import { getChapters, getSubject } from "@/features/curriculum/data";
+import { browsableLevels } from "@/features/schooling/class-navigation";
 import { isSupabaseConfigured } from "@/lib/env";
 import { gradeAnswer, toScore20 } from "@/lib/grading";
+import type { LevelCode } from "@/lib/levels";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { CATALOG_ANSWER_KEYS } from "@/mocks/answer-keys";
 import { CATALOG_QUESTIONS } from "@/mocks/assessments";
@@ -86,7 +88,10 @@ export async function createPracticeSessionAction(formData: FormData) {
   const chapterIds = [...new Set(formData.getAll("chapters").map(String))].slice(0, 20);
   const count = Number(formData.get("count"));
   const timed = formData.get("mode") === "chrono";
-  const back = `/eleve/exercices/preparer?matiere=${encodeURIComponent(subjectSlug)}`;
+  // Retour sur la même classe (classe précédente ouverte en révision, s'il y a lieu).
+  const classe = String(formData.get("classe") ?? "").slice(0, 8);
+  const serie = String(formData.get("serie") ?? "").slice(0, 8);
+  const back = `/eleve/exercices/preparer?${new URLSearchParams({ matiere: subjectSlug, ...(classe ? { classe } : {}), ...(serie ? { serie } : {}) })}`;
   if (!chapterIds.length) redirect(`${back}&erreur=chapitres`);
   if (!PRACTICE_COUNTS.includes(count)) redirect(`${back}&erreur=nombre`);
 
@@ -105,9 +110,16 @@ export async function createPracticeSessionAction(formData: FormData) {
     redirect(`/eleve/tentatives/${(data as { attempt_id: string }).attempt_id}`);
   }
 
-  // Démo : mêmes contrôles que la fonction SQL (matière de la classe de l'élève, chapitres Premium).
+  // Démo : mêmes contrôles que la fonction SQL (matière de la classe de l'élève ou d'une classe
+  // précédente, chapitres Premium).
   const student = await getCurrentStudent();
-  const subject = (await getSubjects(student.levelCode, student.seriesCode)).find((s) => s.slug === subjectSlug);
+  const candidate = await getSubject(subjectSlug);
+  const allowed =
+    candidate &&
+    (candidate.levelCode === student.levelCode
+      ? !candidate.seriesCode || candidate.seriesCode === student.seriesCode
+      : browsableLevels(student.levelCode).includes(candidate.levelCode as LevelCode));
+  const subject = allowed ? candidate : undefined;
   const chapters = subject ? (await getChapters(subject)).filter((c) => chapterIds.includes(c.id)) : [];
   if (!subject || chapters.length !== chapterIds.length) redirect(`${back}&erreur=chapitres`);
   if (chapters.some((c) => c.lessons.some((l) => l.isPremium)) && !student.isPremium) redirect("/eleve/abonnement");

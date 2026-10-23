@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { ChapterList, ChapterListSkeleton } from "@/features/curriculum/components/chapter-list";
 import { getChapters, getSubject, getSubjects } from "@/features/curriculum/data";
+import { coursesHrefFor } from "@/features/schooling/class-navigation";
 
 type Params = PageProps<"/eleve/cours/[matiere]">["params"];
 
@@ -26,7 +27,7 @@ async function SubjectContent({ params }: { params: Params }) {
 
   return (
     <>
-      <Breadcrumb items={[{ label: tBreadcrumb("courses"), href: "/eleve/cours" }, { label: subject.name }]} />
+      <Breadcrumb items={[{ label: tBreadcrumb("courses"), href: coursesHrefFor(subject) }, { label: subject.name }]} />
       <header className="flex items-center gap-4">
         <SubjectIcon code={subject.code} size="lg" />
         <div>

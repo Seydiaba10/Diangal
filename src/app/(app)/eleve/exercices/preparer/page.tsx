@@ -12,6 +12,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentStudent } from "@/features/account/data";
 import { createPracticeSessionAction } from "@/features/assessments/actions";
 import { getPracticeOptions } from "@/features/assessments/data";
+import { classQuery } from "@/features/schooling/class-navigation";
+import { ClassSwitcher } from "@/features/schooling/components/class-switcher";
+import { getBrowsedClass, getClassOptions } from "@/features/schooling/data";
 import { cn } from "@/lib/cn";
 import type { PracticeChapterOption } from "@/types/domain";
 
@@ -40,10 +43,23 @@ const OPTION_CLASS =
   "flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-line bg-surface px-4 py-2 text-sm text-ink has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50";
 
 async function PrepareForm({ searchParams }: { searchParams: SearchParams }) {
-  const [{ matiere, erreur }, student, t] = await Promise.all([searchParams, getCurrentStudent(), getTranslations("prepare")]);
-  const options = await getPracticeOptions(student.levelCode, student.seriesCode);
+  const [params, student, t] = await Promise.all([searchParams, getCurrentStudent(), getTranslations("prepare")]);
+  const { matiere, erreur } = params;
+  // Classe actuelle, ou classe précédente choisie sur la page Exercices (révisions).
+  const [browsed, classes] = await Promise.all([getBrowsedClass(params), getClassOptions()]);
+  const options = await getPracticeOptions(browsed.levelCode, browsed.seriesCode);
+  const withClass = (extra: Record<string, string> = {}) => {
+    const query = new URLSearchParams({ ...classQuery(browsed), ...extra });
+    return `/eleve/exercices/preparer${query.size ? `?${query}` : ""}`;
+  };
+  const switcher = <ClassSwitcher basePath="/eleve/exercices/preparer" browsed={browsed} options={classes} />;
   if (!options.length) {
-    return <p className="rounded-2xl border border-line bg-surface p-5 text-sm text-ink-muted">{t("noQuestions")}</p>;
+    return (
+      <div className="space-y-5">
+        {switcher}
+        <p className="rounded-2xl border border-line bg-surface p-5 text-sm text-ink-muted">{t("noQuestions")}</p>
+      </div>
+    );
   }
   // Par défaut : la première matière où l'élève a au moins un chapitre accessible.
   const selected =
@@ -54,6 +70,7 @@ async function PrepareForm({ searchParams }: { searchParams: SearchParams }) {
 
   return (
     <div className="space-y-5">
+      {switcher}
       {error ? <Notice tone="error">{t(`errors.${error}`)}</Notice> : null}
 
       <nav aria-label={t("subjectLabel")} className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
@@ -63,7 +80,7 @@ async function PrepareForm({ searchParams }: { searchParams: SearchParams }) {
             return (
               <li key={subject.slug}>
                 <Link
-                  href={`/eleve/exercices/preparer?matiere=${subject.slug}`}
+                  href={withClass({ matiere: subject.slug })}
                   aria-current={active ? "page" : undefined}
                   className={cn(
                     "inline-flex h-11 shrink-0 items-center rounded-full border px-4 text-sm font-medium",
@@ -80,6 +97,9 @@ async function PrepareForm({ searchParams }: { searchParams: SearchParams }) {
 
       <form action={createPracticeSessionAction} className="space-y-5">
         <input type="hidden" name="subject" value={selected.subject.slug} />
+        {Object.entries(classQuery(browsed)).map(([name, value]) => (
+          <input key={name} type="hidden" name={name} value={value} />
+        ))}
 
         <SectionCard id="chapitres-titre" title={t("chaptersTitle")} subtitle={t("chaptersHint")}>
           <div className="space-y-4">

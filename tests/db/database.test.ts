@@ -628,9 +628,10 @@ describe("Préparer mon prochain devoir et offre gratuite", () => {
     expect(JSON.stringify(started)).not.toMatch(/correct_option|accepted_texts|numeric_value|explanation_html/);
   });
 
-  it("refuse un chapitre Premium sans abonnement, une autre classe ou une demande invalide", async () => {
+  it("refuse un chapitre Premium sans abonnement, une classe supérieure ou une demande invalide", async () => {
     const premium = await chapterWithQuestions("3E", true);
-    const otherLevel = await chapterWithQuestions("CI", false);
+    // Une classe précédente (CI) est permise en révision ; une classe supérieure (2nde) ne l'est pas.
+    const otherLevel = await chapterWithQuestions("2NDE", false);
     const free = await chapterWithQuestions("3E", false);
     await expect(as(db, ibou, (tx) => tx.query("select public.create_practice_session($1, 5, false)", [[premium]]))).rejects.toThrow(
       /premium_required/,

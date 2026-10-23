@@ -113,7 +113,7 @@ async function ChildContent({
             className="w-full text-danger-700 hover:bg-danger-50"
           >
             <Trash className="size-4" aria-hidden />
-            {t("deleteAccount", { name: child.firstName })}
+            {t("deleteAccount")}
           </ButtonLink>
         </aside>
       </div>

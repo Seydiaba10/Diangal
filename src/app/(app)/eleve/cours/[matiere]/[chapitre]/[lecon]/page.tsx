@@ -9,6 +9,7 @@ import { buttonClasses } from "@/components/ui/button";
 import { LessonIllustration } from "@/features/curriculum/components/lesson-illustration";
 import { LessonBody, LessonBodySkeleton, LessonResources } from "@/features/curriculum/components/lesson-parts";
 import { chapterHref, getLesson, getPrerenderedLessonParams, lessonHref } from "@/features/curriculum/data";
+import { coursesHrefFor } from "@/features/schooling/class-navigation";
 import { hasReadAloud } from "@/lib/levels";
 
 type Params = PageProps<"/eleve/cours/[matiere]/[chapitre]/[lecon]">;
@@ -33,7 +34,7 @@ async function LessonContent({ params }: { params: Params["params"] }) {
     <>
       <Breadcrumb
         items={[
-          { label: tBreadcrumb("courses"), href: "/eleve/cours" },
+          { label: tBreadcrumb("courses"), href: coursesHrefFor(subject) },
           { label: subject.name, href: `/eleve/cours/${subject.slug}` },
           { label: chapter.title, href: chapterHref(subject, chapter) },
         ]}

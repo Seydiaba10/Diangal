@@ -10,9 +10,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { AssessmentCard } from "@/features/assessments/components/assessment-card";
 import { getPracticeAssessments, getPracticeHistory, getRecommendedAssessments } from "@/features/assessments/data";
-import { getCurrentStudent } from "@/features/account/data";
 import { getSubjects } from "@/features/curriculum/data";
 import { getStudentDashboard } from "@/features/progress/data";
+import { classQuery } from "@/features/schooling/class-navigation";
+import { ClassSwitcher } from "@/features/schooling/components/class-switcher";
+import { getBrowsedClass, getClassOptions } from "@/features/schooling/data";
 import { cn } from "@/lib/cn";
 import { formatDate, formatScore } from "@/lib/format";
 import type { AssessmentSummary } from "@/types/domain";
@@ -37,16 +39,23 @@ function AssessmentGrid({ items }: { items: AssessmentSummary[] }) {
 }
 
 async function PracticeContent({ searchParams }: { searchParams: SearchParams }) {
-  const { matiere } = await searchParams;
-  const student = await getCurrentStudent();
-  const [subjects, t] = await Promise.all([getSubjects(student.levelCode, student.seriesCode), getTranslations("practice")]);
+  const params = await searchParams;
+  const { matiere } = params;
+  // Classe ouverte : celle de l'élève, ou une classe précédente (?classe=3E) pour réviser.
+  const [browsed, classes] = await Promise.all([getBrowsedClass(params), getClassOptions()]);
+  const [subjects, t] = await Promise.all([getSubjects(browsed.levelCode, browsed.seriesCode), getTranslations("practice")]);
   const selected = subjects.find((s) => s.slug === matiere);
   const [all, dashboard, history] = await Promise.all([
-    getPracticeAssessments(student.levelCode, selected?.code, student.seriesCode),
+    getPracticeAssessments(browsed.levelCode, selected?.code, browsed.seriesCode),
     getStudentDashboard(),
     getPracticeHistory(),
   ]);
-  const recommended = selected ? [] : await getRecommendedAssessments(dashboard.weakPoints.map((w) => w.chapterId));
+  const recommended =
+    selected || !browsed.isCurrent ? [] : await getRecommendedAssessments(dashboard.weakPoints.map((w) => w.chapterId));
+  const withClass = (path: string, extra: Record<string, string> = {}) => {
+    const query = new URLSearchParams({ ...classQuery(browsed), ...extra });
+    return query.size ? `${path}?${query}` : path;
+  };
 
   const chip = (href: string, label: string, active: boolean) => (
     <Link
@@ -63,6 +72,7 @@ async function PracticeContent({ searchParams }: { searchParams: SearchParams })
 
   return (
     <>
+      <ClassSwitcher basePath="/eleve/exercices" browsed={browsed} options={classes} />
       {/* « Préparer mon prochain devoir » : séance composée à partir des chapitres choisis. */}
       <section
         aria-labelledby="preparer-titre"
@@ -77,16 +87,16 @@ async function PracticeContent({ searchParams }: { searchParams: SearchParams })
           </h2>
           <p className="text-sm text-white/85">{t("prepare.hint")}</p>
         </div>
-        <ButtonLink href="/eleve/exercices/preparer" className="bg-white text-brand-700 hover:bg-brand-50">
+        <ButtonLink href={withClass("/eleve/exercices/preparer")} className="bg-white text-brand-700 hover:bg-brand-50">
           {t("prepare.cta")}
         </ButtonLink>
       </section>
 
       <nav aria-label={t("filterLabel")} className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
         <ul className="flex gap-2 pb-1">
-          <li>{chip("/eleve/exercices", t("allSubjects"), !selected)}</li>
+          <li>{chip(withClass("/eleve/exercices"), t("allSubjects"), !selected)}</li>
           {subjects.map((s) => (
-            <li key={s.slug}>{chip(`/eleve/exercices?matiere=${s.slug}`, s.name, selected?.slug === s.slug)}</li>
+            <li key={s.slug}>{chip(withClass("/eleve/exercices", { matiere: s.slug }), s.name, selected?.slug === s.slug)}</li>
           ))}
         </ul>
       </nav>

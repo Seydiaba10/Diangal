@@ -1269,7 +1269,7 @@
     "subjects": "Progression par matière",
     "programSoon": "Le programme détaillé de cette classe sera publié prochainement.",
     "readOnly": "Vous consultez la progression en lecture seule. Votre enfant garde la main sur ses révisions.",
-    "deleteAccount": "Supprimer le compte de {name}"
+    "deleteAccount": "Supprimer le compte de cet enfant"
   },
   "addChild": {
     "title": "Ajouter un enfant",
@@ -2227,7 +2227,7 @@
     "codeSentEmail": "{tu, select, true {Un email vient de t’être envoyé : saisis le code ci-dessous, ou ouvre le lien sur cet appareil.} other {Un email vient de vous être envoyé : saisissez le code ci-dessous, ou ouvrez le lien sur cet appareil.}}",
     "codeSentPhone": "{tu, select, true {Un code vient de t’être envoyé : saisis-le ci-dessous.} other {Un code vient de vous être envoyé : saisissez-le ci-dessous.}}",
     "childRequest": "{child} a demandé la suppression de son compte le {date}. Vous pouvez accepter ci-dessous, ou refuser.",
-    "refuseChild": "Refuser la demande de {child}",
+    "refuseChild": "Refuser la demande et garder le compte",
     "managed": {
       "title": "D’abord, les profils de vos enfants",
       "body": "Vous gérez des profils d’enfants qui se connectent avec le code famille. Supprimez-les d’abord : sans votre compte, ils ne pourraient plus se connecter.",
@@ -2243,11 +2243,11 @@
     "requests": {
       "envoyee": "{tu, select, true {Ta demande a été envoyée à ton parent.} other {La demande a été envoyée.}}",
       "annulee": "La demande a été annulée.",
-      "refusee": "Vous avez refusé : le compte de {child} est conservé."
+      "refusee": "Vous avez refusé : le compte de votre enfant est conservé."
     },
     "effects": {
       "title": "{tu, select, true {Ce qui se passe si tu supprimes ton compte} other {Ce qui se passe si vous supprimez votre compte}}",
-      "titleChild": "Ce qui se passe si vous supprimez le compte de {child}",
+      "titleChild": "Compte de votre enfant {child} : ce qui se passe",
       "erasedTitle": "Effacé",
       "erased": {
         "identity": "Nom, email, numéro de téléphone et connexion",
@@ -2271,12 +2271,12 @@
     },
     "confirm": {
       "title": "Supprimer définitivement le compte",
-      "titleChild": "Supprimer définitivement le compte de {child}",
+      "titleChild": "Supprimer définitivement le compte de votre enfant {child}",
       "code": "Code de confirmation",
       "word": "{tu, select, true {Pour confirmer, tape SUPPRIMER} other {Pour confirmer, tapez SUPPRIMER}}",
       "understand": "{tu, select, true {Je comprends que c’est définitif : mes cours suivis, mes notes et mes messages seront effacés.} other {Je comprends que c’est définitif et que ces données ne pourront pas être récupérées.}}",
       "submit": "Supprimer le compte",
-      "submitChild": "Supprimer le compte de {child}",
+      "submitChild": "Supprimer ce compte",
       "cancel": "Annuler"
     },
     "errors": {
@@ -2288,5 +2288,15 @@
       "envoi": "Le code n’a pas pu être envoyé. Réessayez dans un instant.",
       "limite": "Trop de codes demandés. Réessayez dans quelques minutes."
     }
+  },
+  "classSwitcher": {
+    "title": "Mes classes",
+    "hint": "Revois les cours des classes précédentes : ta classe ne change pas et ta progression est gardée.",
+    "current": "Ma classe",
+    "progress": "{done}/{total} chapitres",
+    "more": "{count, plural, one {# autre classe précédente} other {# autres classes précédentes}}",
+    "series": "Série à revoir en {level}",
+    "reviewing": "Révision : cours de {level}. Ta classe actuelle reste {current}, et ta progression est gardée.",
+    "back": "Revenir à ma classe ({current})"
   }
 }

@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { ChapterContent, ChapterContentSkeleton } from "@/features/curriculum/components/chapter-content";
 import { getChapter, getPrerenderedChapterParams } from "@/features/curriculum/data";
+import { coursesHrefFor } from "@/features/schooling/class-navigation";
 
 type Params = PageProps<"/eleve/cours/[matiere]/[chapitre]">["params"];
 
@@ -30,7 +31,7 @@ async function ChapterPageContent({ params }: { params: Params }) {
     <>
       <Breadcrumb
         items={[
-          { label: tBreadcrumb("courses"), href: "/eleve/cours" },
+          { label: tBreadcrumb("courses"), href: coursesHrefFor(subject) },
           { label: subject.name, href: `/eleve/cours/${subject.slug}` },
           { label: chapter.title },
         ]}

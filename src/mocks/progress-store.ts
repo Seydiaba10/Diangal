@@ -70,6 +70,9 @@ interface MockState {
   tutorSessions: TutorSession[];
   /** Séances « Préparer mon prochain devoir » créées pendant la démo. */
   practiceSessions: Map<string, Assessment & { createdAt: string }>;
+  /** Passage en classe supérieure d'Awa pendant la démo (sinon : la 3e des données fictives). */
+  studentLevel?: { levelCode: string; seriesCode: string | null };
+  levelHistory: { levelCode: string; seriesCode: string | null; startedAt: string; endedAt: string }[];
 }
 
 const g = globalThis as typeof globalThis & { __diangalMockState?: MockState };
@@ -94,6 +97,7 @@ export const mockState: MockState = (g.__diangalMockState ??= {
   tutorAssignments: [],
   tutorSessions: [],
   practiceSessions: new Map(),
+  levelHistory: [],
 });
 
 // Champs ajoutés après le premier démarrage : complétés si l'état existait déjà (rechargement à chaud).
@@ -114,6 +118,7 @@ mockState.tutorLinks ??= new Map();
 mockState.tutorAssignments ??= [];
 mockState.tutorSessions ??= [];
 mockState.practiceSessions ??= new Map();
+mockState.levelHistory ??= [];
 
 export function logAudit(actorName: string, action: string, target: string) {
   mockState.auditLog.unshift({

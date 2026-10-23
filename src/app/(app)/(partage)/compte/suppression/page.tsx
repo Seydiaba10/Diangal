@@ -19,6 +19,7 @@ import {
 import { getCurrentRole, getDeletionStatus, getParentChild } from "@/features/account/data";
 import { cn } from "@/lib/cn";
 import { formatDate } from "@/lib/format";
+import type { AppRole } from "@/types/domain";
 
 export async function generateMetadata() {
   const t = await getTranslations("pages");
@@ -120,7 +121,7 @@ async function DeletionContent({ searchParams }: { searchParams: PageProps<"/com
             </form>
           )}
         </SectionCard>
-        <WhatHappens tu={tu} />
+        <WhatHappens tu={tu} role="student" />
       </div>
     );
   }
@@ -133,7 +134,7 @@ async function DeletionContent({ searchParams }: { searchParams: PageProps<"/com
       {childId && status.pendingRequestAt ? (
         <Notice tone="warning">{t("childRequest", { child: childName, date: formatDate(status.pendingRequestAt) })}</Notice>
       ) : null}
-      <WhatHappens tu={tu} child={childName || undefined} />
+      <WhatHappens tu={tu} role={childId ? "student" : role} child={childName || undefined} />
 
       <SectionCard id="identite-titre" title={t("verify.title")} subtitle={t("verify.body", { tu })}>
         {status.recentLogin ? (
@@ -182,7 +183,7 @@ async function DeletionContent({ searchParams }: { searchParams: PageProps<"/com
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button type="submit" className="bg-danger-700 hover:bg-danger-700/90">
             <Trash className="size-4" aria-hidden />
-            {childName ? t("confirm.submitChild", { child: childName }) : t("confirm.submit")}
+            {childName ? t("confirm.submitChild") : t("confirm.submit")}
           </Button>
           <ButtonLink href={childId ? `/parent/enfants/${childId}` : "/compte"} variant="ghost">
             {t("confirm.cancel")}
@@ -194,7 +195,7 @@ async function DeletionContent({ searchParams }: { searchParams: PageProps<"/com
         <form action={refuseChildDeletionAction.bind(null, childId)}>
           <Button type="submit" variant="outline" size="sm">
             <CircleX className="size-4" aria-hidden />
-            {t("refuseChild", { child: childName })}
+            {t("refuseChild")}
           </Button>
         </form>
       ) : null}
@@ -202,8 +203,16 @@ async function DeletionContent({ searchParams }: { searchParams: PageProps<"/com
   );
 }
 
+/** Données effacées selon le rôle du compte supprimé. */
+const ERASED: Record<AppRole, readonly ("identity" | "progress" | "messages" | "family" | "tutor")[]> = {
+  student: ["identity", "progress", "messages", "family"],
+  parent: ["identity", "messages", "family"],
+  tutor: ["identity", "messages", "tutor"],
+  admin: ["identity"],
+};
+
 /** Ce qui est effacé et ce qui est gardé (obligations légales), en langage simple. */
-async function WhatHappens({ tu, child }: { tu: string; child?: string }) {
+async function WhatHappens({ tu, role, child }: { tu: string; role: AppRole; child?: string }) {
   const t = await getTranslations("accountDeletion");
   return (
     <SectionCard id="effets-titre" title={child ? t("effects.titleChild", { child }) : t("effects.title", { tu })}>
@@ -211,7 +220,7 @@ async function WhatHappens({ tu, child }: { tu: string; child?: string }) {
         <div>
           <p className="text-sm font-semibold text-ink">{t("effects.erasedTitle")}</p>
           <ul className="mt-2 space-y-1.5 text-sm text-ink-muted">
-            {(["identity", "progress", "messages", "family", "tutor"] as const).map((key) => (
+            {ERASED[role].map((key) => (
               <li key={key} className="flex gap-2">
                 <CircleX className="mt-0.5 size-4 shrink-0 text-danger-700" aria-hidden />
                 {t(`effects.erased.${key}`)}
