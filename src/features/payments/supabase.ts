@@ -7,6 +7,9 @@ import type { OfferPlanCode, PaymentChannel, PaymentRecord, Plan, PlanCode } fro
 
 // Paiements Supabase : offres (plans, publiques), paiements (lecture des siens ; tous pour l'admin).
 
+/** Formules en vente (le Pass BFEM est retiré ; « referral_bonus » n'est jamais vendue). */
+const OFFER_PLAN_CODES: OfferPlanCode[] = ["monthly", "quarterly", "yearly", "family_monthly", "family_quarterly", "family_yearly"];
+
 /**
  * Offres actives : contenu public, mis en cache. Les formules Famille sont affichées même
  * inactives (activées à la mise en ligne) : create_payment_intent refuse une offre inactive.
@@ -21,7 +24,8 @@ export async function loadPlans(): Promise<(Plan & { name: string })[]> {
     .or("is_active.eq.true,max_children.not.is.null")
     .order("sort_order");
   if (error) throw new Error(`offres : ${error.message}`);
-  return data.map((p) => ({
+  // Seules les formules en vente : une ancienne formule restée active en base (Pass BFEM) n'apparaît jamais.
+  return data.filter((p) => OFFER_PLAN_CODES.includes(p.code as OfferPlanCode)).map((p) => ({
     code: p.code as OfferPlanCode,
     name: p.name,
     priceFcfa: p.price_fcfa,

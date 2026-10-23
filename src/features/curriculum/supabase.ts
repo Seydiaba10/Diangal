@@ -9,6 +9,9 @@ import type { Chapter, LessonResource, Subject, SubjectCode } from "@/types/doma
 
 // Lecture Supabase du catalogue et de la progression (mêmes types que les données de démo).
 
+/** Taille des pages du catalogue (sous la limite de lignes par réponse de l'API Supabase). */
+const CHAPTER_PAGE = 500;
+
 export interface Catalog {
   subjects: Subject[];
   chapters: Chapter[];
@@ -30,18 +33,28 @@ export async function loadCatalog(): Promise<Catalog> {
     .order("sort_order");
   if (error) throw new Error(`catalogue (programmes) : ${error.message}`);
 
-  const { data: chapters, error: chaptersError } = await supabase
-    .from("chapters")
-    .select(
-      "id, program_id, number, slug, title, summary, strand, sort_order, lessons(id, number, slug, title, is_premium, estimated_minutes, media(kind, title, size_bytes, duration_s))",
-    )
-    .in(
-      "program_id",
-      programs.map((p) => p.id),
-    )
-    .order("sort_order")
-    .order("number", { referencedTable: "lessons" });
-  if (chaptersError) throw new Error(`catalogue (chapitres) : ${chaptersError.message}`);
+  // Chapitres lus par pages (réponses plus petites, limite de lignes de l'API respectée), avec
+  // jusqu'à 3 essais par page : une grosse réponse unique arrivait parfois coupée pendant le build.
+  const programIds = programs.map((p) => p.id);
+  const page = (from: number) =>
+    supabase
+      .from("chapters")
+      .select(
+        "id, program_id, number, slug, title, summary, strand, sort_order, lessons(id, number, slug, title, is_premium, estimated_minutes, media(kind, title, size_bytes, duration_s))",
+      )
+      .in("program_id", programIds)
+      .order("sort_order")
+      .order("id")
+      .order("number", { referencedTable: "lessons" })
+      .range(from, from + CHAPTER_PAGE - 1);
+  const chapters: NonNullable<Awaited<ReturnType<typeof page>>["data"]> = [];
+  for (let from = 0; ; from += CHAPTER_PAGE) {
+    let result = await page(from);
+    for (let attempt = 1; result.error && attempt < 3; attempt++) result = await page(from);
+    if (result.error) throw new Error(`catalogue (chapitres) : ${result.error.message.slice(0, 200)}`);
+    chapters.push(...result.data);
+    if (result.data.length < CHAPTER_PAGE) break;
+  }
 
   // Classes dans l'ordre de la scolarité (CI → Terminale), matières dans l'ordre du programme.
   const ordered = [...programs].sort((a, b) => a.levels.sort_order - b.levels.sort_order || a.sort_order - b.sort_order);

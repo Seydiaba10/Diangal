@@ -1593,21 +1593,6 @@ export type Database = {
           },
         ]
       }
-      regions: {
-        Row: {
-          id: number
-          name: string
-        }
-        Insert: {
-          id: number
-          name: string
-        }
-        Update: {
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
       referral_codes: {
         Row: {
           active: boolean
@@ -1631,7 +1616,7 @@ export type Database = {
           {
             foreignKeyName: "referral_codes_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -1753,7 +1738,7 @@ export type Database = {
           {
             foreignKeyName: "referrals_referee_id_fkey"
             columns: ["referee_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -1765,6 +1750,21 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      regions: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
       }
       reports: {
         Row: {
@@ -3062,7 +3062,13 @@ export const Constants = {
         "short_text",
         "numeric",
       ],
-      referral_status: ["pending", "qualified", "rewarded", "cancelled", "expired"],
+      referral_status: [
+        "pending",
+        "qualified",
+        "rewarded",
+        "cancelled",
+        "expired",
+      ],
       report_target: ["message", "review", "tutor", "user"],
       review_status: ["pending", "published", "rejected"],
       teaching_mode: ["online", "home", "both"],
