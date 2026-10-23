@@ -9,7 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { getCurrentStudent } from "@/features/account/data";
 import { AssessmentCard } from "@/features/assessments/components/assessment-card";
-import { EXAM_BY_LEVEL, getExamHistory, getExamPapers, getMockExams, getNextExamOfType } from "@/features/exams/data";
+import { OfficialPapersSection } from "@/features/exams/components/official-papers-section";
+import { EXAM_BY_LEVEL, getExamHistory, getExamPapers, getMockExams, getNextExamOfType, getOfficialPapers } from "@/features/exams/data";
 import { ExamCountdown } from "@/features/progress/components/exam-countdown";
 import { cn } from "@/lib/cn";
 import { formatDate, formatScore } from "@/lib/format";
@@ -48,11 +49,13 @@ async function ExamsContent({ searchParams }: { searchParams: SearchParams }) {
   const exam = EXAMS.find((e) => e.param === examen)?.type ?? EXAM_BY_LEVEL[student.levelCode] ?? "BFEM";
   const series =
     exam === "BAC" ? (BAC_SERIES.find((s) => s === serie) ?? BAC_SERIES.find((s) => s === student.seriesCode) ?? null) : null;
-  const [next, papers, mockExams, history] = await Promise.all([
+  const [next, papers, mockExams, history, official] = await Promise.all([
     getNextExamOfType(exam),
     getExamPapers(exam, series),
     getMockExams(exam, series),
     getExamHistory(exam),
+    // Bac : sujets et corrigés officiels en PDF (liens vers le site de l'Office du Bac).
+    exam === "BAC" ? getOfficialPapers(series) : Promise.resolve(null),
   ]);
   const years = [...new Set(papers.map((p) => p.year))].sort((a, b) => b - a);
   const examName = tExams(exam);
@@ -94,6 +97,10 @@ async function ExamsContent({ searchParams }: { searchParams: SearchParams }) {
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-5">
+          {official ? (
+            <OfficialPapersSection papers={official.papers} series={series} total={official.total} checkedOn={official.checkedOn} />
+          ) : null}
+
           <section aria-labelledby="blancs-titre">
             <h2 id="blancs-titre" className="text-lg font-semibold text-ink">
               {t("mockExams")}
@@ -114,6 +121,7 @@ async function ExamsContent({ searchParams }: { searchParams: SearchParams }) {
             )}
           </section>
 
+          {years.length || !official ? (
           <SectionCard id="annales-titre" title={t("pastPapers", { exam: examName })} subtitle={t("pastPapersHint")}>
             {years.length ? (
               <div className="space-y-5">
@@ -155,6 +163,7 @@ async function ExamsContent({ searchParams }: { searchParams: SearchParams }) {
               <p className="text-sm text-ink-muted">{t("noPastPapers", { exam: examName })}</p>
             )}
           </SectionCard>
+          ) : null}
 
           <SectionCard id="historique-titre" title={t("historyTitle")}>
             {history.length ? (

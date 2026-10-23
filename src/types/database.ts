@@ -1164,6 +1164,66 @@ export type Database = {
           },
         ]
       }
+      official_papers: {
+        Row: {
+          checked_on: string
+          created_at: string
+          exam_group: number | null
+          exam_type: Database["public"]["Enums"]["exam_type"]
+          id: string
+          is_published: boolean
+          kind: string
+          replacement: boolean
+          series_codes: string[]
+          series_label: string | null
+          source_name: string
+          source_page: string
+          subject_code: string | null
+          subject_label: string
+          title: string
+          url: string
+          year: number
+        }
+        Insert: {
+          checked_on: string
+          created_at?: string
+          exam_group?: number | null
+          exam_type?: Database["public"]["Enums"]["exam_type"]
+          id?: string
+          is_published?: boolean
+          kind: string
+          replacement?: boolean
+          series_codes?: string[]
+          series_label?: string | null
+          source_name?: string
+          source_page: string
+          subject_code?: string | null
+          subject_label: string
+          title: string
+          url: string
+          year: number
+        }
+        Update: {
+          checked_on?: string
+          created_at?: string
+          exam_group?: number | null
+          exam_type?: Database["public"]["Enums"]["exam_type"]
+          id?: string
+          is_published?: boolean
+          kind?: string
+          replacement?: boolean
+          series_codes?: string[]
+          series_label?: string | null
+          source_name?: string
+          source_page?: string
+          subject_code?: string | null
+          subject_label?: string
+          title?: string
+          url?: string
+          year?: number
+        }
+        Relationships: []
+      }
       parent_links: {
         Row: {
           approved_at: string | null

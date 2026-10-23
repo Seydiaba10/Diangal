@@ -575,6 +575,33 @@ export interface ExamPaper {
   correctionSource: string | null;
 }
 
+/**
+ * Sujet ou corrigé officiel du Bac en PDF, publié par l'Office du Bac : DIANGAL ne garde que le
+ * lien vers le site officiel (aucune copie).
+ */
+export interface OfficialPaperData {
+  year: number;
+  kind: "epreuve" | "corrige";
+  /** 1er ou 2e groupe (second tour) ; null si le libellé ne le dit pas. */
+  group: 1 | 2 | null;
+  /** Sujet de remplacement. */
+  replacement: boolean;
+  subjectCode: SubjectCode | null;
+  subjectLabel: string;
+  /** Série telle que l'Office l'écrit (S1-S3, L-AR, STEG, LV2…), null si non précisée. */
+  seriesLabel: string | null;
+  /** Séries DIANGAL concernées, quand la correspondance est sûre. */
+  seriesCodes: string[];
+  /** Libellé du lien sur le site officiel (« Epr-Maths-S1-2ndGr »). */
+  title: string;
+  url: string;
+  sourcePage: string;
+}
+
+export interface OfficialPaper extends OfficialPaperData {
+  id: string;
+}
+
 // ── Administration ──────────────────────────────────────────────────────────
 
 /** draft : dossier pas encore envoyé à la vérification. */

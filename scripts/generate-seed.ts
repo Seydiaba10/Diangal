@@ -7,6 +7,7 @@ import { CATALOG_ASSESSMENTS, CATALOG_QUESTIONS, QUESTION_CHAPTERS } from "../sr
 import { CATALOG_CHAPTERS, CATALOG_LESSON_BODIES, CATALOG_SUBJECTS, chapterSources } from "../src/mocks/curriculum";
 import { EXAM_SESSIONS } from "../src/mocks/exams";
 import { genericLessonBody } from "../src/mocks/lesson-content";
+import { OFFICIAL_PAPERS, OFFICIAL_PAPERS_CHECKED_ON } from "../src/mocks/official-papers";
 import { MOCK_PLANS } from "../src/mocks/plans";
 
 const q = (value: string | null | undefined) => (value == null ? "null" : `'${value.replace(/'/g, "''")}'`);
@@ -181,6 +182,13 @@ out.push(
   ).join(",\n")};`,
 );
 out.push(`insert into public.platform_settings (key, value) values ('commission_rate', '0.15'::jsonb);`);
+// Sujets et corrigés officiels du Bac : liens vers les PDF de l'Office du Bac (aucune copie).
+out.push(
+  `insert into public.official_papers (year, kind, exam_group, replacement, subject_code, subject_label, series_label, series_codes, title, url, source_page, checked_on) values\n${OFFICIAL_PAPERS.map(
+    (p) =>
+      `  (${p.year}, ${q(p.kind)}, ${p.group ?? "null"}, ${p.replacement}, ${q(p.subjectCode)}, ${q(p.subjectLabel)}, ${q(p.seriesLabel)}, ${textArray(p.seriesCodes)}, ${q(p.title)}, ${q(p.url)}, ${q(p.sourcePage)}, ${q(OFFICIAL_PAPERS_CHECKED_ON)})`,
+  ).join(",\n")};`,
+);
 // Formules Famille (créées inactives par la migration) : ouvertes dans la démo et les tests.
 out.push(`update public.plans set is_active = true where max_children is not null;`);
 // Offre gratuite appliquée dans la démo et les tests (les accès Premium des mocks suivent déjà la règle).

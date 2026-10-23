@@ -104,6 +104,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - **« Préparer mon prochain devoir »** (`/eleve/exercices/preparer`) : l'élève coche des chapitres d'une matière, choisit 5 à 20 questions et le mode (libre ou chronométré, 1 min 30 par question) ; questions tirées au hasard dans la banque, correction détaillée, historique « Mes devoirs préparés » ;
   - **contrôle chronométré** en mode concentration (`(focus)`) : échéance fixée par le serveur, sauvegarde locale, envoi automatique ;
   - résultat avec corrigé détaillé ;
+  - **sujets et corrigés officiels du Bac** (onglet Bac des examens) : 731 PDF de l'Office du Bac (2023 à 2026), liens vers le site officiel, sans copie. Classés par session et matière ; ceux de la série de l'élève d'abord, les langues et documents sans série repliés. Voir `docs/annales/README.md` ;
   - **examens** (`/eleve/examens?examen=cfee|bfem|bac&serie=`) : onglets CFEE, BFEM et Bac (série au Bac), compte à rebours, sujets blancs DIANGAL chronométrés (présentés comme tels, avec l'origine du corrigé), annales officielles **seulement si vérifiées** (`assessments.verification` ≠ `unverified`) avec leur provenance, historique des épreuves passées. Aucune annale inventée : la démo n'en contient pas ;
   - progression, téléchargements hors ligne, profil, abonnement ;
   - **écoute à voix haute** (CI à CM1, `READ_ALOUD_LEVELS` de `lib/levels.ts`) : barre « Écouter » sur les leçons (lecture, pause, reprise, arrêt, plus lentement) et bouton « Écouter » sur chaque question des exercices ; synthèse vocale du téléphone (`components/ui/read-aloud.tsx`, `lib/speech.ts`), donc hors ligne si une voix française est installée. Illustration SVG en tête des leçons de ces classes (`lesson-illustration.tsx`) ;
@@ -135,7 +136,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
 - **Paiement** :
   - client PayDunya (`src/lib/payments`) ;
   - webhook `/api/webhooks/paydunya` : vérifie le hash, relit le statut chez PayDunya, journalise dans `payment_events` (idempotent), puis appelle la RPC `apply_payment_event`.
-- **Base Supabase** (`supabase/migrations`, 33 fichiers) :
+- **Base Supabase** (`supabase/migrations`, 34 fichiers) :
   - RLS sur toutes les tables, droits par colonne, schéma `private` pour les fonctions `SECURITY DEFINER` et les corrigés ;
   - hook d'access token (claim `user_role`) ; un admin doit avoir le niveau MFA `aal2` ;
   - RPC `start_attempt`, `submit_attempt` (correction côté serveur), `get_student_dashboard`, `search_tutors`, consentement parental, messagerie, vérification des répétiteurs, paiements ;
@@ -152,6 +153,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - comptes (`20261022000002_accounts.sql`) : numéros E.164, `account_deletion_requests`, `delete_account`, `request_account_deletion`, `answer_account_deletion_request`, `private.anonymize_account`, `sync_my_contact`, `is_account_anonymized` (clé secrète), hook d'access token sans rôle pour un compte supprimé, `private.recent_login` (claim `amr`) ;
   - navigation entre les classes (`20261022000003_class_navigation.sql`) : `create_practice_session` accepte une classe précédente ;
   - parrainage (`20261022000004_referrals.sql`) : `referral_codes`, `referrals`, `referral_rewards`, réglages `platform_settings.referral` (fermé par défaut), `get_my_referral`, `claim_referral`, `private.qualify_referral` (appelée par `apply_payment_event`), `use_referral_days`, `admin_set_referral_settings`, `admin_referral_stats`, `admin_refund_payment` ; formule technique inactive `referral_bonus` ;
+  - sujets officiels (`20261023000001_official_papers.sql`) : table `official_papers` (liens vers les PDF de l'Office du Bac, lecture publique, URL limitée au site officiel), données dans `src/mocks/official-papers.ts` (généré par `scripts/import-official-papers.mjs`) et le seed ;
   - Storage et pg_cron, installés seulement si l'extension existe.
 - **Mise en ligne du 16/10/2026** (demandée par le porteur du projet) : code poussé sur `main` et déployé par Vercel ; formules Famille activées ; CP, exercices du CI, du CP et de la 3e et leçons rédigées de la 3e publiés dans la base hébergée (sauvegarde des anciennes leçons génériques de 3e faite avant le remplacement). **Reste à faire** : une fois PayDunya branché et testé, activer l'offre gratuite (carte « Offre gratuite » du Référentiel).
 - **Pas encore fait** :
@@ -160,7 +162,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - réservations, salle de visio LiveKit (les cours en ligne sont déjà planifiables) et avis (release 2) ;
   - ouverture des réseaux sociaux dans Supabase (comptes développeur Meta, Apple, Google, X) ;
   - séries rares du lycée (L1a, L1b, F6, S1A, S2A, STEG) ; arabe, EPS et arts avant le lycée ; interface en wolof ;
-  - sujets blancs du CFEE et du Bac, annales officielles vérifiées (le PDF des sujets attend le stockage de fichiers dans l'admin) ;
+  - sujets blancs du CFEE et du Bac ; annales numérisées (questions corrigées en ligne) ; sujets officiels du CFEE et du BFEM (seul le Bac a ses PDF officiels, via l'Office du Bac) ;
   - réglages de notifications du parent (affichés « Bientôt ») ;
   - E2E Playwright en CI, Lighthouse CI, déploiement.
 

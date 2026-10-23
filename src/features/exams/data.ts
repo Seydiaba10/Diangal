@@ -9,8 +9,19 @@ import { isSupabaseConfigured } from "@/lib/env";
 import { daysUntil } from "@/lib/format";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { EXAM_SESSIONS } from "@/mocks/exams";
+import { OFFICIAL_PAPERS, OFFICIAL_PAPERS_CHECKED_ON } from "@/mocks/official-papers";
 import { mockState } from "@/mocks/progress-store";
-import type { AssessmentSummary, ExamPaper, ExamSession, ExamType, NextExam, Subject } from "@/types/domain";
+import type {
+  AssessmentSummary,
+  ExamPaper,
+  ExamSession,
+  ExamType,
+  NextExam,
+  OfficialPaper,
+  Subject,
+  SubjectCode,
+} from "@/types/domain";
+import { officialPapersFor } from "./official-papers";
 
 // Démo : src/mocks. Supabase : table exam_sessions (dates saisies par l'admin) et
 // évaluations de type past_paper (annales).
@@ -139,4 +150,52 @@ export async function getAllExamPaperIds() {
   const ids = (await examPapers()).map((p) => ({ id: p.id }));
   // generateStaticParams doit renvoyer au moins une valeur : « _ » mène à une page 404.
   return ids.length ? ids : [{ id: "_" }];
+}
+
+/** Sujets et corrigés officiels du Bac (liens vers les PDF de l'Office du Bac) : contenu public, mis en cache. */
+async function loadOfficialPapers(): Promise<{ papers: OfficialPaper[]; checkedOn: string }> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("official-papers");
+  const { data, error } = await createSupabasePublicClient()
+    .from("official_papers")
+    .select("id, year, kind, exam_group, replacement, subject_code, subject_label, series_label, series_codes, title, url, source_page, checked_on")
+    .eq("exam_type", "BAC")
+    .order("year", { ascending: false })
+    .order("title");
+  if (error) throw new Error(`sujets officiels : ${error.message}`);
+  return {
+    papers: data.map((p) => ({
+      id: p.id,
+      year: p.year,
+      kind: p.kind === "corrige" ? "corrige" : "epreuve",
+      group: p.exam_group === 1 || p.exam_group === 2 ? p.exam_group : null,
+      replacement: p.replacement,
+      subjectCode: (p.subject_code as SubjectCode | null) ?? null,
+      subjectLabel: p.subject_label,
+      seriesLabel: p.series_label,
+      seriesCodes: p.series_codes,
+      title: p.title,
+      url: p.url,
+      sourcePage: p.source_page,
+    })),
+    checkedOn: data.reduce((latest, p) => (p.checked_on > latest ? p.checked_on : latest), ""),
+  };
+}
+
+export interface OfficialPapersView {
+  /** Documents de la série demandée et épreuves communes (tous sans série). */
+  papers: OfficialPaper[];
+  /** Nombre de documents relevés, toutes séries. */
+  total: number;
+  /** Date du dernier relevé des liens (aaaa-mm-jj). */
+  checkedOn: string;
+}
+
+/** Sujets et corrigés officiels du Bac pour une série (et les épreuves communes). */
+export async function getOfficialPapers(series: string | null): Promise<OfficialPapersView> {
+  const { papers, checkedOn } = isSupabaseConfigured()
+    ? await loadOfficialPapers()
+    : { papers: OFFICIAL_PAPERS.map((p, i) => ({ ...p, id: `officiel-${i + 1}` })), checkedOn: OFFICIAL_PAPERS_CHECKED_ON };
+  return { papers: officialPapersFor(papers, series), total: papers.length, checkedOn };
 }

@@ -1048,7 +1048,26 @@
     "correctionSource": "Corrigé : {source}",
     "onlineTitle": "Ce sujet existe en version interactive",
     "onlineBody": "Réponds en ligne et obtiens ta note sur 20 avec le corrigé de chaque question.",
-    "onlineCta": "Faire le sujet en ligne"
+    "onlineCta": "Faire le sujet en ligne",
+    "official": {
+      "title": "Sujets et corrigés officiels (PDF)",
+      "subtitle": "Publiés par l’Office du Bac : chaque document s’ouvre sur son site officiel.",
+      "chooseSeries": "Choisis ta série ci-dessus pour voir ses sujets et corrigés officiels ({count, plural, one {# document} other {# documents}} de 2023 à 2026).",
+      "empty": "Aucun sujet officiel pour cette série pour l’instant.",
+      "session": "Session {year}",
+      "count": "{count, plural, one {# document} other {# documents}}",
+      "epreuve": "Épreuve",
+      "corrige": "Corrigé",
+      "group1": "1er groupe",
+      "group2": "2e groupe",
+      "replacement": "Remplacement",
+      "open": "{label} : PDF officiel, s’ouvre sur le site de l’Office du Bac",
+      "source": "Source : Office du Bac (officedubac.sn), liens vérifiés le {date}. DIANGAL ne modifie ni n’héberge ces documents.",
+      "sourceLink": "Voir tous les sujets sur le site de l’Office du Bac",
+      "unknownSeries": "Série non précisée",
+      "others": "Langues vivantes et épreuves sans série précisée ({count, plural, one {# document} other {# documents}})",
+      "noSeriesPapers": "Pas d’épreuve propre à ta série pour cette session : regarde les épreuves communes ci-dessous."
+    }
   },
   "progressPage": {
     "title": "Ma progression",
