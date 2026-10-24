@@ -4,6 +4,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
 import { parseSources } from "@/lib/sources";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
+import { selectAllRows } from "@/lib/supabase/rows";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type {
   AnswerValue,
@@ -46,8 +47,10 @@ export async function loadAssessmentCatalog(): Promise<CatalogAssessment[]> {
   cacheLife("hours");
   cacheTag("catalog");
   const supabase = createSupabasePublicClient();
-  const { data, error } = await supabase.rpc("get_assessments_catalog");
-  if (error) throw new Error(`évaluations : ${error.message}`);
+  // Plus de 2 000 évaluations : lues par pages, dans l'ordre des identifiants publics.
+  const data = await selectAllRows("évaluations", (from, to) =>
+    supabase.rpc("get_assessments_catalog").order("slug").order("id").range(from, to),
+  );
   return data.map((a) => ({
     uuid: a.id,
     slug: a.slug,
@@ -75,8 +78,9 @@ export async function loadChapterQuestionCounts(): Promise<Record<string, number
   cacheLife("hours");
   cacheTag("catalog");
   const supabase = createSupabasePublicClient();
-  const { data, error } = await supabase.rpc("get_chapter_question_counts");
-  if (error) throw new Error(`questions par chapitre : ${error.message}`);
+  const data = await selectAllRows("questions par chapitre", (from, to) =>
+    supabase.rpc("get_chapter_question_counts").order("chapter_id").range(from, to),
+  );
   return Object.fromEntries(data.map((r) => [r.chapter_id, r.questions]));
 }
 

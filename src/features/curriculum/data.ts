@@ -98,12 +98,24 @@ export async function findLessonById(lessonId: string) {
   return chapter && lesson && subject ? { subject, chapter, lesson } : undefined;
 }
 
-// Pages prérendues au build : le premier chapitre de chaque matière et ses leçons. Les autres sont
-// rendues à la première visite puis gardées en cache (ISR avec Cache Components) : prérendre tout le
-// catalogue (plus de 2 000 chapitres et 3 500 leçons) allongerait trop le build.
+// Pages prérendues au build : la première matière de chaque classe, son premier chapitre et ses
+// leçons. Les autres sont rendues à la première visite puis gardées en cache (ISR avec Cache
+// Components). Chaque page prérendue emporte le catalogue entier (données du cache) et le build les
+// renvoie d'un seul bloc : quelques centaines de pages suffisent à dépasser la taille maximale d'une
+// chaîne (« RangeError: Invalid string length » sur Vercel le 23/10/2026).
 async function prerenderedChapters() {
   const { subjects, chapters } = await catalog();
-  return chapters.filter((chapter) => chapter.number === 1).map((chapter) => ({ chapter, matiere: subjectOf(subjects, chapter)!.slug }));
+  const levels = new Set<string>();
+  return subjects
+    .filter((subject) => !levels.has(subject.levelCode) && levels.add(subject.levelCode))
+    .flatMap((subject) => {
+      const chapter = chapters.find((c) => c.number === 1 && subjectOf([subject], c));
+      return chapter ? [{ chapter, matiere: subject.slug }] : [];
+    });
+}
+
+export async function getPrerenderedSubjectParams() {
+  return (await prerenderedChapters()).map(({ matiere }) => ({ matiere }));
 }
 
 export async function getPrerenderedChapterParams() {

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { parseSources } from "@/lib/sources";
+import { selectAllRows, selectRowsByIds } from "@/lib/supabase/rows";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { MockAnswerKey } from "@/mocks/answer-keys-3e";
 import type { Json } from "@/types/database";
@@ -147,10 +148,12 @@ export async function fetchAuditLog(): Promise<AuditEntry[]> {
 export async function fetchWrittenLessonIds(lessonIds?: string[]): Promise<Set<string>> {
   if (lessonIds && !lessonIds.length) return new Set();
   const supabase = await createSupabaseServerClient();
-  let request = supabase.from("lesson_bodies").select("lesson_id").not("body_html", "ilike", "%Contenu de démonstration%");
-  if (lessonIds) request = request.in("lesson_id", lessonIds);
-  const { data } = await request;
-  return new Set((data ?? []).map((b) => b.lesson_id));
+  const written = () => supabase.from("lesson_bodies").select("lesson_id").not("body_html", "ilike", "%Contenu de démonstration%");
+  // Plus de 1 000 leçons en Terminale : identifiants par paquets, ou toutes les leçons par pages.
+  const rows = lessonIds
+    ? await selectRowsByIds("leçons rédigées", lessonIds, (chunk) => written().in("lesson_id", chunk))
+    : await selectAllRows("leçons rédigées", (from, to) => written().order("lesson_id").range(from, to));
+  return new Set(rows.map((b) => b.lesson_id));
 }
 
 // ── Référentiel : lectures avec la session admin (la RLS laisse voir les brouillons) ──

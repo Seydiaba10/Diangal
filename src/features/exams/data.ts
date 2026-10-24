@@ -8,6 +8,7 @@ import { getSubjects } from "@/features/curriculum/data";
 import { isSupabaseConfigured } from "@/lib/env";
 import { daysUntil } from "@/lib/format";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
+import { selectAllRows } from "@/lib/supabase/rows";
 import { EXAM_SESSIONS } from "@/mocks/exams";
 import { OFFICIAL_PAPERS, OFFICIAL_PAPERS_CHECKED_ON } from "@/mocks/official-papers";
 import { mockState } from "@/mocks/progress-store";
@@ -100,9 +101,10 @@ export async function getExamPapers(type: ExamType, seriesCode?: string | null):
 
 /** Sujets blancs DIANGAL d'un examen (et de la série au Bac), avec la meilleure note de l'élève. */
 export async function getMockExams(type: ExamType, seriesCode?: string | null): Promise<AssessmentSummary[]> {
-  return (await getAssessmentsByKind("mock_exam")).filter(
-    (a) => a.examType === type && (type !== "BAC" || !a.seriesCode || a.seriesCode === seriesCode),
-  );
+  // Rangés par identifiant (« bfem-blanc-1-… », « bfem-blanc-2-… ») : le même ordre en démo et en ligne.
+  return (await getAssessmentsByKind("mock_exam"))
+    .filter((a) => a.examType === type && (type !== "BAC" || !a.seriesCode || a.seriesCode === seriesCode))
+    .sort((a, b) => a.id.localeCompare(b.id));
 }
 
 export interface ExamHistoryItem {
@@ -157,13 +159,17 @@ async function loadOfficialPapers(): Promise<{ papers: OfficialPaper[]; checkedO
   "use cache";
   cacheLife("hours");
   cacheTag("official-papers");
-  const { data, error } = await createSupabasePublicClient()
-    .from("official_papers")
-    .select("id, year, kind, exam_group, replacement, subject_code, subject_label, series_label, series_codes, title, url, source_page, checked_on")
-    .eq("exam_type", "BAC")
-    .order("year", { ascending: false })
-    .order("title");
-  if (error) throw new Error(`sujets officiels : ${error.message}`);
+  const supabase = createSupabasePublicClient();
+  const data = await selectAllRows("sujets officiels", (from, to) =>
+    supabase
+      .from("official_papers")
+      .select("id, year, kind, exam_group, replacement, subject_code, subject_label, series_label, series_codes, title, url, source_page, checked_on")
+      .eq("exam_type", "BAC")
+      .order("year", { ascending: false })
+      .order("title")
+      .order("id")
+      .range(from, to),
+  );
   return {
     papers: data.map((p) => ({
       id: p.id,

@@ -6,13 +6,13 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { ChapterList, ChapterListSkeleton } from "@/features/curriculum/components/chapter-list";
-import { getChapters, getSubject, getSubjects } from "@/features/curriculum/data";
+import { getChapters, getPrerenderedSubjectParams, getSubject } from "@/features/curriculum/data";
 import { coursesHrefFor } from "@/features/schooling/class-navigation";
 
 type Params = PageProps<"/eleve/cours/[matiere]">["params"];
 
 export async function generateStaticParams() {
-  return (await getSubjects()).map((s) => ({ matiere: s.slug }));
+  return getPrerenderedSubjectParams();
 }
 
 export async function generateMetadata({ params }: PageProps<"/eleve/cours/[matiere]">) {

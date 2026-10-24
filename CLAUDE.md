@@ -23,6 +23,7 @@ Contraintes qui guident tous les choix :
   - `demo` : données fictives de `src/mocks`, sans réseau. C'est la valeur par défaut si la variable manque.
 - **Connexion** : deux pages séparées, `/connexion` (élèves et parents) et `/connexion/repetiteur`. Pas de mot de passe : code à 6 chiffres reçu par **email**, ou par **téléphone** (onglet affiché seulement si `DIANGAL_WHATSAPP_ENABLED` ou `DIANGAL_SMS_ENABLED` est activé ; choix WhatsApp ou SMS, indicatif +221 par défaut). Facebook, Apple, Google et X marchent pour un compte existant (grisés tant que le réseau n'est pas ouvert dans Supabase). Un identifiant inconnu reçoit la même réponse qu'un compte existant (pas d'énumération). L'admin passe par une double authentification TOTP.
 - **Mise en ligne du 23/10/2026** (demandée par le porteur du projet) : branche `refonte-comptes-classes-paiements` fusionnée dans `main` et déployée par Vercel ; migrations `20261022000001` à `…04` appliquées en ligne (répétées d'abord sur PGlite dans l'état de la production, sauvegarde JSON des formules, réglages, fonctions et contraintes remplacées) ; types régénérés ; essai réel sur le site avec un compte temporaire (3e → 2nde, révision de la 3e, Mon compte, Parrainage, suppression par la page), puis effacé. Contenu : landing claire, Pass BFEM retiré, comptes (déconnexion partout, « Mon compte », suppression CDP), navigation entre les classes, parrainage (fermé), remboursements. Documentation : `docs/comptes-et-classes.md`, `docs/connexion-telephone.md`, `docs/paiements.md` (Stripe non disponible au Sénégal, PayDunya gardé), `docs/parrainage.md`.
+- **Mises en ligne des 23 et 24/10/2026** : sujets et corrigés officiels du Bac (731 liens, table `official_papers`) ; Next.js 16.4.0 → 16.4.3 (failles corrigées) ; 9 sujets blancs BFEM DIANGAL (137 questions) ajoutés à la base hébergée par un lot rejouable, essayé sur PGlite (copie parfaite = 20/20 sur chaque sujet), puis vérifiés sur le site avec un élève de 3e temporaire, effacé ensuite. Cet essai a révélé la coupure à 1 000 lignes (voir « Données ») : catalogue lu par pages et prérendu réduit le 24/10.
 - **Limites actuelles, qui demandent des comptes externes** :
   - **emails** : l'envoi intégré à Supabase (offre gratuite) n'envoie qu'aux membres de l'équipe du projet, 2 emails par heure, avec un modèle non modifiable qui contient un lien et pas de code. Il faut un SMTP personnalisé (Resend, Brevo…), puis le modèle en français avec `{{ .Token }}` (`DIANGAL_EMAIL_CODE=true`) ;
   - **SMS** : Orange SMS ou Twilio, plus le déploiement des Edge Functions (`DIANGAL_SMS_ENABLED=true`). Sans SMS, les demandes de validation parentale attendent dans `private.sms_outbox` ;
@@ -35,7 +36,7 @@ Contraintes qui guident tous les choix :
 
 ```bash
 pnpm dev          # http://localhost:3000 (Turbopack)
-pnpm build        # build de production (seuls le 1er chapitre de chaque matière, ses leçons et ses exercices sont prérendus)
+pnpm build        # build de production (seul le 1er chapitre de la 1re matière de chaque classe, ses leçons et ses exercices sont prérendus)
 pnpm lint
 pnpm typecheck    # tsc --noEmit
 pnpm test         # Vitest : tests/unit + tests/db (PGlite)
@@ -75,7 +76,7 @@ pnpm db:seed      # régénère supabase/seed.sql depuis src/mocks
 
 | Domaine | Choix |
 |---|---|
-| Framework | **Next.js 16.4** (App Router, Turbopack), React 19.3, TypeScript strict. `cacheComponents` et `partialPrefetching` sont activés. |
+| Framework | **Next.js 16.4.3** (App Router, Turbopack), React 19.3, TypeScript strict. `cacheComponents` et `partialPrefetching` sont activés. |
 | Styles | **Tailwind CSS v4** via `@tailwindcss/turbopack`, tokens dans `@theme` (`src/app/globals.css`). La palette par défaut est désactivée. |
 | Traduction | **next-intl** sans préfixe de langue : locale fixée à `fr` (`src/i18n/request.ts`), textes dans `messages/fr.json`, typés par `src/global.d.ts`. |
 | Icônes, police | `lucide-react`, Lexend (`next/font`). |
@@ -221,7 +222,8 @@ public/                  icons/ (PWA), landing/revision-du-soir.jpg (photo de l'
 
 ### Données
 - **Un composant n'importe jamais `src/mocks` ni `supabase.ts`.** Il passe par `features/*/data.ts`. Chaque fonction choisit sa source avec `isSupabaseConfigured()` et renvoie les mêmes types dans les deux modes.
-- **Catalogue** (`loadCatalog`, `features/curriculum/supabase.ts`) : une seule requête pour les chapitres, avec 3 essais. La lecture par pages a fait échouer le build Vercel le 23/10 (un seul processus, « RangeError: Invalid string length » vers 726 pages) : ne pas la remettre.
+- **1 000 lignes au plus par requête** (réglage `max_rows` du projet) : au-delà, l'API coupe la réponse **sans erreur**. Toute lecture qui peut dépasser ce nombre passe par `selectAllRows` (par pages, avec un ordre total qui finit par une colonne unique) ou `selectRowsByIds` (identifiants par paquets de 200) de `lib/supabase/rows.ts` : catalogue des chapitres (2 078), évaluations (plus de 2 000), questions par chapitre, sujets officiels, leçons rédigées (admin). Jusqu'au 24/10, le site en ligne ne recevait que 1 000 chapitres et 1 000 évaluations.
+- **Pages prérendues** : chacune emporte le catalogue entier (données de cache, environ 0,6 Mo compressé) et le build renvoie toutes ces pages d'un seul bloc. Le 23/10, environ 726 pages ont dépassé la taille maximale d'une chaîne (« RangeError: Invalid string length » sur Vercel). On ne prérend donc que la 1re matière de chaque classe, son 1er chapitre, ses leçons et ses exercices (environ 190 pages, 0,5 Mo chacune) : ne pas en prérendre davantage sans mesurer.
 - **Contenu public** (catalogue, contrôles publiés, offres, dates d'examen, fiches répétiteurs) : client `createSupabasePublicClient()` dans une fonction `"use cache"`, avec `cacheLife("hours")` et un `cacheTag` (`catalog`, `exam-sessions`, `plans`, `tutors`) que l'admin invalide par `updateTag`.
 - **Données d'un utilisateur** : `createSupabaseServerClient()`, qui appelle `connection()` (jamais de prérendu). Le droit d'accès est vérifié par la RLS ou par la RPC, jamais seulement dans le code.
 - L'identité vient de `getAuthIdentity()` / `requireIdentity()` (`features/account/session.ts`) : id, rôle (claim `user_role`), niveau `aal`, email ou téléphone.
@@ -239,7 +241,7 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 - pas de `Date.now()` ni de `new Date()` pendant le rendu avant `connection()` ;
 - lire `params` et `searchParams` dans un composant enfant placé sous `<Suspense>` ;
 - `usePathname` seulement via `NavLink`, déjà sous Suspense ;
-- `generateStaticParams` doit renvoyer au moins une valeur ; les pages de cours et d'exercices ne prérendent que le 1er chapitre de chaque matière (`getPrerenderedChapterParams`, `getPrerenderedLessonParams`, `getPrerenderedAssessmentIds`) : les autres sont rendues à la première visite puis gardées en cache (ISR avec Cache Components) ;
+- `generateStaticParams` doit renvoyer au moins une valeur ; les pages de cours et d'exercices ne prérendent que le 1er chapitre de la 1re matière de chaque classe (`getPrerenderedChapterParams`, `getPrerenderedLessonParams`, `getPrerenderedAssessmentIds`) : les autres sont rendues à la première visite puis gardées en cache (ISR avec Cache Components) ;
 - un fichier `page.tsx` n'exporte que ce que Next autorise : placer les constantes partagées dans `features/` ;
 - `src/proxy.ts` remplace `middleware.ts` ;
 - les helpers globaux `PageProps<"/route">` et `LayoutProps` typent les pages.
@@ -334,7 +336,7 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
    - fournisseur SMS et déploiement des Edge Functions `send-sms` et `process-sms-outbox` ;
    - clés PayDunya sandbox, puis test d'un paiement complet ;
    - E2E Playwright en CI ;
-   - **mettre à jour Next.js** : la 16.4.0 a des failles connues, dont deux critiques, corrigées en 16.4.1 et 16.4.2 (`next upgrade`), puis build et tests ; ouvrir le parrainage (scénario prudent) quand PayDunya fonctionne ;
+   - ouvrir le parrainage (scénario prudent) quand PayDunya fonctionne ;
    - export des données (droit d'accès CDP), Turnstile ;
    - publier une nouvelle classe : générer des lots d'ajouts rejouables (une classe, ou une classe et une série), les essayer sur PGlite dans l'état de la production, puis les exécuter un par un via l'API de gestion en contrôlant l'empreinte des classes déjà en ligne ;
    - validation des leçons et exercices de toutes les classes par des enseignants ;

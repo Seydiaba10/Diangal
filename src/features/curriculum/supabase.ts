@@ -4,6 +4,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
 import { programSlug } from "@/lib/slug";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
+import { selectAllRows } from "@/lib/supabase/rows";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Chapter, LessonResource, Subject, SubjectCode } from "@/types/domain";
 
@@ -30,22 +31,24 @@ export async function loadCatalog(): Promise<Catalog> {
     .order("sort_order");
   if (error) throw new Error(`catalogue (programmes) : ${error.message}`);
 
-  // Une seule requête (la lecture par pages faisait échouer le build Vercel), avec jusqu'à 3 essais :
-  // une grosse réponse arrive parfois coupée sur un réseau lent.
+  // Plus de 2 000 chapitres : lus par pages de 1 000 (au-delà, l'API coupe la réponse sans erreur),
+  // avec jusqu'à 3 essais par page.
   const programIds = programs.map((p) => p.id);
-  const loadChapters = () =>
-    supabase
-      .from("chapters")
-      .select(
-        "id, program_id, number, slug, title, summary, strand, sort_order, lessons(id, number, slug, title, is_premium, estimated_minutes, media(kind, title, size_bytes, duration_s))",
-      )
-      .in("program_id", programIds)
-      .order("sort_order")
-      .order("number", { referencedTable: "lessons" });
-  let result = await loadChapters();
-  for (let attempt = 1; result.error && attempt < 3; attempt++) result = await loadChapters();
-  if (result.error) throw new Error(`catalogue (chapitres) : ${result.error.message.slice(0, 200)}`);
-  const chapters = result.data;
+  const chapters = await selectAllRows(
+    "catalogue (chapitres)",
+    (from, to) =>
+      supabase
+        .from("chapters")
+        .select(
+          "id, program_id, number, slug, title, summary, strand, sort_order, lessons(id, number, slug, title, is_premium, estimated_minutes, media(kind, title, size_bytes, duration_s))",
+        )
+        .in("program_id", programIds)
+        .order("sort_order")
+        .order("id")
+        .order("number", { referencedTable: "lessons" })
+        .range(from, to),
+    3,
+  );
 
   // Classes dans l'ordre de la scolarité (CI → Terminale), matières dans l'ordre du programme.
   const ordered = [...programs].sort((a, b) => a.levels.sort_order - b.levels.sort_order || a.sort_order - b.sort_order);
