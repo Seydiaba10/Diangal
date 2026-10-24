@@ -47,6 +47,16 @@ enable_confirmations = false
 otp_length = 6
 otp_expiry = 600
 
+# Emails en français avec le code {{ .Token }} (le lien reste en secours). En ligne, ils ne sont
+# modifiables qu'avec un SMTP personnalisé : scripts/configure-email.mjs les applique avec Resend.
+[auth.email.template.magic_link]
+subject = "Code de connexion DIANGAL : {{ .Token }}"
+content_path = "./supabase/templates/code-connexion.html"
+
+[auth.email.template.confirmation]
+subject = "Code d’inscription DIANGAL : {{ .Token }}"
+content_path = "./supabase/templates/code-inscription.html"
+
 [auth.sms]
 enable_signup = true
 enable_confirmations = true

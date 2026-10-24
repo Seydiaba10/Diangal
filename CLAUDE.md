@@ -25,7 +25,7 @@ Contraintes qui guident tous les choix :
 - **Mise en ligne du 23/10/2026** (demandée par le porteur du projet) : branche `refonte-comptes-classes-paiements` fusionnée dans `main` et déployée par Vercel ; migrations `20261022000001` à `…04` appliquées en ligne (répétées d'abord sur PGlite dans l'état de la production, sauvegarde JSON des formules, réglages, fonctions et contraintes remplacées) ; types régénérés ; essai réel sur le site avec un compte temporaire (3e → 2nde, révision de la 3e, Mon compte, Parrainage, suppression par la page), puis effacé. Contenu : landing claire, Pass BFEM retiré, comptes (déconnexion partout, « Mon compte », suppression CDP), navigation entre les classes, parrainage (fermé), remboursements. Documentation : `docs/comptes-et-classes.md`, `docs/connexion-telephone.md`, `docs/paiements.md` (Stripe non disponible au Sénégal, PayDunya gardé), `docs/parrainage.md`.
 - **Mises en ligne des 23 et 24/10/2026** : sujets et corrigés officiels du Bac (731 liens, table `official_papers`) ; Next.js 16.4.0 → 16.4.3 (failles corrigées) ; 9 sujets blancs BFEM DIANGAL (137 questions) ajoutés à la base hébergée par un lot rejouable, essayé sur PGlite (copie parfaite = 20/20 sur chaque sujet), puis vérifiés sur le site avec un élève de 3e temporaire, effacé ensuite. Cet essai a révélé la coupure à 1 000 lignes (voir « Données ») : catalogue lu par pages et prérendu réduit le 24/10.
 - **Limites actuelles, qui demandent des comptes externes** :
-  - **emails** : l'envoi intégré à Supabase (offre gratuite) n'envoie qu'aux membres de l'équipe du projet, 2 emails par heure, avec un modèle non modifiable qui contient un lien et pas de code. Il faut un SMTP personnalisé (Resend, Brevo…), puis le modèle en français avec `{{ .Token }}` (`DIANGAL_EMAIL_CODE=true`) ;
+  - **emails** : l'envoi intégré à Supabase (offre gratuite) n'envoie qu'aux membres de l'équipe du projet, 2 emails par heure, avec un modèle non modifiable qui contient un lien et pas de code. **Resend est préparé** (`docs/emails.md`) : modèles français avec le code (`supabase/templates/`, déclarés dans `config.toml`) et script `scripts/configure-email.mjs` (`--apply`, `--test`). Le porteur du projet a un compte Resend ; il manque un **nom de domaine** vérifié dans Resend, puis `RESEND_API_KEY` et `DIANGAL_EMAIL_FROM` dans `.env.local`, puis `DIANGAL_EMAIL_CODE=true` (local et Vercel) ;
   - **SMS** : Orange SMS ou Twilio, plus le déploiement des Edge Functions (`DIANGAL_SMS_ENABLED=true`). Sans SMS, les demandes de validation parentale attendent dans `private.sms_outbox` ;
   - **WhatsApp** : compte WhatsApp Business (API Cloud de Meta), modèle d'authentification `diangal_code` en français approuvé par Meta, secrets `WHATSAPP_TOKEN` et `WHATSAPP_PHONE_NUMBER_ID` sur la fonction `send-sms`, Send SMS Hook activé, puis `DIANGAL_WHATSAPP_ENABLED=true`. Le canal choisi est noté dans `private.otp_channels` juste avant l'envoi (le hook ne le transmet pas) ;
   - **paiement** : clés PayDunya (sandbox). Sans elles, le bouton « Payer » affiche « paiement pas encore ouvert » ;
@@ -63,7 +63,7 @@ pnpm db:seed      # régénère supabase/seed.sql depuis src/mocks
 - **Réglages Auth** (Management API `/v1/projects/{ref}/config/auth`, avec le jeton) :
   - hook d'access token activé ; OTP email à 6 chiffres, valable 600 s ;
   - `uri_allow_list` : `localhost:3000` et `diangal.sn` ;
-  - les modèles d'email ne sont modifiables qu'avec un SMTP personnalisé.
+  - les modèles d'email ne sont modifiables qu'avec un SMTP personnalisé (`scripts/configure-email.mjs --apply` les envoie avec Resend).
 - **Comptes de test** : les créer avec l'API admin (`auth.admin.createUser`, le déclencheur crée le profil) et obtenir un code sans email avec `auth.admin.generateLink({ type: "magiclink" })` (`properties.email_otp`).
   - Un compte qui a agi (messages, consentements, journal) ne se supprime pas tant que ces lignes existent : effacer d'abord ces traces.
 - **Démo** :
@@ -159,7 +159,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - Storage et pg_cron, installés seulement si l'extension existe.
 - **Mise en ligne du 16/10/2026** (demandée par le porteur du projet) : code poussé sur `main` et déployé par Vercel ; formules Famille activées ; CP, exercices du CI, du CP et de la 3e et leçons rédigées de la 3e publiés dans la base hébergée (sauvegarde des anciennes leçons génériques de 3e faite avant le remplacement). **Reste à faire** : une fois PayDunya branché et testé, activer l'offre gratuite (carte « Offre gratuite » du Référentiel).
 - **Pas encore fait** :
-  - SMTP personnalisé (emails avec code), SMS (Edge Functions à déployer), clés PayDunya, Turnstile ;
+  - emails par Resend (préparé, attend un nom de domaine), SMS (Edge Functions à déployer), clés PayDunya, Turnstile ;
   - export « Mes données » (droit d'accès CDP) ; Cloudflare Turnstile sur les demandes de code ;
   - réservations, salle de visio LiveKit (les cours en ligne sont déjà planifiables) et avis (release 2) ;
   - ouverture des réseaux sociaux dans Supabase (comptes développeur Meta, Apple, Google, X) ;
@@ -209,8 +209,9 @@ src/
   types/database.ts      GÉNÉRÉ depuis la base (supabase gen types)
   i18n/request.ts  proxy.ts  global.d.ts
 messages/fr.json         tous les textes de l'interface, un namespace par écran
-supabase/                migrations/, seed.sql (GÉNÉRÉ), config.toml, functions/ (SMS)
+supabase/                migrations/, seed.sql (GÉNÉRÉ), config.toml, functions/ (SMS), templates/ (emails d'Auth)
 scripts/generate-seed.ts produit supabase/seed.sql à partir des mocks
+scripts/configure-email.mjs branche Resend (SMTP) et les modèles d'email sur le projet en ligne
 tests/unit/              format, grading, paydunya, safe-path, speech, phone, class-navigation, catalog (leçons, séries, corrigés)
 tests/db/                harness PGlite + tests RLS/RPC (parité de correction SQL/TS), accounts, class-navigation, referrals
 docs/programme/          sources et découpage de chaque classe (programme-ci.md à programme-tle.md,
@@ -332,7 +333,7 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 7. Prochaines étapes :
    - compte WhatsApp Business (Meta), modèle `diangal_code`, puis déploiement de `send-sms` ;
    - salle de visio LiveKit pour les cours en ligne ; réseaux sociaux à ouvrir dans Supabase ;
-   - SMTP personnalisé, puis modèles d'email en français avec le code ;
+   - nom de domaine (`diangal.sn`), puis mise en service de Resend (`docs/emails.md`) ;
    - fournisseur SMS et déploiement des Edge Functions `send-sms` et `process-sms-outbox` ;
    - clés PayDunya sandbox, puis test d'un paiement complet ;
    - E2E Playwright en CI ;
