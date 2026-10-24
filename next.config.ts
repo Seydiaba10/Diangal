@@ -36,6 +36,8 @@ const nextConfig: NextConfig = {
     // .next/cache d'un build à l'autre). Les builds partent donc toujours de zéro.
     turbopackFileSystemCacheForDev: false,
     turbopackFileSystemCacheForBuild: false,
+    // Rappels de mise à jour limités aux failles de sécurité publiées (next dev, next build).
+    agentUpgrade: "security",
   },
   turbopack: {
     rules: {

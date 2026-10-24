@@ -6,3 +6,18 @@ allowBuilds:
   "@swc/core": false
   # esbuild (service worker Serwist) : binaire fourni par @esbuild/win32-x64
   esbuild: false
+# Correctif de sécurité Next.js 16.4.3 (24/10/2026) : publié trop récemment pour la règle d'âge
+# minimum de pnpm, autorisé pour ces seules versions officielles.
+minimumReleaseAgeExclude:
+  - "@next/env@16.4.3"
+  - "@next/swc-darwin-arm64@16.4.3"
+  - "@next/swc-darwin-x64@16.4.3"
+  - "@next/swc-linux-arm64-gnu@16.4.3"
+  - "@next/swc-linux-arm64-musl@16.4.3"
+  - "@next/swc-linux-x64-gnu@16.4.3"
+  - "@next/swc-linux-x64-musl@16.4.3"
+  - "@next/swc-win32-arm64-msvc@16.4.3"
+  - "@next/swc-win32-x64-msvc@16.4.3"
+  - next@16.4.3
+  - "@next/eslint-plugin-next@16.4.3"
+  - eslint-config-next@16.4.3
