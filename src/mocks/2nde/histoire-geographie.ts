@@ -3,6 +3,7 @@
 // Leçons rédigées par DIANGAL, à faire valider par un professeur d’histoire-géographie.
 
 import { type ChapterSpec, exemple, liste, methode, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const H = "Histoire";
 const G = "Géographie";
@@ -38,7 +39,8 @@ export const HG_2NDE: ChapterSpec[] = [
             "les plus anciens fossiles d’hominidés ont été découverts en Afrique (Toumaï au Tchad, Lucy en Éthiopie) ;",
             "au <strong>paléolithique</strong>, les hommes taillent la pierre, chassent, cueillent et maîtrisent le feu ;",
             "la <strong>révolution néolithique</strong> apporte l’agriculture, l’élevage, la poterie et la sédentarisation (Sahara vert).",
-          ])}`,
+          ])}
+          ${figure(schema("h2-hominides", "Carte de l’Afrique avec les sites de Toumaï et de Lucy."), "Toumaï, au Tchad, a environ 7 millions d’années ; Lucy, en Éthiopie, environ 3,2 millions d’années.")}`,
       },
       {
         title: "Préhistoire et protohistoire du Sénégal",
@@ -83,7 +85,8 @@ export const HG_2NDE: ChapterSpec[] = [
             ["Mali", "XIII<sup>e</sup>-XV<sup>e</sup> siècle", "Soundjata Keïta, Kankou Moussa, Tombouctou"],
             ["Songhaï", "XV<sup>e</sup>-XVI<sup>e</sup> siècle", "Gao, Sonni Ali Ber, Askia Mohammed, Tondibi (1591)"],
           ])}
-          ${liste(["l’islam s’y diffuse par les commerçants et les lettrés, d’abord dans les villes et chez les rois ;", "il apporte l’écriture arabe, les universités (Sankoré) et des liens avec le monde musulman."])}`,
+          ${liste(["l’islam s’y diffuse par les commerçants et les lettrés, d’abord dans les villes et chez les rois ;", "il apporte l’écriture arabe, les universités (Sankoré) et des liens avec le monde musulman."])}
+          ${figure(schema("h2-soudan", "Carte des villes des empires du Ghana, du Mali et du Songhaï."), "Les grandes villes des empires se trouvent au bord du Sahel et le long du Niger, sur les routes de l’or et du commerce transsaharien.")}`,
       },
       {
         title: "Les empires du Jolof et du Gaabu",
@@ -109,7 +112,8 @@ export const HG_2NDE: ChapterSpec[] = [
             "la traite atlantique (XVI<sup>e</sup>-XIX<sup>e</sup> siècle) alimente les plantations d’Amérique par le commerce triangulaire ;",
             "conséquences en Afrique : saignée démographique, guerres, insécurité, recul des activités productives.",
           ])}
-          ${retenir("Gorée et Saint-Louis furent des points de la traite au Sénégal.")}`,
+          ${retenir("Gorée et Saint-Louis furent des points de la traite au Sénégal.")}
+          ${figure(schema("h2-traites", "Carte des routes de la traite arabe et de la traite atlantique."), "La traite arabe part vers le nord et l’est ; la traite atlantique vers l’ouest, à travers l’océan.")}`,
       },
     ],
   },
@@ -178,7 +182,8 @@ export const HG_2NDE: ChapterSpec[] = [
             "l’inclinaison de son axe explique les saisons et l’inégale durée des jours ;",
             "un lieu est repéré par sa latitude (par rapport à l’équateur) et sa longitude (par rapport au méridien de Greenwich).",
           ])}
-          ${exemple(["Dakar est à environ 14° 40’ de latitude nord et 17° 26’ de longitude ouest."])}`,
+          ${exemple(["Dakar est à environ 14° 40’ de latitude nord et 17° 26’ de longitude ouest."])}
+          ${figure(schema("g2-saisons", "La Terre autour du Soleil aux quatre saisons."), "En juin, l’hémisphère nord est tourné vers le Soleil : il reçoit plus de lumière, c’est l’été ; en décembre, c’est l’inverse.")}`,
       },
     ],
   },
@@ -195,7 +200,8 @@ export const HG_2NDE: ChapterSpec[] = [
             "cinq océans : Pacifique (le plus grand), Atlantique, Indien, Arctique, Austral ;",
             "les eaux marines sont salées et animées de courants : le courant froid des Canaries longe la côte sénégalaise ;",
             "les remontées d’eaux froides (upwelling) rendent ces côtes très poissonneuses.",
-          ])}`,
+          ])}
+          ${figure(schema("g2-oceans", "Planisphère des cinq océans."), "Le Pacifique, le plus grand, couvre à lui seul plus d’un tiers de la Terre.")}`,
       },
     ],
   },
@@ -217,7 +223,8 @@ export const HG_2NDE: ChapterSpec[] = [
             ["intertropicale", "équatorial, tropical, désertique"],
             ["tempérée", "océanique, continental, méditerranéen"],
             ["polaire", "polaire"],
-          ])}`,
+          ])}
+          ${figure(schema("g2-zones-climatiques", "Planisphère des zones climatiques selon la latitude."), "Plus on s’éloigne de l’équateur, plus les rayons du Soleil arrivent de biais et moins il fait chaud. Le Sénégal est dans la zone intertropicale.")}`,
       },
     ],
   },

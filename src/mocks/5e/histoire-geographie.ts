@@ -3,6 +3,7 @@
 // DIANGAL, à faire valider par un professeur d’histoire-géographie.
 
 import { type ChapterSpec, exemple, liste, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const H = "Histoire";
 const G = "Géographie";
@@ -71,7 +72,8 @@ export const HG_5E: ChapterSpec[] = [
             "Empire soninké, riche grâce à l’or et au commerce avec les marchands d’Afrique du Nord (relation avec Aoudaghost) ; capitale Koumbi Saleh.",
             "Les <strong>Almoravides</strong>, mouvement religieux berbère né au XI<sup>e</sup> siècle, conquièrent le Maroc et l’Espagne et affaiblissent le Ghana (prise de Koumbi en 1076, selon la tradition).",
           ])}
-          ${retenir("Le roi du Ghana contrôlait le commerce de l’or ; il en tirait d’importants impôts.")}`,
+          ${retenir("Le roi du Ghana contrôlait le commerce de l’or ; il en tirait d’importants impôts.")}
+          ${figure(schema("h5-empires", "Frise des empires du Ghana, du Mali et du Songhaï de 700 à 1700."), "Le Ghana, puis le Mali et le Songhaï se succèdent du VIIIe au XVIe siècle. Les dates de début et de fin des empires sont approximatives ; les événements sont datés.")}`,
       },
       {
         title: "L’empire du Mali",
@@ -188,6 +190,7 @@ export const HG_5E: ChapterSpec[] = [
             "Il est formé surtout d’un grand bassin sédimentaire (roches déposées par la mer) ; le socle ancien n’apparaît qu’au sud-est.",
             "Le relief est bas et plat : plaines, plateaux bas, dunes du littoral ; les points les plus hauts (environ 600 m) sont au sud-est.",
           ])}
+          ${figure(schema("g5-socle", "Carte du Sénégal : le bassin sédimentaire et le socle ancien au sud-est."), "Le socle ancien n’apparaît qu’au sud-est : c’est là que se trouvent les points les plus hauts du pays (environ 600 m). Le reste est un bassin sédimentaire bas et plat.")}
           ${retenir("Le relief plat facilite les transports mais l’absence de hauteurs limite les pluies.")}`,
       },
     ],
@@ -205,6 +208,10 @@ export const HG_5E: ChapterSpec[] = [
             "On représente le climat d’une ville par un <strong>diagramme climatique</strong> (températures en courbe, pluies en bâtons).",
             "Fleuves : Sénégal, Gambie, Casamance ; Saloum (estuaire) ; lac de Guiers ; nappes souterraines.",
           ])}
+          ${figure(schema("g5-fleuves", "Carte des cours d’eau du Sénégal."), "Le fleuve Sénégal forme la frontière nord ; la Gambie et la Casamance coulent vers l’ouest ; le Saloum est un estuaire où entre l’eau de mer.")}
+          ${figure(schema("g5-climat-ziguinchor", "Diagramme climatique de Ziguinchor : pluies en bâtons, températures en courbe."), "À Ziguinchor, au sud, la saison des pluies est plus longue et il tombe environ 1 400 mm par an, plus de trois fois plus qu’à Dakar.")}
+          ${figure(schema("g5-climat-dakar", "Diagramme climatique de Dakar : pluies en bâtons, températures en courbe."), "À Dakar, il pleut surtout d’août à septembre et il tombe environ 410 mm par an ; la température varie peu (de 20 à 27 °C) grâce à la mer.")}
+          ${figure(schema("g5-pluies", "Carte des pluies du Sénégal avec deux isohyètes."), "Les pluies diminuent du sud vers le nord. Le tracé des isohyètes est approximatif : il varie d’une année à l’autre.")}
           ${retenir("Le climat commande les activités agricoles et le mode de vie.")}`,
       },
       {
@@ -245,6 +252,8 @@ export const HG_5E: ChapterSpec[] = [
             "Mobilité : exode rural, migrations saisonnières, émigration à l’étranger.",
             "Villes principales : Dakar, Touba, Thiès, Kaolack, Saint-Louis, Ziguinchor, Mbour.",
           ])}
+          ${figure(schema("g5-densites", "Carte des densités : fortes à l’ouest, faibles à l’est."), "Les hommes sont surtout concentrés à l’ouest, près de la côte et dans le Bassin arachidier ; l’est est peu peuplé.")}
+          ${figure(schema("g5-pyramide", "Allure de la pyramide des âges d’une population jeune."), "Schéma de l’allure, sans chiffres : chaque barre représente une tranche d’âge ; la base large montre une population très jeune.")}
           ${retenir("Plus de la moitié des Sénégalais vivent désormais en ville ou près des villes.")}`,
       },
     ],

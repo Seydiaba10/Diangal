@@ -3,6 +3,7 @@
 // DIANGAL, à faire valider par un professeur de SVT.
 
 import { type ChapterSpec, exemple, liste, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const BIO = "Le corps humain et la santé";
 const REPRO = "Reproduction et hérédité";
@@ -23,6 +24,7 @@ export const SVT_4E: ChapterSpec[] = [
             "l’amylase de la salive transforme l’amidon en maltose (test à l’eau iodée qui ne bleuit plus) ;",
             "à la fin, les aliments sont devenus des <strong>nutriments</strong> : glucose, acides aminés, acides gras et glycérol.",
           ])}
+          ${figure(schema("s4-digestif", "Schéma de l’appareil digestif avec ses organes."), "Le tube digestif va de la bouche à l’anus ; les glandes digestives (salivaires, foie, pancréas) y versent leurs sucs.")}
           ${retenir("Bien mâcher facilite la digestion.")}`,
       },
       {
@@ -33,6 +35,7 @@ export const SVT_4E: ChapterSpec[] = [
             "la paroi porte des millions de replis, les <strong>villosités</strong>, qui donnent une très grande surface d’échange ;",
             "ce qui n’est pas absorbé passe dans le gros intestin et forme les selles.",
           ])}
+          ${figure(schema("s4-villosite", "Schéma d’une villosité intestinale."), "Chaque villosité est riche en vaisseaux : les nutriments passent dans le sang et dans la lymphe.")}
           ${retenir("Le sang distribue ensuite les nutriments à toutes les cellules.")}`,
       },
     ],
@@ -52,6 +55,7 @@ export const SVT_4E: ChapterSpec[] = [
             ["globules blancs (leucocytes)", "défendent l’organisme contre les microbes"],
             ["plaquettes", "arrêtent les saignements (coagulation)"],
           ])}
+          ${figure(schema("s4-sang", "Sang vu au microscope : globules rouges, globules blancs, plaquettes, plasma."), "Les globules rouges sont les plus nombreux ; les globules blancs, plus gros, ont un noyau.")}
           ${liste([
             "anémie : manque de globules rouges ou d’hémoglobine (fatigue, pâleur) ;",
             "drépanocytose : maladie héréditaire des globules rouges, fréquente en Afrique ;",
@@ -74,6 +78,8 @@ export const SVT_4E: ChapterSpec[] = [
             "petite circulation : cœur droit → poumons → cœur gauche (le sang s’y charge en dioxygène) ;",
             "grande circulation : cœur gauche → organes → cœur droit.",
           ])}
+          ${figure(schema("s4-coeur", "Le cœur en coupe avec ses quatre cavités et ses vaisseaux."), "Le cœur droit et le cœur gauche sont séparés par une cloison : le sang pauvre en dioxygène et le sang riche ne se mélangent pas.")}
+          ${figure(schema("s4-double-circulation", "Schéma de la petite et de la grande circulation."), "Le sang passe deux fois par le cœur à chaque tour : une fois pour aller aux poumons, une fois pour aller aux organes.")}
           ${retenir("Le pouls, perçu au poignet, traduit les battements du cœur (environ 70 par minute au repos).")}`,
       },
       {
@@ -129,6 +135,8 @@ export const SVT_4E: ChapterSpec[] = [
             ["cellules reproductrices", "spermatozoïdes (production continue)", "ovules (un par cycle environ)"],
             ["autres organes", "spermiducte, prostate, pénis", "trompes, utérus, vagin"],
           ])}
+          ${figure(schema("s4-app-masculin", "Schéma de l’appareil reproducteur de l’homme."), "Les testicules produisent les spermatozoïdes ; les spermiductes les conduisent jusqu’à l’urètre.")}
+          ${figure(schema("s4-app-feminin", "Schéma de l’appareil reproducteur de la femme."), "Les ovaires libèrent environ un ovule par cycle ; la fécondation a lieu dans une trompe ; l’embryon se développe dans l’utérus.")}
           ${retenir("Le cycle menstruel dure environ 28 jours ; l’ovulation a lieu vers le 14e jour ; s’il n’y a pas de grossesse, la paroi de l’utérus est éliminée : ce sont les règles.")}`,
       },
     ],
@@ -148,6 +156,7 @@ export const SVT_4E: ChapterSpec[] = [
             "le <strong>placenta</strong> et le cordon ombilical assurent les échanges entre la mère et le fœtus ;",
             "la grossesse dure environ neuf mois ; l’accouchement se termine par l’expulsion du placenta.",
           ])}
+          ${figure(schema("s4-grossesse", "Le fœtus dans l’utérus, avec le placenta et le cordon ombilical."), "Le fœtus reçoit par le cordon ombilical le dioxygène et les nutriments venus du sang de la mère, à travers le placenta.")}
           ${retenir("Les consultations prénatales protègent la santé de la mère et de l’enfant ; l’alcool, le tabac et certains médicaments passent dans le placenta.")}`,
       },
     ],
@@ -183,6 +192,7 @@ export const SVT_4E: ChapterSpec[] = [
             "l’être humain a 46 chromosomes (23 paires) ; les cellules reproductrices n’en ont que 23 ;",
             "chaque enfant reçoit la moitié de ses chromosomes de son père et l’autre moitié de sa mère.",
           ])}
+          ${figure(schema("s4-caryotype", "Caryotype humain schématique : 23 paires de chromosomes."), "Les chromosomes sont rangés par paires : une moitié vient du père, l’autre de la mère.")}
           ${exemple(["Sexe : la femme a deux chromosomes X (XX), l’homme X et Y (XY). L’ovule porte toujours un X ; c’est le spermatozoïde (X ou Y) qui détermine le sexe de l’enfant."])}`,
       },
     ],
@@ -200,6 +210,7 @@ export const SVT_4E: ChapterSpec[] = [
             "l’<strong>épicentre</strong> est le point de la surface situé au-dessus du foyer ;",
             "les ondes sismiques sont enregistrées par un sismographe ; la magnitude (échelle de Richter) mesure l’énergie libérée, l’intensité mesure les dégâts.",
           ])}
+          ${figure(schema("s4-seisme", "Coupe d’un séisme : faille, foyer, épicentre et ondes."), "Les ondes partent du foyer dans toutes les directions ; les dégâts sont en général les plus forts près de l’épicentre.")}
           ${retenir("En cas de séisme : s’abriter sous une table solide, loin des vitres, puis sortir dans un espace dégagé.")}`,
       },
       {
@@ -211,6 +222,7 @@ export const SVT_4E: ChapterSpec[] = [
             ["manteau", "jusqu’à 2 900 km", "roches chaudes"],
             ["noyau", "de 2 900 km au centre (environ 6 370 km)", "fer et nickel ; partie externe liquide"],
           ])}
+          ${figure(schema("s4-globe", "Quart de globe en coupe : croûte, manteau, noyau externe et graine."), "À l’échelle, la croûte n’est qu’un trait : la Terre est surtout formée du manteau et du noyau.")}
           ${retenir("C’est l’étude de la propagation des ondes sismiques qui a permis de connaître l’intérieur de la Terre.")}`,
       },
     ],
@@ -228,6 +240,7 @@ export const SVT_4E: ChapterSpec[] = [
             "éruption <strong>effusive</strong> : lave fluide qui coule en coulées (volcans d’Hawaï) ;",
             "éruption <strong>explosive</strong> : lave visqueuse, projections et nuées ardentes, très dangereuses (montagne Pelée, 1902).",
           ])}
+          ${figure(schema("s4-volcan", "Volcan en coupe avec la chambre magmatique, la cheminée et le cratère."), "Le cône du volcan est fait de couches de laves et de cendres accumulées au fil des éruptions.")}
           ${exemple(["Les Mamelles de Dakar sont d’anciens volcans ; le basalte de Gorée et des côtes de Dakar est une roche volcanique."])}`,
       },
     ],
@@ -246,6 +259,7 @@ export const SVT_4E: ChapterSpec[] = [
             ["refroidissement", "rapide, en surface", "lent, en profondeur"],
             ["aspect", "petits cristaux et verre", "gros cristaux visibles (roche grenue)"],
           ])}
+          ${figure(schema("s4-roches", "Basalte et granite vus au microscope."), "La taille des cristaux dépend de la vitesse de refroidissement du magma.")}
           ${retenir("Les roches magmatiques naissent du refroidissement d’un magma ; au Sénégal, le granite affleure au sud-est (région de Kédougou).")}`,
       },
     ],

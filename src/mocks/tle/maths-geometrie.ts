@@ -3,6 +3,7 @@
 // enseignant.
 
 import { auBac, erreurs, exemple, exercice, formula, frac, type LessonSpec, liste, methode, objectifs, retenir, sqrt, tableau, vec } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 // ── Barycentres et lignes de niveau ─────────────────────────────────────────
 
@@ -188,7 +189,8 @@ export const PRODUIT_VECTORIEL: LessonSpec = {
         "‖w⃗‖ = √11 : c’est l’aire du parallélogramme construit sur u⃗ et v⃗.",
       ],
     )}
-    ${erreurs(["se tromper dans l’ordre des produits : écris la formule (yz’ − zy’ ; zx’ − xz’ ; xy’ − yx’) avant de calculer ;", "oublier que u⃗ ∧ v⃗ = −v⃗ ∧ u⃗."])}`,
+    ${erreurs(["se tromper dans l’ordre des produits : écris la formule (yz’ − zy’ ; zx’ − xz’ ; xy’ − yx’) avant de calculer ;", "oublier que u⃗ ∧ v⃗ = −v⃗ ∧ u⃗."])}
+          ${figure(schema("t-produit-vectoriel", "Vecteurs u, v et leur produit vectoriel."), "Règle de la main droite : le pouce suit u, l’index v, le majeur donne le sens de u ∧ v.")}`,
 };
 
 export const PRODUIT_VECTORIEL_APPLICATIONS: LessonSpec = {
@@ -419,7 +421,8 @@ export const PARABOLE: LessonSpec = {
         "Au point d’abscisse 2 : y = 1 et y’ = x/2 = 1.",
         "Tangente : <strong>y = x − 1</strong>.",
       ],
-    )}`,
+    )}
+          ${figure(schema("t-parabole", "Parabole avec son foyer et sa directrice."), "Pour tout point M de la parabole, MF = MH : la distance au foyer égale la distance à la directrice.")}`,
 };
 
 export const ELLIPSE: LessonSpec = {
@@ -449,7 +452,8 @@ export const ELLIPSE: LessonSpec = {
         "M est sur l’ellipse : 5/9 + (16/9)/4 = 5/9 + 4/9 = 1.",
         "MF = 4/3 (avec F(√5 ; 0)) et MF’ = √(20 + 16/9) = 14/3 : MF + MF’ = 18/3 = 6 = <strong>2a</strong>.",
       ],
-    )}`,
+    )}
+          ${figure(schema("t-ellipse", "Ellipse avec ses deux foyers."), "Pour tout point M de l’ellipse, la somme des distances aux deux foyers est constante.")}`,
 };
 
 export const HYPERBOLE: LessonSpec = {
@@ -485,5 +489,6 @@ export const HYPERBOLE: LessonSpec = {
         "Asymptotes : <strong>y = x/2 et y = −x/2</strong>.",
       ],
     )}
-    ${auBac("Une erreur de signe change la nature de la conique : vérifie la forme canonique en redéveloppant avant de conclure.")}`,
+    ${auBac("Une erreur de signe change la nature de la conique : vérifie la forme canonique en redéveloppant avant de conclure.")}
+          ${figure(schema("t-hyperbole", "Hyperbole avec ses asymptotes et ses foyers."), "Les deux branches s’approchent des asymptotes sans jamais les toucher.")}`,
 };

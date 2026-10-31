@@ -4,6 +4,7 @@
 // d’histoire-géographie.
 
 import { type ChapterSpec, exemple, liste, methode, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const H = "Histoire";
 const G = "Géographie";
@@ -54,7 +55,8 @@ export const HG_4E: ChapterSpec[] = [
       {
         title: "Le commerce triangulaire",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(schema("h4-commerce-triangulaire", "Carte de l’Atlantique avec les trois trajets du commerce triangulaire."), "Le voyage forme un triangle entre l’Europe, l’Afrique et l’Amérique ; la traversée de l’Atlantique avec les captifs était la plus meurtrière.")}
+          ${tableau([
             ["Étape", "Trajet", "Marchandises"],
             ["1", "Europe → Afrique", "tissus, armes, alcool, pacotille"],
             ["2", "Afrique → Amérique", "captifs africains"],
@@ -350,6 +352,7 @@ export const HG_4E: ChapterSpec[] = [
             "l’UEMOA regroupe huit États qui utilisent le franc CFA ;",
             "obstacles : routes insuffisantes, tracasseries aux frontières, monnaies différentes, crises politiques.",
           ])}
+          ${figure(schema("g4-afrique-ouest", "Carte de l’Afrique de l’Ouest : pays de la CEDEAO et de l’Alliance des États du Sahel."), "Depuis 2025, la CEDEAO compte 12 États ; le Mali, le Burkina Faso et le Niger forment l’Alliance des États du Sahel.")}
           ${retenir("L’intégration permet de former un marché plus grand et de mieux peser dans le monde.")}`,
       },
     ],
@@ -362,7 +365,8 @@ export const HG_4E: ChapterSpec[] = [
       {
         title: "La diversité physique et humaine",
         minutes: 15,
-        body: `${liste([
+        body: `${figure(schema("g4-afrique-physique", "Carte de l’Afrique avec ses grands fleuves, ses lacs et ses déserts."), "Le Sahara au nord, le Kalahari au sud, les grands lacs à l’est et les grands fleuves : Nil, Niger, Congo, Zambèze.")}
+          ${liste([
             "continent de plus de 30 millions de km² et de 54 États ;",
             "relief : plateaux, hautes terres de l’Est (Kilimandjaro, environ 5 895 m) ; grands fleuves : Nil, Congo, Niger ;",
             "climats et paysages organisés de part et d’autre de l’équateur : forêt dense, savane, steppe, désert (Sahara) ;",
@@ -389,7 +393,8 @@ export const HG_4E: ChapterSpec[] = [
       {
         title: "Un continent intégré",
         minutes: 15,
-        body: `${liste([
+        body: `${figure(schema("g4-europe", "Planisphère : l’Europe en couleur."), "L’Europe, petit continent très peuplé, s’étend de l’océan Atlantique à l’Oural.")}
+          ${liste([
             "petit continent (environ 10 millions de km²) très découpé ; grande plaine au nord, montagnes jeunes au sud (Alpes) ;",
             "climats : océanique à l’ouest, continental à l’est, méditerranéen au sud ;",
             "population nombreuse, urbaine et vieillissante ; forte immigration ;",
@@ -407,7 +412,8 @@ export const HG_4E: ChapterSpec[] = [
       {
         title: "Un continent de contrastes",
         minutes: 15,
-        body: `${liste([
+        body: `${figure(schema("g4-amerique", "Planisphère : l’Amérique en couleur."), "L’Amérique s’étire du nord au sud, de l’océan Arctique au cap Horn ; le Nord est plus riche que le Sud.")}
+          ${liste([
             "à l’ouest, de hautes montagnes (Rocheuses, Andes) ; au centre, de grandes plaines et de grands fleuves (Mississippi, Amazone) ;",
             "peuples : Amérindiens, descendants d’Européens et d’Africains déportés par la traite, métis ;",
             "fortes disparités : les États-Unis et le Canada sont riches ; Haïti est très pauvre ;",
@@ -424,7 +430,8 @@ export const HG_4E: ChapterSpec[] = [
       {
         title: "Le continent le plus peuplé",
         minutes: 15,
-        body: `${liste([
+        body: `${figure(schema("g4-asie", "Planisphère : l’Asie en couleur."), "L’Asie est le plus vaste continent ; plus d’un être humain sur deux y vit.")}
+          ${liste([
             "plus grand continent ; l’Himalaya porte le plus haut sommet du monde (Everest, environ 8 849 m) ;",
             "contrastes : froid de la Sibérie, déserts d’Arabie et de Gobi, climat de mousson au sud et au sud-est ;",
             "environ 60 % de l’humanité ; l’Inde et la Chine dépassent chacune 1,4 milliard d’habitants ;",
@@ -441,7 +448,8 @@ export const HG_4E: ChapterSpec[] = [
       {
         title: "Un continent d’îles",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(schema("g4-oceanie", "Planisphère : l’Océanie en couleur."), "L’Océanie : l’Australie, la Nouvelle-Zélande, la Nouvelle-Guinée et des milliers d’îles du Pacifique.")}
+          ${liste([
             "l’Australie, la Nouvelle-Zélande et des milliers d’îles du Pacifique (Mélanésie, Micronésie, Polynésie) ;",
             "peu peuplée (environ 45 millions d’habitants) ;",
             "l’Australie et la Nouvelle-Zélande sont riches (mines, élevage, services) ; beaucoup de petites îles dépendent de l’aide et sont menacées par la montée des eaux ;",

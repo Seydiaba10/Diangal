@@ -4,10 +4,13 @@ import "server-only";
 // par matière et par titre de chapitre ; un chapitre commun aux deux séries reçoit la même série. Écrits
 // par DIANGAL d’après les leçons, à faire relire par des enseignants. Corrigés inclus : ce fichier ne
 // doit jamais atteindre le navigateur.
+// Questions illustrées (schémas des leçons) ajoutées par 2nde/enrich.ts.
 
 import type { SubjectCode } from "@/types/domain";
 import { CHAPTERS_2NDE } from "../curriculum-2nde";
 import { buildExerciseSeries, type ExerciseSeries, type ExerciseSpec } from "../exercise-series";
+import { withSubjectExtras } from "../illustrated-questions";
+import { EXTRA_2NDE } from "./enrich";
 
 const BANK: Partial<Record<SubjectCode, Record<string, ExerciseSpec[]>>> = {
   MATH: {
@@ -370,7 +373,7 @@ const SERIES: ExerciseSeries[] = CHAPTERS_2NDE.map((chapter) => {
   return { subject: chapter.subjectCode, chapter: chapter.title, series: chapter.seriesCode ?? undefined, questions };
 });
 
-const built = buildExerciseSeries("2NDE", CHAPTERS_2NDE, SERIES);
+const built = buildExerciseSeries("2NDE", CHAPTERS_2NDE, withSubjectExtras(SERIES, EXTRA_2NDE));
 
 export const QUESTIONS_2NDE = built.questions;
 export const ANSWER_KEYS_2NDE = built.keys;

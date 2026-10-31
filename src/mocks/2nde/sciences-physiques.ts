@@ -3,6 +3,7 @@
 // faire valider par un professeur de sciences physiques.
 
 import { type ChapterSpec, exemple, formula, frac, liste, retenir, sub, sup, tableau, vec } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const PHY = "Physique";
 const CHI = "Chimie";
@@ -39,7 +40,8 @@ const MOTION: ChapterSpec = {
           "mouvement uniforme : la vitesse reste constante.",
         ])}
         ${formula(`v = ${frac("d", "t")} (m/s ou km/h ; 1 m/s = 3,6 km/h)`)}
-        ${exemple(["Un car parcourt 180 km en 3 h : v = 180 ÷ 3 = 60 km/h, soit environ 16,7 m/s."])}`,
+        ${exemple(["Un car parcourt 180 km en 3 h : v = 180 ÷ 3 = 60 km/h, soit environ 16,7 m/s."])}
+          ${figure(schema("p2-chrono", "Positions d’un mobile notées à intervalles de temps égaux."), "Plus les points sont espacés, plus le mobile va vite : des écarts égaux montrent un mouvement uniforme.")}`,
     },
   ],
 };
@@ -110,7 +112,8 @@ const CIRCUIT: ChapterSpec = {
           "l’<strong>intensité</strong> I (ampère, A) se mesure avec un ampèremètre branché <strong>en série</strong> ;",
           "la <strong>tension</strong> U (volt, V) se mesure avec un voltmètre branché <strong>en dérivation</strong> ;",
           "en série, l’intensité est la même partout et les tensions s’additionnent ; en dérivation, les intensités s’additionnent (loi des nœuds) et la tension est la même.",
-        ])}`,
+        ])}
+          ${figure(schema("p2-mesures", "Circuit avec un ampèremètre en série et un voltmètre en dérivation."), "L’ampèremètre est traversé par le courant du circuit ; le voltmètre compare deux points, aux bornes de la lampe.")}`,
     },
   ],
 };
@@ -132,7 +135,8 @@ export const PC_2NDE_S: ChapterSpec[] = [
             "des <strong>isotopes</strong> ont le même Z mais des A différents (¹²C et ¹⁴C) ;",
             "les électrons se répartissent en couches K (2 au plus), L (8), M (8 pour les 18 premiers éléments).",
           ])}
-          ${exemple(["Sodium Na (Z = 11) : K² L⁸ M¹."])}`,
+          ${exemple(["Sodium Na (Z = 11) : K² L⁸ M¹."])}
+          ${figure(schema("p2-atome", "Modèle de l’atome de sodium avec ses couches K, L et M."), "Le noyau est en réalité environ 100 000 fois plus petit que l’atome : le dessin ne respecte pas les tailles.")}`,
       },
       {
         title: "La classification périodique",
@@ -141,7 +145,8 @@ export const PC_2NDE_S: ChapterSpec[] = [
             "les éléments sont rangés par Z croissant ; une ligne (période) correspond à une couche en cours de remplissage ;",
             "les éléments d’une même colonne (famille) ont le même nombre d’électrons sur la couche externe et des propriétés voisines ;",
             "familles : alcalins (colonne 1), halogènes (colonne 17), gaz nobles (colonne 18, très stables).",
-          ])}`,
+          ])}
+          ${figure(schema("p2-classification", "Les 18 premiers éléments de la classification."), "Chaque ligne correspond à une couche électronique ; les éléments d’une même colonne ont des propriétés voisines.")}`,
       },
     ],
   },
@@ -158,7 +163,8 @@ export const PC_2NDE_S: ChapterSpec[] = [
             "<strong>liaison covalente</strong> : mise en commun d’un doublet d’électrons (H–H, H–O–H) ;",
             "<strong>liaison ionique</strong> : un atome cède des électrons à un autre ; les ions formés s’attirent (Na⁺ et Cl⁻ dans le sel).",
           ])}
-          ${exemple(["Le chlore (M⁷) gagne un électron pour devenir Cl⁻ ; le sodium (M¹) en perd un pour devenir Na⁺."])}`,
+          ${exemple(["Le chlore (M⁷) gagne un électron pour devenir Cl⁻ ; le sodium (M¹) en perd un pour devenir Na⁺."])}
+          ${figure(schema("p2-lewis", "Molécule d’eau en Lewis et formation des ions du sel."), "Dans l’eau, les atomes partagent des électrons ; dans le sel, le sodium donne un électron au chlore.")}`,
       },
     ],
   },
@@ -214,7 +220,8 @@ export const PC_2NDE_S: ChapterSpec[] = [
             ["Cu²⁺", "soude", "précipité bleu"],
             ["Fe²⁺", "soude", "précipité vert"],
             ["Fe³⁺", "soude", "précipité rouille"],
-          ])}`,
+          ])}
+          ${figure(schema("p2-tests-ions", "Cinq tubes avec des précipités de couleurs différentes."), "La couleur du précipité permet de reconnaître l’ion présent dans la solution.")}`,
       },
     ],
   },
@@ -234,7 +241,8 @@ export const PC_2NDE_S: ChapterSpec[] = [
             `trois forces non parallèles : elles sont <strong>coplanaires</strong> et <strong>concourantes</strong>, et ${vec("F₁")} + ${vec("F₂")} + ${vec("F₃")} = ${vec("0")} ;`,
             "on résout graphiquement (triangle des forces) ou par projection sur des axes.",
           ])}
-          ${exemple(["Un lustre suspendu à un fil : le poids et la tension du fil se compensent, T = P."])}`,
+          ${exemple(["Un lustre suspendu à un fil : le poids et la tension du fil se compensent, T = P."])}
+          ${figure(schema("p2-trois-forces", "Objet suspendu à deux fils, avec ses trois forces et le triangle des forces."), "Mises bout à bout, les trois forces reviennent au point de départ : leur somme est nulle, l’objet est en équilibre.")}`,
       },
     ],
   },
@@ -252,7 +260,8 @@ export const PC_2NDE_S: ChapterSpec[] = [
             "à l’équilibre, la somme des moments des forces par rapport à l’axe est nulle ;",
             "une force dont la droite d’action rencontre l’axe a un moment nul.",
           ])}
-          ${exemple(["Une balançoire : 300 N à 2 m de l’axe équilibrent 400 N à 1,5 m (600 = 600)."])}`,
+          ${exemple(["Une balançoire : 300 N à 2 m de l’axe équilibrent 400 N à 1,5 m (600 = 600)."])}
+          ${figure(schema("p2-moments", "Balançoire en équilibre avec deux forces à des distances différentes."), "La force la plus faible est compensée par un plus grand bras de levier.")}`,
       },
     ],
   },
@@ -296,7 +305,8 @@ export const PC_2NDE_S: ChapterSpec[] = [
             "un générateur (pile) a une f.é.m. E et une résistance interne r : U = E − rI ;",
             "un électrolyseur ou un moteur (récepteur actif) : U = E’ + r’I ;",
             "le point de fonctionnement d’un circuit est l’intersection des caractéristiques du générateur et du récepteur.",
-          ])}`,
+          ])}
+          ${figure(schema("p2-fonctionnement", "Caractéristiques d’un générateur et d’un moteur, et leur point de fonctionnement."), "Le circuit fonctionne là où les deux caractéristiques se coupent : même intensité et même tension pour les deux dipôles.")}`,
       },
     ],
   },
@@ -314,7 +324,8 @@ export const PC_2NDE_S: ChapterSpec[] = [
             "inverseur : U<sub>s</sub> = −(R₂/R₁) U<sub>e</sub> ;",
             "non inverseur : U<sub>s</sub> = (1 + R₂/R₁) U<sub>e</sub>.",
           ])}
-          ${exemple(["Inverseur avec R₁ = 1 kΩ, R₂ = 10 kΩ et U<sub>e</sub> = 0,5 V : U<sub>s</sub> = −5 V."])}`,
+          ${exemple(["Inverseur avec R₁ = 1 kΩ, R₂ = 10 kΩ et U<sub>e</sub> = 0,5 V : U<sub>s</sub> = −5 V."])}
+          ${figure(schema("p2-inverseur", "Schéma d’un montage inverseur à amplificateur opérationnel."), "Avec R₁ = 1 kΩ et R₂ = 10 kΩ, la tension d’entrée est multipliée par −10.")}`,
       },
     ],
   },

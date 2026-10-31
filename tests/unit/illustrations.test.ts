@@ -48,7 +48,8 @@ describe("illustrations", () => {
     for (const [id, svg] of Object.entries(SCHEMAS)) {
       const file = readFileSync(join(DIR, "schemas", `${id}.svg`), "utf8");
       expect(file, id).toBe(renderSchemaFile(svg, css, read));
-      expect(Buffer.byteLength(file), id).toBeLessThanOrEqual(MAX_BYTES);
+      // Une carte du monde ou de l'Afrique (fond Natural Earth) a droit au double : environ 8 Ko une fois compressée.
+      expect(Buffer.byteLength(file), id).toBeLessThanOrEqual(file.includes("Natural Earth") ? 2 * MAX_BYTES : MAX_BYTES);
     }
   });
 

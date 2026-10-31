@@ -3,6 +3,7 @@
 // valider par un enseignant.
 
 import { auBac, erreurs, exemple, exercice, formula, frac, type LessonSpec, liste, methode, objectifs, retenir, sqrt, sup, tableau, vec } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 /** Conjugué ou événement contraire : lettre surlignée (trait combinant U+0305). */
 const bar = (x: string) => `${x}̅`;
@@ -79,7 +80,8 @@ export const PROBA_CONDITIONNELLE: LessonSpec = {
         "p<sub>R</sub>(U₂) = p(U₂ ∩ R) ÷ p(R) = (1/30) ÷ (16/30) = <strong>1/16</strong>.",
       ],
     )}
-    ${auBac("Construis toujours l’arbre pondéré : la somme des probabilités issues d’un même nœud vaut 1, et chaque branche porte une probabilité conditionnelle.")}`,
+    ${auBac("Construis toujours l’arbre pondéré : la somme des probabilités issues d’un même nœud vaut 1, et chaque branche porte une probabilité conditionnelle.")}
+          ${figure(schema("t-arbre", "Arbre pondéré à deux niveaux."), "Sur un arbre pondéré, la somme des probabilités issues d’un même nœud vaut 1 ; on multiplie le long d’un chemin.")}`,
 };
 
 export const VARIABLE_ALEATOIRE: LessonSpec = {
@@ -143,7 +145,8 @@ export const LOI_BINOMIALE: LessonSpec = {
         "Avec n tirs : p(au moins un succès) = 1 − 0,2ⁿ ≥ 0,999 ⇔ 0,2ⁿ ≤ 0,001 ⇔ n ≥ ln 0,001 / ln 0,2 ≈ 4,3 : il faut <strong>5 tirs</strong>.",
       ],
     )}
-    ${erreurs(["appliquer la loi binomiale sans vérifier que les répétitions sont indépendantes et identiques (tirages sans remise : ce n’est pas une loi binomiale) ;", "changer le sens de l’inégalité en divisant par ln 0,2, qui est négatif : il faut l’inverser."])}`,
+    ${erreurs(["appliquer la loi binomiale sans vérifier que les répétitions sont indépendantes et identiques (tirages sans remise : ce n’est pas une loi binomiale) ;", "changer le sens de l’inégalité en divisant par ln 0,2, qui est négatif : il faut l’inverser."])}
+          ${figure(schema("t-binomiale", "Diagramme de la loi binomiale B(6 ; 0,5)."), "La loi est symétrique ici car p = 0,5 ; son espérance vaut n × p = 3.")}`,
 };
 
 // ── Statistiques (séries S2 et L) ───────────────────────────────────────────
@@ -209,7 +212,8 @@ export const AJUSTEMENT_LINEAIRE: LessonSpec = {
         "r = cov/(σ<sub>x</sub>σ<sub>y</sub>) = 6/√(8 × 4,8) ≈ <strong>0,97</strong> : corrélation forte et positive, l’ajustement est justifié.",
         "Pour x = 18 : y ≈ 0,75 × 18 + 3 = <strong>16,5</strong>.",
       ],
-    )}`,
+    )}
+          ${figure(schema("m1-nuage", "Nuage de points et droite d’ajustement."), "Exemple : la droite passe au plus près des points ; ici, la droite de Mayer passe par les points moyens des deux moitiés du nuage.")}`,
 };
 
 // ── Nombres complexes ───────────────────────────────────────────────────────
@@ -330,7 +334,8 @@ export const RACINES_NIEMES: LessonSpec = {
         "<strong>√2 + i√2 ; −√2 + i√2 ; −√2 − i√2 ; √2 − i√2</strong>.",
         "Leurs images sont les sommets d’un carré inscrit dans le cercle de centre O et de rayon 2.",
       ],
-    )}`,
+    )}
+          ${figure(schema("t-racines", "Les six racines sixièmes de l’unité sur le cercle trigonométrique."), "Les racines n-ièmes de 1 sont régulièrement réparties sur le cercle de rayon 1 : deux racines voisines font un angle de 2π/n.")}`,
 };
 
 export const COMPLEXES_GEOMETRIE: LessonSpec = {
@@ -444,7 +449,8 @@ export const SIMILITUDES_COMPLEXES: LessonSpec = {
         "Rapport |2i| = <strong>2</strong>, angle arg(2i) = <strong>π/2</strong>, centre ω = 1/(1 − 2i) = <strong>(1 + 2i)/5</strong>.",
       ],
     )}
-    ${auBac("Pour trouver le centre, résous ω = aω + b : c’est le seul point invariant (si a ≠ 1).")}`,
+    ${auBac("Pour trouver le centre, résous ω = aω + b : c’est le seul point invariant (si a ≠ 1).")}
+          ${figure(schema("t-similitude", "Un triangle et son image par une similitude directe."), "Une similitude directe est la composée d’une rotation et d’une homothétie de même centre.")}`,
 };
 
 // ── Arithmétique (séries S1 et S3) ──────────────────────────────────────────

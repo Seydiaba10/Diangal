@@ -4,6 +4,7 @@
 // enseignant.
 
 import { type ChapterSpec, exemple, formula, frac, liste, methode, retenir, sqrt, sup, tableau, vec } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const NUM = "Activités numériques";
 const GEO = "Activités géométriques";
@@ -35,7 +36,8 @@ const SECOND_DEGREE: ChapterSpec = {
           "s’il n’a pas de racine, il a toujours le signe de a ;",
           "pour résoudre une inéquation, on étudie le signe dans un tableau.",
         ])}
-        ${exemple([`x${sup("2")} − 5x + 6 &lt; 0 : a = 1 &gt; 0, le trinôme est négatif entre ses racines : x ∈ ]2 ; 3[.`])}`,
+        ${exemple([`x${sup("2")} − 5x + 6 &lt; 0 : a = 1 &gt; 0, le trinôme est négatif entre ses racines : x ∈ ]2 ; 3[.`])}
+          ${figure(schema("m2-trinome", "Parabole de x² − 5x + 6 qui coupe l’axe des abscisses en 2 et 3."), "La parabole est sous l’axe des abscisses entre les racines 2 et 3 : c’est là que le trinôme est négatif.")}`,
     },
   ],
 };
@@ -90,7 +92,8 @@ export const MATH_2NDE_S: ChapterSpec[] = [
             "|x − a| est la distance entre x et a sur la droite graduée ;",
             "|x − a| ≤ r équivaut à a − r ≤ x ≤ a + r.",
           ])}
-          ${exemple(["|x − 2| ≤ 3 équivaut à −1 ≤ x ≤ 5 ; |x − 2| = 3 donne x = −1 ou x = 5."])}`,
+          ${exemple(["|x − 2| ≤ 3 équivaut à −1 ≤ x ≤ 5 ; |x − 2| = 3 donne x = −1 ou x = 5."])}
+          ${figure(schema("m2-valeur-absolue", "Droite graduée : les nombres à une distance au plus 3 de 2."), "|x − 2| ≤ 3 : x est à une distance d’au plus 3 de 2, donc entre −1 et 5.")}`,
       },
     ],
   },
@@ -134,7 +137,8 @@ export const MATH_2NDE_S: ChapterSpec[] = [
             "f est <strong>impaire</strong> si f(−x) = −f(x) : sa courbe est symétrique par rapport à l’origine ;",
             "la composée g ∘ f est définie par (g ∘ f)(x) = g[f(x)].",
           ])}
-          ${exemple([`x ↦ x${sup("2")} est paire ; x ↦ x${sup("3")} est impaire.`])}`,
+          ${exemple([`x ↦ x${sup("2")} est paire ; x ↦ x${sup("3")} est impaire.`])}
+          ${figure(schema("m2-parite", "Courbes de x² et de x³."), "La courbe de x² est symétrique par rapport à l’axe des ordonnées (fonction paire) ; celle de x³ par rapport à l’origine (fonction impaire).")}`,
       },
     ],
   },
@@ -153,7 +157,8 @@ export const MATH_2NDE_S: ChapterSpec[] = [
             ["x ↦ √x", "demi-parabole", "croissante sur [0 ; +∞["],
             ["x ↦ E(x)", "courbe en escalier", "constante sur chaque [n ; n + 1["],
           ])}
-          ${retenir(`La courbe de x ↦ (x − α)${sup("2")} + β est la parabole de x ↦ x${sup("2")} translatée : son sommet est le point (α ; β).`)}`,
+          ${retenir(`La courbe de x ↦ (x − α)${sup("2")} + β est la parabole de x ↦ x${sup("2")} translatée : son sommet est le point (α ; β).`)}
+          ${figure(schema("m2-reference", "Courbes de x², de 1/x et de √x."), "Les trois courbes passent par le point (1 ; 1). L’hyperbole de 1/x a deux branches et ne coupe jamais les axes.")}`,
       },
     ],
   },
@@ -221,7 +226,8 @@ export const MATH_2NDE_S: ChapterSpec[] = [
         body: `<p>Si a + b ≠ 0, le barycentre G des points pondérés (A, a) et (B, b) est l’unique point tel que a${vec("GA")} + b${vec("GB")} = ${vec("0")}. On a alors :</p>
           ${formula(`${vec("AG")} = ${frac("b", "a + b")} ${vec("AB")}`)}
           ${exemple([`G barycentre de (A, 1) et (B, 3) : ${vec("AG")} = ${frac("3", "4")}${vec("AB")}.`])}
-          ${retenir("L’isobarycentre de deux points est le milieu ; celui des trois sommets d’un triangle est son centre de gravité.")}`,
+          ${retenir("L’isobarycentre de deux points est le milieu ; celui des trois sommets d’un triangle est son centre de gravité.")}
+          ${figure(schema("m2-barycentre", "Segment [AB] avec le barycentre G de (A, 1) et (B, 3)."), "G partage [AB] en quatre parts égales et se place à trois parts de A : il est attiré par le point le plus lourd.")}`,
       },
     ],
   },
@@ -261,7 +267,8 @@ export const MATH_2NDE_S: ChapterSpec[] = [
             ["x", "0", "π/6", "π/4", "π/3", "π/2"],
             ["cos x", "1", "√3/2", "√2/2", "1/2", "0"],
             ["sin x", "0", "1/2", "√2/2", "√3/2", "1"],
-          ])}`,
+          ])}
+          ${figure(schema("m2-cercle-trigo", "Cercle trigonométrique avec les angles π/6, π/4, π/3 et π/2."), "Sur le cercle de rayon 1, le cosinus se lit sur l’axe horizontal et le sinus sur l’axe vertical.")}`,
       },
     ],
   },
@@ -278,7 +285,8 @@ export const MATH_2NDE_S: ChapterSpec[] = [
             `dans un repère orthonormal : ${vec("u")} · ${vec("v")} = xx’ + yy’ ;`,
             "deux vecteurs non nuls sont orthogonaux si et seulement si leur produit scalaire est nul.",
           ])}
-          ${exemple([`${vec("u")}(2 ; 3) et ${vec("v")}(3 ; −2) : 6 − 6 = 0, ils sont orthogonaux.`])}`,
+          ${exemple([`${vec("u")}(2 ; 3) et ${vec("v")}(3 ; −2) : 6 − 6 = 0, ils sont orthogonaux.`])}
+          ${figure(schema("m2-produit-scalaire", "Vecteurs u(2 ; 3) et v(3 ; −2), perpendiculaires."), "Le produit scalaire de u et v est nul : les vecteurs sont orthogonaux, ils forment un angle droit.")}`,
       },
       {
         title: "Relations métriques et applications",
@@ -303,7 +311,8 @@ export const MATH_2NDE_S: ChapterSpec[] = [
             `l’homothétie de centre O et de rapport k transforme M en M’ tel que ${vec("OM’")} = k${vec("OM")} ;`,
             "elle multiplie les longueurs par |k| et les aires par k² ; elle conserve les angles et le parallélisme ;",
             "la rotation de centre O et d’angle θ conserve les distances et les angles orientés.",
-          ])}`,
+          ])}
+          ${figure(schema("m2-homothetie", "Un triangle et son image par une homothétie de rapport 2."), "Avec un rapport 2, l’image est deux fois plus grande, dans le même sens ; avec un rapport négatif, elle serait de l’autre côté de O.")}`,
       },
       {
         title: "Composer des transformations",
@@ -404,7 +413,8 @@ export const MATH_2NDE_L: ChapterSpec[] = [
         title: "Lire un graphique",
         minutes: 12,
         body: `${methode(["Lire le titre, les axes et leurs unités.", "Repérer les maximums, les minimums, les hausses et les baisses.", "Interpoler : entre deux points connus, on estime une valeur en supposant une évolution régulière (en ligne droite)."])}
-          ${exemple(["Températures relevées à Dakar à 8 h (22 °C) et à 12 h (28 °C) : à 10 h, on estime 25 °C."])}`,
+          ${exemple(["Températures relevées à Dakar à 8 h (22 °C) et à 12 h (28 °C) : à 10 h, on estime 25 °C."])}
+          ${figure(schema("m2-interpolation", "Graphique de la température à Dakar entre 8 h et 12 h."), "On joint les deux mesures par un segment : à 10 h, au milieu, on lit environ 25 °C.")}`,
       },
     ],
   },
@@ -421,7 +431,8 @@ export const MATH_2NDE_L: ChapterSpec[] = [
             "quartiles : Q1 et Q3 encadrent la moitié centrale des valeurs ;",
             "dispersion : étendue (plus grande − plus petite valeur), écart interquartile Q3 − Q1, écart-type.",
           ])}
-          ${exemple(["Notes 6 ; 9 ; 10 ; 12 ; 18 : médiane 10, moyenne 11, étendue 12."])}`,
+          ${exemple(["Notes 6 ; 9 ; 10 ; 12 ; 18 : médiane 10, moyenne 11, étendue 12."])}
+          ${figure(schema("m2-boite", "Boîte à moustaches des notes 6, 9, 10, 12 et 18."), "La boîte contient la moitié centrale des notes ; les moustaches vont de la plus petite à la plus grande.")}`,
       },
     ],
   },

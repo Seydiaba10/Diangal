@@ -4,6 +4,7 @@
 // DIANGAL, à faire valider par un professeur de SVT.
 
 import { type ChapterSpec, exemple, formula, liste, methode, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 export const SVT_6E: ChapterSpec[] = [
   {
@@ -23,6 +24,7 @@ export const SVT_6E: ChapterSpec[] = [
             ["plantes à fleurs", "fleurs et graines", "mil, baobab, manguier"],
           ])}
           ${methode(["Observer les caractères de chaque être vivant.", "Les regrouper selon un caractère commun.", "Utiliser une clé de détermination (questions à choix : a-t-il des plumes ? oui / non)."])}
+          ${figure(schema("s6-cle", "Clé de détermination : poils, plumes, nageoires, peau nue, écailles."), "Une clé de détermination pose des questions à réponse oui ou non sur ce que l’animal possède.")}
           ${retenir("La chauve-souris vole mais c’est un mammifère : on classe d’après ce que les êtres possèdent, pas d’après ce qu’ils font.")}`,
       },
     ],
@@ -53,6 +55,7 @@ export const SVT_6E: ChapterSpec[] = [
         title: "Chaînes et réseaux alimentaires",
         minutes: 15,
         body: `<p>Une <strong>chaîne alimentaire</strong> est une suite d’êtres vivants dans laquelle chacun mange le précédent : herbe → criquet → lézard → serpent → aigle.</p>
+          ${figure(schema("s6-chaine", "Chaîne alimentaire : herbe, criquet, lézard, serpent, aigle."), "Chaque flèche va de l’être mangé vers celui qui le mange. Le premier maillon est toujours une plante verte (producteur).")}
           ${liste([
             "<strong>producteurs</strong> : les plantes vertes ;",
             "<strong>consommateurs</strong> primaires (herbivores), secondaires (carnivores)… ;",
@@ -74,6 +77,7 @@ export const SVT_6E: ChapterSpec[] = [
             "Les feuilles absorbent le <strong>dioxyde de carbone</strong> de l’air.",
             "Elles ont besoin de <strong>lumière</strong> et de <strong>chlorophylle</strong> (pigment vert).",
           ])}
+          ${figure(schema("s6-besoins-plante", "Plante verte : eau et sels minéraux par les racines, dioxyde de carbone et lumière par les feuilles."), "La plante prend dans le sol l’eau et les sels minéraux, et dans l’air le dioxyde de carbone ; ses feuilles vertes captent la lumière.")}
           ${exemple(["Une plante privée de lumière jaunit et dépérit ; une plante sans eau se fane."])}
           ${retenir("La plante verte fabrique sa propre matière à partir de matière minérale : elle est autotrophe.")}`,
       },
@@ -82,6 +86,7 @@ export const SVT_6E: ChapterSpec[] = [
         minutes: 12,
         body: `${formula("eau + dioxyde de carbone + lumière → matière organique (amidon) + dioxygène")}
           ${methode(["Exposer une feuille à la lumière, en cacher une partie.", "Décolorer la feuille dans l’alcool chaud.", "Ajouter de l’eau iodée : la partie éclairée devient bleu-noir (présence d’amidon)."], "Mettre en évidence l’amidon")}
+          ${figure(schema("s6-amidon", "Feuille à moitié cachée puis testée à l’eau iodée : la partie éclairée devient bleu-noir."), "Seule la partie éclairée de la feuille contient de l’amidon : la photosynthèse a besoin de lumière.")}
           ${retenir("Grâce à la photosynthèse, les plantes nourrissent presque tous les êtres vivants et produisent le dioxygène que nous respirons.")}`,
       },
     ],

@@ -4,6 +4,7 @@
 // professeur d'histoire-géographie.
 
 import { auBac, type ChapterSpec, exercice, liste, objectifs, retenir, tableau } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 const HISTOIRE = "Histoire";
 const GEOGRAPHIE = "Géographie";
@@ -90,7 +91,8 @@ export const HG_TLE: ChapterSpec[] = [
             ],
             "Exercice corrigé",
           )}
-          ${auBac("Pour un commentaire de document, suis toujours trois temps : présenter (nature, auteur, date, contexte), expliquer les idées à l’aide de tes connaissances, puis montrer la portée et les limites du document.")}`,
+          ${auBac("Pour un commentaire de document, suis toujours trois temps : présenter (nature, auteur, date, contexte), expliquer les idées à l’aide de tes connaissances, puis montrer la portée et les limites du document.")}
+          ${figure(schema("h3-frise-guerre-froide", "Frise de la guerre froide."), "De 1947 à 1991, les deux blocs s’opposent sans guerre directe entre eux.")}`,
       },
       {
         title: "La Chine de 1945 aux années 1990",
@@ -176,7 +178,8 @@ export const HG_TLE: ChapterSpec[] = [
               "La forme de la décolonisation dépend donc du poids des colons, de l’attitude de la métropole et de la stratégie des mouvements nationalistes.",
             ],
             "Exercice corrigé",
-          )}`,
+          )}
+          ${figure(schema("h3-independances", "Carte des indépendances africaines."), "La plupart des pays d’Afrique deviennent indépendants autour de 1960, souvent par la négociation, parfois au terme d’une guerre.")}`,
       },
       {
         title: "Bandoeng et l’émergence du tiers-monde",
@@ -361,7 +364,8 @@ export const HG_TLE: ChapterSpec[] = [
             ],
             "Sujet corrigé",
           )}
-          ${auBac("Cette leçon est souvent au Bac : connais avec précision les dates (1944, 1946, 1956, 1958, 1959, 1960) et les noms des acteurs.")}`,
+          ${auBac("Cette leçon est souvent au Bac : connais avec précision les dates (1944, 1946, 1956, 1958, 1959, 1960) et les noms des acteurs.")}
+          ${figure(schema("h3-frise-senegal", "Frise du Sénégal de 1944 à 1960."), "Du statut de colonie à l’indépendance, les étapes de 1944 à 1960.")}`,
       },
       {
         title: "Guinée-Bissau et Angola : les luttes armées",
@@ -666,7 +670,8 @@ export const HG_TLE: ChapterSpec[] = [
             ],
             "Sujet corrigé",
           )}
-          ${auBac("En géographie, appuie chaque idée sur un exemple localisé et, si possible, un chiffre ; un croquis simple (pôles, flux) valorise la copie.")}`,
+          ${auBac("En géographie, appuie chaque idée sur un exemple localisé et, si possible, un chiffre ; un croquis simple (pôles, flux) valorise la copie.")}
+          ${figure(schema("t-triade", "Planisphère des trois grands pôles de la mondialisation."), "Les échanges mondiaux se concentrent entre ces trois pôles, reliés par les grandes routes maritimes et aériennes.")}`,
       },
     ],
   },
@@ -698,7 +703,8 @@ export const HG_TLE: ChapterSpec[] = [
               "Les moyens techniques et financiers (irrigation, barrages, normes antisismiques) permettent de valoriser les atouts et de réduire les contraintes.",
             ],
             "Exercice corrigé",
-          )}`,
+          )}
+          ${figure(schema("t-aceum", "Carte de l’Amérique du Nord."), "Un vaste espace aux ressources abondantes, du Canada au Mexique.")}`,
       },
       {
         title: "Populations, villes et sociétés",
@@ -807,7 +813,8 @@ export const HG_TLE: ChapterSpec[] = [
               "Les liens historiques (colonisation, langue) orientent les migrations : les Sénégalais vers la France, l’Italie, l’Espagne.",
             ],
             "Exercice corrigé",
-          )}`,
+          )}
+          ${figure(schema("t-ue", "Carte des États de l’Union européenne."), "L’Union européenne réunit 27 États ; elle est l’un des trois grands pôles de la mondialisation.")}`,
       },
       {
         title: "La construction européenne : réalités et perspectives",
@@ -889,7 +896,8 @@ export const HG_TLE: ChapterSpec[] = [
               "<strong>III. Des limites</strong> : inégalités, pollution, vieillissement, dépendance aux marchés, tensions géopolitiques.",
             ],
             "Sujet corrigé",
-          )}`,
+          )}
+          ${figure(schema("t-asie-pacifique", "Carte de l’Asie-Pacifique."), "Le Japon, puis les « dragons », la Chine et l’Asie du Sud-Est se sont développés par vagues successives.")}`,
       },
       {
         title: "Le modèle économique japonais",
@@ -992,7 +1000,8 @@ export const HG_TLE: ChapterSpec[] = [
               "Économies tournées vers l’exportation de matières premières, dont les bénéfices profitent surtout à une élite.",
             ],
             "Exercice corrigé",
-          )}`,
+          )}
+          ${figure(schema("t-mercosur", "Carte de l’Amérique latine et du Mercosur."), "Le Brésil occupe près de la moitié de l’Amérique du Sud.")}`,
       },
       {
         title: "Le Brésil, une puissance du tiers-monde",
@@ -1077,7 +1086,8 @@ export const HG_TLE: ChapterSpec[] = [
               "Facteurs économiques : port, industries, administrations, services et emplois attirent l’exode rural ; l’Est reste peu peuplé et enclavé.",
             ],
             "Exercice corrigé",
-          )}`,
+          )}
+          ${figure(schema("g5-pluies", "Carte des pluies du Sénégal."), "Les pluies diminuent du sud vers le nord ; le tracé des isohyètes est approximatif.")}`,
       },
       {
         title: "La question de l’eau au Sénégal",
@@ -1101,7 +1111,8 @@ export const HG_TLE: ChapterSpec[] = [
               "<strong>III. Des enjeux de développement</strong> : agriculture irriguée et sécurité alimentaire, eau potable et santé, énergie, coopération entre États.",
             ],
             "Sujet corrigé",
-          )}`,
+          )}
+          ${figure(schema("g5-fleuves", "Carte des cours d’eau du Sénégal."), "Le fleuve Sénégal, le lac de Guiers et les nappes souterraines sont les principales ressources en eau du pays.")}`,
       },
       {
         title: "Problèmes économiques et politiques de développement du Sénégal",

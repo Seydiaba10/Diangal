@@ -3,6 +3,7 @@
 // par DIANGAL, à faire valider par un professeur de SVT.
 
 import { type ChapterSpec, exemple, liste, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 export const SVT_2NDE: ChapterSpec[] = [
   {
@@ -16,7 +17,8 @@ export const SVT_2NDE: ChapterSpec[] = [
             "un écosystème = un <strong>biotope</strong> (milieu physique : sol, eau, climat) + une <strong>biocénose</strong> (ensemble des êtres vivants) ;",
             "facteurs abiotiques : lumière, température, eau, sol ; facteurs biotiques : relations entre êtres vivants (prédation, compétition, symbiose, parasitisme) ;",
             "exemples au Sénégal : mangrove du Saloum, savane du Niokolo-Koba, Niayes.",
-          ])}`,
+          ])}
+          ${figure(schema("s2-ecosysteme", "Un écosystème : biotope et biocénose."), "Le milieu agit sur les êtres vivants (lumière, eau), et les êtres vivants modifient leur milieu (ombre, humus).")}`,
       },
       {
         title: "Chaînes alimentaires et flux d’énergie",
@@ -28,7 +30,8 @@ export const SVT_2NDE: ChapterSpec[] = [
             ["consommateurs secondaires", "carnivores", "lion, oiseau insectivore"],
             ["décomposeurs", "recyclent la matière organique en matière minérale", "bactéries, champignons"],
           ])}
-          ${retenir("L’énergie traverse l’écosystème en se perdant à chaque niveau ; la matière, elle, est recyclée.")}`,
+          ${retenir("L’énergie traverse l’écosystème en se perdant à chaque niveau ; la matière, elle, est recyclée.")}
+          ${figure(schema("s2-pyramide", "Pyramide des producteurs et des consommateurs."), "Il faut beaucoup d’herbe pour nourrir les gazelles, et beaucoup de gazelles pour nourrir quelques lions.")}`,
       },
     ],
   },
@@ -60,7 +63,8 @@ export const SVT_2NDE: ChapterSpec[] = [
             "cycle : évaporation, condensation (nuages), précipitations, ruissellement, infiltration vers les nappes ;",
             "au Sénégal : eaux de surface (fleuves Sénégal et Gambie, lac de Guiers) et eaux souterraines (nappes) ;",
             "le lac de Guiers alimente en partie Dakar en eau potable.",
-          ])}`,
+          ])}
+          ${figure(schema("s2-cycle-eau", "Le cycle de l’eau entre la mer, l’air et le sol."), "L’eau circule sans cesse : la même eau passe par la mer, les nuages, les pluies et les nappes.")}`,
       },
       {
         title: "Pollution et potabilisation",
@@ -71,7 +75,8 @@ export const SVT_2NDE: ChapterSpec[] = [
             "potabilisation : décantation, filtration, désinfection (chlore) ;",
             "à la maison : conserver l’eau dans un récipient propre et fermé.",
           ])}
-          ${exemple(["Quelques gouttes d’eau de Javel bien dosées désinfectent l’eau de boisson."])}`,
+          ${exemple(["Quelques gouttes d’eau de Javel bien dosées désinfectent l’eau de boisson."])}
+          ${figure(schema("s2-potabilisation", "Les étapes de la potabilisation de l’eau."), "Chaque étape retire un type d’impuretés : les plus grosses d’abord, les microbes à la fin.")}`,
       },
     ],
   },

@@ -21,6 +21,7 @@ import {
   tableau,
   vec,
 } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 export const PHYSIQUE_TLE_S: ChapterSpec[] = [
   {
@@ -275,7 +276,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "Sans frottement, on aurait a = 5 m/s² et v ≈ 4,5 m/s : le frottement a dissipé f × d = 1 J.",
             ],
           )}
-          ${erreurs(["écrire a = g cos α : c’est sin α pour la composante parallèle au plan ;", "croire qu’un corps lourd tombe plus vite qu’un corps léger dans le vide."])}`,
+          ${erreurs(["écrire a = g cos α : c’est sin α pour la composante parallèle au plan ;", "croire qu’un corps lourd tombe plus vite qu’un corps léger dans le vide."])}
+          ${figure(schema("t-plan-incline", "Solide sur un plan incliné avec son poids et la réaction du plan."), "La réaction du plan, perpendiculaire à la pente, compense une partie du poids : il reste g sin α le long de la pente.")}`,
       },
       {
         title: "Mouvement d’un projectile",
@@ -307,7 +309,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "x = 10 × 3 = <strong>30 m</strong>. La vitesse à l’arrivée a pour composantes 10 m/s et 30 m/s : v ≈ 31,6 m/s.",
             ],
           )}
-          ${auBac("Pour savoir si un projectile passe au-dessus d’un obstacle, calcule z pour l’abscisse x de l’obstacle à l’aide de l’équation de la trajectoire, puis compare à sa hauteur.")}`,
+          ${auBac("Pour savoir si un projectile passe au-dessus d’un obstacle, calcule z pour l’abscisse x de l’obstacle à l’aide de l’équation de la trajectoire, puis compare à sa hauteur.")}
+          ${figure(schema("t-projectile", "Trajectoire parabolique d’un projectile."), "Sans frottement, la trajectoire est une parabole ; pour une même vitesse, la portée est maximale à 45°.")}`,
       },
       {
         title: "Chute verticale dans un fluide",
@@ -337,7 +340,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "Régime permanent : P = Π + k v<sub>lim</sub>, donc v<sub>lim</sub> = (0,10 − 0,02) ÷ 0,4 = <strong>0,2 m/s</strong>.",
               "Au départ, v = 0 : pas de frottement. m = 0,01 kg, donc a₀ = (0,10 − 0,02) ÷ 0,01 = <strong>8 m/s²</strong>, moins que g à cause de la poussée.",
             ],
-          )}`,
+          )}
+          ${figure(schema("t-chute-fluide", "Vitesse d’un objet qui tombe dans un fluide."), "Les frottements augmentent avec la vitesse jusqu’à compenser le poids : la vitesse limite est alors atteinte.")}`,
       },
       {
         title: "Mouvements circulaires : pendule conique, virage, fronde",
@@ -449,7 +453,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "T = 2π r ÷ v ≈ 2π × 6,8 × 10<sup>6</sup> ÷ 7 700 ≈ 5 550 s, soit environ <strong>92 min</strong>.",
             ],
           )}
-          ${auBac("Pour retrouver l’altitude d’un satellite géostationnaire, utilise la 3<sup>e</sup> loi de Kepler avec T = 86 164 s : r³ = GM T²/(4π²), puis h = r − R.")}`,
+          ${auBac("Pour retrouver l’altitude d’un satellite géostationnaire, utilise la 3<sup>e</sup> loi de Kepler avec T = 86 164 s : r³ = GM T²/(4π²), puis h = r − R.")}
+          ${figure(schema("t-satellite", "Satellite en orbite circulaire autour de la Terre."), "La force de gravitation joue le rôle de force centripète : le mouvement circulaire est uniforme.")}`,
       },
     ],
   },
@@ -512,7 +517,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "B est proportionnel à I : I = B ÷ (μ₀ n) = 2 × 10<sup>−5</sup> ÷ (4π × 10<sup>−7</sup> × 2000) ≈ <strong>8 mA</strong>.",
             ],
           )}
-          ${erreurs(["utiliser la longueur en cm dans n = N/ℓ ;", "confondre le nombre total de spires N et le nombre de spires par mètre n."])}`,
+          ${erreurs(["utiliser la longueur en cm dans n = N/ℓ ;", "confondre le nombre total de spires N et le nombre de spires par mètre n."])}
+          ${figure(schema("t-solenoide", "Lignes de champ d’un solénoïde."), "À l’intérieur d’un long solénoïde, le champ magnétique est uniforme et proportionnel à l’intensité du courant.")}`,
       },
     ],
   },
@@ -544,7 +550,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "T = 2π m ÷ (q B) = 2π × 1,67 × 10<sup>−27</sup> ÷ (1,6 × 10<sup>−20</sup>) ≈ <strong>6,6 × 10<sup>−7</sup> s</strong>.",
             ],
           )}
-          ${auBac("Pour trouver le sens de déviation, applique la règle des trois doigts de la main droite à q v⃗ : pour un électron (q &lt; 0), le sens est inversé.")}`,
+          ${auBac("Pour trouver le sens de déviation, applique la règle des trois doigts de la main droite à q v⃗ : pour un électron (q &lt; 0), le sens est inversé.")}
+          ${figure(schema("t-lorentz", "Trajectoire circulaire d’une particule chargée dans un champ magnétique."), "La force de Lorentz est toujours perpendiculaire à la vitesse : elle courbe la trajectoire sans changer la valeur de la vitesse.")}`,
       },
       {
         title: "Applications : spectrographe, cyclotron, déflexion magnétique",
@@ -602,7 +609,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "Tige perpendiculaire à B⃗ : F = I ℓ B = 5 × 0,10 × 0,2 = <strong>0,1 N</strong>, horizontale, perpendiculaire à la tige.",
               "Poids et réaction des rails se compensent : a = F ÷ m = 0,1 ÷ 0,020 = <strong>5 m/s²</strong>.",
             ],
-          )}`,
+          )}
+          ${figure(schema("t-laplace", "Rails de Laplace dans un champ magnétique."), "Le sens de la force se trouve avec la règle de la main droite (ou des trois doigts).")}`,
       },
       {
         title: "Applications de la loi de Laplace",
@@ -692,7 +700,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "E<sub>m</sub> = ½ × 0,24 × 0,5² = <strong>0,03 J</strong>.",
             ],
           )}
-          ${auBac("Sur une courbe i(t), τ se lit à 63 % de la valeur finale ou à l’intersection de la tangente à l’origine avec l’asymptote.")}`,
+          ${auBac("Sur une courbe i(t), τ se lit à 63 % de la valeur finale ou à l’intersection de la tangente à l’origine avec l’asymptote.")}
+          ${figure(schema("t-rl", "Établissement du courant dans un dipôle RL."), "La bobine s’oppose aux variations du courant : il ne s’établit pas instantanément.")}`,
       },
     ],
   },
@@ -754,7 +763,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "95 % : 1 − e<sup>−t/τ</sup> = 0,95, donc e<sup>−t/τ</sup> = 0,05 et t = τ ln 20 ≈ <strong>3 s</strong>.",
             ],
           )}
-          ${auBac("Pour vérifier qu’une fonction est solution, remplace-la dans l’équation différentielle ; pour trouver les constantes, utilise la condition initiale u<sub>C</sub>(0).")}`,
+          ${auBac("Pour vérifier qu’une fonction est solution, remplace-la dans l’équation différentielle ; pour trouver les constantes, utilise la condition initiale u<sub>C</sub>(0).")}
+          ${figure(schema("t-rc", "Courbes de charge et de décharge d’un condensateur."), "Au bout de 5τ, le condensateur est pratiquement chargé (ou déchargé).")}`,
       },
     ],
   },
@@ -792,7 +802,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "E = ½ C U² = ½ × 10<sup>−5</sup> × 100 = <strong>5 × 10<sup>−4</sup> J</strong>.",
               "Quand q = 0, toute l’énergie est dans la bobine : ½ L I<sub>m</sub>² = 5 × 10<sup>−4</sup>, donc I<sub>m</sub> = √(10<sup>−2</sup>) = <strong>0,1 A</strong>.",
             ],
-          )}`,
+          )}
+          ${figure(schema("t-oscillations", "Oscillations amorties dans un circuit RLC."), "Sans résistance, les oscillations garderaient la même amplitude, de période T₀ = 2π√(LC).")}`,
       },
       {
         title: "Circuit RLC en régime forcé et résonance",
@@ -825,7 +836,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "U<sub>C</sub> = I₀ ÷ (Cω₀) = 0,1 ÷ (2 × 10<sup>−6</sup> × 1000) = <strong>50 V</strong> = Q × 10 V : surtension.",
             ],
           )}
-          ${erreurs(["confondre pulsation (rad/s) et fréquence (Hz) : ω = 2πf ;", "appliquer les formules aux valeurs maximales et efficaces mélangées."])}`,
+          ${erreurs(["confondre pulsation (rad/s) et fréquence (Hz) : ω = 2πf ;", "appliquer les formules aux valeurs maximales et efficaces mélangées."])}
+          ${figure(schema("t-resonance", "Courbes de résonance pour deux résistances."), "À la résonance, la fréquence imposée par le générateur est égale à la fréquence propre du circuit.")}`,
       },
     ],
   },
@@ -858,7 +870,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "x(0) = X<sub>m</sub> cos φ = 0,05 et v(0) = −X<sub>m</sub>ω₀ sin φ = 0, donc φ = 0 : <strong>x(t) = 0,05 cos(10t)</strong>.",
               "v<sub>max</sub> = X<sub>m</sub> ω₀ = <strong>0,5 m/s</strong> ; E = ½ k X<sub>m</sub>² = ½ × 20 × 0,05² = <strong>0,025 J</strong>.",
             ],
-          )}`,
+          )}
+          ${figure(schema("t-pendule", "Pendule élastique et courbe x(t)."), "La période ne dépend que de la masse et de la raideur du ressort, pas de l’amplitude.")}`,
       },
       {
         title: "Pendule simple et amortissement",
@@ -925,7 +938,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "Les franges sombres sont en x = (k + ½) i ; la 3<sup>e</sup> correspond à k = 2 : x = 2,5 × 1,8 = <strong>4,5 mm</strong>.",
             ],
           )}
-          ${erreurs(["oublier de convertir mm et nm en mètres ;", "mesurer un seul interfrange au lieu de plusieurs."])}`,
+          ${erreurs(["oublier de convertir mm et nm en mètres ;", "mesurer un seul interfrange au lieu de plusieurs."])}
+          ${figure(schema("t-young", "Dispositif des fentes de Young et franges d’interférence."), "Les franges montrent que la lumière se comporte comme une onde.")}`,
       },
       {
         title: "Interprétation et applications",
@@ -1016,7 +1030,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "La lumière visible (λ &gt; 400 nm) a une longueur d’onde supérieure au seuil du zinc : elle ne peut pas arracher d’électrons au zinc ; l’ultraviolet le peut. C’est ce qu’a observé Hertz.",
               "Photon de 500 nm : E = h c/λ ≈ 3,97 × 10<sup>−19</sup> J ≈ 2,48 eV ; E<sub>c max</sub> = 2,48 − 1,9 ≈ <strong>0,6 eV</strong>.",
             ],
-          )}`,
+          )}
+          ${figure(schema("t-photoelectrique", "Énergie cinétique des électrons émis selon la fréquence de la lumière."), "La pente de la droite est la constante de Planck h ; son intersection avec l’axe donne la fréquence seuil.")}`,
       },
     ],
   },
@@ -1075,7 +1090,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "11 eV ne correspond à aucune différence de niveaux (E₃ − E₁ = 12,1 eV) et ne suffit pas à ioniser : ce photon n’est <strong>pas absorbé</strong>.",
             ],
           )}
-          ${auBac("Trace le diagramme des niveaux (axe vertical en eV) et représente chaque transition par une flèche verticale : vers le bas pour une émission, vers le haut pour une absorption.")}`,
+          ${auBac("Trace le diagramme des niveaux (axe vertical en eV) et représente chaque transition par une flèche verticale : vers le bas pour une émission, vers le haut pour une absorption.")}
+          ${figure(schema("t-niveaux", "Diagramme des niveaux d’énergie de l’hydrogène."), "Chaque flèche est une transition : l’énergie du photon émis est la différence entre les deux niveaux.")}`,
       },
     ],
   },
@@ -1103,7 +1119,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
               "E<sub>ℓ</sub> = 0,03037 × 931,5 ≈ <strong>28,3 MeV</strong>.",
               "E<sub>ℓ</sub>/A ≈ 28,3 ÷ 4 ≈ <strong>7,1 MeV par nucléon</strong> : l’hélium 4 est un noyau très stable.",
             ],
-          )}`,
+          )}
+          ${figure(schema("t-aston", "Courbe d’Aston : énergie de liaison par nucléon selon le nombre de masse."), "Les noyaux autour du fer sont les plus stables : la fusion des noyaux légers et la fission des noyaux lourds libèrent de l’énergie.")}`,
       },
       {
         title: "Radioactivité et décroissance",
@@ -1139,7 +1156,8 @@ export const PHYSIQUE_TLE_S: ChapterSpec[] = [
           ${exercice(
             "Un morceau de bois ancien a une activité en carbone 14 égale au quart de celle d’un bois vivant de même masse. Quel est son âge ?",
             ["A ÷ A₀ = 1/4 = 1/2² : il s’est écoulé 2 périodes.", "Âge ≈ 2 × 5 730 ≈ <strong>11 460 ans</strong>."],
-          )}`,
+          )}
+          ${figure(schema("t-decroissance", "Courbe de décroissance radioactive."), "Au bout de n périodes, il reste N₀ ÷ 2ⁿ noyaux.")}`,
       },
       {
         title: "Fission, fusion et applications",

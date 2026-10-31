@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { getCurrentStudent } from "@/features/account/data";
 import { AssessmentCard } from "@/features/assessments/components/assessment-card";
+import { getOpenAttempts } from "@/features/assessments/data";
 import { OfficialPapersSection } from "@/features/exams/components/official-papers-section";
 import { EXAM_BY_LEVEL, getExamHistory, getExamPapers, getMockExams, getNextExamOfType, getOfficialPapers } from "@/features/exams/data";
 import { ExamCountdown } from "@/features/progress/components/exam-countdown";
@@ -49,14 +50,17 @@ async function ExamsContent({ searchParams }: { searchParams: SearchParams }) {
   const exam = EXAMS.find((e) => e.param === examen)?.type ?? EXAM_BY_LEVEL[student.levelCode] ?? "BFEM";
   const series =
     exam === "BAC" ? (BAC_SERIES.find((s) => s === serie) ?? BAC_SERIES.find((s) => s === student.seriesCode) ?? null) : null;
-  const [next, papers, mockExams, history, official] = await Promise.all([
+  const [next, papers, mockExams, history, official, openAttempts] = await Promise.all([
     getNextExamOfType(exam),
     getExamPapers(exam, series),
     getMockExams(exam, series),
     getExamHistory(exam),
     // Bac : sujets et corrigés officiels en PDF (liens vers le site de l'Office du Bac).
     exam === "BAC" ? getOfficialPapers(series) : Promise.resolve(null),
+    getOpenAttempts(),
   ]);
+  // Sujets blancs commencés : « En cours » et « Reprendre » (le chrono continue).
+  const open = new Map(openAttempts.filter((o) => o.answered > 0 || o.currentIndex > 0).map((o) => [o.assessmentId, o]));
   const years = [...new Set(papers.map((p) => p.year))].sort((a, b) => b - a);
   const examName = tExams(exam);
   const tabHref = (param: string) => `/eleve/examens?examen=${param}`;
@@ -110,7 +114,7 @@ async function ExamsContent({ searchParams }: { searchParams: SearchParams }) {
               <ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {mockExams.map((a) => (
                   <li key={a.id}>
-                    <AssessmentCard assessment={a} />
+                    <AssessmentCard assessment={a} open={open.get(a.id) ?? null} />
                   </li>
                 ))}
               </ul>

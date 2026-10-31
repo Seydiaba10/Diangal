@@ -1,10 +1,13 @@
 import "server-only";
 
 // Exercices corrigés de 6e : une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
-// relire par des enseignants). Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// relire par des enseignants), complétée par les questions illustrées de 6e/enrich.ts. Corrigés inclus :
+// ce fichier ne doit jamais atteindre le navigateur.
 
 import { CHAPTERS_6E } from "../curriculum-6e";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withSubjectExtras } from "../illustrated-questions";
+import { EXTRA_6E } from "./enrich";
 
 const SERIES: ExerciseSeries[] = [
   // ── Mathématiques ──────────────────────────────────────────────────────────
@@ -294,7 +297,7 @@ const SERIES: ExerciseSeries[] = [
   ] },
 ];
 
-const built = buildExerciseSeries("6E", CHAPTERS_6E, SERIES);
+const built = buildExerciseSeries("6E", CHAPTERS_6E, withSubjectExtras(SERIES, EXTRA_6E));
 
 export const QUESTIONS_6E = built.questions;
 export const ANSWER_KEYS_6E = built.keys;

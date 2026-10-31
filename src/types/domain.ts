@@ -314,6 +314,26 @@ export interface AttemptSession {
   serverNow: number;
   /** Page du cahier d'exercices, que l'élève peut revoir pendant l'exercice. */
   introHtml?: string | null;
+  /** Réponses et question en cours enregistrées sur le serveur : l'élève reprend là où il s'était arrêté. */
+  savedAnswers: AnswerMap;
+  currentIndex: number;
+  /** Heure de la dernière sauvegarde sur le serveur, null si rien n'est encore enregistré. */
+  savedAt: string | null;
+  /** Où ramène « Quitter » : liste des exercices (au bon chapitre), Examens ou historique des devoirs préparés. */
+  backHref: string;
+}
+
+/** Exercice commencé, pas encore envoyé : de quoi le reprendre là où l'élève s'était arrêté. */
+export interface OpenAttempt {
+  attemptId: string;
+  /** Identifiant public (slug) de l'évaluation. */
+  assessmentId: string;
+  answered: number;
+  total: number;
+  /** Question où l'élève s'était arrêté (0 = la première). */
+  currentIndex: number;
+  savedAt: string;
+  timed: boolean;
 }
 
 export interface QuestionReview extends PlayerQuestion {

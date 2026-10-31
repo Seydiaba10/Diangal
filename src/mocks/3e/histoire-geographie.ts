@@ -2,6 +2,7 @@
 // Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { type Chapter3eSpec, liste, retenir, tableau } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 export const HG_3E: Chapter3eSpec[] = [
   {
@@ -58,7 +59,8 @@ export const HG_3E: Chapter3eSpec[] = [
           ${liste([
             "Elle fixe les règles du partage : pour revendiquer un territoire, il faut l’occuper effectivement et en informer les autres puissances.",
             "Elle accélère la « course au clocher » : vers 1914, presque toute l’Afrique est colonisée (sauf l’Éthiopie et le Liberia).",
-          ])}`,
+          ])}
+          ${figure(schema("h3-afrique-1914", "Carte de l’Afrique colonisée vers 1914 par puissance coloniale."), "Vers 1914, l’Afrique est presque entièrement partagée entre les puissances européennes. Les frontières dessinées sont les frontières actuelles : celles de 1914 étaient un peu différentes.")}`,
       },
       {
         title: "Les systèmes coloniaux",
@@ -143,7 +145,8 @@ export const HG_3E: Chapter3eSpec[] = [
       },
       {
         title: "Le déroulement du conflit",
-        body: `${liste([
+        body: `${figure(schema("h3-frise-guerres", "Frise de 1910 à 1950 avec les deux guerres mondiales."), "Une génération seulement sépare les deux guerres mondiales.")}
+          ${liste([
             "1914 : guerre de mouvement, puis le front se fige.",
             "1915-1917 : guerre des tranchées (Verdun en 1916).",
             "1917 : entrée en guerre des États-Unis ; la Russie se retire.",
@@ -273,7 +276,8 @@ export const HG_3E: Chapter3eSpec[] = [
             "1948-1949 : blocus de Berlin ; création de l’OTAN (1949).",
             "1955 : pacte de Varsovie.",
             "Conflits périphériques : guerre de Corée (1950-1953), crise de Cuba (1962).",
-          ])}`,
+          ])}
+          ${figure(schema("h3-frise-guerre-froide", "Frise de la guerre froide de 1945 à 1991."), "Pendant plus de 40 ans, les deux blocs s’opposent sans guerre directe entre eux.")}`,
       },
       {
         title: "La coexistence pacifique et la détente",
@@ -330,7 +334,8 @@ export const HG_3E: Chapter3eSpec[] = [
             "1957 : la Gold Coast devient le <strong>Ghana</strong> de Kwame Nkrumah, premier pays d’Afrique de l’Ouest à obtenir l’indépendance.",
             "1958 : la <strong>Guinée</strong> de Sékou Touré vote « non » au référendum et devient indépendante.",
             "1960 : indépendance des autres colonies de l’AOF, dont le Sénégal ; le Nigeria en octobre 1960.",
-          ])}`,
+          ])}
+          ${figure(schema("h3-independances", "Carte de l’Afrique colorée selon la date d’indépendance."), "L’année 1960 est appelée « l’année de l’Afrique » : 17 pays deviennent indépendants.")}`,
       },
     ],
   },
@@ -371,6 +376,7 @@ export const HG_3E: Chapter3eSpec[] = [
             "20 juin 1960 : la Fédération du Mali devient indépendante.",
             "20 août 1960 : le Sénégal se retire de la Fédération et proclame son indépendance.",
           ])}
+          ${figure(schema("h3-frise-senegal", "Frise du Sénégal de 1944 à 1960."), "En seize ans, le Sénégal passe de la colonie à l’indépendance.")}
           ${retenir("Le 4 avril, fête de l’indépendance, rappelle la signature des accords de transfert des compétences (4 avril 1960).")}`,
       },
       {
@@ -427,7 +433,8 @@ export const HG_3E: Chapter3eSpec[] = [
             "Pays développés : revenus élevés, longue espérance de vie, industrie et services.",
             "Pays en développement : pauvreté, croissance rapide de la population, dépendance aux matières premières.",
             "Pays émergents : Chine, Inde, Brésil… dont la croissance est rapide.",
-          ])}`,
+          ])}
+          ${figure(schema("g3-nord-sud", "Planisphère des pays développés, émergents et en développement."), "Classement simplifié : chaque groupe est très divers, et certains pays changent de groupe avec le temps.")}`,
       },
     ],
   },
@@ -472,6 +479,7 @@ export const HG_3E: Chapter3eSpec[] = [
       {
         title: "Le changement climatique",
         body: `<p>Les gaz à effet de serre (CO₂ surtout), rejetés par les activités humaines, réchauffent la planète.</p>
+          ${figure(schema("g3-rechauffement", "Courbe de la température moyenne de la Terre de 1880 à 2025."), "Depuis 1980, la température moyenne de la Terre monte vite : les années 2023 à 2025 sont les plus chaudes jamais mesurées.")}
           ${liste([
             "Conséquences : sécheresses, pluies irrégulières, montée du niveau de la mer (érosion côtière à Saint-Louis).",
             "Réponses : la Grande Muraille verte, le reboisement, les énergies renouvelables (centrales solaires, éoliennes de Taïba Ndiaye).",

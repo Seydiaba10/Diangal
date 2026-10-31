@@ -2,6 +2,7 @@
 // Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { type Chapter3eSpec, exemple, formula, frac, liste, methode, retenir, tableau } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 export const PC_3E: Chapter3eSpec[] = [
   {
@@ -16,7 +17,8 @@ export const PC_3E: Chapter3eSpec[] = [
             "<strong>Lentille divergente</strong> : à bords épais. Le faisceau parallèle s’écarte comme s’il venait d’un point situé avant la lentille.",
           ])}
           <p>Le point O au centre de la lentille est le <strong>centre optique</strong>. La distance OF’ est la <strong>distance focale</strong> f.</p>
-          ${retenir("Pour reconnaître une lentille convergente, on la place au-dessus d’un texte : elle grossit les lettres (effet loupe).")}`,
+          ${retenir("Pour reconnaître une lentille convergente, on la place au-dessus d’un texte : elle grossit les lettres (effet loupe).")}
+          ${figure(schema("p3-lentilles", "Lentille convergente et lentille divergente éclairées par un faisceau parallèle."), "La lentille convergente rassemble la lumière en F′ ; la divergente l’écarte.")}`,
       },
       {
         title: "Vergence et rayons particuliers",
@@ -38,6 +40,7 @@ export const PC_3E: Chapter3eSpec[] = [
             "Depuis le sommet B de l’objet AB, tracer deux des trois rayons particuliers.",
             "Leur point de rencontre est B’, image de B ; A’ est sur l’axe, à la verticale de B’.",
           ])}
+          ${figure(schema("p3-image-lentille", "Construction de l’image A′B′ d’un objet AB par une lentille convergente."), "Les trois rayons particuliers partent de B et se croisent en B′ ; l’objet étant avant F, l’image est réelle et renversée.")}
           ${tableau([
             ["Position de l’objet", "Image obtenue"],
             ["Avant F (loin de la lentille)", "réelle, renversée, sur un écran"],
@@ -55,7 +58,8 @@ export const PC_3E: Chapter3eSpec[] = [
         title: "Le prisme décompose la lumière",
         body: `<p>Un faisceau de lumière blanche (soleil, lampe) qui traverse un <strong>prisme</strong> en verre est dévié et étalé en une bande colorée : le <strong>spectre</strong>.</p>
           <p>On y voit, dans l’ordre : rouge, orangé, jaune, vert, bleu, indigo, violet. Le violet est le plus dévié, le rouge le moins.</p>
-          ${retenir("La lumière blanche est un mélange de lumières colorées. Le prisme ne crée pas les couleurs : il les sépare. C’est la <strong>dispersion</strong>.")}`,
+          ${retenir("La lumière blanche est un mélange de lumières colorées. Le prisme ne crée pas les couleurs : il les sépare. C’est la <strong>dispersion</strong>.")}
+          ${figure(schema("p3-prisme", "Faisceau de lumière blanche décomposé par un prisme en couleurs."), "Le prisme sépare les couleurs de la lumière blanche : c’est la dispersion.")}`,
       },
       {
         title: "Recomposition et arc-en-ciel",
@@ -106,7 +110,8 @@ export const PC_3E: Chapter3eSpec[] = [
         body: `<p>Un solide soumis à deux forces F<sub>1</sub> et F<sub>2</sub> est en équilibre si :</p>
           ${liste(["les deux forces ont la même droite d’action ;", "elles sont de sens contraires ;", "elles ont la même intensité."])}
           ${formula("F<sub>1</sub> + F<sub>2</sub> = 0 (somme vectorielle)")}
-          ${retenir("Les deux forces « s’annulent » : le solide reste immobile s’il l’était au départ.")}`,
+          ${retenir("Les deux forces « s’annulent » : le solide reste immobile s’il l’était au départ.")}
+          ${figure(schema("p3-equilibre", "Solide suspendu à un fil : la tension du fil et le poids."), "Les deux forces sont représentées par des flèches de même longueur, sur la même droite, en sens contraires.")}`,
       },
       {
         title: "Applications : fil, support, ressort",
@@ -127,7 +132,8 @@ export const PC_3E: Chapter3eSpec[] = [
         title: "Énoncé du principe",
         body: `<p>Quand un corps A exerce une force sur un corps B, le corps B exerce en même temps une force sur A. Ces deux forces :</p>
           ${liste(["ont la même droite d’action ;", "sont de sens contraires ;", "ont la même intensité ;", "s’appliquent sur deux corps <strong>différents</strong>."])}
-          ${retenir("Ne pas confondre avec l’équilibre : dans l’équilibre, les deux forces s’appliquent sur le <strong>même</strong> solide.")}`,
+          ${retenir("Ne pas confondre avec l’équilibre : dans l’équilibre, les deux forces s’appliquent sur le <strong>même</strong> solide.")}
+          ${figure(schema("p3-actions-reciproques", "Deux blocs A et B en contact et les deux forces qu’ils exercent l’un sur l’autre."), "Une force s’applique sur B, l’autre sur A : elles ne s’annulent pas, car elles ne s’exercent pas sur le même corps.")}`,
       },
       {
         title: "Exemples de la vie courante",
@@ -154,7 +160,8 @@ export const PC_3E: Chapter3eSpec[] = [
             "Travail <strong>résistant</strong> (négatif) : la force s’oppose au mouvement (frottements).",
             "Travail du poids pour une hauteur h : W = P × h = m × g × h.",
           ])}
-          ${exemple(["Soulever un sac de 20 kg de 1,5 m demande un travail W = 20 × 10 × 1,5 = 300 J."])}`,
+          ${exemple(["Soulever un sac de 20 kg de 1,5 m demande un travail W = 20 × 10 × 1,5 = 300 J."])}
+          ${figure(schema("p3-travail", "Sac de 20 kg soulevé de 1,5 m."), "Le travail du poids ne dépend que de la hauteur h, pas du chemin suivi.")}`,
       },
       {
         title: "La puissance mécanique",
@@ -177,7 +184,8 @@ export const PC_3E: Chapter3eSpec[] = [
             "Il existe deux sortes de charges : <strong>positives (+)</strong> et <strong>négatives (−)</strong>.",
             "Deux corps chargés de même signe se <strong>repoussent</strong> ; de signes contraires, ils s’<strong>attirent</strong>.",
           ])}
-          ${retenir("Le plastique frotté avec la laine se charge négativement ; le verre frotté avec la soie se charge positivement.")}`,
+          ${retenir("Le plastique frotté avec la laine se charge négativement ; le verre frotté avec la soie se charge positivement.")}
+          ${figure(schema("p3-electrisation", "Règle frottée qui attire des morceaux de papier."), "Le frottement arrache ou apporte des électrons : la règle se charge.")}`,
       },
       {
         title: "L’explication : les électrons",
@@ -214,7 +222,8 @@ export const PC_3E: Chapter3eSpec[] = [
           ${formula("I = I<sub>1</sub> + I<sub>2</sub>")}
           <p>La <strong>tension</strong> U se mesure en volts (V) avec un <strong>voltmètre</strong> branché <strong>en dérivation</strong>.</p>
           ${liste(["En série, les tensions s’additionnent.", "Des dipôles branchés en dérivation ont la même tension à leurs bornes."])}
-          ${exemple(["I = 0,8 A dans la branche principale et I<sub>1</sub> = 0,3 A : alors I<sub>2</sub> = 0,8 − 0,3 = 0,5 A."])}`,
+          ${exemple(["I = 0,8 A dans la branche principale et I<sub>1</sub> = 0,3 A : alors I<sub>2</sub> = 0,8 − 0,3 = 0,5 A."])}
+          ${figure(schema("p3-loi-noeuds", "Circuit avec deux branches en dérivation et un ampèremètre dans la branche principale."), "Au nœud, le courant se partage : rien ne se perd, I = I₁ + I₂.")}`,
       },
     ],
   },
@@ -227,7 +236,8 @@ export const PC_3E: Chapter3eSpec[] = [
         body: `<p>Un <strong>conducteur ohmique</strong> (résistor) freine le passage du courant. Sa <strong>résistance</strong> R se mesure en ohms (Ω).</p>
           ${formula("U = R × I")}
           <p>U en volts, R en ohms, I en ampères. La courbe U en fonction de I est une droite qui passe par l’origine.</p>
-          ${exemple(["Un résistor de 100 Ω traversé par un courant de 0,05 A a une tension U = 100 × 0,05 = 5 V à ses bornes."])}`,
+          ${exemple(["Un résistor de 100 Ω traversé par un courant de 0,05 A a une tension U = 100 × 0,05 = 5 V à ses bornes."])}
+          ${figure(schema("p3-loi-ohm", "Droite U = 100 × I passant par l’origine."), "La caractéristique d’un résistor est une droite qui passe par l’origine ; son coefficient directeur est la résistance R.")}`,
       },
       {
         title: "Associer des résistances",
@@ -240,6 +250,7 @@ export const PC_3E: Chapter3eSpec[] = [
             "En série : 100 Ω et 200 Ω donnent 300 Ω.",
             "En dérivation : 100 Ω et 100 Ω donnent 1 ÷ (1/100 + 1/100) = 50 Ω.",
           ])}
+          ${figure(schema("p3-resistances", "Deux résistances en série, deux résistances en dérivation."), "En série, le courant traverse les deux résistances l’une après l’autre ; en dérivation, il se partage.")}
           ${retenir("En dérivation, la résistance équivalente est plus petite que chacune des résistances.")}`,
       },
     ],
@@ -285,6 +296,7 @@ export const PC_3E: Chapter3eSpec[] = [
             "On mélange 200 g d’eau à 80 °C et 300 g d’eau à 20 °C.",
             "0,2 × c × (θ<sub>e</sub> − 80) + 0,3 × c × (θ<sub>e</sub> − 20) = 0, donc 0,5 θ<sub>e</sub> = 16 + 6 et θ<sub>e</sub> = 44 °C.",
           ], "Exemple corrigé")}
+          ${figure(schema("p3-calorimetre", "Calorimètre avec thermomètre et agitateur."), "La paroi isolante évite les échanges de chaleur avec l’extérieur : toute la chaleur cédée par l’eau chaude est reçue par l’eau froide.")}
           ${retenir("Pendant un changement d’état (la glace qui fond), la température reste constante : Q = m × L, où L est la chaleur latente.")}`,
       },
     ],
@@ -310,7 +322,8 @@ export const PC_3E: Chapter3eSpec[] = [
         title: "La dilution",
         body: `<p><strong>Diluer</strong>, c’est ajouter du solvant : la quantité de soluté ne change pas, la concentration diminue.</p>
           ${formula("C<sub>1</sub> × V<sub>1</sub> = C<sub>2</sub> × V<sub>2</sub>")}
-          ${exemple(["On prélève 50 mL d’une solution à 0,2 mol/L et on complète à 200 mL : C<sub>2</sub> = 0,2 × 50 ÷ 200 = 0,05 mol/L."])}`,
+          ${exemple(["On prélève 50 mL d’une solution à 0,2 mol/L et on complète à 200 mL : C<sub>2</sub> = 0,2 × 50 ÷ 200 = 0,05 mol/L."])}
+          ${figure(schema("p3-dilution", "Dilution avec une pipette et une fiole jaugée."), "La quantité de soluté prélevée reste la même ; elle est seulement répartie dans un volume 4 fois plus grand.")}`,
       },
     ],
   },
@@ -327,6 +340,7 @@ export const PC_3E: Chapter3eSpec[] = [
             ["pH = 7", "neutre", "eau pure, eau salée"],
             ["pH &gt; 7", "basique", "eau de javel, soude, eau savonneuse"],
           ])}
+          ${figure(schema("p3-echelle-ph", "Échelle de pH de 0 à 14 avec quelques exemples."), "Plus le pH est petit, plus la solution est acide ; plus il est grand, plus elle est basique.")}
           <p>On le mesure avec du papier pH ou un pH-mètre.</p>
           ${retenir("Une solution acide contient plus d’ions H₃O⁺ que d’ions OH⁻ ; une solution basique, l’inverse.")}`,
       },
@@ -338,6 +352,7 @@ export const PC_3E: Chapter3eSpec[] = [
             ["Bleu de bromothymol (BBT)", "jaune", "vert", "bleu"],
             ["Phénolphtaléine", "incolore", "incolore", "rose"],
           ])}
+          ${figure(schema("p3-bbt", "Trois tubes de BBT : jaune, vert et bleu."), "Quelques gouttes de BBT suffisent pour savoir si une solution est acide, neutre ou basique.")}
           <p>Quand on verse peu à peu une base dans un acide, le mélange se neutralise : acide + base → sel + eau. Exemple : acide chlorhydrique + soude → chlorure de sodium + eau.</p>`,
       },
       {
@@ -402,6 +417,7 @@ export const PC_3E: Chapter3eSpec[] = [
             ["3", "propane", "C₃H₈"],
             ["4", "butane", "C₄H₁₀"],
           ])}
+          ${figure(schema("p3-alcanes", "Formules développées du méthane, de l’éthane, du propane et du butane."), "Dans une formule développée, on dessine toutes les liaisons : chaque carbone en a 4, chaque hydrogène 1.")}
           ${retenir("On les trouve dans le pétrole et le gaz naturel. Le gaz de cuisine est du butane.")}`,
       },
       {

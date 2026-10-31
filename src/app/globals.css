@@ -738,6 +738,1024 @@
     font-size: 13px;
     font-weight: 700;
   }
+  /* Schémas du collège et du lycée (mocks/figures/kit.ts) : textes, repères, géométrie, solides, circuits,
+     optique, frises, graphiques, tissus des schémas de SVT. */
+  .dg-lbl {
+    fill: currentColor;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .dg-lbl-sm {
+    fill: currentColor;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .dg-lbl-xs {
+    fill: currentColor;
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .dg-lbl-math {
+    fill: currentColor;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-style: italic;
+  }
+  .dg-tick {
+    fill: var(--color-ink-muted);
+    font-size: 10.5px;
+    font-weight: 500;
+  }
+  .dg-ink,
+  .dg-ink-thin,
+  .dg-leader,
+  .dg-axis-line {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .dg-ink-thin,
+  .dg-axis-line {
+    stroke-width: 1.1;
+  }
+  .dg-leader {
+    stroke: var(--color-ink-muted);
+    stroke-width: 0.9;
+  }
+  .dg-pt {
+    fill: var(--color-ink);
+  }
+  .dg-grid-light {
+    fill: none;
+    stroke: var(--color-line);
+    stroke-width: 0.8;
+  }
+  .dg-dash-thin {
+    fill: none;
+    stroke: var(--color-ink-subtle);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+  .dg-curve,
+  .dg-curve-alt,
+  .dg-curve-3 {
+    fill: none;
+    stroke: var(--color-subject-math);
+    stroke-width: 2.4;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .dg-curve-alt {
+    stroke: var(--color-cycle-secondary);
+  }
+  .dg-curve-3 {
+    stroke: var(--color-success-500);
+  }
+  .dg-area {
+    fill: var(--color-info-500);
+    opacity: 0.2;
+  }
+  .dg-vec,
+  .dg-ray,
+  .dg-object-line,
+  .dg-image-line,
+  .dg-image-virtual,
+  .dg-ray-virtual {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+  }
+  .dg-vec-head,
+  .dg-object-head {
+    fill: var(--color-cycle-secondary);
+  }
+  .dg-ray {
+    stroke: var(--color-premium-500);
+    stroke-width: 1.8;
+  }
+  .dg-ray-head {
+    fill: var(--color-premium-500);
+  }
+  .dg-ray-virtual {
+    stroke: var(--color-premium-500);
+    stroke-width: 1.4;
+    stroke-dasharray: 4 3;
+  }
+  .dg-object-line {
+    stroke: var(--color-subject-math);
+    stroke-width: 2.6;
+  }
+  .dg-object-head {
+    fill: var(--color-subject-math);
+  }
+  .dg-image-line,
+  .dg-image-virtual {
+    stroke: var(--color-success-500);
+    stroke-width: 2.6;
+  }
+  .dg-image-virtual {
+    stroke-dasharray: 5 3;
+  }
+  .dg-image-head {
+    fill: var(--color-success-500);
+  }
+  .dg-lens {
+    fill: none;
+    stroke: var(--color-info-700);
+    stroke-width: 2.4;
+  }
+  .dg-lens-head {
+    fill: var(--color-info-700);
+  }
+  .dg-geo,
+  .dg-geo-line {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .dg-geo-line {
+    stroke: var(--color-subject-math);
+    stroke-width: 1.4;
+  }
+  .dg-geo-fill {
+    fill: var(--color-subject-math);
+    opacity: 0.08;
+    stroke: var(--color-ink);
+    stroke-width: 1.8;
+  }
+  .dg-arc {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 1.5;
+  }
+  .dg-solid-face,
+  .dg-solid-face-top,
+  .dg-solid-face-side {
+    fill: var(--color-info-50);
+    stroke: var(--color-ink);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+  .dg-solid-face-top {
+    fill: var(--color-surface);
+  }
+  .dg-solid-face-side {
+    fill: var(--color-pastel-lavender);
+  }
+  .dg-hidden,
+  .dg-hidden-thin {
+    fill: none;
+    stroke: var(--color-ink-muted);
+    stroke-width: 1.3;
+    stroke-dasharray: 4 3;
+  }
+  .dg-hidden-thin {
+    stroke-width: 0.9;
+  }
+  .dg-wire,
+  .dg-wire-bold {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.7;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .dg-wire-bold {
+    stroke-width: 4;
+    stroke-linecap: butt;
+  }
+  .dg-comp {
+    fill: var(--color-surface);
+    stroke: var(--color-ink);
+    stroke-width: 1.7;
+  }
+  .dg-period,
+  .dg-period-alt {
+    fill: var(--color-premium-50);
+    stroke: var(--color-premium-700);
+    stroke-width: 1;
+  }
+  .dg-period-alt {
+    fill: var(--color-info-50);
+    stroke: var(--color-info-700);
+  }
+  .dg-bar,
+  .dg-bar-alt {
+    fill: var(--color-info-500);
+    opacity: 0.85;
+  }
+  .dg-bar-alt {
+    fill: var(--color-cycle-secondary);
+  }
+  .dg-head-cell,
+  .dg-cell,
+  .dg-cell-hi {
+    fill: var(--color-canvas);
+    stroke: var(--color-ink);
+    stroke-width: 1;
+  }
+  .dg-cell {
+    fill: var(--color-surface);
+  }
+  .dg-cell-hi {
+    fill: var(--color-premium-50);
+  }
+  /* Tissus et organes (schémas de SVT) : couleurs pâles et contour plus soutenu. */
+  .dg-t-red,
+  .dg-t-blue,
+  .dg-t-yellow,
+  .dg-t-green,
+  .dg-t-pink,
+  .dg-t-sand,
+  .dg-t-violet,
+  .dg-t-grey {
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .dg-t-red {
+    fill: var(--color-cycle-secondary-soft);
+    stroke: var(--color-danger-700);
+  }
+  .dg-t-blue {
+    fill: var(--color-info-50);
+    stroke: var(--color-info-700);
+  }
+  .dg-t-yellow {
+    fill: var(--color-premium-50);
+    stroke: var(--color-premium-700);
+  }
+  .dg-t-green {
+    fill: var(--color-subject-svt-soft);
+    stroke: var(--color-subject-svt);
+  }
+  .dg-t-pink {
+    fill: var(--color-flame-50);
+    stroke: var(--color-flame-500);
+  }
+  .dg-t-sand {
+    fill: var(--color-pastel-sand);
+    stroke: var(--color-subject-hg);
+  }
+  .dg-t-violet {
+    fill: var(--color-pastel-lavender);
+    stroke: var(--color-ink-muted);
+  }
+  .dg-t-grey {
+    fill: var(--color-canvas);
+    stroke: var(--color-ink-muted);
+  }
+  .dg-red-fill {
+    fill: var(--color-danger-500);
+  }
+  .dg-blue-fill {
+    fill: var(--color-info-500);
+  }
+  .dg-red-line,
+  .dg-blue-line,
+  .dg-green-line,
+  .dg-yellow-line {
+    fill: none;
+    stroke: var(--color-danger-500);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .dg-blue-line {
+    stroke: var(--color-info-500);
+  }
+  .dg-green-line {
+    stroke: var(--color-success-500);
+  }
+  .dg-yellow-line {
+    stroke: var(--color-premium-500);
+  }
+  .dg-sea {
+    fill: var(--color-info-50);
+  }
+  .dg-arc-2 {
+    fill: none;
+    stroke: var(--color-success-500);
+    stroke-width: 1.8;
+  }
+  /* Arcs de compas d’une construction. */
+  .dg-compass {
+    fill: none;
+    stroke: var(--color-ink-subtle);
+    stroke-width: 1.2;
+  }
+  .dg-iso {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 2;
+    stroke-dasharray: 6 4;
+  }
+  /* Cartes de l’Afrique et du monde (mocks/figures/world.ts) : frontières fines, lacs, fleuves, cadre. */
+  .dg-water-line {
+    fill: var(--color-info-500);
+    opacity: 0.6;
+  }
+  .dg-river-thin {
+    fill: none;
+    stroke: var(--color-info-500);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .dg-frame {
+    fill: none;
+    stroke: var(--color-line);
+    stroke-width: 1;
+  }
+  /* Test de l’amidon : coloration bleu-noir de l’eau iodée. */
+  .dg-amidon {
+    fill: var(--color-info-700);
+  }
+  /* Organes, vaisseaux, roches et matériel de laboratoire (schémas de SVT et de physique-chimie). */
+  .dg-tube,
+  .dg-tube-pink,
+  .dg-colon,
+  .dg-small-gut {
+    fill: none;
+    stroke: var(--color-flame-500);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .dg-tube-pink {
+    stroke-width: 5;
+  }
+  .dg-colon {
+    stroke: var(--color-subject-hg);
+    stroke-width: 14;
+    opacity: 0.75;
+  }
+  .dg-small-gut {
+    stroke: var(--color-flame-500);
+    stroke-width: 6;
+    opacity: 0.8;
+  }
+  .dg-rbc-center {
+    fill: var(--color-danger-500);
+    opacity: 0.25;
+  }
+  .dg-nucleus {
+    fill: var(--color-pastel-lavender);
+    stroke: var(--color-ink-muted);
+    stroke-width: 1.2;
+  }
+  .dg-vessel-blue,
+  .dg-vessel-red,
+  .dg-vessel-blue-thin,
+  .dg-vessel-red-thin {
+    fill: none;
+    stroke: var(--color-info-500);
+    stroke-width: 12;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+  .dg-vessel-red,
+  .dg-vessel-red-thin {
+    stroke: var(--color-danger-500);
+  }
+  .dg-vessel-blue-thin,
+  .dg-vessel-red-thin {
+    stroke-width: 8;
+  }
+  .dg-septum {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 4;
+  }
+  .dg-amnios {
+    fill: var(--color-info-50);
+    stroke: var(--color-info-500);
+    stroke-width: 1;
+  }
+  .dg-cord {
+    fill: none;
+    stroke: var(--color-danger-500);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+  .dg-chromo,
+  .dg-chromo-x,
+  .dg-chromo-y {
+    fill: var(--color-pastel-lavender);
+    stroke: var(--color-ink-muted);
+    stroke-width: 1;
+  }
+  .dg-chromo-x {
+    fill: var(--color-flame-50);
+    stroke: var(--color-flame-500);
+  }
+  .dg-chromo-y {
+    fill: var(--color-info-50);
+    stroke: var(--color-info-700);
+  }
+  .dg-fault {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 2.5;
+    stroke-dasharray: 8 4;
+  }
+  .dg-wave {
+    fill: none;
+    stroke: var(--color-danger-500);
+    stroke-width: 1.2;
+    opacity: 0.7;
+  }
+  .dg-magma,
+  .dg-lava {
+    fill: var(--color-flame-500);
+    stroke: var(--color-danger-700);
+    stroke-width: 1;
+  }
+  .dg-lava {
+    fill: none;
+    stroke: var(--color-flame-500);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+  .dg-ash {
+    fill: var(--color-canvas);
+    stroke: var(--color-ink-muted);
+    stroke-width: 1.2;
+  }
+  .dg-shadow {
+    fill: var(--color-ink);
+    opacity: 0.22;
+  }
+  .dg-ray-zone {
+    fill: var(--color-premium-50);
+  }
+  .dg-mirror {
+    fill: var(--color-info-50);
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+  }
+  .dg-eye-shape {
+    fill: var(--color-surface);
+    stroke: var(--color-ink);
+    stroke-width: 1.2;
+  }
+  .dg-filter {
+    fill: var(--color-surface);
+    stroke: var(--color-ink-muted);
+    stroke-width: 1;
+  }
+  .dg-water-clear {
+    fill: var(--color-info-50);
+    stroke: var(--color-info-500);
+    stroke-width: 0.8;
+  }
+  .dg-flame {
+    fill: var(--color-flame-500);
+  }
+  .dg-glass-tube {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 5;
+    opacity: 0.35;
+  }
+  .dg-cooling {
+    fill: var(--color-info-50);
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+    opacity: 0.85;
+  }
+  .dg-atom-h,
+  .dg-atom-o,
+  .dg-atom-c {
+    stroke: var(--color-ink);
+    stroke-width: 1.3;
+  }
+  .dg-atom-h {
+    fill: var(--color-surface);
+  }
+  .dg-atom-o {
+    fill: var(--color-danger-500);
+  }
+  .dg-atom-c {
+    fill: var(--color-ink);
+  }
+  .dg-atom-label,
+  .dg-atom-label-light {
+    fill: var(--color-ink);
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .dg-atom-label-light {
+    fill: var(--color-surface);
+  }
+  .dg-interval {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 6;
+    opacity: 0.6;
+  }
+  .dg-bracket {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 2.5;
+  }
+  .dg-arc-thick {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 4;
+  }
+  .dg-section {
+    fill: var(--color-premium-50);
+    stroke: var(--color-premium-700);
+    stroke-width: 1.5;
+  }
+  /* Itinéraires sur les cartes d’histoire : trois couleurs pour les trois trajets. */
+  .dg-vec-thick,
+  .dg-route-3 {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  .dg-route-3 {
+    stroke: var(--color-success-500);
+  }
+  .dg-route-3-head {
+    fill: var(--color-success-500);
+  }
+  .dg-map-small,
+  .dg-map-sea,
+  .dg-map-river {
+    fill: var(--color-ink);
+    font-size: 9px;
+    font-weight: 600;
+    paint-order: stroke;
+    stroke: var(--color-surface);
+    stroke-width: 2.5px;
+  }
+  .dg-map-sea {
+    fill: var(--color-info-700);
+    font-style: italic;
+    stroke: var(--color-info-50);
+  }
+  .dg-map-river {
+    fill: var(--color-info-700);
+    font-style: italic;
+  }
+  /* Système nerveux, œil, poumon, rein, immunité (schémas de SVT de 3e). */
+  .dg-nerve-cord,
+  .dg-nerve,
+  .dg-nerve-optic,
+  .dg-axon,
+  .dg-sensory,
+  .dg-motor {
+    fill: none;
+    stroke: var(--color-premium-500);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+  .dg-nerve,
+  .dg-axon {
+    stroke-width: 2.5;
+  }
+  .dg-sensory {
+    stroke: var(--color-info-500);
+    stroke-width: 3;
+  }
+  .dg-motor {
+    stroke: var(--color-danger-500);
+    stroke-width: 3;
+  }
+  .dg-myelin {
+    fill: var(--color-premium-50);
+    stroke: var(--color-premium-700);
+    stroke-width: 1;
+  }
+  .dg-flame-line {
+    fill: none;
+    stroke: var(--color-flame-500);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+  .dg-retina,
+  .dg-retina-line {
+    fill: var(--color-cycle-secondary-soft);
+    stroke: var(--color-danger-500);
+    stroke-width: 2;
+  }
+  .dg-retina-line {
+    fill: none;
+    stroke-width: 4;
+  }
+  .dg-vitre {
+    fill: var(--color-info-50);
+    stroke: var(--color-ink-muted);
+    stroke-width: 1;
+  }
+  .dg-cornea {
+    fill: none;
+    stroke: var(--color-info-700);
+    stroke-width: 3;
+  }
+  .dg-lens-eye {
+    fill: var(--color-surface);
+    stroke: var(--color-info-700);
+    stroke-width: 2;
+  }
+  .dg-iris {
+    fill: none;
+    stroke: var(--color-subject-hg);
+    stroke-width: 5;
+  }
+  .dg-bronchiole,
+  .dg-ureter,
+  .dg-tubule {
+    fill: none;
+    stroke: var(--color-flame-500);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .dg-ureter {
+    stroke: var(--color-premium-500);
+    stroke-width: 6;
+  }
+  .dg-tubule {
+    stroke: var(--color-premium-500);
+    stroke-width: 10;
+    opacity: 0.8;
+  }
+  .dg-air {
+    fill: var(--color-surface);
+    stroke: var(--color-flame-500);
+    stroke-width: 1;
+  }
+  .dg-capillary-red,
+  .dg-capillary-blue {
+    fill: none;
+    stroke: var(--color-danger-500);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+  .dg-capillary-blue {
+    stroke: var(--color-info-500);
+  }
+  .dg-capillary-red-fill {
+    fill: none;
+    stroke: var(--color-danger-500);
+    stroke-width: 3;
+  }
+  .dg-antibody {
+    fill: none;
+    stroke: var(--color-subject-ang);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .dg-ag-a {
+    fill: var(--color-subject-math);
+  }
+  .dg-ag-b {
+    fill: var(--color-success-500);
+  }
+  .dg-magma-line {
+    fill: none;
+    stroke: var(--color-flame-500);
+    stroke-width: 5;
+  }
+  .dg-volcano-mini {
+    fill: var(--color-flame-500);
+  }
+  /* Optique, électricité et chimie (schémas de physique-chimie de 3e). */
+  .dg-lens-shape {
+    fill: none;
+    stroke: var(--color-info-700);
+    stroke-width: 2.4;
+  }
+  .dg-prism {
+    fill: var(--color-info-50);
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+  }
+  .dg-ray-white {
+    fill: none;
+    stroke: var(--color-ink-muted);
+    stroke-width: 3;
+  }
+  .dg-sp-red,
+  .dg-sp-orange,
+  .dg-sp-yellow,
+  .dg-sp-green,
+  .dg-sp-blue,
+  .dg-sp-indigo,
+  .dg-sp-violet {
+    fill: none;
+    stroke-width: 2.2;
+  }
+  .dg-sp-red {
+    stroke: var(--color-senegal-red);
+  }
+  .dg-sp-orange {
+    stroke: var(--color-flame-500);
+  }
+  .dg-sp-yellow {
+    stroke: var(--color-premium-500);
+  }
+  .dg-sp-green {
+    stroke: var(--color-success-500);
+  }
+  .dg-sp-blue {
+    stroke: var(--color-info-500);
+  }
+  .dg-sp-indigo {
+    stroke: var(--color-subject-philo);
+  }
+  .dg-sp-violet {
+    stroke: var(--color-subject-ang);
+  }
+  .dg-rod {
+    fill: none;
+    stroke: var(--color-subject-hg);
+    stroke-width: 9;
+    stroke-linecap: round;
+  }
+  .dg-charge {
+    fill: var(--color-surface);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .dg-sol-strong {
+    fill: var(--color-subject-esvs);
+    opacity: 0.6;
+  }
+  .dg-sol-weak {
+    fill: var(--color-subject-esvs);
+    opacity: 0.2;
+  }
+  .dg-ph-0,
+  .dg-ph-1,
+  .dg-ph-2 {
+    fill: var(--color-senegal-red);
+  }
+  .dg-ph-3 {
+    fill: var(--color-flame-500);
+  }
+  .dg-ph-4 {
+    fill: var(--color-premium-500);
+  }
+  .dg-ph-5,
+  .dg-ph-6 {
+    fill: var(--color-senegal-yellow);
+  }
+  .dg-ph-7 {
+    fill: var(--color-success-500);
+  }
+  .dg-ph-8 {
+    fill: var(--color-subject-svt);
+  }
+  .dg-ph-9 {
+    fill: var(--color-subject-ec);
+  }
+  .dg-ph-10 {
+    fill: var(--color-info-500);
+  }
+  .dg-ph-11 {
+    fill: var(--color-subject-math);
+  }
+  .dg-ph-12 {
+    fill: var(--color-subject-philo);
+  }
+  .dg-ph-13,
+  .dg-ph-14 {
+    fill: var(--color-subject-ang);
+  }
+  .dg-bbt-yellow {
+    fill: var(--color-senegal-yellow);
+  }
+  .dg-bbt-green {
+    fill: var(--color-success-500);
+  }
+  .dg-bbt-blue {
+    fill: var(--color-info-500);
+  }
+  .dg-formula {
+    fill: currentColor;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .dg-hatch-line {
+    fill: none;
+    stroke: var(--color-ink-muted);
+    stroke-width: 1;
+  }
+  /* Classes de cartes thématiques : couleurs franches et bien distinctes. */
+  .dg-m1 {
+    fill: var(--color-info-500);
+    fill-opacity: 0.6;
+  }
+  .dg-m2 {
+    fill: var(--color-danger-500);
+    fill-opacity: 0.55;
+  }
+  .dg-m3 {
+    fill: var(--color-senegal-yellow);
+    fill-opacity: 0.85;
+  }
+  .dg-m4 {
+    fill: var(--color-subject-ang);
+    fill-opacity: 0.45;
+  }
+  .dg-m5 {
+    fill: var(--color-success-500);
+    fill-opacity: 0.6;
+  }
+  .dg-m6 {
+    fill: var(--color-premium-500);
+    fill-opacity: 0.65;
+  }
+  /* Schémas de 2nde : couches électroniques, précipités, cycle de l’eau, saisons, cartes. */
+  .dg-shell {
+    fill: none;
+    stroke: var(--color-ink-subtle);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+  .dg-green-fill {
+    fill: var(--color-success-500);
+  }
+  .dg-rust-fill {
+    fill: var(--color-subject-hg);
+  }
+  .dg-nappe {
+    fill: var(--color-info-500);
+    opacity: 0.35;
+  }
+  .dg-rain {
+    fill: none;
+    stroke: var(--color-info-500);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .dg-night {
+    fill: var(--color-ink);
+    opacity: 0.45;
+  }
+  .dg-map-empire {
+    fill: var(--color-subject-hg);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    paint-order: stroke;
+    stroke: var(--color-surface);
+    stroke-width: 3px;
+  }
+  .dg-zone-hot,
+  .dg-zone-temperate,
+  .dg-zone-cold {
+    fill: var(--color-danger-500);
+    fill-opacity: 0.22;
+  }
+  .dg-zone-temperate {
+    fill: var(--color-success-500);
+  }
+  .dg-zone-cold {
+    fill: var(--color-info-500);
+  }
+  /* Schémas de 1re : région de contraintes, piles et électrolyse, cellules, ADN. */
+  .dg-region {
+    fill: var(--color-success-500);
+    fill-opacity: 0.2;
+    stroke: none;
+  }
+  .dg-sol-zinc {
+    fill: var(--color-idle-200);
+  }
+  .dg-sol-copper {
+    fill: var(--color-info-500);
+    opacity: 0.35;
+  }
+  .dg-salt-bridge {
+    fill: none;
+    stroke: var(--color-premium-500);
+    stroke-width: 9;
+    opacity: 0.7;
+  }
+  .dg-copper-deposit {
+    fill: var(--color-subject-pc);
+  }
+  .dg-gamma {
+    fill: none;
+    stroke: var(--color-success-500);
+    stroke-width: 2;
+    stroke-dasharray: 5 3;
+  }
+  .dg-mito {
+    fill: var(--color-flame-50);
+    stroke: var(--color-flame-500);
+    stroke-width: 1.4;
+  }
+  .dg-cell-wall {
+    fill: var(--color-pastel-sage);
+    stroke: var(--color-subject-svt);
+    stroke-width: 2;
+  }
+  .dg-vacuole {
+    fill: var(--color-info-50);
+    stroke: var(--color-info-500);
+    stroke-width: 1.2;
+  }
+  .dg-chloro {
+    fill: var(--color-success-500);
+  }
+  .dg-dna,
+  .dg-rna {
+    fill: none;
+    stroke: var(--color-subject-ang);
+    stroke-width: 2.5;
+  }
+  .dg-rna {
+    stroke: var(--color-flame-500);
+  }
+  .dg-capsid {
+    fill: var(--color-pastel-lavender);
+    stroke: var(--color-subject-ang);
+    stroke-width: 1.6;
+  }
+  /* Schémas de Terminale : bobines, champs, rails, franges, synapse, sarcomère, hérédité, fleur. */
+  .dg-coil {
+    fill: none;
+    stroke: var(--color-subject-pc);
+    stroke-width: 2;
+  }
+  .dg-field {
+    fill: none;
+    stroke: var(--color-subject-math);
+    stroke-width: 1.4;
+    stroke-dasharray: 5 3;
+  }
+  .dg-cross {
+    fill: var(--color-ink-subtle);
+    font-size: 12px;
+  }
+  .dg-rail,
+  .dg-rod-metal {
+    fill: none;
+    stroke: var(--color-ink-muted);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+  .dg-rod-metal {
+    stroke: var(--color-subject-pc);
+    stroke-width: 7;
+  }
+  .dg-surface-gap {
+    fill: var(--color-surface);
+  }
+  .dg-fringe {
+    fill: var(--color-premium-500);
+  }
+  .dg-vesicle {
+    fill: var(--color-surface);
+    stroke: var(--color-subject-ang);
+    stroke-width: 1.4;
+  }
+  .dg-zline {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 3;
+  }
+  .dg-actin,
+  .dg-myosin {
+    fill: none;
+    stroke: var(--color-info-500);
+    stroke-width: 2;
+  }
+  .dg-myosin {
+    stroke: var(--color-danger-500);
+    stroke-width: 5;
+  }
+  .dg-ill {
+    fill: var(--color-ink);
+    stroke: var(--color-ink);
+    stroke-width: 1.4;
+  }
+  .dg-chloro-orange {
+    fill: var(--color-premium-500);
+  }
+  /* Continent mis en valeur sur un planisphère. */
+  .dg-hl {
+    fill: var(--color-premium-500);
+    fill-opacity: 0.55;
+  }
+  /* Frontières fines sur les cartes de pays : après les remplissages, pour l’emporter sur leur trait. */
+  .dg-border {
+    stroke: var(--color-ink-muted);
+    stroke-width: 0.5;
+  }
   .dg-glass,
   .dg-bottle {
     fill: none;

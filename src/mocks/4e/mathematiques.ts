@@ -3,6 +3,7 @@
 // Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { type ChapterSpec, exemple, formula, frac, liste, methode, retenir, sup, tableau, vec } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const NUM = "Activités numériques";
 const GEO = "Activités géométriques";
@@ -109,7 +110,8 @@ export const MATH_4E: ChapterSpec[] = [
             ["x ≥ 1", "[1 ; +∞["],
             ["x &lt; 4", "]−∞ ; 4["],
             ["1 ≤ x &lt; 4", "[1 ; 4["],
-          ])}`,
+          ])}
+          ${figure(schema("m4-intervalle", "Droite graduée avec l’intervalle [1 ; 4[ colorié."), "Le crochet tourné vers l’intervalle indique une borne comprise (1 est une solution) ; tourné vers l’extérieur, une borne exclue (4 n’en est pas une).")}`,
       },
       {
         title: "Systèmes de deux inéquations",
@@ -133,7 +135,8 @@ export const MATH_4E: ChapterSpec[] = [
             "linéarité : f(x + y) = f(x) + f(y) et f(kx) = k f(x) ;",
             "sa représentation graphique est une <strong>droite qui passe par l’origine</strong> du repère.",
           ])}
-          ${exemple(["Le mètre de tissu coûte 1 500 F : f(x) = 1 500x. Pour 4 m, f(4) = 6 000 F ; 9 000 F correspond à 6 m (antécédent de 9 000)."])}`,
+          ${exemple(["Le mètre de tissu coûte 1 500 F : f(x) = 1 500x. Pour 4 m, f(4) = 6 000 F ; 9 000 F correspond à 6 m (antécédent de 9 000)."])}
+          ${figure(schema("m4-lineaire", "Droite représentant f(x) = 1 500x, passant par l’origine."), "La représentation d’une application linéaire est une droite qui passe par l’origine : on y lit f(4) = 6 000 et l’antécédent 6 de 9 000.")}`,
       },
     ],
   },
@@ -156,6 +159,7 @@ export const MATH_4E: ChapterSpec[] = [
         title: "Représenter une série statistique",
         minutes: 12,
         body: `${liste(["diagramme en bâtons (caractère quantitatif) ;", "diagramme à bandes ;", "diagramme circulaire : angle = fréquence × 360° ;", "diagramme semi-circulaire : angle = fréquence × 180°."])}
+          ${figure(schema("m4-batons", "Diagramme en bâtons des notes de la leçon précédente."), "Diagramme en bâtons de la série de notes : la hauteur de chaque bâton est l’effectif ; le plus haut montre le mode (10).")}
           ${exemple(["Une valeur de fréquence 0,25 occupe 90° d’un diagramme circulaire."])}`,
       },
     ],
@@ -178,6 +182,7 @@ export const MATH_4E: ChapterSpec[] = [
             ["d = r − r’", "tangents intérieurement"],
             ["d &lt; r − r’", "l’un à l’intérieur de l’autre"],
           ])}
+          ${figure(schema("m4-cercles", "Les cinq positions possibles de deux cercles."), "De gauche à droite, la distance des centres diminue : les cercles s’éloignent, se touchent, se coupent, puis l’un entre dans l’autre.")}
           ${retenir("On peut construire un triangle si chaque longueur est inférieure à la somme des deux autres.")}`,
       },
       {
@@ -189,6 +194,7 @@ export const MATH_4E: ChapterSpec[] = [
             "un point de la bissectrice d’un angle est à égale distance des deux côtés, et réciproquement ;",
             "droite et cercle de rayon r, d = distance du centre à la droite : d &lt; r sécants ; d = r tangents ; d &gt; r disjoints.",
           ])}
+          ${figure(schema("m4-bissectrice-tangente", "Un point de la bissectrice à égale distance des côtés, et une tangente perpendiculaire au rayon."), "Les distances d’un point à une droite se mesurent sur la perpendiculaire. La tangente en A ne coupe le cercle qu’en A.")}
           ${retenir("La tangente en un point A du cercle est perpendiculaire au rayon [OA].")}`,
       },
     ],
@@ -207,7 +213,8 @@ export const MATH_4E: ChapterSpec[] = [
             "la droite qui passe par le milieu d’un côté parallèlement à un deuxième côté coupe le troisième en son milieu ;",
             "des parallèles qui découpent des segments égaux sur une sécante en découpent aussi sur toute autre sécante.",
           ])}
-          ${exemple(["Dans ABC, I milieu de [AB], J milieu de [AC] et BC = 8 cm : (IJ) // (BC) et IJ = 4 cm."])}`,
+          ${exemple(["Dans ABC, I milieu de [AB], J milieu de [AC] et BC = 8 cm : (IJ) // (BC) et IJ = 4 cm."])}
+          ${figure(schema("m4-droite-milieux", "Triangle ABC avec I milieu de [AB] et J milieu de [AC]."), "La droite des milieux (IJ) est parallèle à (BC), et IJ = BC ÷ 2.")}`,
       },
     ],
   },
@@ -226,6 +233,7 @@ export const MATH_4E: ChapterSpec[] = [
             ["médianes", "centre de gravité G", `AG = ${frac("2", "3")} de la médiane issue de A`],
             ["hauteurs", "orthocentre", "—"],
           ])}
+          ${figure(schema("m4-medianes", "Triangle ABC, ses trois médianes et le centre de gravité G."), "Le centre de gravité G est sur chaque médiane, aux deux tiers en partant du sommet.")}
           ${retenir("Si, dans un triangle, une hauteur, une médiane ou une médiatrice est aussi bissectrice, le triangle est isocèle.")}`,
       },
     ],
@@ -240,6 +248,7 @@ export const MATH_4E: ChapterSpec[] = [
         minutes: 15,
         body: `${formula(`ABC rectangle en A ⟹ BC${sup("2")} = AB${sup("2")} + AC${sup("2")}`)}
           ${exemple([`AB = 6 cm, AC = 8 cm : BC${sup("2")} = 36 + 64 = 100, donc BC = 10 cm.`])}
+          ${figure(schema("m4-pythagore", "Triangle rectangle de côtés 6, 8 et 10 avec les carrés construits sur ses côtés."), "L’aire du carré construit sur l’hypoténuse est égale à la somme des aires des deux autres carrés : 100 = 36 + 64.")}
           ${retenir(`Réciproque : si BC${sup("2")} = AB${sup("2")} + AC${sup("2")}, le triangle ABC est rectangle en A (5, 12, 13 : 25 + 144 = 169).`)}`,
       },
       {
@@ -247,6 +256,7 @@ export const MATH_4E: ChapterSpec[] = [
         minutes: 12,
         body: `<p>Si ABC est rectangle en A et H le pied de la hauteur issue de A : <strong>AB × AC = AH × BC</strong> (deux calculs de l’aire du triangle).</p>
           ${exemple(["AB = 6, AC = 8, BC = 10 : AH = 48 ÷ 10 = 4,8 cm."])}
+          ${figure(schema("m4-hauteur-hypotenuse", "Triangle rectangle ABC et sa hauteur [AH]."), "L’aire du triangle se calcule de deux façons : AB × AC ÷ 2 = AH × BC ÷ 2, donc AB × AC = AH × BC.")}
           ${retenir("Réciproquement, si AB × AC = AH × BC, le triangle est rectangle en A.")}`,
       },
     ],
@@ -260,6 +270,7 @@ export const MATH_4E: ChapterSpec[] = [
         title: "La translation",
         minutes: 15,
         body: `<p>L’image de M par la translation qui transforme A en B est le point M’ tel que <strong>ABM’M</strong> soit un parallélogramme.</p>
+          ${figure(schema("m4-translation", "Un triangle et son image par une translation, avec le vecteur de la translation."), "Tous les points se déplacent de la même façon que A vers B : l’image du triangle lui est superposable.")}
           ${liste(["l’image d’un segment est un segment parallèle et de même longueur ;", "l’image d’une droite est une droite parallèle ;", "l’image d’un cercle est un cercle de même rayon ;", "la translation conserve l’alignement, les longueurs, les angles, les aires, le parallélisme et l’orthogonalité."])}`,
       },
       {
@@ -271,6 +282,7 @@ export const MATH_4E: ChapterSpec[] = [
             `ABCD est un parallélogramme si et seulement si ${vec("AB")} = ${vec("DC")} ;`,
             `I est le milieu de [AB] si et seulement si ${vec("AI")} = ${vec("IB")}.`,
           ])}
+          ${figure(schema("m4-vecteurs", "Parallélogramme ABCD avec les vecteurs AB et DC."), "Les flèches AB et DC ont la même direction, le même sens et la même longueur : les vecteurs sont égaux.")}
           ${retenir("Le vecteur nul n’a ni direction ni sens ; sa longueur est 0.")}`,
       },
     ],
@@ -284,12 +296,14 @@ export const MATH_4E: ChapterSpec[] = [
         title: "Angle au centre et longueur d’un arc",
         minutes: 12,
         body: `${formula(`ℓ = ${frac("2πr × α", "360")} (α en degrés)`)}
-          ${exemple(["Rayon 6 cm, angle au centre 60° : ℓ = 2π × 6 × 60 ÷ 360 = 2π ≈ 6,28 cm."])}`,
+          ${exemple(["Rayon 6 cm, angle au centre 60° : ℓ = 2π × 6 × 60 ÷ 360 = 2π ≈ 6,28 cm."])}
+          ${figure(schema("m4-arc", "Cercle de rayon 6 cm avec un angle au centre de 60° et l’arc qu’il intercepte."), "60° est le sixième de 360° : l’arc mesure le sixième du périmètre du cercle.")}`,
       },
       {
         title: "La rotation",
         minutes: 15,
         body: `<p>La rotation de centre O et d’angle α (dans un sens donné) transforme M en M’ tel que <strong>OM’ = OM</strong> et l’angle MOM’ = α.</p>
+          ${figure(schema("m4-rotation", "Rotation de centre O et d’angle 70° qui transforme M en M′."), "Le point tourne autour du centre O sur un cercle : la distance au centre ne change pas.")}
           ${liste(["elle conserve les longueurs, l’alignement, les angles, les aires, le parallélisme et l’orthogonalité ;", "l’image d’un cercle est un cercle de même rayon."])}`,
       },
       {
@@ -300,6 +314,7 @@ export const MATH_4E: ChapterSpec[] = [
             "il est inscrit dans un cercle ; la rotation de centre O et d’angle 360° ÷ n le laisse invariant ;",
             "triangle équilatéral (120°), carré (90°), hexagone régulier (60°, côté égal au rayon).",
           ])}
+          ${figure(schema("m4-hexagone", "Hexagone régulier inscrit dans un cercle, avec un angle au centre de 60°."), "Hexagone régulier : 6 angles au centre de 60° ; chaque triangle formé avec le centre est équilatéral.")}
           ${methode(["Tracer un cercle de centre O.", "Placer des angles au centre de 360° ÷ n.", "Joindre les points obtenus sur le cercle."], "Construire un polygone régulier à n côtés")}`,
       },
     ],
@@ -313,13 +328,15 @@ export const MATH_4E: ChapterSpec[] = [
         title: "La projection orthogonale",
         minutes: 12,
         body: `<p>Le <strong>projeté orthogonal</strong> de M sur (D) est le point où la perpendiculaire à (D) passant par M coupe (D).</p>
-          ${liste(["le projeté d’un segment est un segment (éventuellement réduit à un point) ;", "le projeté du milieu d’un segment est le milieu du segment projeté."])}`,
+          ${liste(["le projeté d’un segment est un segment (éventuellement réduit à un point) ;", "le projeté du milieu d’un segment est le milieu du segment projeté."])}
+          ${figure(schema("m4-projection", "Projection orthogonale du segment [AB] et de son milieu sur une droite."), "On projette chaque point en suivant la perpendiculaire à (D) ; le projeté du milieu est le milieu du projeté.")}`,
       },
       {
         title: "Milieu et distance dans un repère orthonormal",
         minutes: 15,
         body: `${formula(`I ( ${frac("x<sub>A</sub> + x<sub>B</sub>", "2")} ; ${frac("y<sub>A</sub> + y<sub>B</sub>", "2")} ) ; AB${sup("2")} = (x<sub>B</sub> − x<sub>A</sub>)${sup("2")} + (y<sub>B</sub> − y<sub>A</sub>)${sup("2")}`)}
-          ${exemple([`A(1 ; 2) et B(4 ; 6) : AB${sup("2")} = 3${sup("2")} + 4${sup("2")} = 25, donc AB = 5 ; milieu I(2,5 ; 4).`])}`,
+          ${exemple([`A(1 ; 2) et B(4 ; 6) : AB${sup("2")} = 3${sup("2")} + 4${sup("2")} = 25, donc AB = 5 ; milieu I(2,5 ; 4).`])}
+          ${figure(schema("m4-milieu-distance", "Repère avec A(1 ; 2), B(4 ; 6) et leur milieu I."), "La distance AB se calcule avec le théorème de Pythagore dans le triangle rectangle de côtés 3 et 4.")}`,
       },
     ],
   },
@@ -337,7 +354,8 @@ export const MATH_4E: ChapterSpec[] = [
             "deux plans perpendiculaires à une même droite sont parallèles ;",
             "la section d’une sphère par un plan est un cercle ; si le plan passe par le centre, c’est un <strong>grand cercle</strong>.",
           ])}
-          ${exemple([`Sphère de rayon R = 5 cm, plan à d = 3 cm du centre : rayon de la section r, avec r${sup("2")} = 5${sup("2")} − 3${sup("2")} = 16, donc r = 4 cm.`])}`,
+          ${exemple([`Sphère de rayon R = 5 cm, plan à d = 3 cm du centre : rayon de la section r, avec r${sup("2")} = 5${sup("2")} − 3${sup("2")} = 16, donc r = 4 cm.`])}
+          ${figure(schema("m4-section-sphere", "Section d’une sphère par un plan : un cercle."), "Le rayon de la sphère, la distance au plan et le rayon de la section forment un triangle rectangle.")}`,
       },
     ],
   },

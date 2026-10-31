@@ -2,9 +2,12 @@ import "server-only";
 
 // Exercices corrigés de 4e : une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
 // relire par des enseignants). Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// Questions illustrées (schémas des leçons) ajoutées par 4e/enrich.ts.
 
 import { CHAPTERS_4E } from "../curriculum-4e";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withSubjectExtras } from "../illustrated-questions";
+import { EXTRA_4E } from "./enrich";
 
 const SERIES: ExerciseSeries[] = [
   // ── Mathématiques ──────────────────────────────────────────────────────────
@@ -375,7 +378,7 @@ const SERIES: ExerciseSeries[] = [
   ] },
 ];
 
-const built = buildExerciseSeries("4E", CHAPTERS_4E, SERIES);
+const built = buildExerciseSeries("4E", CHAPTERS_4E, withSubjectExtras(SERIES, EXTRA_4E));
 
 export const QUESTIONS_4E = built.questions;
 export const ANSWER_KEYS_4E = built.keys;

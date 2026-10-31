@@ -2,9 +2,12 @@ import "server-only";
 
 // Exercices corrigés de 5e : une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
 // relire par des enseignants). Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// Questions illustrées (schémas des leçons) ajoutées par 5e/enrich.ts.
 
 import { CHAPTERS_5E } from "../curriculum-5e";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withSubjectExtras } from "../illustrated-questions";
+import { EXTRA_5E } from "./enrich";
 
 const SERIES: ExerciseSeries[] = [
   // ── Mathématiques ──────────────────────────────────────────────────────────
@@ -254,7 +257,7 @@ const SERIES: ExerciseSeries[] = [
   ] },
 ];
 
-const built = buildExerciseSeries("5E", CHAPTERS_5E, SERIES);
+const built = buildExerciseSeries("5E", CHAPTERS_5E, withSubjectExtras(SERIES, EXTRA_5E));
 
 export const QUESTIONS_5E = built.questions;
 export const ANSWER_KEYS_5E = built.keys;

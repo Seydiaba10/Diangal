@@ -3,24 +3,26 @@
 // rédigées par DIANGAL, à faire valider par un professeur d’histoire-géographie.
 
 import { type ChapterSpec, exemple, liste, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const H = "Histoire";
 const G = "Géographie";
 
-/** Deux leçons d’étude régionale : milieu et population, activités et développement. */
+/** Deux leçons d’étude régionale : milieu et population (avec une carte de situation), activités et développement. */
 function regional(
   title: string,
   theme: string,
   milieu: string[],
   activites: string[],
   probleme: string,
+  fig = "",
 ): ChapterSpec {
   return {
     title,
     summary: `Étude régionale : ${theme}.`,
     strand: G,
     lessons: [
-      { title: "Situation, milieu et population", minutes: 12, body: `${liste(milieu)}${retenir("Pour étudier une région, on la situe d’abord sur la carte : où est-elle ? quelles sont ses limites ?")}` },
+      { title: "Situation, milieu et population", minutes: 12, body: `${liste(milieu)}${fig}${retenir("Pour étudier une région, on la situe d’abord sur la carte : où est-elle ? quelles sont ses limites ?")}` },
       { title: "Activités, problèmes et perspectives", minutes: 12, body: `${liste(activites)}${retenir(probleme)}` },
     ],
   };
@@ -44,6 +46,7 @@ export const HG_6E: ChapterSpec[] = [
             ["archéologiques", "outils, poteries, ruines, tombes"],
           ])}
           ${liste(["La <strong>chronologie</strong> range les événements dans l’ordre ; on compte les années avant et après Jésus-Christ (av. J.-C., apr. J.-C.).", "Un siècle = 100 ans : l’an 1450 appartient au XV<sup>e</sup> siècle."])}
+          ${figure(schema("h6-periodes", "Frise des grandes périodes de l’histoire, de −4000 à nos jours."), "Les grandes périodes : la Préhistoire s’achève avec l’invention de l’écriture vers 3000 av. J.-C. ; l’Antiquité se termine en 476, le Moyen Âge en 1492, les Temps modernes en 1789.")}
           ${retenir("L’histoire nous aide à comprendre le présent et à connaître nos racines.")}`,
       },
     ],
@@ -259,6 +262,7 @@ export const HG_6E: ChapterSpec[] = [
             "Une <strong>carte</strong> représente un espace vu d’en haut, réduit ; elle a un titre, une <strong>légende</strong>, une <strong>échelle</strong> et une orientation (le nord en haut).",
             "Échelle 1/100 000 : 1 cm sur la carte = 1 km en réalité.",
           ])}
+          ${figure(schema("g6-rose-echelle", "Rose des vents et échelle graphique."), "La rose des vents donne les points cardinaux ; l’échelle permet de passer des centimètres de la carte aux kilomètres réels.")}
           ${exemple(["Sur une carte au 1/1 000 000, Dakar et Kaolack sont à environ 19 cm : la distance réelle est d’environ 190 km."])}
           ${retenir("La situation d’un lieu se donne par rapport aux points cardinaux, aux pays voisins, à la mer, ou par ses coordonnées (latitude, longitude).")}`,
       },
@@ -279,6 +283,7 @@ export const HG_6E: ChapterSpec[] = [
       "Problèmes : appauvrissement des sols (monoculture), sécheresses, baisse des prix, exode rural.",
     ],
     "La diversification des cultures et la restauration des sols sont des enjeux majeurs pour le Bassin arachidier.",
+    figure(schema("g6-bassin-arachidier", "Carte du Sénégal : le Bassin arachidier en couleur."), "Le Bassin arachidier occupe le centre-ouest du pays ; Kaolack, sur le Saloum, en est la grande ville-marché."),
   ),
   regional(
     "Dakar et le littoral central",
@@ -294,6 +299,7 @@ export const HG_6E: ChapterSpec[] = [
       "Problèmes : encombrements, inondations, logement, pollution, chômage des jeunes.",
     ],
     "Dakar concentre l’essentiel des activités du pays : il faut mieux répartir le développement entre les régions.",
+    figure(schema("g6-dakar-littoral", "Carte du Sénégal : la région de Dakar en couleur."), "La région de Dakar, à l’extrême ouest de l’Afrique, est la plus petite du pays mais la plus peuplée."),
   ),
   regional(
     "Le Ferlo",
@@ -309,6 +315,7 @@ export const HG_6E: ChapterSpec[] = [
       "Problèmes : manque d’eau, surpâturage, avancée du désert ; la Grande Muraille verte y plante des arbres.",
     ],
     "Dans le Ferlo, l’eau commande la vie des hommes et des troupeaux.",
+    figure(schema("g6-ferlo", "Carte du Sénégal : le Ferlo au nord du pays."), "Le Ferlo est une région naturelle, sans limites administratives : la zone colorée est approximative."),
   ),
   regional(
     "La vallée du fleuve Sénégal",
@@ -324,6 +331,7 @@ export const HG_6E: ChapterSpec[] = [
       "Problèmes : salinisation, maladies hydriques, coût des aménagements.",
     ],
     "Les barrages ont transformé l’agriculture de la vallée en permettant l’irrigation.",
+    figure(schema("g6-vallee", "Carte du Sénégal : les régions de la vallée du fleuve Sénégal en couleur."), "Le fleuve Sénégal forme la frontière nord du pays, de Bakel à Saint-Louis.") + figure(schema("g6-walo-dieri", "Coupe de la vallée : le fleuve, le walo inondable et le diéri."), "Le walo, inondé pendant la crue, porte les cultures de décrue ; le diéri, plus haut, n’est jamais inondé."),
   ),
   regional(
     "La Casamance",
@@ -339,6 +347,7 @@ export const HG_6E: ChapterSpec[] = [
       "Atouts : très grandes potentialités agricoles et touristiques.",
     ],
     "La Casamance est le « grenier » potentiel du Sénégal ; le pont de Farafégny sur la Gambie facilite son désenclavement.",
+    figure(schema("g6-casamance", "Carte du Sénégal : la Casamance en couleur."), "La Casamance, au sud de la Gambie, est traversée d’est en ouest par le fleuve Casamance."),
   ),
   regional(
     "Le Haut-Sénégal (Sud-Est)",
@@ -354,5 +363,6 @@ export const HG_6E: ChapterSpec[] = [
       "Problèmes : enclavement, orpaillage qui pollue les rivières, manque d’infrastructures.",
     ],
     "Le Sud-Est possède d’importantes richesses minières et naturelles à exploiter durablement.",
+    figure(schema("g6-sud-est", "Carte du Sénégal : le Sud-Est en couleur."), "Le Sud-Est touche le Mali et la Guinée ; la Gambie et la Falémé y prennent leur cours au Sénégal."),
   ),
 ];

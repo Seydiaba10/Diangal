@@ -7,11 +7,13 @@ import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { selectAllRows } from "@/lib/supabase/rows";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type {
+  AnswerMap,
   AnswerValue,
   AssessmentKind,
   ContentSource,
   ContentVerification,
   ExamType,
+  OpenAttempt,
   PlayerQuestion,
   QuestionReview,
   QuestionType,
@@ -166,6 +168,7 @@ export async function fetchPracticeAttempts(studentId: string): Promise<RemotePr
     .from("attempts")
     .select("id, status, score_20, started_at, submitted_at, assessments!inner(owner_id, duration_s, subjects!inner(code), levels!inner(code), assessment_questions(count))")
     .eq("user_id", studentId)
+    .neq("status", "expired")
     .not("assessments.owner_id", "is", null)
     .order("started_at", { ascending: false })
     .limit(20);
@@ -233,6 +236,9 @@ export interface RemoteAttemptSession {
   deadlineAt: string | null;
   serverNow: number;
   questions: PlayerQuestion[];
+  savedAnswers: AnswerMap;
+  currentIndex: number;
+  savedAt: string | null;
 }
 
 /** Contrôle en cours de l'élève connecté (reprise), « submitted » s'il est déjà envoyé, sinon null. */
@@ -247,8 +253,13 @@ export async function fetchAttemptSession(attemptId: string): Promise<RemoteAtte
     started_at: string;
     deadline_at: string | null;
     server_now: string;
+    saved_answers: AnswerMap | null;
+    current_index: number | null;
+    saved_at: string | null;
     questions: RawQuestion[];
   };
+  // Une tentative abandonnée (« Recommencer à zéro ») ne se rouvre pas.
+  if (session.status === "expired") return null;
   if (session.status !== "in_progress") return "submitted";
   return {
     assessmentSlug: session.assessment_slug,
@@ -256,7 +267,26 @@ export async function fetchAttemptSession(attemptId: string): Promise<RemoteAtte
     deadlineAt: session.deadline_at,
     serverNow: Date.parse(session.server_now),
     questions: session.questions.map(toPlayerQuestion),
+    savedAnswers: session.saved_answers ?? {},
+    currentIndex: session.current_index ?? 0,
+    savedAt: session.saved_at ?? null,
   };
+}
+
+/** Exercices commencés et pas encore envoyés de l'élève connecté (dernière tentative de chaque évaluation). */
+export async function fetchOpenAttempts(): Promise<OpenAttempt[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("get_my_open_attempts");
+  if (error) throw new Error(`tentatives en cours : ${error.message}`);
+  return (data ?? []).map((r) => ({
+    attemptId: r.attempt_id,
+    assessmentId: r.assessment_slug,
+    answered: r.answered,
+    total: r.total,
+    currentIndex: r.current_index,
+    savedAt: r.saved_at,
+    timed: r.deadline_at !== null,
+  }));
 }
 
 export interface RemoteAttemptResult {

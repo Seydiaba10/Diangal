@@ -34,10 +34,17 @@ function seededShuffle<T>(items: T[], seed: string): T[] {
   return out;
 }
 
-/** Démo : ouvre une tentative (ordre des options figé, date limite fixée maintenant). */
+/**
+ * Démo : rouvre la tentative encore ouverte de cette évaluation (comme start_attempt), sinon en ouvre
+ * une nouvelle (ordre des options figé, date limite fixée maintenant).
+ */
 function startMockAttempt(assessment: Assessment): never {
-  const id = crypto.randomUUID();
   const now = Date.now();
+  const open = [...mockState.attempts.values()]
+    .filter((a) => a.assessmentId === assessment.id && a.status === "in_progress" && (a.deadlineAt === null || a.deadlineAt > now))
+    .sort((a, b) => b.startedAt - a.startedAt)[0];
+  if (open) redirect(`/eleve/tentatives/${open.id}`);
+  const id = crypto.randomUUID();
   // Comme start_attempt : options mélangées, sauf vrai / faux et pages de cahier (ordre du document).
   const shuffle = assessment.shuffleOptions !== false;
   const optionOrder = Object.fromEntries(
@@ -150,6 +157,60 @@ function sanitizeAnswer(value: unknown): AnswerValue | null {
   return null;
 }
 
+/** Copie nettoyée : 100 réponses au plus, textes coupés, valeurs d'un autre type écartées. */
+function cleanAnswers(answers: AnswerMap | null | undefined): AnswerMap {
+  return Object.fromEntries(
+    Object.entries(answers ?? {})
+      .slice(0, 100)
+      .map(([questionId, value]) => [questionId, sanitizeAnswer(value)] as const)
+      .filter((entry): entry is [string, AnswerValue] => entry[1] !== null),
+  );
+}
+
+export type SaveProgressResult = { ok: true; savedAt: string } | { ok: false; error: "closed" | "failed" };
+
+/**
+ * Sauvegarde automatique du lecteur : réponses et question en cours, sur le compte de l'élève connecté.
+ * N'envoie jamais la copie. « closed » : tentative déjà envoyée, abandonnée ou hors délai.
+ */
+export async function saveAttemptProgressAction(attemptId: string, answers: AnswerMap, currentIndex: number): Promise<SaveProgressResult> {
+  const index = Number.isInteger(currentIndex) ? Math.max(0, Math.min(currentIndex, 200)) : 0;
+  const clean = cleanAnswers(answers);
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase.rpc("save_attempt_progress", { p_attempt: attemptId, p_answers: clean, p_current_index: index });
+    if (error) return { ok: false, error: /not_in_progress|deadline_passed|not_found/.test(error.message) ? "closed" : "failed" };
+    return { ok: true, savedAt: data };
+  }
+
+  const attempt = mockState.attempts.get(attemptId);
+  const now = Date.now();
+  if (!attempt || attempt.status !== "in_progress" || (attempt.deadlineAt !== null && now > attempt.deadlineAt + GRACE_MS)) {
+    return { ok: false, error: "closed" };
+  }
+  const questionIds = findMockAssessment(attempt.assessmentId)?.questionIds ?? [];
+  attempt.savedAnswers = Object.fromEntries(Object.entries(clean).filter(([qid]) => questionIds.includes(qid)));
+  attempt.currentIndex = Math.min(index, Math.max(questionIds.length - 1, 0));
+  attempt.savedAt = now;
+  return { ok: true, savedAt: new Date(now).toISOString() };
+}
+
+/**
+ * « Recommencer à zéro » : ferme sans note la tentative ouverte (non chronométrée) de cette évaluation,
+ * puis en ouvre une nouvelle. Supabase : RPC abandon_attempt, puis start_attempt.
+ */
+export async function restartAttemptAction(assessmentId: string, attemptId: string) {
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseServerClient();
+    // Déjà envoyée ou abandonnée : on démarre simplement une nouvelle tentative.
+    await supabase.rpc("abandon_attempt", { p_attempt: attemptId });
+  } else {
+    const attempt = mockState.attempts.get(attemptId);
+    if (attempt && attempt.status === "in_progress" && attempt.deadlineAt === null) attempt.status = "expired";
+  }
+  await startAttemptAction(assessmentId);
+}
+
 export type SubmitAttemptResult = { ok: true } | { ok: false; error: "not_found" };
 
 /**
@@ -158,23 +219,17 @@ export type SubmitAttemptResult = { ok: true } | { ok: false; error: "not_found"
  */
 export async function submitAttemptAction(attemptId: string, answers: AnswerMap): Promise<SubmitAttemptResult> {
   if (isSupabaseConfigured()) {
-    const clean = Object.fromEntries(
-      Object.entries(answers ?? {})
-        .slice(0, 100)
-        .map(([questionId, value]) => [questionId, sanitizeAnswer(value)] as const)
-        .filter(([, value]) => value !== null),
-    );
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.rpc("submit_attempt", {
       p_attempt: attemptId,
-      p_answers: clean,
+      p_answers: cleanAnswers(answers),
       p_client_submitted_at: new Date().toISOString(),
     });
     return error ? { ok: false, error: "not_found" } : { ok: true };
   }
 
   const attempt = mockState.attempts.get(attemptId);
-  if (!attempt) return { ok: false, error: "not_found" };
+  if (!attempt || attempt.status === "expired") return { ok: false, error: "not_found" };
   if (attempt.status === "submitted") return { ok: true };
 
   const assessment = findMockAssessment(attempt.assessmentId)!;

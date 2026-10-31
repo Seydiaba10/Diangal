@@ -3,9 +3,12 @@ import "server-only";
 // Exercices corrigés de 3e : une série par chapitre (Thalès et l’immunité ont déjà la leur dans
 // assessments-3e.ts), écrite par DIANGAL d’après les leçons (à faire relire par des enseignants).
 // Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// Questions illustrées (schémas des leçons) ajoutées par 3e/enrich.ts.
 
 import { CHAPTERS_3E } from "../curriculum-3e";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withSubjectExtras } from "../illustrated-questions";
+import { EXTRA_3E } from "./enrich";
 
 const SERIES: ExerciseSeries[] = [
   // ── Mathématiques ──────────────────────────────────────────────────────────
@@ -707,7 +710,7 @@ const SERIES: ExerciseSeries[] = [
   },
 ];
 
-const built = buildExerciseSeries("3E", CHAPTERS_3E, SERIES);
+const built = buildExerciseSeries("3E", CHAPTERS_3E, withSubjectExtras(SERIES, EXTRA_3E));
 
 export const QUESTIONS_3E_SERIES = built.questions;
 export const ANSWER_KEYS_3E_SERIES = built.keys;

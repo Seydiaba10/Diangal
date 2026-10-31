@@ -4,6 +4,7 @@
 // propriétés basiques. Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { auBac, type ChapterSpec, definition, erreurs, exercice, formula, frac, liste, methode, objectifs, retenir, tableau } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 export const CHIMIE_TLE_S: ChapterSpec[] = [
   {
@@ -284,7 +285,8 @@ export const CHIMIE_TLE_S: ChapterSpec[] = [
               "Entre 30 et 40 min : v = (0,45 − 0,40) ÷ 10 = <strong>0,005 mol/min</strong> : la vitesse diminue.",
               "Moitié de la valeur finale : 0,265 mol, atteinte entre 10 et 20 min ; par lecture graphique, t<sub>½</sub> ≈ <strong>15 min</strong>.",
             ],
-          )}`,
+          )}
+          ${figure(schema("t-cinetique", "Avancement d’une réaction en fonction du temps."), "La vitesse volumique est proportionnelle à la pente de la tangente à la courbe.")}`,
       },
       {
         title: "Facteurs cinétiques",
@@ -349,7 +351,8 @@ export const CHIMIE_TLE_S: ChapterSpec[] = [
               "pH &gt; 7 : la solution est <strong>basique</strong>.",
             ],
           )}
-          ${erreurs(["oublier le signe moins dans pH = −log[H₃O⁺] ;", "croire qu’une solution neutre a toujours pH = 7 : ce n’est vrai qu’à 25 °C."])}`,
+          ${erreurs(["oublier le signe moins dans pH = −log[H₃O⁺] ;", "croire qu’une solution neutre a toujours pH = 7 : ce n’est vrai qu’à 25 °C."])}
+          ${figure(schema("p3-echelle-ph", "Échelle de pH de 0 à 14."), "À 25 °C, une solution est neutre à pH = 7, acide en dessous, basique au-dessus.")}`,
       },
       {
         title: "Indicateurs colorés",
@@ -375,7 +378,8 @@ export const CHIMIE_TLE_S: ChapterSpec[] = [
               "Jaune avec l’hélianthine : pH &gt; 4,4.",
               "Donc <strong>4,4 &lt; pH &lt; 6,0</strong>.",
             ],
-          )}`,
+          )}
+          ${figure(schema("p3-bbt", "Couleurs du bleu de bromothymol selon le pH."), "La teinte sensible, verte pour le BBT, correspond à la zone de virage autour du pKa de l’indicateur.")}`,
       },
     ],
   },
@@ -441,7 +445,8 @@ export const CHIMIE_TLE_S: ChapterSpec[] = [
             "Le dosage de 20 mL d’une solution d’acide chlorhydrique par de la soude à 0,10 mol/L donne une équivalence pour 15 mL. Calcule C<sub>a</sub>.",
             ["C<sub>a</sub> = C<sub>b</sub> V<sub>bE</sub> ÷ V<sub>a</sub> = 0,10 × 15 ÷ 20 = <strong>0,075 mol/L</strong>."],
           )}
-          ${erreurs(["oublier d’utiliser le volume total du mélange ;", "lire l’équivalence au début du saut au lieu de son milieu."])}`,
+          ${erreurs(["oublier d’utiliser le volume total du mélange ;", "lire l’équivalence au début du saut au lieu de son milieu."])}
+          ${figure(schema("t-dosage-fort", "Courbe de dosage d’un acide fort par une base forte."), "On repère l’équivalence au milieu du saut de pH ; un indicateur dont la zone de virage contient 7 convient (BBT).")}`,
       },
     ],
   },
@@ -520,7 +525,8 @@ export const CHIMIE_TLE_S: ChapterSpec[] = [
               "K = 10<sup>9,2 − 3,8</sup> = 10<sup>5,4</sup> ≈ 2,5 × 10<sup>5</sup>.",
               "K &gt; 10⁴ : la réaction est pratiquement <strong>totale</strong>.",
             ],
-          )}`,
+          )}
+          ${figure(schema("t-predominance", "Diagramme de prédominance du couple acide éthanoïque / ion éthanoate."), "À pH = pKa, l’acide et sa base conjuguée sont en quantités égales.")}`,
       },
     ],
   },
@@ -557,7 +563,8 @@ export const CHIMIE_TLE_S: ChapterSpec[] = [
               "À l’équivalence, la solution d’éthanoate de sodium est basique : on choisit la <strong>phénolphtaléine</strong> (zone 8,2 – 10).",
             ],
           )}
-          ${auBac("Sur la courbe, repère toujours dans l’ordre : V<sub>bE</sub> (méthode des tangentes), puis V<sub>bE</sub>/2, puis lis le pK<sub>a</sub> à la demi-équivalence.")}`,
+          ${auBac("Sur la courbe, repère toujours dans l’ordre : V<sub>bE</sub> (méthode des tangentes), puis V<sub>bE</sub>/2, puis lis le pK<sub>a</sub> à la demi-équivalence.")}
+          ${figure(schema("t-dosage-faible", "Courbe de dosage d’un acide faible par une base forte."), "La demi-équivalence donne le pKa du couple ; à l’équivalence, la solution est basique : on choisit la phénolphtaléine.")}`,
       },
       {
         title: "Solutions tampons",

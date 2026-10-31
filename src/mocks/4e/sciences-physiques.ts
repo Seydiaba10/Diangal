@@ -4,6 +4,7 @@
 // rédigées par DIANGAL, à faire valider par un professeur de sciences physiques.
 
 import { type ChapterSpec, exemple, formula, frac, liste, methode, retenir, sub, sup, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const PHY = "Physique";
 const CHI = "Chimie";
@@ -27,6 +28,7 @@ export const PC_4E: ChapterSpec[] = [
             ["volume", "mètre cube (m³) ; 1 L = 1 dm³", "éprouvette graduée"],
             ["température", "degré Celsius (°C)", "thermomètre"],
           ])}
+          ${figure(schema("p4-eprouvette", "Lecture du volume d’un liquide dans une éprouvette graduée."), "Pour lire un volume, l’œil est à la hauteur du liquide et on lit le bas du ménisque.")}
           ${retenir("Une mesure n’est jamais parfaitement exacte : on lit l’instrument avec soin et on répète la mesure.")}`,
       },
     ],
@@ -65,6 +67,7 @@ export const PC_4E: ChapterSpec[] = [
             "le poids est vertical, dirigé vers le bas ;",
             "la masse ne change pas d’un lieu à l’autre ; le poids, si (sur la Lune, g ≈ 1,6 N/kg).",
           ])}
+          ${figure(schema("p4-dynamometre", "Dynamomètre qui mesure le poids d’une masse de 500 g."), "Le dynamomètre indique 5 N pour une masse de 0,5 kg : P = m × g avec g ≈ 10 N/kg.")}
           ${exemple(["Un sac de riz de 50 kg : P = 50 × 10 = 500 N."])}`,
       },
     ],
@@ -83,6 +86,7 @@ export const PC_4E: ChapterSpec[] = [
             "les métaux sont <strong>conducteurs</strong> ; le plastique, le verre, le bois sec sont <strong>isolants</strong> ;",
             "en série, les dipôles forment une seule boucle : si une lampe grille, tout s’éteint ; en dérivation, chaque branche fonctionne seule.",
           ])}
+          ${figure(schema("p4-circuits", "Schémas d’un circuit en série et d’un circuit en dérivation."), "Dans les schémas, chaque appareil a son symbole : pile, lampe, interrupteur K. Les points marquent les nœuds du circuit en dérivation.")}
           ${retenir("Ne jamais toucher une prise ou un fil dénudé du secteur (220 V) : danger d’électrocution.")}`,
       },
     ],
@@ -111,6 +115,8 @@ export const PC_4E: ChapterSpec[] = [
             "un objet opaque éclairé a une ombre propre ; il projette une ombre portée ;",
             "éclipse de Lune : la Lune passe dans l’ombre de la Terre ; éclipse de Soleil : la Lune cache le Soleil.",
           ])}
+          ${figure(schema("p4-ombre", "Source, objet opaque et écran : cône d’ombre et ombre portée."), "Les rayons qui frôlent l’objet délimitent le cône d’ombre : c’est parce que la lumière va en ligne droite.")}
+          ${figure(schema("p4-eclipse", "Éclipse de Lune : Soleil, Terre et Lune alignés."), "Pendant une éclipse de Lune, la Terre est entre le Soleil et la Lune. Les tailles et les distances ne sont pas à l’échelle.")}
           ${retenir("Soleil, Terre et Lune sont alignés pendant une éclipse.")}`,
       },
     ],
@@ -129,6 +135,8 @@ export const PC_4E: ChapterSpec[] = [
             "<strong>réfraction</strong> : la lumière change de direction en passant d’un milieu transparent à un autre (air → eau) ;",
             "c’est pourquoi un bâton plongé dans l’eau paraît brisé.",
           ])}
+          ${figure(schema("p4-reflexion", "Réflexion d’un rayon sur un miroir plan, avec la normale."), "Le rayon réfléchi est symétrique du rayon incident par rapport à la normale : i = r.")}
+          ${figure(schema("p4-refraction", "Réfraction d’un rayon qui passe de l’air dans l’eau."), "En entrant dans l’eau, le rayon est dévié et se rapproche de la normale ; le pointillé montre où il serait allé sans réfraction.")}
           ${retenir("Les angles se mesurent par rapport à la normale (perpendiculaire à la surface).")}`,
       },
     ],
@@ -148,6 +156,8 @@ export const PC_4E: ChapterSpec[] = [
             "évaporation : récupère le sel de l’eau de mer (marais salants du Saloum, lac Rose) ;",
             "distillation : sépare les liquides ou récupère l’eau pure.",
           ])}
+          ${figure(schema("p4-separation", "Décantation puis filtration d’une eau boueuse."), "La décantation sépare grossièrement ; la filtration termine le travail et donne un liquide limpide.")}
+          ${figure(schema("p4-distillation", "Montage de distillation : ballon chauffé, réfrigérant, récipient."), "La distillation récupère l’eau pure d’une eau salée : le sel reste dans le ballon.")}
           ${retenir("Un corps pur a des températures de changement d’état fixes : l’eau pure fond à 0 °C et bout à 100 °C (pression normale).")}`,
       },
     ],
@@ -172,7 +182,8 @@ export const PC_4E: ChapterSpec[] = [
             ["dioxygène", `O${sub("2")}`, "2 O"],
             ["dioxyde de carbone", `CO${sub("2")}`, "1 C et 2 O"],
             ["méthane", `CH${sub("4")}`, "1 C et 4 H"],
-          ])}`,
+          ])}
+          ${figure(schema("p4-molecules", "Modèles des molécules d’eau, de dioxygène, de dioxyde de carbone et de méthane."), "Dans les modèles, chaque boule est un atome : blanc pour l’hydrogène, rouge pour l’oxygène, noir pour le carbone.")}`,
       },
     ],
   },
@@ -190,6 +201,7 @@ export const PC_4E: ChapterSpec[] = [
             "l’équation-bilan est équilibrée : autant d’atomes de chaque sorte à gauche et à droite.",
           ])}
           ${formula(`C + O${sub("2")} → CO${sub("2")} ; 2 H${sub("2")} + O${sub("2")} → 2 H${sub("2")}O`)}
+          ${figure(schema("p4-reaction", "Modèles des réactions C + O₂ → CO₂ et 2 H₂ + O₂ → 2 H₂O."), "On compte les boules de chaque couleur avant et après la flèche : il y en a autant, la masse se conserve.")}
           ${exemple(["Le charbon de bois brûle dans le dioxygène de l’air : il se forme du dioxyde de carbone, qui trouble l’eau de chaux."])}`,
       },
     ],

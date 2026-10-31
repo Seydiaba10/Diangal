@@ -5,6 +5,7 @@
 // par un enseignant.
 
 import { auBac, definition, erreurs, exercice, formula, type LessonSpec, liste, methode, objectifs, retenir, tableau } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 // ── Immunologie ─────────────────────────────────────────────────────────────
 
@@ -108,7 +109,8 @@ export const REPONSE_IMMUNITAIRE: LessonSpec = {
       ],
     )}
     ${retenir("Réponse innée : barrières, inflammation, phagocytose. Réponse spécifique : induction (sélection), amplification (clones, interleukines), différenciation (plasmocytes, LTc, mémoire), phase effectrice (anticorps, perforine). Le LT4 coordonne tout.")}
-    ${auBac("Pour un exercice de transfert (sérum, lymphocytes), raisonne ainsi : « ce qui transfère la protection » porte l’immunité. Sérum = anticorps (humorale) ; lymphocytes T = immunité cellulaire.")}`,
+    ${auBac("Pour un exercice de transfert (sérum, lymphocytes), raisonne ainsi : « ce qui transfère la protection » porte l’immunité. Sérum = anticorps (humorale) ; lymphocytes T = immunité cellulaire.")}
+          ${figure(schema("s3-anticorps", "Un anticorps fixé sur son antigène."), "La reconnaissance de l’antigène par l’anticorps est spécifique.")}`,
 };
 
 export const VIH_SIDA: LessonSpec = {
@@ -263,7 +265,9 @@ export const GAMETOGENESE: LessonSpec = {
         "C’est un <strong>spermatocyte II</strong>, entre les deux divisions de la méiose.",
       ],
     )}
-    ${auBac("Pour schématiser la méiose, prends 2n = 4 (deux paires de chromosomes, de couleurs différentes) et dessine chaque phase ; c’est ce qui est attendu au Bac.")}`,
+    ${auBac("Pour schématiser la méiose, prends 2n = 4 (deux paires de chromosomes, de couleurs différentes) et dessine chaque phase ; c’est ce qui est attendu au Bac.")}
+          ${figure(schema("s4-app-masculin", "Appareil reproducteur de l’homme."), "Les spermatozoïdes sont produits dans les testicules à partir de la puberté.")}
+          ${figure(schema("s4-app-feminin", "Appareil reproducteur de la femme."), "Les ovules se forment dans les ovaires ; en général, un seul est libéré à chaque cycle.")}`,
 };
 
 export const FECONDATION: LessonSpec = {
@@ -361,7 +365,8 @@ export const REGULATION_REPRODUCTION: LessonSpec = {
       ],
     )}
     ${retenir("Hypothalamus (GnRH) → hypophyse (FSH, LH) → gonades (gamètes et hormones) → rétrocontrôle sur l’hypothalamus et l’hypophyse. Rétrocontrôle négatif, sauf le pic d’œstrogènes avant l’ovulation (positif).")}
-    ${auBac("Construis un <strong>schéma fonctionnel</strong> : cadres « hypothalamus », « hypophyse », « ovaire », « utérus », flèches de stimulation (+) et de rétrocontrôle (−).")}`,
+    ${auBac("Construis un <strong>schéma fonctionnel</strong> : cadres « hypothalamus », « hypophyse », « ovaire », « utérus », flèches de stimulation (+) et de rétrocontrôle (−).")}
+          ${figure(schema("t-cycle-ovarien", "Allure des taux d’hormones pendant un cycle."), "Les hormones de l’hypophyse (LH, FSH) et des ovaires (œstrogènes, progestérone) se contrôlent mutuellement.")}`,
 };
 
 export const GESTATION: LessonSpec = {
@@ -400,7 +405,8 @@ export const GESTATION: LessonSpec = {
         "À partir du 3<sup>e</sup> mois, le <strong>placenta</strong> produit lui-même la progestérone et les œstrogènes.",
         "Au 4<sup>e</sup> mois, les ovaires ne sont donc plus indispensables : la grossesse continue.",
       ],
-    )}`,
+    )}
+          ${figure(schema("s4-grossesse", "Le fœtus dans l’utérus."), "Pendant la gestation, le placenta assure les échanges entre la mère et le fœtus et sécrète des hormones.")}`,
 };
 
 export const LACTATION: LessonSpec = {
@@ -528,7 +534,8 @@ export const REPRODUCTION_SPERMAPHYTES: LessonSpec = {
         "L’oosphère est haploïde : <strong>10</strong> chromosomes ; le noyau secondaire, issu de deux noyaux polaires, est diploïde : <strong>20</strong> chromosomes.",
         "L’albumen vient de la fusion du noyau secondaire (2n) avec un gamète mâle (n) : 3n = <strong>30</strong> chromosomes.",
       ],
-    )}`,
+    )}
+          ${figure(schema("t-fleur", "Coupe d’une fleur."), "La pollinisation transporte le pollen des étamines jusqu’au stigmate ; la fécondation a lieu dans l’ovaire.")}`,
 };
 
 // ── Génétique ───────────────────────────────────────────────────────────────
@@ -603,7 +610,8 @@ export const LOIS_MENDEL: LessonSpec = {
       "conclure à des gènes liés sans avoir fait un test-cross ou une analyse de F2 ;",
       "oublier de vérifier si le caractère dépend du sexe des descendants.",
     ])}
-    ${auBac("Rédige toujours dans l’ordre : analyse des résultats → hypothèse → vérification par l’échiquier → conclusion. Les points sont donnés pour le raisonnement autant que pour le résultat.")}`,
+    ${auBac("Rédige toujours dans l’ordre : analyse des résultats → hypothèse → vérification par l’échiquier → conclusion. Les points sont donnés pour le raisonnement autant que pour le résultat.")}
+          ${figure(schema("t-croisement", "Échiquier de croisement de deux hybrides."), "En F2 d’un monohybridisme avec dominance, on obtient 3/4 de phénotype dominant et 1/4 de phénotype récessif.")}`,
 };
 
 // ── Hérédité humaine : une version par série ────────────────────────────────
@@ -775,5 +783,6 @@ export const BIOTECHNOLOGIES: LessonSpec = {
         "Les bactéries se multiplient très vite : la production est abondante, régulière et ne dépend plus des abattoirs.",
       ],
     )}
-    ${retenir("Génie génétique : enzymes de restriction (couper), ligase (coller), vecteur (transporter), cellule hôte (produire). Applications en médecine, agriculture, justice et environnement ; elles posent des questions de biosécurité et d’éthique.")}`,
+    ${retenir("Génie génétique : enzymes de restriction (couper), ligase (coller), vecteur (transporter), cellule hôte (produire). Applications en médecine, agriculture, justice et environnement ; elles posent des questions de biosécurité et d’éthique.")}
+          ${figure(schema("t-pedigree", "Arbre généalogique d’une maladie récessive."), "Quand deux parents sains ont un enfant malade, l’allèle de la maladie est récessif.")}`,
 };

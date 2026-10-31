@@ -3,6 +3,7 @@
 // Leçons rédigées par DIANGAL, à faire valider par un professeur de SVT.
 
 import { type ChapterSpec, exemple, formula, liste, retenir, sub, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const CELL = "Biologie cellulaire";
 const NUTRI = "Nutrition";
@@ -23,7 +24,8 @@ const CELL_ORGANISATION: ChapterSpec = {
           "la cellule végétale a en plus une paroi, une grande vacuole et des chloroplastes (photosynthèse) ;",
           "mouvements cellulaires : cyclose, déplacement amiboïde, battement des cils et des flagelles.",
         ])}
-        ${retenir("La cellule est l’unité de structure et de fonctionnement des êtres vivants.")}`,
+        ${retenir("La cellule est l’unité de structure et de fonctionnement des êtres vivants.")}
+          ${figure(schema("s1-cellules", "Cellule animale et cellule végétale."), "Les mitochondries sont présentes dans les deux cellules ; la paroi, la grande vacuole et les chloroplastes sont propres à la cellule végétale.")}`,
     },
   ],
 };
@@ -42,7 +44,8 @@ const MICROBES: ChapterSpec = {
           ["taille", "environ 1 μm", "de 20 à 300 nm"],
           ["multiplication", "seule, par division", "seulement dans une cellule hôte"],
           ["traitement", "antibiotiques", "les antibiotiques sont inefficaces ; vaccins, antiviraux"],
-        ])}`,
+        ])}
+          ${figure(schema("s1-bacterie-virus", "Une bactérie et un virus."), "La bactérie est une cellule vivante sans noyau ; le virus n’est pas une cellule : il ne se multiplie qu’à l’intérieur d’une cellule.")}`,
     },
   ],
 };
@@ -61,7 +64,8 @@ const EXCHANGES: ChapterSpec = {
           "dans un milieu hypotonique, la cellule végétale se gonfle (turgescence) ; dans un milieu hypertonique, elle se vide (plasmolyse) ;",
           "le transport actif fait passer des substances contre le gradient de concentration, en consommant de l’énergie (ATP).",
         ])}
-        ${exemple(["Des feuilles de salade salées se ramollissent : leurs cellules perdent leur eau par osmose."])}`,
+        ${exemple(["Des feuilles de salade salées se ramollissent : leurs cellules perdent leur eau par osmose."])}
+          ${figure(schema("s1-osmose", "Globules rouges dans de l’eau pure, dans de l’eau à 9 g/L et dans une eau très salée."), "L’eau traverse la membrane vers le milieu le plus concentré : c’est l’osmose.")}`,
     },
   ],
 };
@@ -80,7 +84,8 @@ const MITOSIS: ChapterSpec = {
           "la mitose : prophase, métaphase (chromosomes alignés sur la plaque équatoriale), anaphase (séparation des chromatides), télophase ;",
           "elle donne deux cellules filles identiques à la cellule mère.",
         ])}
-        ${retenir("La mitose assure la croissance et le renouvellement des tissus.")}`,
+        ${retenir("La mitose assure la croissance et le renouvellement des tissus.")}
+          ${figure(schema("s1-mitose", "Les quatre phases de la mitose."), "Chaque chromosome double se sépare en deux : chaque cellule fille reçoit exactement les mêmes chromosomes.")}`,
     },
   ],
 };
@@ -99,7 +104,8 @@ const PROTEINS: ChapterSpec = {
           "traduction (dans le cytoplasme, sur les ribosomes) : chaque codon de trois nucléotides correspond à un acide aminé ;",
           "le code génétique est universel : il est le même chez presque tous les êtres vivants.",
         ])}
-        ${exemple(["Une mutation d’un seul nucléotide du gène de l’hémoglobine est à l’origine de la drépanocytose."])}`,
+        ${exemple(["Une mutation d’un seul nucléotide du gène de l’hémoglobine est à l’origine de la drépanocytose."])}
+          ${figure(schema("s1-proteines", "Transcription dans le noyau et traduction dans le cytoplasme."), "Le gène reste dans le noyau ; c’est sa copie, l’ARN messager, qui sort vers les ribosomes.")}`,
     },
   ],
 };
@@ -118,7 +124,8 @@ const DIGESTION: ChapterSpec = {
           ["protéines", "pepsine (estomac), trypsine (pancréas)", "acides aminés"],
           ["lipides", "lipase (pancréas), aidée de la bile", "acides gras et glycérol"],
         ])}
-        ${retenir("Les enzymes sont spécifiques et agissent mieux à 37 °C ; la bile n’est pas une enzyme, elle émulsionne les graisses.")}`,
+        ${retenir("Les enzymes sont spécifiques et agissent mieux à 37 °C ; la bile n’est pas une enzyme, elle émulsionne les graisses.")}
+          ${figure(schema("s4-digestif", "Schéma de l’appareil digestif."), "Les aliments sont transformés en nutriments tout au long du tube digestif, grâce aux sucs digestifs.")}`,
     },
   ],
 };
@@ -136,7 +143,9 @@ const GEOLOGY_INTRO: ChapterSpec = {
           "la vitesse des ondes sismiques change à certaines profondeurs : ces discontinuités séparent la croûte, le manteau et le noyau ;",
           "Moho : limite croûte-manteau ; discontinuité de Gutenberg (2 900 km) : limite manteau-noyau ;",
           "la lithosphère rigide (croûte et sommet du manteau) repose sur l’asthénosphère, plus ductile.",
-        ])}`,
+        ])}
+          ${figure(schema("s1-vitesses-sismiques", "Vitesse des ondes P et S selon la profondeur."), "Les brusques changements de vitesse des ondes sismiques révèlent les limites entre les enveloppes de la Terre.")}
+          ${figure(schema("s4-globe", "Quart de globe en coupe."), "Les enveloppes de la Terre, dessinées à l’échelle : la croûte est très mince.")}`,
     },
   ],
 };
@@ -154,7 +163,8 @@ const SENEGAL_GEOLOGY: ChapterSpec = {
           "la paléogéographie reconstitue les anciens rivages : la mer a recouvert une grande partie du pays au cours des temps géologiques ;",
           "ressources : phosphates (Taïba, Matam), calcaire (cimenteries de Bargny et de Pout), zircon des sables des Niayes, or (Sabodala), fer de la Falémé, pétrole et gaz en mer (Sangomar, Grand Tortue Ahmeyim).",
         ])}
-        ${retenir("Les ressources géologiques sont non renouvelables : leur exploitation doit être durable et profiter au pays.")}`,
+        ${retenir("Les ressources géologiques sont non renouvelables : leur exploitation doit être durable et profiter au pays.")}
+          ${figure(schema("g5-socle", "Carte du Sénégal : bassin sédimentaire et socle ancien."), "Le bassin sédimentaire couvre presque tout le pays ; le socle ancien affleure au sud-est.")}`,
     },
   ],
 };
@@ -214,7 +224,8 @@ export const SVT_1RE_S: ChapterSpec[] = [
             ["structure", "grenue (tous les minéraux en cristaux)", "microlitique (verre et petits cristaux)"],
             ["minéraux", "quartz, feldspaths, micas", "feldspaths, pyroxènes, olivine"],
             ["au Sénégal", "Sénégal oriental", "presqu’île du Cap-Vert"],
-          ])}`,
+          ])}
+          ${figure(schema("s4-roches", "Basalte et granite vus au microscope."), "La taille des cristaux révèle la vitesse de refroidissement du magma.")}`,
       },
     ],
   },
@@ -230,7 +241,8 @@ export const SVT_1RE_S: ChapterSpec[] = [
             "les roches sédimentaires se forment par altération, transport, dépôt puis diagenèse (tassement, cimentation) ;",
             "détritiques (grès), chimiques ou biochimiques (calcaire, phosphate) ;",
             "les roches <strong>résiduelles</strong> restent sur place après altération : latérite et cuirasses ferrugineuses des plateaux, bauxite.",
-          ])}`,
+          ])}
+          ${figure(schema("s5-sedimentation", "Couches de sédiments au fond de la mer."), "Les couches se déposent les unes sur les autres et durcissent : la plus ancienne est en bas.")}`,
       },
     ],
   },
@@ -246,7 +258,8 @@ export const SVT_1RE_S: ChapterSpec[] = [
             "sous l’effet de la température et de la pression, une roche se transforme sans fondre : c’est le métamorphisme (argile → schiste → micaschiste → gneiss) ;",
             "les roches se déforment : plis (déformation souple) et failles (cassures) ;",
             "ces déformations résultent des mouvements des plaques et accompagnent la formation des chaînes de montagnes.",
-          ])}`,
+          ])}
+          ${figure(schema("s3-cycle-roches", "Le cycle des roches."), "Enfouies sous de fortes pressions et températures, les roches se transforment sans fondre : ce sont les roches métamorphiques.")}`,
       },
     ],
   },
@@ -272,7 +285,8 @@ export const SVT_1RE_L: ChapterSpec[] = [
             "les nutriments traversent la paroi de l’intestin grêle au niveau des villosités ;",
             "le glucose et les acides aminés passent dans le sang et gagnent le foie ; les lipides passent surtout dans la lymphe ;",
             "les cellules utilisent les nutriments pour produire de l’énergie et fabriquer leur propre matière.",
-          ])}`,
+          ])}
+          ${figure(schema("s4-villosite", "Une villosité intestinale."), "Les nutriments passent dans le sang et la lymphe à travers les villosités de l’intestin grêle.")}`,
       },
     ],
   },

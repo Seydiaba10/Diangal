@@ -4,6 +4,7 @@
 // valider par un professeur de sciences physiques.
 
 import { type ChapterSpec, exemple, formula, frac, liste, retenir, sub, sup, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const PHY = "Physique";
 const CHI = "Chimie";
@@ -101,7 +102,8 @@ const WORK: ChapterSpec = {
           "travail du poids : W = m g (z<sub>A</sub> − z<sub>B</sub>), il ne dépend pas du chemin suivi ;",
           "la puissance s’exprime en watts (W).",
         ])}
-        ${exemple(["Monter un seau de 10 kg de 3 m dans un puits : le poids fournit W = −10 × 10 × 3 = −300 J."])}`,
+        ${exemple(["Monter un seau de 10 kg de 3 m dans un puits : le poids fournit W = −10 × 10 × 3 = −300 J."])}
+          ${figure(schema("p1-travail", "Caisse tirée par une force qui fait un angle α avec le déplacement."), "Plus l’angle α est grand, plus le travail est petit ; il est nul si la force est perpendiculaire au déplacement.")}`,
     },
   ],
 };
@@ -123,7 +125,8 @@ export const PC_1RE_S: ChapterSpec[] = [
             "formule brute C₆H₆ : cycle de six carbones, électrons délocalisés (formule de Kekulé) ;",
             "il donne surtout des réactions de <strong>substitution</strong> (nitration, halogénation) ; l’addition est difficile ;",
             "il est toxique : on le manipule avec précaution.",
-          ])}`,
+          ])}
+          ${figure(schema("p1-benzene", "Formules du benzène."), "Les six liaisons du cycle sont identiques : les électrons des doubles liaisons sont partagés par tout le cycle.")}`,
       },
     ],
   },
@@ -142,7 +145,8 @@ export const PC_1RE_S: ChapterSpec[] = [
             "une lame de zinc dans une solution de sulfate de cuivre se recouvre de cuivre : Zn + Cu²⁺ → Zn²⁺ + Cu ;",
             "on classe les couples par leur potentiel standard E° (référence : couple H⁺/H₂, E° = 0 V).",
           ])}
-          ${retenir("L’oxydant le plus fort réagit avec le réducteur le plus fort (règle du gamma).")}`,
+          ${retenir("L’oxydant le plus fort réagit avec le réducteur le plus fort (règle du gamma).")}
+          ${figure(schema("p1-redox", "Échelle de potentiels standard de quelques couples."), "La règle du gamma : l’oxydant d’un couple situé au-dessus réagit avec le réducteur d’un couple situé en dessous (Cu²⁺ avec Zn).")}`,
       },
     ],
   },
@@ -176,7 +180,8 @@ export const PC_1RE_S: ChapterSpec[] = [
             "quantité d’électricité : Q = I × t (coulombs) ;",
             "quantité d’électrons : n(e⁻) = Q ÷ F, avec F = 96 500 C/mol (faraday).",
           ])}
-          ${exemple(["I = 2 A pendant 1 930 s : Q = 3 860 C, n(e⁻) = 0,04 mol ; à la cathode se déposent 0,02 mol de cuivre (Cu²⁺ + 2 e⁻ → Cu)."])}`,
+          ${exemple(["I = 2 A pendant 1 930 s : Q = 3 860 C, n(e⁻) = 0,04 mol ; à la cathode se déposent 0,02 mol de cuivre (Cu²⁺ + 2 e⁻ → Cu)."])}
+          ${figure(schema("p1-electrolyse", "Cuve d’électrolyse d’une solution de sulfate de cuivre."), "Les électrons fournis par le générateur réduisent les ions cuivre à la cathode : la masse de cuivre déposé dépend de la quantité d’électricité Q = I × t.")}`,
       },
     ],
   },
@@ -206,7 +211,8 @@ export const PC_1RE_S: ChapterSpec[] = [
         minutes: 15,
         body: `${formula("E<sub>p</sub> = m g z ; E<sub>m</sub> = E<sub>c</sub> + E<sub>p</sub>")}
           ${liste(["sans frottement, l’énergie mécanique se conserve ;", "avec frottements, elle diminue : l’énergie perdue devient de la chaleur."])}
-          ${exemple(["Un objet lâché de 5 m sans vitesse (g = 10 N/kg) arrive au sol à v = √(2 × 10 × 5) = 10 m/s."])}`,
+          ${exemple(["Un objet lâché de 5 m sans vitesse (g = 10 N/kg) arrive au sol à v = √(2 × 10 × 5) = 10 m/s."])}
+          ${figure(schema("p1-energie", "Énergies cinétique, potentielle et mécanique d’un objet qui tombe."), "Pendant la chute, l’énergie potentielle se transforme en énergie cinétique ; sans frottement, leur somme ne change pas.")}`,
       },
     ],
   },
@@ -220,7 +226,8 @@ export const PC_1RE_S: ChapterSpec[] = [
         minutes: 15,
         body: `${formula("Q = m × c × (θ<sub>f</sub> − θ<sub>i</sub>) ; changement d’état : Q = m × L")}
           ${liste(["capacité thermique massique de l’eau : c = 4 180 J/(kg·°C) ;", "dans un calorimètre isolé, la somme des quantités de chaleur échangées est nulle."])}
-          ${exemple(["Chauffer 2 kg d’eau de 20 °C à 100 °C : Q = 2 × 4 180 × 80 = 668 800 J."])}`,
+          ${exemple(["Chauffer 2 kg d’eau de 20 °C à 100 °C : Q = 2 × 4 180 × 80 = 668 800 J."])}
+          ${figure(schema("p3-calorimetre", "Calorimètre avec thermomètre et agitateur."), "Le calorimètre est un récipient isolé : la chaleur cédée par le corps chaud est reçue par le corps froid.")}`,
       },
     ],
   },
@@ -233,7 +240,8 @@ export const PC_1RE_S: ChapterSpec[] = [
         title: "Loi de Coulomb et champ",
         minutes: 15,
         body: `${formula(`F = k ${frac("|q q’|", `r${sup("2")}`)} (k = 9 × 10${sup("9")} SI) ; <strong>F</strong> = q <strong>E</strong>`)}
-          ${liste(["le champ électrostatique se mesure en V/m ;", "entre deux plaques parallèles chargées, le champ est uniforme : E = U ÷ d."])}`,
+          ${liste(["le champ électrostatique se mesure en V/m ;", "entre deux plaques parallèles chargées, le champ est uniforme : E = U ÷ d."])}
+          ${figure(schema("p1-champ", "Champ électrostatique uniforme entre deux plaques chargées."), "Les lignes de champ vont de la plaque + vers la plaque − ; une charge négative serait poussée dans l’autre sens.")}`,
       },
     ],
   },
@@ -296,7 +304,8 @@ export const PC_1RE_S: ChapterSpec[] = [
             "onde transversale (corde) ou longitudinale (ressort, son) ;",
             "deux ondes de même fréquence qui se superposent forment des interférences : franges d’amplitude maximale et d’amplitude nulle.",
           ])}
-          ${exemple(["Une onde de 50 Hz qui se propage à 10 m/s a une longueur d’onde de 0,2 m."])}`,
+          ${exemple(["Une onde de 50 Hz qui se propage à 10 m/s a une longueur d’onde de 0,2 m."])}
+          ${figure(schema("p1-onde", "Onde sinusoïdale le long d’une corde avec sa longueur d’onde."), "La longueur d’onde est la distance parcourue par l’onde pendant une période.")}`,
       },
     ],
   },
@@ -310,7 +319,8 @@ export const PC_1RE_S: ChapterSpec[] = [
         minutes: 15,
         body: `${formula(`${frac("1", "OA’")} − ${frac("1", "OA")} = ${frac("1", "f’")} ; γ = ${frac("OA’", "OA")} ; C = ${frac("1", "f’")}`)}
           ${liste(["mesures algébriques, sens positif celui de la lumière ;", "C est la vergence en dioptries (δ) : positive pour une lentille convergente ;", "trois rayons particuliers permettent de construire l’image : par le centre optique, parallèle à l’axe, par le foyer objet."])}
-          ${exemple(["Lentille de 10 δ (f’ = 10 cm), objet à 30 cm devant : 1/OA’ = 10 − 1/0,3, image réelle à 15 cm, renversée, γ = −0,5."])}`,
+          ${exemple(["Lentille de 10 δ (f’ = 10 cm), objet à 30 cm devant : 1/OA’ = 10 − 1/0,3, image réelle à 15 cm, renversée, γ = −0,5."])}
+          ${figure(schema("p1-lentille", "Construction de l’image d’un objet par une lentille de 10 δ."), "Objet à 30 cm d’une lentille de 10 δ : l’image est réelle, renversée, à 15 cm de la lentille et deux fois plus petite.")}`,
       },
     ],
   },
@@ -334,7 +344,8 @@ export const PC_1RE_L: ChapterSpec[] = [
             "pile Daniell : une lame de zinc dans une solution de Zn²⁺, une lame de cuivre dans une solution de Cu²⁺, reliées par un pont salin ;",
             "le zinc est oxydé (pôle −), les ions cuivre sont réduits (pôle +) ; f.é.m. d’environ 1,1 V.",
           ])}
-          ${retenir("Une pile transforme de l’énergie chimique en énergie électrique ; les piles usagées se recyclent.")}`,
+          ${retenir("Une pile transforme de l’énergie chimique en énergie électrique ; les piles usagées se recyclent.")}
+          ${figure(schema("p1-daniell", "Schéma de la pile Daniell."), "Le pont salin ferme le circuit à l’intérieur de la pile et garde les solutions électriquement neutres.")}`,
       },
     ],
   },

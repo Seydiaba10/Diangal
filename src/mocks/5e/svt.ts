@@ -3,6 +3,7 @@
 // rédigées par DIANGAL, à faire valider par un professeur de SVT.
 
 import { type ChapterSpec, exemple, liste, methode, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 export const SVT_5E: ChapterSpec[] = [
   {
@@ -18,7 +19,9 @@ export const SVT_5E: ChapterSpec[] = [
             ["carnivore", "chien, lion", "canines pointues pour déchirer, molaires tranchantes"],
             ["omnivore", "homme, porc", "dents variées"],
           ])}
+          ${figure(schema("s5-dentition", "Dentition d’un herbivore (mouton) et d’un carnivore (chien)."), "Le mouton n’a pas de canines : un espace vide, la barre, sépare ses incisives de ses molaires. Le chien a des canines longues et pointues.")}
           ${liste(["Les ruminants (vache, mouton) ont un estomac à quatre poches et ruminent.", "Les oiseaux n’ont pas de dents : le gésier broie les graines."])}
+          ${figure(schema("s5-ruminant", "Estomac d’un ruminant : panse, bonnet, feuillet et caillette."), "Le ruminant avale l’herbe sans bien la mâcher, puis la fait remonter pour la remâcher au repos : c’est la rumination.")}
           ${retenir("La forme des dents et de l’appareil digestif est adaptée au régime alimentaire.")}`,
       },
     ],
@@ -80,7 +83,9 @@ export const SVT_5E: ChapterSpec[] = [
             "Il contient des éléments minéraux (sable, argile, limon), de l’humus, de l’eau, de l’air et des êtres vivants.",
             "Au Sénégal : sols « dior » (sableux, filtrants) et « deck » (plus argileux, plus riches).",
           ])}
-          ${methode(["Mettre un échantillon de sol dans un bocal d’eau, agiter, laisser reposer.", "Observer les couches : graviers, sable, limon, argile ; l’humus flotte."], "Étudier la composition d’un sol")}`,
+          ${figure(schema("s5-profil-sol", "Profil d’un sol avec ses couches, de la litière à la roche mère."), "Le sol se forme au-dessus de la roche mère, qui s’altère lentement ; l’humus vient de la décomposition des feuilles et des débris.")}
+          ${methode(["Mettre un échantillon de sol dans un bocal d’eau, agiter, laisser reposer.", "Observer les couches : graviers, sable, limon, argile ; l’humus flotte."], "Étudier la composition d’un sol")}
+          ${figure(schema("s5-bocal-sol", "Bocal d’eau où les constituants du sol se sont déposés en couches."), "Les éléments les plus lourds tombent au fond en premier ; l’argile, très fine, se dépose en dernier ; l’humus, léger, flotte.")}`,
       },
       {
         title: "L’érosion et la conservation des sols",
@@ -102,6 +107,7 @@ export const SVT_5E: ChapterSpec[] = [
             "Avec le temps, les couches se tassent et durcissent : elles deviennent des roches (grès, calcaire, argile).",
             "Elles contiennent souvent des <strong>fossiles</strong>, restes d’êtres vivants anciens.",
           ])}
+          ${figure(schema("s5-sedimentation", "Couches de sédiments au fond de la mer, la plus ancienne en bas, avec un fossile."), "Les couches se déposent les unes sur les autres : la plus ancienne est en bas, la plus récente en haut.")}
           ${exemple(["Le calcaire fait effervescence avec l’acide chlorhydrique ; les phosphates de Taïba et de Matam sont des roches sédimentaires exploitées."])}
           ${retenir("Le Sénégal est formé en grande partie d’un bassin sédimentaire.")}`,
       },

@@ -245,12 +245,14 @@ export type Database = {
           assessment_id: string
           client_ref: string | null
           client_submitted_at: string | null
+          current_index: number
           deadline_at: string | null
           id: string
           late_sync: boolean
           max_score: number | null
           option_order: Json
           saved_answers: Json
+          saved_at: string | null
           score: number | null
           score_20: number | null
           started_at: string
@@ -262,12 +264,14 @@ export type Database = {
           assessment_id: string
           client_ref?: string | null
           client_submitted_at?: string | null
+          current_index?: number
           deadline_at?: string | null
           id?: string
           late_sync?: boolean
           max_score?: number | null
           option_order?: Json
           saved_answers?: Json
+          saved_at?: string | null
           score?: number | null
           score_20?: number | null
           started_at?: string
@@ -279,12 +283,14 @@ export type Database = {
           assessment_id?: string
           client_ref?: string | null
           client_submitted_at?: string | null
+          current_index?: number
           deadline_at?: string | null
           id?: string
           late_sync?: boolean
           max_score?: number | null
           option_order?: Json
           saved_answers?: Json
+          saved_at?: string | null
           score?: number | null
           score_20?: number | null
           started_at?: string
@@ -2681,6 +2687,7 @@ export type Database = {
         Args: { p_enabled: boolean; p_scenario: string }
         Returns: Json
       }
+      abandon_attempt: { Args: { p_attempt: string }; Returns: undefined }
       answer_account_deletion_request: {
         Args: { p_approve: boolean; p_student: string }
         Returns: undefined
@@ -2797,6 +2804,18 @@ export type Database = {
       }
       get_my_consent_request: { Args: never; Returns: Json }
       get_my_family_code: { Args: never; Returns: string }
+      get_my_open_attempts: {
+        Args: never
+        Returns: {
+          answered: number
+          assessment_slug: string
+          attempt_id: string
+          current_index: number
+          deadline_at: string
+          saved_at: string
+          total: number
+        }[]
+      }
       get_my_referral: { Args: never; Returns: Json }
       get_pending_parent_links: {
         Args: never
@@ -2842,6 +2861,10 @@ export type Database = {
       save_attempt_answers: {
         Args: { p_answers: Json; p_attempt: string }
         Returns: undefined
+      }
+      save_attempt_progress: {
+        Args: { p_answers: Json; p_attempt: string; p_current_index: number }
+        Returns: string
       }
       schedule_tutor_session: {
         Args: {

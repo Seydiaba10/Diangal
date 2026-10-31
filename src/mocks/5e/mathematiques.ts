@@ -4,6 +4,7 @@
 // en ligne. Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { type ChapterSpec, exemple, formula, frac, liste, methode, retenir, sup, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const NUM = "Activités numériques";
 const GEO = "Activités géométriques";
@@ -23,6 +24,7 @@ export const MATH_5E: ChapterSpec[] = [
             "soustraire un nombre, c’est ajouter son opposé : 4 − (−6) = 4 + 6 = 10.",
           ])}
           ${exemple(["La température passe de −2 °C à +5 °C : elle monte de 5 − (−2) = 7 °C."])}
+          ${figure(schema("m5-addition-relatifs", "Droite graduée : de −2 à +5, une flèche de + 7."), "Pour aller de −2 à +5 sur la droite graduée, on avance de 7 : 5 − (−2) = 5 + 2 = 7.")}
           ${retenir("Dans une somme algébrique, on peut regrouper les positifs d’un côté et les négatifs de l’autre.")}`,
       },
     ],
@@ -96,6 +98,7 @@ export const MATH_5E: ChapterSpec[] = [
             `on simplifie en divisant numérateur et dénominateur par un même nombre : ${frac("18", "24")} = ${frac("3", "4")} ;`,
             `pour comparer, on réduit au même dénominateur : ${frac("2", "3")} = ${frac("8", "12")} et ${frac("3", "4")} = ${frac("9", "12")}, donc ${frac("2", "3")} &lt; ${frac("3", "4")}.`,
           ])}
+          ${figure(schema("m5-fractions", "Bandes partagées en 3, 12 et 4 parts : 2/3 = 8/12 et 3/4 = 9/12."), "Au même dénominateur, on compare les numérateurs : 8/12 < 9/12, donc 2/3 < 3/4.")}
           ${retenir("Une fraction est irréductible quand on ne peut plus la simplifier.")}`,
       },
       {
@@ -157,6 +160,7 @@ export const MATH_5E: ChapterSpec[] = [
             "les axes partagent le plan en quatre quadrants ;",
             "le symétrique de M(x ; y) par rapport à l’origine est M’(−x ; −y).",
           ])}
+          ${figure(schema("m5-quadrants", "Repère partagé en quatre quadrants avec M(3 ; 2) et M′(−3 ; −2)."), "Les axes partagent le plan en quatre quadrants. M′(−3 ; −2) est le symétrique de M(3 ; 2) par rapport à l’origine O.")}
           ${retenir("Les points de l’axe des abscisses ont une ordonnée nulle ; ceux de l’axe des ordonnées, une abscisse nulle.")}`,
       },
     ],
@@ -174,6 +178,7 @@ export const MATH_5E: ChapterSpec[] = [
             "deux droites parallèles coupées par une sécante forment des angles <strong>alternes-internes</strong> égaux et des angles <strong>correspondants</strong> égaux ;",
             "réciproquement, si deux angles alternes-internes sont égaux, les droites sont parallèles.",
           ])}
+          ${figure(schema("m5-angles-paralleles", "Deux parallèles coupées par une sécante, avec deux angles alternes-internes et deux angles correspondants marqués."), "Les angles alternes-internes sont entre les deux parallèles, de part et d’autre de la sécante ; les angles correspondants sont à la même place aux deux intersections.")}
           ${retenir("Angles complémentaires : somme 90° ; angles supplémentaires : somme 180°.")}`,
       },
     ],
@@ -187,7 +192,8 @@ export const MATH_5E: ChapterSpec[] = [
         title: "Construire un triangle",
         minutes: 12,
         body: `${retenir("Inégalité triangulaire : dans un triangle, chaque côté est plus petit que la somme des deux autres. On ne peut pas construire un triangle de côtés 3 cm, 4 cm et 9 cm.")}
-          ${liste(["on construit un triangle connaissant trois côtés (compas), deux côtés et l’angle compris, ou un côté et deux angles (rapporteur) ;", "la somme des angles d’un triangle vaut 180°."])}`,
+          ${liste(["on construit un triangle connaissant trois côtés (compas), deux côtés et l’angle compris, ou un côté et deux angles (rapporteur) ;", "la somme des angles d’un triangle vaut 180°."])}
+          ${figure(schema("m5-construire-triangle", "Triangle ABC de côtés 5 cm, 4 cm et 3 cm, avec deux arcs de compas qui se coupent en C."), "On trace [AB] = 5 cm, puis deux arcs de compas : de centre A (rayon 4 cm) et de centre B (rayon 3 cm). Ils se coupent en C, car 5 < 4 + 3.")}`,
       },
       {
         title: "Médiatrices et hauteurs",
@@ -196,6 +202,8 @@ export const MATH_5E: ChapterSpec[] = [
             "les trois <strong>médiatrices</strong> d’un triangle se coupent en un point, centre du <strong>cercle circonscrit</strong> (il passe par les trois sommets) ;",
             "une <strong>hauteur</strong> est la droite passant par un sommet et perpendiculaire au côté opposé ; les trois hauteurs sont concourantes.",
           ])}
+          ${figure(schema("m5-hauteurs", "Triangle ABC et ses trois hauteurs qui se coupent en H."), "Chaque hauteur part d’un sommet et coupe le côté opposé à angle droit ; les trois hauteurs se coupent en H (l’orthocentre).")}
+          ${figure(schema("m5-mediatrices", "Triangle ABC, ses trois médiatrices concourantes en O et son cercle circonscrit."), "Le point O est à la même distance des trois sommets : c’est le centre du cercle circonscrit.")}
           ${retenir("Dans un triangle rectangle, le centre du cercle circonscrit est le milieu de l’hypoténuse.")}`,
       },
     ],
@@ -209,6 +217,7 @@ export const MATH_5E: ChapterSpec[] = [
         title: "Propriétés du parallélogramme",
         minutes: 15,
         body: `<p>Un <strong>parallélogramme</strong> est un quadrilatère dont les côtés opposés sont parallèles.</p>
+          ${figure(schema("m5-parallelogramme", "Parallélogramme ABCD avec ses diagonales qui se coupent en leur milieu O."), "Les codages montrent que O est le milieu de [AC] et de [BD] : les diagonales se coupent en leur milieu.")}
           ${liste(["ses côtés opposés ont la même longueur ;", "ses angles opposés sont égaux ; deux angles consécutifs sont supplémentaires ;", "ses diagonales se coupent en leur milieu ; ce point est son centre de symétrie."])}
           ${methode(["Les diagonales se coupent en leur milieu.", "Ou : les côtés opposés sont égaux deux à deux.", "Ou : deux côtés opposés sont parallèles et de même longueur."], "Reconnaître un parallélogramme")}
           ${retenir("Rectangle, losange et carré sont des parallélogrammes particuliers.")}`,
@@ -224,6 +233,7 @@ export const MATH_5E: ChapterSpec[] = [
         title: "Symétrie par rapport à un point",
         minutes: 12,
         body: `<p>Le symétrique de A par rapport au point O est le point A’ tel que O soit le <strong>milieu</strong> de [AA’].</p>
+          ${figure(schema("m5-symetrie-centrale", "Triangle ABC et son symétrique A′B′C′ par rapport au point O."), "Chaque point et son symétrique sont de part et d’autre de O, à la même distance : O est le milieu de [AA′].")}
           ${liste(["la symétrie centrale conserve les longueurs, les angles, les aires et l’alignement ;", "elle transforme une droite en une droite parallèle ;", "une figure a un centre de symétrie si elle est sa propre image (parallélogramme, cercle)."])}
           ${retenir("La symétrie centrale est un demi-tour autour du point O.")}`,
       },
@@ -242,6 +252,7 @@ export const MATH_5E: ChapterSpec[] = [
             ["prisme droit", "périmètre de la base × hauteur", "aire de la base × hauteur"],
             ["cylindre", "2 × π × r × h", "π × r² × h"],
           ])}
+          ${figure(schema("m5-prisme", "Prisme droit à base triangulaire et son patron."), "Le patron d’un prisme droit à base triangulaire : deux triangles (les bases) et trois rectangles (les faces latérales).")}
           ${exemple(["Un prisme à base triangulaire (base 6 cm, hauteur du triangle 4 cm) et de hauteur 10 cm : V = (6 × 4 ÷ 2) × 10 = 120 cm³."])}
           ${retenir("Le patron d’un prisme droit est formé de deux bases polygonales et de rectangles.")}`,
       },

@@ -3,6 +3,7 @@
 // programme la contient. Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { auBac, definition, erreurs, exercice, formula, type LessonSpec, liste, methode, objectifs, retenir, tableau } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 // ── Système nerveux cérébro-spinal ──────────────────────────────────────────
 
@@ -52,7 +53,8 @@ export const ENCEPHALE: LessonSpec = {
       ],
     )}
     ${retenir("Encéphale = cerveau + cervelet + tronc cérébral (bulbe). Il est protégé par le crâne, trois méninges et le LCR. Dans le cerveau, la substance grise est à l’extérieur ; dans la moelle, elle est au centre.")}
-    ${auBac("On te demande souvent un <strong>schéma annoté</strong> d’une coupe de l’encéphale ou de la moelle. Trace-le grand, au crayon, avec des traits de rappel horizontaux et un titre précis.")}`,
+    ${auBac("On te demande souvent un <strong>schéma annoté</strong> d’une coupe de l’encéphale ou de la moelle. Trace-le grand, au crayon, avec des traits de rappel horizontaux et un titre précis.")}
+          ${figure(schema("t-encephale", "L’encéphale vu de côté."), "Le cerveau commande les mouvements volontaires ; le cervelet coordonne les mouvements ; le bulbe contrôle des fonctions vitales.")}`,
 };
 
 export const MOELLE: LessonSpec = {
@@ -98,7 +100,8 @@ export const MOELLE: LessonSpec = {
     ${erreurs([
       "inverser cornes dorsales (étroites, sensitives) et cornes ventrales (larges, motrices) ;",
       "placer la substance grise à l’extérieur de la moelle, comme dans le cerveau.",
-    ])}`,
+    ])}
+          ${figure(schema("t-moelle", "Coupe transversale de la moelle épinière."), "La racine dorsale contient les fibres sensitives, la racine ventrale les fibres motrices.")}`,
 };
 
 // ── Tissu nerveux et ses propriétés ─────────────────────────────────────────
@@ -142,7 +145,8 @@ export const STRUCTURE_TISSU_NERVEUX: LessonSpec = {
         "Il s’agit d’un nerf formé de fibres myélinisées.",
       ],
     )}
-    ${auBac("Pour un schéma de neurone, indique toujours le sens de propagation du message par une flèche : dendrites → corps cellulaire → axone → arborisation terminale.")}`,
+    ${auBac("Pour un schéma de neurone, indique toujours le sens de propagation du message par une flèche : dendrites → corps cellulaire → axone → arborisation terminale.")}
+          ${figure(schema("s3-neurone", "Un neurone."), "Le neurone est la cellule nerveuse : corps cellulaire, dendrites et axone.")}`,
 };
 
 export const PROPRIETES_TISSU_NERVEUX: LessonSpec = {
@@ -227,7 +231,8 @@ export const PHENOMENES_ELECTRIQUES: LessonSpec = {
       ],
     )}
     ${retenir("Repos : −70 mV, membrane polarisée, maintenue par la pompe Na⁺/K⁺ (ATP). Potentiel d’action : entrée de Na⁺ (dépolarisation), puis sortie de K⁺ (repolarisation). Message nerveux codé en fréquence de potentiels d’action.")}
-    ${auBac("Sur un enregistrement, repère toujours les axes et leurs unités (mV, ms), puis décris avant d’interpréter : « on observe… », puis « on en déduit… ».")}`,
+    ${auBac("Sur un enregistrement, repère toujours les axes et leurs unités (mV, ms), puis décris avant d’interpréter : « on observe… », puis « on en déduit… ».")}
+          ${figure(schema("t-potentiel", "Courbe d’un potentiel d’action."), "Le potentiel d’action obéit à la loi du tout ou rien : son amplitude ne dépend pas de l’intensité de la stimulation.")}`,
 };
 
 export const CONDUCTION_INFLUX: LessonSpec = {
@@ -328,7 +333,8 @@ export const SYNAPSE: LessonSpec = {
       ],
     )}
     ${retenir("Synapse chimique : potentiel d’action → entrée de Ca²⁺ → exocytose du neurotransmetteur → fixation sur les récepteurs → PPSE ou PPSI → intégration. Délai synaptique et sens unique. Drogues et poisons agissent souvent sur les synapses.")}
-    ${auBac("Un schéma fonctionnel de la synapse, avec des flèches numérotées dans l’ordre des étapes, vaut souvent mieux qu’un long texte.")}`,
+    ${auBac("Un schéma fonctionnel de la synapse, avec des flèches numérotées dans l’ordre des étapes, vaut souvent mieux qu’un long texte.")}
+          ${figure(schema("t-synapse", "Schéma d’une synapse chimique."), "Le message électrique est converti en message chimique dans la fente synaptique, puis de nouveau en message électrique.")}`,
 };
 
 // ── Rôle du système nerveux dans le comportement moteur (S2) ───────────────
@@ -379,7 +385,8 @@ export const REFLEXES: LessonSpec = {
         "En excitant le bout central, on envoie un message vers la moelle : le centre, la voie motrice et le muscle fonctionnent. La racine dorsale est la voie afférente de l’arc réflexe.",
       ],
     )}
-    ${retenir("Réflexe inné : arc réflexe à 5 éléments, centre médullaire. Réflexe myotatique monosynaptique avec innervation réciproque. Réflexe conditionnel : apprentissage, centre cortical, extinction sans renforcement.")}`,
+    ${retenir("Réflexe inné : arc réflexe à 5 éléments, centre médullaire. Réflexe myotatique monosynaptique avec innervation réciproque. Réflexe conditionnel : apprentissage, centre cortical, extinction sans renforcement.")}
+          ${figure(schema("s3-arc-reflexe", "L’arc réflexe."), "Le centre nerveux du réflexe médullaire est la moelle épinière.")}`,
 };
 
 export const MOUVEMENTS_VOLONTAIRES: LessonSpec = {
@@ -463,7 +470,8 @@ export const STRUCTURE_MUSCLE: LessonSpec = {
         "Les filaments ne raccourcissent pas, ils <strong>glissent</strong> les uns sur les autres : le sarcomère raccourcit.",
       ],
     )}
-    ${retenir("Muscle → faisceaux → fibres (cellules multinucléées) → myofibrilles → sarcomères (actine et myosine). Pendant la contraction, la bande A reste constante, la bande I et la zone H diminuent.")}`,
+    ${retenir("Muscle → faisceaux → fibres (cellules multinucléées) → myofibrilles → sarcomères (actine et myosine). Pendant la contraction, la bande A reste constante, la bande I et la zone H diminuent.")}
+          ${figure(schema("t-sarcomere", "Sarcomère relâché et contracté."), "Pendant la contraction, les filaments ne raccourcissent pas : ils glissent les uns entre les autres.")}`,
 };
 
 export const FONCTIONNEMENT_MUSCLE: LessonSpec = {
@@ -567,7 +575,8 @@ export const AUTOMATISME_CARDIAQUE: LessonSpec = {
         "Le blocage se situe au niveau du nœud auriculo-ventriculaire ou du faisceau de His (bloc auriculo-ventriculaire) ; on peut poser un stimulateur cardiaque artificiel.",
       ],
     )}
-    ${retenir("Le cœur est automatique grâce au tissu nodal : nœud sinusal (pacemaker) → oreillettes → nœud auriculo-ventriculaire → faisceau de His → réseau de Purkinje. Période réfractaire longue : pas de tétanos cardiaque.")}`,
+    ${retenir("Le cœur est automatique grâce au tissu nodal : nœud sinusal (pacemaker) → oreillettes → nœud auriculo-ventriculaire → faisceau de His → réseau de Purkinje. Période réfractaire longue : pas de tétanos cardiaque.")}
+          ${figure(schema("s4-coeur", "Le cœur en coupe."), "Le cœur bat de façon automatique grâce à son tissu nodal ; le système nerveux ne fait qu’accélérer ou ralentir son rythme.")}`,
 };
 
 export const PRESSION_ARTERIELLE: LessonSpec = {
@@ -787,5 +796,6 @@ export const GLYCEMIE: LessonSpec = {
       ],
     )}
     ${retenir("Hyperglycémie → cellules β → insuline → stockage du glucose (foie, muscles, tissu adipeux). Hypoglycémie → cellules α → glucagon → libération du glucose par le foie. Le diabète est une glycémie durablement trop élevée.")}
-    ${auBac("Dans un exercice avec des courbes de glycémie et d’hormones, compare toujours l’ordre chronologique : une hormone qui augmente <strong>après</strong> la glycémie en est la réponse, pas la cause.")}`,
+    ${auBac("Dans un exercice avec des courbes de glycémie et d’hormones, compare toujours l’ordre chronologique : une hormone qui augmente <strong>après</strong> la glycémie en est la réponse, pas la cause.")}
+          ${figure(schema("t-glycemie", "Boucle de régulation de la glycémie."), "Insuline et glucagon agissent en sens contraires pour maintenir la glycémie autour de 1 g/L.")}`,
 };

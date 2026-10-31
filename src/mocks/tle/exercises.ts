@@ -5,10 +5,13 @@ import "server-only";
 // même série d’exercices, sauf si la banque prévoit une version propre à une série (clé « titre [série] »).
 // Écrits par DIANGAL d’après les leçons, à faire relire par des enseignants.
 // Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// Questions illustrées (schémas des leçons) ajoutées par tle/enrich.ts.
 
 import type { SubjectCode } from "@/types/domain";
 import { CHAPTERS_TLE } from "../curriculum-tle";
 import { buildExerciseSeries, type ExerciseSeries, type ExerciseSpec } from "../exercise-series";
+import { withSubjectExtras } from "../illustrated-questions";
+import { EXTRA_TLE } from "./enrich";
 import { ANG_TLE_EXERCISES, FR_TLE_EXERCISES, HG_TLE_EXERCISES, PHILO_TLE_EXERCISES } from "./exercises-lettres";
 import { MATH_TLE_EXERCISES } from "./exercises-maths";
 import { PC_TLE_EXERCISES, SVT_TLE_EXERCISES } from "./exercises-sciences";
@@ -36,7 +39,7 @@ const SERIES: ExerciseSeries[] = CHAPTERS_TLE.map((chapter) => {
   return { subject: chapter.subjectCode, chapter: chapter.title, series: chapter.seriesCode ?? undefined, questions };
 });
 
-const built = buildExerciseSeries("TLE", CHAPTERS_TLE, SERIES);
+const built = buildExerciseSeries("TLE", CHAPTERS_TLE, withSubjectExtras(SERIES, EXTRA_TLE));
 
 export const QUESTIONS_TLE_SERIES = built.questions;
 export const ANSWER_KEYS_TLE_SERIES = built.keys;

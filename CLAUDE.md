@@ -107,6 +107,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - exercices (`/eleve/exercices`) : séries par chapitre (une série d'exercices corrigés par chapitre de chaque classe : `src/mocks/<classe>/exercises.ts`), contrôles, historique ;
   - **« Préparer mon prochain devoir »** (`/eleve/exercices/preparer`) : l'élève coche des chapitres d'une matière, choisit 5 à 20 questions et le mode (libre ou chronométré, 1 min 30 par question) ; questions tirées au hasard dans la banque, correction détaillée, historique « Mes devoirs préparés » ;
   - **contrôle chronométré** en mode concentration (`(focus)`) : échéance fixée par le serveur, sauvegarde locale, envoi automatique ;
+  - **quitter et reprendre un exercice** (31/10/2026, pas encore en ligne) : bouton « Quitter » du lecteur (`attempt-player.tsx`) avec confirmation ; quitter n'envoie jamais les réponses. Sauvegarde automatique des réponses et de la question en cours : copie locale (`localStorage`, 30 jours) et action serveur `saveAttemptProgressAction` après 2 s, ou aussitôt à la sortie de la page ; la copie la plus récente gagne. `start_attempt` rouvre la tentative en cours (bandeau « Tu reprends où tu t’étais arrêté »). Le chrono d'un contrôle continue pendant l'absence ; « Recommencer à zéro » (exercice non chronométré seulement) abandonne l'ancienne tentative (`abandon_attempt`, statut `expired`, hors historique). Page Exercices : section « Reprendre », badge « En cours » sur les cartes (`getOpenAttempts`) ;
   - résultat avec corrigé détaillé ;
   - **sujets et corrigés officiels du Bac** (onglet Bac des examens) : 731 PDF de l'Office du Bac (2023 à 2026), liens vers le site officiel, sans copie. Classés par session et matière ; ceux de la série de l'élève d'abord, les langues et documents sans série repliés. Voir `docs/annales/README.md` ;
   - **sujets blancs du BFEM** (onglet BFEM) : 9 sujets rédigés par DIANGAL, avec barème par question (`pts`) et corrigé détaillé : n°1 dans 6 matières (maths, français, PC, SVT, histoire-géographie, anglais), n°2 en maths, PC et SVT (forme des épreuves reprise, aucun texte copié). Fichier `src/mocks/3e/bfem-blancs.ts`, format compact de `exercise-series.ts` (`buildMockExams`), chaque question rattachée à un chapitre de 3e. Gratuits, à faire relire par des enseignants ;
@@ -141,7 +142,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
 - **Paiement** :
   - client PayDunya (`src/lib/payments`) ;
   - webhook `/api/webhooks/paydunya` : vérifie le hash, relit le statut chez PayDunya, journalise dans `payment_events` (idempotent), puis appelle la RPC `apply_payment_event`.
-- **Base Supabase** (`supabase/migrations`, 34 fichiers) :
+- **Base Supabase** (`supabase/migrations`, 37 fichiers) :
   - RLS sur toutes les tables, droits par colonne, schéma `private` pour les fonctions `SECURITY DEFINER` et les corrigés ;
   - hook d'access token (claim `user_role`) ; un admin doit avoir le niveau MFA `aal2` ;
   - RPC `start_attempt`, `submit_attempt` (correction côté serveur), `get_student_dashboard`, `search_tutors`, consentement parental, messagerie, vérification des répétiteurs, paiements ;
@@ -159,6 +160,7 @@ Toutes fonctionnent sur Supabase (et sur les mocks en mode démo), sauf mention 
   - navigation entre les classes (`20261022000003_class_navigation.sql`) : `create_practice_session` accepte une classe précédente ;
   - parrainage (`20261022000004_referrals.sql`) : `referral_codes`, `referrals`, `referral_rewards`, réglages `platform_settings.referral` (fermé par défaut), `get_my_referral`, `claim_referral`, `private.qualify_referral` (appelée par `apply_payment_event`), `use_referral_days`, `admin_set_referral_settings`, `admin_referral_stats`, `admin_refund_payment` ; formule technique inactive `referral_bonus` ;
   - sujets officiels (`20261023000001_official_papers.sql`) : table `official_papers` (liens vers les PDF de l'Office du Bac, lecture publique, URL limitée au site officiel), données dans `src/mocks/official-papers.ts` (généré par `scripts/import-official-papers.mjs`) et le seed ;
+  - reprise des exercices (`20261031000001_attempt_resume.sql`, **pas encore appliquée en ligne**, comme `20261025000001` et `…02`) : colonnes `attempts.current_index` et `saved_at`, RPC `save_attempt_progress` (réponses et question en cours, avant l'échéance), `start_attempt` qui renvoie la tentative ouverte (`resumed`), `get_attempt_session` (réponses enregistrées), `abandon_attempt` (non chronométrée seulement), `get_my_open_attempts` ; tests dans `tests/db/attempt-resume.test.ts` ;
   - Storage et pg_cron, installés seulement si l'extension existe.
 - **Mise en ligne du 16/10/2026** (demandée par le porteur du projet) : code poussé sur `main` et déployé par Vercel ; formules Famille activées ; CP, exercices du CI, du CP et de la 3e et leçons rédigées de la 3e publiés dans la base hébergée (sauvegarde des anciennes leçons génériques de 3e faite avant le remplacement). **Reste à faire** : une fois PayDunya branché et testé, activer l'offre gratuite (carte « Offre gratuite » du Référentiel).
 - **Pas encore fait** :
@@ -215,8 +217,10 @@ messages/fr.json         tous les textes de l'interface, un namespace par écran
 supabase/                migrations/, seed.sql (GÉNÉRÉ), config.toml, functions/ (SMS), templates/ (emails d'Auth)
 scripts/generate-seed.ts produit supabase/seed.sql à partir des mocks
 scripts/configure-email.mjs branche Resend (SMTP) et les modèles d'email sur le projet en ligne
-tests/unit/              format, grading, paydunya, safe-path, speech, phone, class-navigation, catalog (leçons, séries, corrigés)
-tests/db/                harness PGlite + tests RLS/RPC (parité de correction SQL/TS), accounts, class-navigation, referrals
+tests/unit/              format, grading, paydunya, safe-path, speech, phone, class-navigation, catalog (leçons, séries, corrigés),
+                         illustrations (dessins, schémas à jour), primary-exercises (réponses recalculées)
+tests/db/                harness PGlite + tests RLS/RPC (parité de correction SQL/TS), accounts, class-navigation, referrals,
+                         attempt-resume (sauvegarde et reprise des exercices)
 docs/programme/          sources et découpage de chaque classe (programme-ci.md à programme-tle.md,
                          programme-college.md, programme-lycee.md) et relevé CI → 3e
 public/                  icons/ (PWA), landing/revision-du-soir.jpg (photo de l'accueil), landing/app-accueil.png
@@ -326,6 +330,10 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
   - carte des 14 régions du Sénégal (`figures/senegal-map.ts`, généré, et `figures/senegal.ts`) : limites de geoBoundaries (SEN ADM1 2019, source Gouvernement du Sénégal et OCHA ROWCA, licence **CC BY 3.0 IGO** : citer la source), simplifiées pour l’école ;
   - exercices de français et d'ESVS : environ 8 questions par chapitre, dont la moitié illustrées (`<classe>/enrich.ts`, briques de `mocks/illustrated-questions.ts`, ajoutées par `withExtras` sans répéter les questions existantes) ;
   - le filtre des leçons (`lib/sanitize.ts`) garde les images `/illustrations/…svg` ; le service worker les garde en cache et le téléchargement d'un chapitre les récupère ; `tests/unit/illustrations.test.ts` vérifie fichiers, tailles, descriptions et schémas à jour.
+- **Schémas de la 6e à la Terminale** (31/10/2026, sans validation intermédiaire, à la demande du porteur du projet ; pas encore en ligne) : seulement là où un schéma aide à comprendre (pas une figure par leçon : ces classes ne sont pas dans `FIGURE_LEVELS`).
+  - 259 schémas (`mocks/figures/6e.ts` à `tle.ts`, `3e-sciences.ts`, `4e-sciences.ts`, `tle-sciences.ts`), briques de `figures/kit.ts` (repère et courbes `plot`, étiquettes gardées dans le cadre `lab`, flèches, angles) ; insérés dans 273 leçons distinctes (environ 285 figures) ; géométrie, courbes, schémas de SVT et de PC, frises, cartes du Sénégal (`senegalMap`, villes et cours d'eau de `figures/senegal.ts`) ;
+  - cartes du monde et de l'Afrique (`figures/world.ts`, fond `figures/world-map.ts` généré depuis **Natural Earth**, domaine public, source écrite sur la carte) : 32 Ko au plus par fichier, contre 16 Ko pour les autres schémas ; limites et dates approximatives signalées dans la légende (empires, Afrique de 1914, isohyètes) ;
+  - exercices : 1 à 3 questions illustrées par chapitre illustré, qui se lisent sur le schéma (316 énoncés distincts, `<classe>/enrich.ts` de la 6e à la Terminale, ajoutées par `withSubjectExtras`, rangées par matière puis titre de chapitre ; au lycée, toutes les séries qui ont ce chapitre les reçoivent).
 - **Leçons de 3e** : 78 chapitres, 203 leçons et une série d'exercices par chapitre, rédigées par DIANGAL (`src/mocks/3e/`, un fichier par matière, briques HTML de `3e/blocks.ts`, assemblées par `curriculum-3e.ts` ; Thalès dans `lesson-content.ts`), à faire valider par des enseignants. Les chapitres de français, d'anglais et d'éducation civique restent indicatifs.
 - **Classes ajoutées le 17/10/2026** (leçons et exercices rédigés par DIANGAL, à faire valider) :
   - CE1 et CE2 : guide officiel de l'étape 2 et cahiers PAAME (`programme-ce1-ce2.md`) ; CM1 et CM2 : cahiers PAAME, guide du CFEE, PROMET (`programme-cm1.md`, `programme-cm2.md`) ;
@@ -350,6 +358,7 @@ Lire `node_modules/next/dist/docs/` avant d'utiliser une API (voir `AGENTS.md`).
 5. Le porteur du projet écrit en français et n'est pas développeur : lui répondre en français simple, et ne pousser sur GitHub que s'il le demande.
 6. Toute nouvelle fonctionnalité se branche dans les deux modes : mock dans `data.ts`, Supabase dans `supabase.ts`. Une nouvelle règle d'accès va en base (migration + test dans `tests/db`).
 7. Prochaines étapes :
+   - mettre en ligne la branche `contenus-illustres-primaire` (primaire illustré, schémas 6e → Terminale, reprise des exercices) quand le porteur du projet le demande : appliquer d'abord les migrations `20261025000001`, `…02` et `20261031000001`, puis publier les leçons et exercices modifiés par lots rejouables ;
    - compte WhatsApp Business (Meta), modèle `diangal_code`, puis déploiement de `send-sms` ;
    - salle de visio LiveKit pour les cours en ligne ; réseaux sociaux à ouvrir dans Supabase ;
    - nom de domaine (`diangal.sn`), puis mise en service de Resend (`docs/emails.md`) ;

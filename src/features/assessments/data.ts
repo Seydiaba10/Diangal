@@ -4,7 +4,7 @@ import { requireIdentity } from "@/features/account/session";
 import { chapterHref, findChapterById, getChapters, getPrerenderedChapterIds, getSubjects } from "@/features/curriculum/data";
 import { isSupabaseConfigured } from "@/lib/env";
 import { BEST_SCORES, CATALOG_ASSESSMENTS, CATALOG_QUESTIONS, QUESTION_CHAPTERS } from "@/mocks/assessments";
-import { mockState } from "@/mocks/progress-store";
+import { mockState, type MockAttempt } from "@/mocks/progress-store";
 import type {
   Assessment,
   AssessmentKind,
@@ -14,6 +14,7 @@ import type {
   ContentSource,
   ContentVerification,
   ExamType,
+  OpenAttempt,
   PracticeChapterOption,
   PracticeHistoryItem,
   Subject,
@@ -23,6 +24,7 @@ import type {
 import {
   fetchAttemptResult,
   fetchAttemptSession,
+  fetchOpenAttempts,
   fetchPersonalAssessment,
   fetchPracticeAttempts,
   getSubmittedAttempts,
@@ -256,6 +258,28 @@ export const getRecommendedAssessments = cache(async (chapterIds: string[]): Pro
   return toSummaries((await getAssessmentCatalog()).filter((a) => a.chapterId && chapterIds.includes(a.chapterId)), true);
 });
 
+/**
+ * Où ramène « Quitter » : la liste des exercices ouverte sur la classe, la matière et le chapitre de la
+ * série ; la page Examens pour une épreuve ; l'historique « Mes devoirs préparés » pour une séance personnelle.
+ */
+export function attemptBackHref(assessment: AssessmentSummary): string {
+  if (assessment.isPersonal) return "/eleve/exercices#historique-titre";
+  if (assessment.examType) {
+    const query = new URLSearchParams({ examen: assessment.examType.toLowerCase(), ...(assessment.seriesCode ? { serie: assessment.seriesCode } : {}) });
+    return `/eleve/examens?${query}`;
+  }
+  const { subject } = assessment;
+  const query = new URLSearchParams({
+    classe: subject.levelCode,
+    ...(subject.seriesCode ? { serie: subject.seriesCode } : {}),
+    matiere: subject.slug,
+    ...(assessment.chapterId ? { chapitre: assessment.chapterId } : {}),
+  });
+  return `/eleve/exercices?${query}${assessment.chapterId ? `#chapitre-${assessment.chapterId}` : ""}`;
+}
+
+const isAnswered = (value: unknown) => (Array.isArray(value) ? value.length > 0 : typeof value === "string" && value.trim() !== "");
+
 /** Tentative en cours, telle qu'envoyée au navigateur : aucune information de correction. */
 export const getAttemptSession = cache(async (attemptId: string): Promise<AttemptSession | "submitted" | null> => {
   await connection();
@@ -272,20 +296,29 @@ export const getAttemptSession = cache(async (attemptId: string): Promise<Attemp
       serverNow: remote.serverNow,
       questions: remote.questions,
       introHtml: assessment.workbook ? await getAssessmentPage(assessment.id) : null,
+      savedAnswers: remote.savedAnswers,
+      currentIndex: remote.currentIndex,
+      savedAt: remote.savedAt,
+      backHref: attemptBackHref(assessment),
     };
   }
 
   const attempt = mockState.attempts.get(attemptId);
-  if (!attempt) return null;
+  if (!attempt || attempt.status === "expired") return null;
   if (attempt.status === "submitted") return "submitted";
   const assessment = findMockAssessment(attempt.assessmentId)!;
+  const summary = (await getAnyAssessmentSummary(assessment.id))!;
   return {
     id: attempt.id,
-    assessment: (await getAnyAssessmentSummary(assessment.id))!,
+    assessment: summary,
     startedAt: new Date(attempt.startedAt).toISOString(),
     deadlineAt: attempt.deadlineAt ? new Date(attempt.deadlineAt).toISOString() : null,
     serverNow: Date.now(),
     introHtml: assessment.introHtml ?? null,
+    savedAnswers: attempt.savedAnswers ?? {},
+    currentIndex: attempt.currentIndex ?? 0,
+    savedAt: attempt.savedAt ? new Date(attempt.savedAt).toISOString() : null,
+    backHref: attemptBackHref(summary),
     questions: assessment.questionIds.map((qid) => {
       const q = CATALOG_QUESTIONS[qid]!;
       const order = attempt.optionOrder[qid] ?? q.options.map((o) => o.id);
@@ -301,6 +334,38 @@ export const getAttemptSession = cache(async (attemptId: string): Promise<Attemp
       };
     }),
   };
+});
+
+/**
+ * Exercices commencés et pas encore envoyés de l'élève connecté : la dernière tentative ouverte de chaque
+ * évaluation (sans limite de temps, ou avant la limite), la plus récente d'abord.
+ */
+export const getOpenAttempts = cache(async (): Promise<OpenAttempt[]> => {
+  await connection();
+  const sortRecent = (list: OpenAttempt[]) => list.sort((a, b) => b.savedAt.localeCompare(a.savedAt));
+  if (isSupabaseConfigured()) return sortRecent(await fetchOpenAttempts());
+
+  const now = Date.now();
+  const latest = new Map<string, MockAttempt>();
+  for (const a of mockState.attempts.values()) {
+    if (a.status !== "in_progress" || (a.deadlineAt !== null && a.deadlineAt <= now)) continue;
+    const previous = latest.get(a.assessmentId);
+    if (!previous || previous.startedAt < a.startedAt) latest.set(a.assessmentId, a);
+  }
+  return sortRecent(
+    [...latest.values()].map((a) => {
+      const total = findMockAssessment(a.assessmentId)?.questionIds.length ?? 0;
+      return {
+        attemptId: a.id,
+        assessmentId: a.assessmentId,
+        answered: Object.values(a.savedAnswers ?? {}).filter(isAnswered).length,
+        total,
+        currentIndex: a.currentIndex ?? 0,
+        savedAt: new Date(a.savedAt ?? a.startedAt).toISOString(),
+        timed: a.deadlineAt !== null,
+      };
+    }),
+  );
 });
 
 export const getAttemptResult = cache(async (attemptId: string): Promise<AttemptResult | null> => {
@@ -448,7 +513,7 @@ export const getPracticeHistory = cache(async (studentId?: string): Promise<Prac
   }
 
   return [...mockState.attempts.values()]
-    .filter((a) => mockState.practiceSessions.has(a.assessmentId))
+    .filter((a) => mockState.practiceSessions.has(a.assessmentId) && a.status !== "expired")
     .map((a) => {
       const session = mockState.practiceSessions.get(a.assessmentId)!;
       return {
@@ -456,7 +521,7 @@ export const getPracticeHistory = cache(async (studentId?: string): Promise<Prac
         subject: subjectOf(session.subjectCode, session.levelCode),
         questionsCount: session.questionIds.length,
         timed: session.durationS !== null,
-        status: a.status,
+        status: a.status === "submitted" ? ("submitted" as const) : ("in_progress" as const),
         score20: a.result?.score20 ?? null,
         date: a.result?.submittedAt ?? new Date(a.startedAt).toISOString(),
       };

@@ -3,6 +3,7 @@
 // à faire valider par un enseignant.
 
 import { auBac, erreurs, exemple, exercice, formula, frac, type LessonSpec, liste, methode, objectifs, retenir, sqrt, sup, tableau, u } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 const lim = (at: string) => `lim<sub>${at}</sub>`;
 const integ = (a: string, b: string) => `∫<sub>${a}</sub><sup>${b}</sup>`;
@@ -97,7 +98,8 @@ export const ASYMPTOTES: LessonSpec = {
         "4/(x − 1) &gt; 0 si x &gt; 1 : la courbe est au-dessus de l’asymptote sur ]1 ; +∞[ et au-dessous sur ]−∞ ; 1[.",
       ],
     )}
-    ${auBac("Rédige toujours l’interprétation graphique : « donc la droite d’équation … est asymptote à la courbe en +∞ ». Sans cette phrase, la réponse est incomplète.")}`,
+    ${auBac("Rédige toujours l’interprétation graphique : « donc la droite d’équation … est asymptote à la courbe en +∞ ». Sans cette phrase, la réponse est incomplète.")}
+          ${figure(schema("t-oblique", "Courbe avec une asymptote verticale et une asymptote oblique."), "Exemple : f(x) = x + 1 + 1/(x − 1). Quand x tend vers l’infini, f(x) − (x + 1) tend vers 0 : la courbe se rapproche de la droite y = x + 1.")}`,
 };
 
 export const CONTINUITE_TVI: LessonSpec = {
@@ -132,7 +134,8 @@ export const CONTINUITE_TVI: LessonSpec = {
     ${erreurs([
       "oublier de citer la <strong>stricte monotonie</strong> pour justifier l’unicité ;",
       "appliquer le théorème à une fonction non continue sur l’intervalle (x ↦ 1/x sur [−1 ; 1]).",
-    ])}`,
+    ])}
+          ${figure(schema("t-tvi", "Courbe continue qui coupe la droite y = k entre a et b."), "Une courbe continue ne peut pas passer de f(a) à f(b) sans couper la droite y = k ; si f est de plus strictement monotone, la solution est unique.")}`,
 };
 
 export const FONCTION_RECIPROQUE: LessonSpec = {
@@ -167,7 +170,8 @@ export const FONCTION_RECIPROQUE: LessonSpec = {
         "f(3) = 3 et f’(3) = 4, donc (f<sup>−1</sup>)’(3) = 1/f’(3) = <strong>1/4</strong> (on vérifie : (1 + √(x + 1))’ = 1/(2√(x + 1)) vaut 1/4 en 3).",
       ],
     )}
-    ${auBac("Pour tracer la courbe de f<sup>−1</sup>, trace d’abord la droite y = x, puis le symétrique de chaque point remarquable et de chaque tangente de la courbe de f.")}`,
+    ${auBac("Pour tracer la courbe de f<sup>−1</sup>, trace d’abord la droite y = x, puis le symétrique de chaque point remarquable et de chaque tangente de la courbe de f.")}
+          ${figure(schema("t-exp-ln", "Courbes de exp et de ln, symétriques par rapport à y = x."), "Les courbes d’une fonction et de sa réciproque sont symétriques par rapport à la droite y = x.")}`,
 };
 
 // ── Dérivation ──────────────────────────────────────────────────────────────
@@ -270,7 +274,8 @@ export const DERIVEES_SUCCESSIVES: LessonSpec = {
         "f(2 − x) = −x³ + 3x² − 2, donc f(2 − x) + f(x) = 0 = 2 × 0 : I est centre de symétrie de la courbe.",
       ],
     )}
-    ${erreurs(["conclure à un point d’inflexion dès que f’’(x₀) = 0 : il faut un <strong>changement de signe</strong> (f(x) = x⁴ n’a pas de point d’inflexion en 0)."])}`,
+    ${erreurs(["conclure à un point d’inflexion dès que f’’(x₀) = 0 : il faut un <strong>changement de signe</strong> (f(x) = x⁴ n’a pas de point d’inflexion en 0)."])}
+          ${figure(schema("t-inflexion", "Courbe de x³ et son point d’inflexion."), "Au point d’inflexion, la courbe change de concavité et traverse sa tangente.")}`,
 };
 
 export const ETUDE_FONCTION: LessonSpec = {
@@ -379,7 +384,8 @@ export const LN_ETUDE: LessonSpec = {
         "Le minimum vaut 1 &gt; 0, donc f(x) &gt; 0, c’est-à-dire <strong>x &gt; ln x</strong> pour tout x &gt; 0.",
       ],
     )}
-    ${auBac("Les limites de référence (ln x/x en +∞, x ln x en 0⁺, ln(1 + x)/x en 0) doivent être citées telles quelles : ce sont des résultats du cours.")}`,
+    ${auBac("Les limites de référence (ln x/x en +∞, x ln x en 0⁺, ln(1 + x)/x en 0) doivent être citées telles quelles : ce sont des résultats du cours.")}
+          ${figure(schema("t-exp-ln", "Courbes de ln et de exp."), "La courbe de ln passe par (1 ; 0) et (e ; 1) ; l’axe des ordonnées est asymptote ; ln est croissante sur ]0 ; +∞[.")}`,
 };
 
 export const LN_EQUATIONS: LessonSpec = {
@@ -480,7 +486,8 @@ export const EXP_ETUDE: LessonSpec = {
         "f(−1) = 0 et f’(−1) = e : tangente <strong>y = e(x + 1)</strong>.",
       ],
     )}
-    ${auBac("Dans un problème, l’exponentielle étant toujours strictement positive, le signe de f’(x) = (…) e<sup>u(x)</sup> est celui du facteur (…) : dis-le explicitement.")}`,
+    ${auBac("Dans un problème, l’exponentielle étant toujours strictement positive, le signe de f’(x) = (…) e<sup>u(x)</sup> est celui du facteur (…) : dis-le explicitement.")}
+          ${figure(schema("t-exp-ln", "Courbes de exp et de ln."), "La courbe de exp passe par (0 ; 1) ; l’axe des abscisses est asymptote en −∞ ; exp est strictement positive et croissante.")}`,
 };
 
 export const PUISSANCES: LessonSpec = {
@@ -706,7 +713,8 @@ export const SUITES_RECURRENTES: LessonSpec = {
         "−1 &lt; ½ &lt; 1, donc (½)ⁿ tend vers 0 et u<sub>n</sub> tend vers <strong>6</strong>. On vérifie que 6 est bien solution de ℓ = ½ℓ + 3.",
       ],
     )}
-    ${auBac("Le plan classique d’un exercice de suite récurrente : bornes par récurrence, monotonie, convergence (théorème de la limite monotone), puis calcul de la limite par ℓ = f(ℓ).")}`,
+    ${auBac("Le plan classique d’un exercice de suite récurrente : bornes par récurrence, monotonie, convergence (théorème de la limite monotone), puis calcul de la limite par ℓ = f(ℓ).")}
+          ${figure(schema("t-escalier", "Construction en escalier d’une suite récurrente."), "On part de u₀ sur l’axe, on monte jusqu’à la courbe de f, puis on revient sur la droite y = x : on lit u₁, et ainsi de suite.")}`,
 };
 
 // ── Calcul intégral ─────────────────────────────────────────────────────────
@@ -780,7 +788,8 @@ export const INTEGRALE_PROPRIETES: LessonSpec = {
         "b) μ = (1/π) ∫ de 0 à π de sin x dx = (1/π)[−cos x] entre 0 et π = <strong>2/π</strong>.",
         "c) Pour x dans [0 ; 1], 1 ≤ 1 + x² ≤ 2, donc 1/2 ≤ 1/(1 + x²) ≤ 1 ; par l’inégalité de la moyenne, <strong>1/2 ≤ J ≤ 1</strong>.",
       ],
-    )}`,
+    )}
+          ${figure(schema("t-integrale", "Aire sous une courbe entre a et b."), "Pour une fonction positive, l’intégrale de a à b est l’aire du domaine coloré, en unités d’aire.")}`,
 };
 
 export const INTEGRATION_PAR_PARTIES: LessonSpec = {
@@ -851,7 +860,8 @@ export const AIRES_VOLUMES: LessonSpec = {
         "1 u.a. = 2 × 2 = 4 cm², donc A = 4/6 = <strong>2/3 cm²</strong>.",
         "b) V = π ∫ de 0 à 4 de (√x)² dx = π [x²/2] entre 0 et 4 = <strong>8π</strong> unités de volume.",
       ],
-    )}`,
+    )}
+          ${figure(schema("t-integrale", "Aire sous une courbe entre a et b."), "L’aire du domaine coloré est ∫ f(x) dx de a à b, multipliée par l’unité d’aire du repère.")}`,
 };
 
 // ── Équations différentielles ───────────────────────────────────────────────
@@ -879,7 +889,8 @@ export const EQDIFF_ORDRE1: LessonSpec = {
         "θ(0) = 90 donne y(0) = 70 = C : <strong>θ(t) = 20 + 70 e<sup>−0,1t</sup></strong>.",
         "θ(t) = 50 ⇔ e<sup>−0,1t</sup> = 3/7 ⇔ t = 10 ln(7/3) ≈ <strong>8,5 min</strong>.",
       ],
-    )}`,
+    )}
+          ${figure(schema("t-equa-diff", "Famille de solutions de y′ = −y."), "Une équation différentielle a une infinité de solutions ; la condition initiale en choisit une.")}`,
 };
 
 export const EQDIFF_ORDRE2: LessonSpec = {

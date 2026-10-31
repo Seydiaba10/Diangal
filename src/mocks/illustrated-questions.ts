@@ -1,9 +1,11 @@
 import "server-only";
 
-// Questions illustrées des séries de français et d'ESVS du primaire : dessins de la banque
-// (public/illustrations) dans l'énoncé ou dans les réponses à choisir. Une réponse illustrée montre
-// le dessin puis son nom (la lecture à voix haute lit le nom).
+// Questions illustrées : séries de français et d'ESVS du primaire (dessins de la banque,
+// public/illustrations, dans l'énoncé ou dans les réponses à choisir ; une réponse illustrée montre
+// le dessin puis son nom, que la lecture à voix haute lit), et séries du collège et du lycée
+// (schémas des leçons dans l'énoncé, <classe>/enrich.ts).
 
+import type { SubjectCode } from "@/types/domain";
 import { esc, pictureSize, type PictureName } from "./drawings";
 import type { ExerciseSeries, ExerciseSpec } from "./exercise-series";
 import { schemaSize } from "./figures";
@@ -67,6 +69,24 @@ export function withExtras(series: ExerciseSeries[], extras: Record<string, Exer
     const more = s.key ? undefined : extras[s.chapter];
     if (!more) return s;
     unused.delete(s.chapter);
+    return { ...s, questions: [...s.questions, ...more] };
+  });
+  if (unused.size) throw new Error(`questions illustrées sans chapitre : ${[...unused].join(", ")}`);
+  return result;
+}
+
+/**
+ * Collège et lycée : questions illustrées rangées par matière puis par titre de chapitre, ajoutées à
+ * chaque série du chapitre (au lycée, à toutes les séries du programme qui ont ce chapitre).
+ */
+export type SubjectExtras = Partial<Record<SubjectCode, Record<string, ExerciseSpec[]>>>;
+
+export function withSubjectExtras(series: ExerciseSeries[], extras: SubjectExtras): ExerciseSeries[] {
+  const unused = new Set(Object.entries(extras).flatMap(([subject, chapters]) => Object.keys(chapters ?? {}).map((c) => `${subject} · ${c}`)));
+  const result = series.map((s) => {
+    const more = s.key ? undefined : extras[s.subject]?.[s.chapter];
+    if (!more) return s;
+    unused.delete(`${s.subject} · ${s.chapter}`);
     return { ...s, questions: [...s.questions, ...more] };
   });
   if (unused.size) throw new Error(`questions illustrées sans chapitre : ${[...unused].join(", ")}`);

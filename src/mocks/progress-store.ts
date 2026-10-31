@@ -4,6 +4,7 @@ import "server-only";
 // globalThis pour survivre au rechargement à chaud ; perdu au redémarrage du serveur.
 
 import type {
+  AnswerMap,
   Assessment,
   AttemptResult,
   AuditEntry,
@@ -24,7 +25,12 @@ export interface MockAttempt {
   deadlineAt: number | null;
   /** Ordre des options mélangé pour cette tentative (QCM). */
   optionOrder: Record<string, string[]>;
-  status: "in_progress" | "submitted";
+  /** « expired » : abandonnée par « Recommencer à zéro », sans note. */
+  status: "in_progress" | "submitted" | "expired";
+  /** Sauvegarde automatique du lecteur (comme save_attempt_progress). */
+  savedAnswers?: AnswerMap;
+  currentIndex?: number;
+  savedAt?: number;
   result?: AttemptResult;
 }
 

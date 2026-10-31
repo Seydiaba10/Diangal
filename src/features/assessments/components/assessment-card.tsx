@@ -1,12 +1,13 @@
-import { ClipboardList, PenLine, Timer, Trophy } from "lucide-react";
+import { ClipboardList, History, PenLine, Timer, Trophy } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Badge, PremiumBadge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { formatDuration, formatScore } from "@/lib/format";
-import type { AssessmentSummary } from "@/types/domain";
+import type { AssessmentSummary, OpenAttempt } from "@/types/domain";
 
-export async function AssessmentCard({ assessment }: { assessment: AssessmentSummary }) {
+/** open : essai commencé et pas encore envoyé (la page de l'évaluation propose alors de le reprendre). */
+export async function AssessmentCard({ assessment, open = null }: { assessment: AssessmentSummary; open?: OpenAttempt | null }) {
   const t = await getTranslations("assessment");
   const timed = assessment.durationS !== null;
   return (
@@ -24,6 +25,11 @@ export async function AssessmentCard({ assessment }: { assessment: AssessmentSum
           {t(`kind.${assessment.kind}`)}
         </Badge>
         {assessment.isPremium ? <PremiumBadge /> : null}
+        {open ? (
+          <Badge tone="info" icon={History}>
+            {t("inProgress")}
+          </Badge>
+        ) : null}
       </div>
 
       <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-muted">
@@ -35,6 +41,12 @@ export async function AssessmentCard({ assessment }: { assessment: AssessmentSum
           <Timer className="size-4" aria-hidden />
           {timed ? formatDuration(assessment.durationS!) : t("untimed")}
         </li>
+        {open ? (
+          <li className="flex items-center gap-1.5 font-medium text-info-700">
+            <History className="size-4" aria-hidden />
+            {t("progress", { number: open.currentIndex + 1, total: open.total })}
+          </li>
+        ) : null}
         {assessment.bestScore20 !== null ? (
           <li className="flex items-center gap-1.5 font-medium text-ink">
             <Trophy className="size-4 text-premium-500" aria-hidden />
@@ -47,11 +59,11 @@ export async function AssessmentCard({ assessment }: { assessment: AssessmentSum
 
       <ButtonLink
         href={`/eleve/evaluations/${assessment.id}`}
-        variant={assessment.bestScore20 !== null ? "outline" : "primary"}
+        variant={open || assessment.bestScore20 === null ? "primary" : "outline"}
         size="sm"
         className="mt-4 w-full sm:mt-auto sm:w-auto sm:self-start"
       >
-        {assessment.bestScore20 !== null ? t("retry") : t("start")}
+        {open ? t("resume") : assessment.bestScore20 !== null ? t("retry") : t("start")}
       </ButtonLink>
     </article>
   );

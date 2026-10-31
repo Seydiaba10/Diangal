@@ -3,6 +3,7 @@
 // DIANGAL, à faire valider par un enseignant.
 
 import { type ChapterSpec, exemple, formula, frac, liste, methode, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const NUM = "Activités numériques";
 const GEO = "Activités géométriques";
@@ -58,6 +59,7 @@ export const MATH_6E: ChapterSpec[] = [
         minutes: 12,
         body: `${methode(["Comparer les parties entières.", "Si elles sont égales, comparer les dixièmes, puis les centièmes, etc."], "Comparer deux décimaux")}
           ${exemple(["12,08 &lt; 12,8 ; 3,457 &gt; 3,45."])}
+          ${figure(schema("m6-encadrer", "Droite graduée de 3,3 à 3,6 : le point 3,47 est entre 3,4 et 3,5."), "Encadrer au dixième : 3,47 est entre 3,4 et 3,5, plus près de 3,5 (arrondi au dixième : 3,5).")}
           ${liste([
             "<strong>encadrer</strong> 7,46 à l’unité : 7 &lt; 7,46 &lt; 8 ; au dixième : 7,4 &lt; 7,46 &lt; 7,5 ;",
             "<strong>arrondir</strong> 7,46 au dixième : 7,5 (on regarde le chiffre suivant : 6 ≥ 5, on arrondit au-dessus).",
@@ -151,6 +153,7 @@ export const MATH_6E: ChapterSpec[] = [
         title: "Les nombres relatifs",
         minutes: 12,
         body: `<p>Un nombre <strong>relatif</strong> a un signe : +3,5 (positif) ou −2 (négatif). On les utilise pour les températures, les altitudes, les dettes.</p>
+          ${figure(schema("m6-relatifs", "Droite graduée de −5 à 5 avec les points A(−3) et A′(3)."), "Les négatifs à gauche de zéro, les positifs à droite ; −3 et 3 sont opposés : ils sont à la même distance de zéro.")}
           ${liste([
             "deux nombres <strong>opposés</strong> ne diffèrent que par le signe : 4 et −4 ;",
             "la <strong>distance à zéro</strong> (valeur absolue) de −4 est 4 ;",
@@ -173,6 +176,7 @@ export const MATH_6E: ChapterSpec[] = [
             "dans un <strong>repère orthonormal</strong>, deux axes perpendiculaires gradués avec la même unité, un point M a pour <strong>coordonnées</strong> (abscisse ; ordonnée).",
           ])}
           ${exemple(["Le point A(3 ; 2) : on avance de 3 sur l’axe horizontal, puis on monte de 2."])}
+          ${figure(schema("m6-repere", "Repère orthonormal avec les points A(3 ; 2), B, C et D."), "Pour placer A(3 ; 2) : on avance de 3 sur l’axe des abscisses, puis on monte de 2.")}
           ${retenir("On lit toujours l’abscisse d’abord, l’ordonnée ensuite.")}`,
       },
     ],
@@ -191,6 +195,7 @@ export const MATH_6E: ChapterSpec[] = [
             ["demi-droite", "[AB)", "commence en A et passe par B"],
             ["segment", "[AB]", "limité par A et B ; sa longueur se note AB"],
           ])}
+          ${figure(schema("m6-droites", "Une droite (AB), un segment [CD] et une demi-droite [EF)."), "La droite est illimitée des deux côtés, la demi-droite d’un seul côté, le segment est limité par ses deux extrémités.")}
           ${liste(["A ∈ (d) se lit « A appartient à la droite (d) » ;", "des points sont <strong>alignés</strong> s’ils sont sur une même droite ;", "le <strong>milieu</strong> I de [AB] est sur [AB] et IA = IB."])}
           ${retenir("Par deux points distincts passe une seule droite.")}`,
       },
@@ -205,6 +210,7 @@ export const MATH_6E: ChapterSpec[] = [
         title: "Le cercle",
         minutes: 12,
         body: `<p>Le <strong>cercle</strong> de centre O et de rayon r est l’ensemble des points M tels que OM = r.</p>
+          ${figure(schema("m6-cercle", "Cercle de centre O avec un rayon [OA], un diamètre [BC] et une corde [DE]."), "Le diamètre [BC] passe par le centre : BC = 2 × OA. La corde [DE] joint deux points du cercle.")}
           ${liste(["un <strong>diamètre</strong> est une corde qui passe par le centre ; sa longueur vaut 2r ;", "une <strong>corde</strong> joint deux points du cercle ; un <strong>arc</strong> est une portion du cercle ;", "le <strong>disque</strong> est formé du cercle et de son intérieur."])}
           ${formula("Périmètre du cercle : P = 2 × π × r ≈ 2 × 3,14 × r")}
           ${exemple(["Un cercle de rayon 5 cm a pour diamètre 10 cm et pour périmètre environ 31,4 cm."])}`,
@@ -223,6 +229,7 @@ export const MATH_6E: ChapterSpec[] = [
             "deux droites <strong>perpendiculaires</strong> se coupent en formant un angle droit : (d) ⊥ (d’) ;",
             "deux droites <strong>parallèles</strong> ne se coupent pas (ou sont confondues) : (d) // (d’).",
           ])}
+          ${figure(schema("m6-perp-para", "Deux droites perpendiculaires, puis deux droites parallèles coupées par une perpendiculaire."), "L’angle droit se code par un petit carré. Une droite perpendiculaire à (d₁) est aussi perpendiculaire à sa parallèle (d₂).")}
           ${retenir("Si deux droites sont perpendiculaires à une même troisième, elles sont parallèles. Si deux droites sont parallèles, toute perpendiculaire à l’une est perpendiculaire à l’autre.")}
           ${methode(["Placer la règle le long de (d).", "Faire glisser l’équerre le long de la règle jusqu’au point A.", "Tracer la droite le long de l’autre côté de l’équerre."], "Tracer la parallèle à (d) passant par A")}`,
       },
@@ -237,6 +244,7 @@ export const MATH_6E: ChapterSpec[] = [
         title: "Symétrie par rapport à une droite",
         minutes: 15,
         body: `<p>Le symétrique du point A par rapport à la droite (d) est le point A’ tel que (d) soit la <strong>médiatrice</strong> de [AA’] : (d) est perpendiculaire à [AA’] en son milieu.</p>
+          ${figure(schema("m6-symetrie", "Triangle ABC et son symétrique A′B′C′ par rapport à la droite (d)."), "(d) coupe [AA′] perpendiculairement en son milieu : c’est la médiatrice de [AA′]. Le triangle A′B′C′ a les mêmes longueurs et les mêmes angles que ABC.")}
           ${retenir("La symétrie orthogonale conserve les longueurs, les angles, l’alignement et les aires.")}
           ${liste(["les points de (d) sont leurs propres symétriques ;", "tout point de la médiatrice de [AB] est à égale distance de A et de B ;", "une figure a un axe de symétrie si elle est sa propre image par la symétrie (le cercle en a une infinité)."])}`,
       },
@@ -257,6 +265,7 @@ export const MATH_6E: ChapterSpec[] = [
             ["obtus", "entre 90° et 180°"],
             ["plat", "180°"],
           ])}
+          ${figure(schema("m6-angles", "Un angle aigu, un angle droit, un angle obtus et un angle plat."), "Angle aigu (moins de 90°), droit (90°), obtus (entre 90° et 180°), plat (180°).")}
           ${liste(["on mesure un angle avec un <strong>rapporteur</strong>, en plaçant son centre sur le sommet ;", "deux angles sont <strong>complémentaires</strong> si leur somme vaut 90°, <strong>supplémentaires</strong> si elle vaut 180° ;", "la <strong>bissectrice</strong> d’un angle le partage en deux angles égaux."])}`,
       },
     ],
@@ -275,6 +284,7 @@ export const MATH_6E: ChapterSpec[] = [
             ["équilatéral", "3 côtés égaux, 3 angles de 60°"],
             ["rectangle", "un angle droit"],
           ])}
+          ${figure(schema("m6-triangles", "Un triangle isocèle, un triangle équilatéral et un triangle rectangle avec leurs codages."), "Les petits traits indiquent des côtés de même longueur ; le petit carré, un angle droit.")}
           ${retenir("La somme des angles d’un triangle vaut 180°.")}
           ${exemple(["Un triangle a deux angles de 50° et 70° : le troisième mesure 180° − 120° = 60°."])}`,
       },
@@ -287,6 +297,7 @@ export const MATH_6E: ChapterSpec[] = [
             ["losange", "4 côtés égaux ; diagonales perpendiculaires qui se coupent en leur milieu"],
             ["carré", "rectangle et losange à la fois"],
           ])}
+          ${figure(schema("m6-quadrilateres", "Un rectangle, un losange et un carré avec leurs diagonales et leurs codages."), "Les diagonales du rectangle ont la même longueur ; celles du losange sont perpendiculaires ; le carré a les propriétés des deux.")}
           ${retenir("Un polygone régulier a tous ses côtés et tous ses angles égaux (triangle équilatéral, carré, hexagone régulier).")}`,
       },
     ],
@@ -306,6 +317,7 @@ export const MATH_6E: ChapterSpec[] = [
             ["triangle", `${frac("b × h", "2")}`],
             ["disque", "π × r × r"],
           ])}
+          ${figure(schema("m6-aires", "Un rectangle, un triangle avec sa hauteur et un disque avec son rayon."), "La hauteur h du triangle est perpendiculaire à la base b ; l’aire du triangle est la moitié de celle du rectangle b × h.")}
           ${retenir("1 m² = 100 dm² = 10 000 cm² ; 1 ha = 10 000 m².")}
           ${exemple(["Un disque de rayon 3 cm : A ≈ 3,14 × 9 = 28,26 cm²."])}`,
       },
@@ -325,12 +337,14 @@ export const MATH_6E: ChapterSpec[] = [
             ["cube (a)", "4 × a²", "a³"],
             ["cylindre (r, h)", "2 × π × r × h", "π × r² × h"],
           ])}
+          ${figure(schema("m6-pave-cylindre", "Un pavé droit en perspective avec ses arêtes cachées, et un cylindre."), "En perspective, les arêtes cachées sont en pointillés. Volume du pavé : L × l × h ; du cylindre : π × r² × h.")}
           ${retenir("Le patron d’un pavé droit est formé de 6 rectangles ; celui d’un cylindre de 2 disques et d’un rectangle.")}`,
       },
       {
         title: "Sphère et boule",
         minutes: 10,
         body: `${formula(`Aire de la sphère : 4πR² ; volume de la boule : ${frac("4", "3")}πR³`)}
+          ${figure(schema("m6-sphere", "Une sphère de centre O et de rayon R avec un grand cercle."), "Tous les points de la sphère sont à la distance R du centre O ; un grand cercle a le même centre et le même rayon.")}
           ${exemple(["Un ballon de rayon 10 cm : volume ≈ 4/3 × 3,14 × 1 000 ≈ 4 187 cm³."])}
           ${retenir("Un <strong>grand cercle</strong> de la sphère a le même centre et le même rayon qu’elle.")}`,
       },
@@ -350,6 +364,7 @@ export const MATH_6E: ChapterSpec[] = [
             "les <strong>méridiens</strong> sont les demi-grands cercles qui joignent les pôles ; le méridien origine passe par Greenwich ;",
             "la <strong>latitude</strong> se mesure de 0° à 90° Nord ou Sud ; la <strong>longitude</strong> de 0° à 180° Est ou Ouest.",
           ])}
+          ${figure(schema("m6-lat-long", "Globe avec l’équateur, des parallèles, le méridien de Greenwich et un point M."), "La latitude se lit sur les parallèles (au nord ou au sud de l’équateur), la longitude sur les méridiens (à l’est ou à l’ouest de Greenwich).")}
           ${exemple(["Dakar a pour coordonnées géographiques environ 14,7° N et 17,4° O."])}`,
       },
     ],

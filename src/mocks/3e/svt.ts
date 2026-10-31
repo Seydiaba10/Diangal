@@ -2,6 +2,7 @@
 // Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { type Chapter3eSpec, exemple, formula, liste, methode, retenir, tableau } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 export const SVT_3E: Chapter3eSpec[] = [
   {
@@ -14,7 +15,9 @@ export const SVT_3E: Chapter3eSpec[] = [
             "Le <strong>système nerveux central</strong> : l’encéphale (cerveau, cervelet, bulbe rachidien), protégé par le crâne, et la moelle épinière, protégée par la colonne vertébrale.",
             "Le <strong>système nerveux périphérique</strong> : les nerfs, qui relient les centres nerveux aux organes.",
           ])}
+          ${figure(schema("s3-systeme-nerveux", "Silhouette avec l’encéphale, la moelle épinière et des nerfs."), "Les centres nerveux (encéphale, moelle épinière) sont protégés par les os ; les nerfs vont dans tout le corps.")}
           <p>L’unité de base est le <strong>neurone</strong> : un corps cellulaire, des dendrites et un long prolongement, l’axone. Les neurones transmettent des messages nerveux.</p>
+          ${figure(schema("s3-neurone", "Un neurone avec son corps cellulaire, ses dendrites et son axone."), "Le message nerveux va des dendrites vers le corps cellulaire, puis le long de l’axone.")}
           ${retenir("Nerfs <strong>sensitifs</strong> : des organes des sens vers les centres. Nerfs <strong>moteurs</strong> : des centres vers les muscles.")}`,
       },
       {
@@ -26,6 +29,7 @@ export const SVT_3E: Chapter3eSpec[] = [
             "Le nerf moteur conduit la réponse jusqu’au muscle.",
             "Le muscle (effecteur) se contracte.",
           ], "L’arc réflexe")}
+          ${figure(schema("s3-arc-reflexe", "Arc réflexe : récepteur, nerf sensitif, moelle épinière, nerf moteur, muscle."), "Le message fait un aller-retour par la moelle épinière, sans passer par le cerveau : la réaction est très rapide.")}
           ${retenir("Le centre d’un réflexe médullaire est la moelle épinière : le cerveau n’intervient pas.")}`,
       },
       {
@@ -52,13 +56,15 @@ export const SVT_3E: Chapter3eSpec[] = [
             "La <strong>rétine</strong>, au fond de l’œil, contient les cellules sensibles à la lumière.",
             "Le <strong>nerf optique</strong> transmet les messages au cerveau.",
           ])}
+          ${figure(schema("s3-oeil", "L’œil en coupe avec ses parties."), "La lumière traverse la cornée, la pupille et le cristallin avant d’atteindre la rétine.")}
           ${retenir("L’œil reçoit la lumière ; c’est le cerveau qui « voit » en interprétant les messages.")}`,
       },
       {
         title: "La formation de l’image",
         body: `<p>Le cristallin forme sur la rétine une image <strong>réelle et renversée</strong> de l’objet. Le cerveau la redresse.</p>
           <p>Pour voir net de loin comme de près, le cristallin se bombe plus ou moins : c’est l’<strong>accommodation</strong>.</p>
-          ${retenir("Le cristallin joue le rôle d’une lentille convergente, la rétine celui d’un écran.")}`,
+          ${retenir("Le cristallin joue le rôle d’une lentille convergente, la rétine celui d’un écran.")}
+          ${figure(schema("s3-image-retine", "Rayons lumineux qui forment sur la rétine une image renversée."), "Les rayons venus du haut de l’objet arrivent en bas de la rétine : l’image est renversée.")}`,
       },
       {
         title: "Les défauts de la vision",
@@ -68,7 +74,8 @@ export const SVT_3E: Chapter3eSpec[] = [
             ["Hypermétropie", "voit mal de près ; l’image se forme après la rétine", "lentilles convergentes"],
             ["Presbytie", "avec l’âge, le cristallin accommode moins", "lentilles convergentes pour lire"],
           ])}
-          ${retenir("Lire avec une bonne lumière, faire des pauses devant les écrans et consulter un ophtalmologiste en cas de gêne.")}`,
+          ${retenir("Lire avec une bonne lumière, faire des pauses devant les écrans et consulter un ophtalmologiste en cas de gêne.")}
+          ${figure(schema("s3-defauts-vision", "Œil myope et œil hypermétrope : l’image se forme avant ou après la rétine."), "Le myope voit flou de loin, l’hypermétrope de près : des lentilles corrigent la position de l’image.")}`,
       },
     ],
   },
@@ -83,6 +90,7 @@ export const SVT_3E: Chapter3eSpec[] = [
             "Le dioxygène (O₂) passe de l’air des alvéoles dans le sang.",
             "Le dioxyde de carbone (CO₂) passe du sang dans l’air des alvéoles, puis il est rejeté.",
           ])}
+          ${figure(schema("s3-alveole", "Une alvéole pulmonaire entourée de capillaires, avec les échanges de dioxygène et de dioxyde de carbone."), "La paroi de l’alvéole et celle du capillaire sont très minces : les gaz les traversent facilement.")}
           ${tableau([
             ["Gaz", "Air inspiré", "Air expiré"],
             ["Dioxygène", "21 %", "environ 16 %"],
@@ -133,6 +141,7 @@ export const SVT_3E: Chapter3eSpec[] = [
         title: "L’appareil urinaire",
         body: `<p>Il comprend deux <strong>reins</strong>, deux <strong>uretères</strong>, la <strong>vessie</strong> et l’<strong>urètre</strong>.</p>
           <p>Chaque rein contient environ un million de <strong>néphrons</strong>, les unités qui fabriquent l’urine.</p>
+          ${figure(schema("s3-appareil-urinaire", "Les deux reins, les uretères, la vessie et l’urètre."), "Les reins filtrent le sang en permanence ; l’urine s’accumule dans la vessie.")}
           ${retenir("L’urine contient de l’eau, de l’urée, des sels minéraux. Elle ne contient normalement ni glucose ni protéines.")}`,
       },
       {
@@ -142,6 +151,7 @@ export const SVT_3E: Chapter3eSpec[] = [
             "<strong>Réabsorption</strong> : l’eau, le glucose et une partie des sels retournent dans le sang.",
             "<strong>Sécrétion</strong> : quelques déchets passent directement du sang dans l’urine.",
           ], "Trois étapes")}
+          ${figure(schema("s3-nephron", "Un néphron avec le glomérule et le tube urinaire."), "Chaque rein contient environ un million de néphrons comme celui-ci.")}
           ${retenir("Le rein élimine les déchets (urée) et règle la quantité d’eau et de sels du corps : il maintient la constance du milieu intérieur.")}`,
       },
       {
@@ -176,7 +186,8 @@ export const SVT_3E: Chapter3eSpec[] = [
             "Les <strong>lymphocytes T</strong> détruisent les cellules infectées.",
             "Après un premier contact, des cellules <strong>mémoire</strong> permettent une réponse plus rapide : c’est le principe du vaccin.",
           ])}
-          ${retenir("Un anticorps reconnaît un seul antigène, comme une clé sa serrure.")}`,
+          ${retenir("Un anticorps reconnaît un seul antigène, comme une clé sa serrure.")}
+          ${figure(schema("s3-anticorps", "Anticorps en forme de Y fixé sur son antigène."), "Chaque anticorps ne reconnaît qu’un antigène : il faut un anticorps différent pour chaque microbe.")}`,
       },
       {
         title: "Les groupes sanguins",
@@ -187,6 +198,7 @@ export const SVT_3E: Chapter3eSpec[] = [
             ["AB", "A et B", "aucun"],
             ["O", "aucun", "anti-A et anti-B"],
           ])}
+          ${figure(schema("s3-groupes-sanguins", "Globules rouges des groupes A, B, AB et O avec leurs antigènes."), "Le groupe dépend des antigènes portés par les globules rouges ; le groupe O n’en porte aucun.")}
           ${retenir("Le groupe O est donneur universel, le groupe AB receveur universel. Il faut aussi respecter le facteur Rhésus (+ ou −).")}`,
       },
     ],
@@ -234,6 +246,7 @@ export const SVT_3E: Chapter3eSpec[] = [
             "<strong>Convergence</strong> : une plaque océanique plonge sous une autre (<strong>subduction</strong>) ; volcans explosifs et séismes. Quand deux continents se heurtent, des montagnes se forment (Himalaya).",
             "<strong>Coulissage</strong> : les plaques glissent l’une contre l’autre (faille de San Andreas).",
           ])}
+          ${figure(schema("s3-plaques", "Trois blocs : divergence, convergence et coulissage des plaques."), "Les flèches rouges montrent le sens du mouvement des plaques.")}
           ${retenir("Les vitesses se mesurent aujourd’hui par satellite (GPS).")}`,
       },
     ],
@@ -271,6 +284,7 @@ export const SVT_3E: Chapter3eSpec[] = [
             "l’érosion les détruit ; les débris forment des roches <strong>sédimentaires</strong> (sable, grès, calcaire) ;",
             "enfouies, elles deviennent <strong>métamorphiques</strong> ; si elles fondent, elles redonnent un magma.",
           ])}
+          ${figure(schema("s3-cycle-roches", "Cycle des roches : magma, roches magmatiques, sédimentaires et métamorphiques."), "Les roches passent d’une famille à l’autre : la matière de la Terre se recycle sans cesse.")}
           ${retenir("Le basalte des Mamelles, à Dakar, est une roche volcanique (magmatique).")}`,
       },
       {
@@ -280,6 +294,7 @@ export const SVT_3E: Chapter3eSpec[] = [
             "<strong>Recoupement</strong> : une faille ou une roche qui en coupe une autre lui est postérieure.",
             "<strong>Fossiles stratigraphiques</strong> : deux couches contenant les mêmes fossiles ont le même âge.",
           ])}
+          ${figure(schema("s3-datation", "Couches de roches A, B, C, D, une faille F et une roche M qui les recoupe."), "On raisonne comme un détective : ce qui coupe une couche s’est produit après elle.")}
           ${retenir("Ces principes donnent une chronologie <strong>relative</strong> (avant, après). La datation absolue utilise la radioactivité.")}`,
       },
     ],

@@ -4,6 +4,7 @@
 // faire valider par un enseignant.
 
 import { type ChapterSpec, exemple, formula, frac, liste, methode, retenir, sup, tableau, u, vec } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const ANA = "Analyse";
 const ALG = "Algèbre";
@@ -24,7 +25,8 @@ const COUNTING: ChapterSpec = {
           ["combinaisons (sans ordre)", `C<sup>p</sup><sub>n</sub> = ${frac("n!", "p!(n − p)!")}`, "comité de 2 parmi 5 : 10"],
           ["permutations", "n!", "ranger 4 livres : 24"],
         ])}
-        ${retenir(`C<sup>p</sup><sub>n</sub> = C<sup>n−p</sup><sub>n</sub> ; C<sup>p</sup><sub>n</sub> + C<sup>p+1</sup><sub>n</sub> = C<sup>p+1</sup><sub>n+1</sub> (triangle de Pascal) ; (a + b)${sup("2")} = a${sup("2")} + 2ab + b${sup("2")} est le cas n = 2 du binôme de Newton.`)}`,
+        ${retenir(`C<sup>p</sup><sub>n</sub> = C<sup>n−p</sup><sub>n</sub> ; C<sup>p</sup><sub>n</sub> + C<sup>p+1</sup><sub>n</sub> = C<sup>p+1</sup><sub>n+1</sub> (triangle de Pascal) ; (a + b)${sup("2")} = a${sup("2")} + 2ab + b${sup("2")} est le cas n = 2 du binôme de Newton.`)}
+          ${figure(schema("m1-pascal", "Triangle de Pascal jusqu’à la ligne n = 5."), "Le triangle de Pascal donne les nombres de combinaisons : à la ligne n, colonne p, on lit C(n, p).")}`,
     },
   ],
 };
@@ -61,7 +63,8 @@ export const MATH_1RE_S: ChapterSpec[] = [
             "formes indéterminées : ∞ − ∞, 0 × ∞, ∞/∞, 0/0 : on factorise ou on simplifie ;",
             "si lim f(x) = ±∞ quand x tend vers a, la droite x = a est asymptote verticale ; si lim f(x) = b à l’infini, y = b est asymptote horizontale.",
           ])}
-          ${exemple([`${frac(`2x${sup("2")} + 1`, `x${sup("2")} − 3`)} tend vers 2 en +∞ : y = 2 est asymptote horizontale.`])}`,
+          ${exemple([`${frac(`2x${sup("2")} + 1`, `x${sup("2")} − 3`)} tend vers 2 en +∞ : y = 2 est asymptote horizontale.`])}
+          ${figure(schema("m1-limites", "Courbe de (2x² + 1)/(x² − 3) avec ses trois asymptotes."), "Près de x = ±√3, la courbe part vers l’infini : asymptotes verticales. Loin de l’origine, elle s’approche de la droite y = 2 : asymptote horizontale.")}`,
       },
       {
         title: "La continuité",
@@ -91,13 +94,15 @@ export const MATH_1RE_S: ChapterSpec[] = [
             ["√x", frac("1", "2√x")],
             ["u + v ; uv", "u’ + v’ ; u’v + uv’"],
             [frac("u", "v"), frac("u’v − uv’", `v${sup("2")}`)],
-          ])}`,
+          ])}
+          ${figure(schema("m1-tangente", "Courbe de x² et sa tangente au point d’abscisse 1."), "Le nombre dérivé f′(1) = 2 est le coefficient directeur de la tangente : y = 2(x − 1) + 1 = 2x − 1.")}`,
       },
       {
         title: "Dérivée et variations",
         minutes: 15,
         body: `${liste(["f’ ≥ 0 sur un intervalle : f y est croissante ; f’ ≤ 0 : décroissante ;", "si f’ s’annule en changeant de signe en a, f(a) est un extremum local."])}
-          ${exemple([`f(x) = x${sup("3")} − 3x : f’(x) = 3x${sup("2")} − 3 = 3(x − 1)(x + 1) ; f est croissante sur ]−∞ ; −1], décroissante sur [−1 ; 1], croissante sur [1 ; +∞[ ; maximum local f(−1) = 2.`])}`,
+          ${exemple([`f(x) = x${sup("3")} − 3x : f’(x) = 3x${sup("2")} − 3 = 3(x − 1)(x + 1) ; f est croissante sur ]−∞ ; −1], décroissante sur [−1 ; 1], croissante sur [1 ; +∞[ ; maximum local f(−1) = 2.`])}
+          ${figure(schema("m1-variations", "Courbe de x³ − 3x avec son maximum et son minimum locaux."), "Aux extremums, la dérivée s’annule : la tangente est horizontale.")}`,
       },
     ],
   },
@@ -133,7 +138,8 @@ export const MATH_1RE_S: ChapterSpec[] = [
             ["terme général", `${u("n")} = ${u("0")} + nr`, `${u("n")} = ${u("0")} × q${sup("n")}`],
             ["somme de termes consécutifs", "nombre de termes × (premier + dernier) ÷ 2", `premier × ${frac(`1 − q${sup("nombre de termes")}`, "1 − q")} (q ≠ 1)`],
           ])}
-          ${exemple([`1 + 2 + … + 100 = 100 × 101 ÷ 2 = 5 050. Une population de 1 000 qui augmente de 5 % par an : ${u("n")} = 1 000 × 1,05${sup("n")}.`])}`,
+          ${exemple([`1 + 2 + … + 100 = 100 × 101 ÷ 2 = 5 050. Une population de 1 000 qui augmente de 5 % par an : ${u("n")} = 1 000 × 1,05${sup("n")}.`])}
+          ${figure(schema("m1-suites", "Termes d’une suite arithmétique et d’une suite géométrique."), "Une suite arithmétique augmente toujours de la même quantité ; une suite géométrique de raison supérieure à 1 augmente de plus en plus.")}`,
       },
     ],
   },
@@ -168,7 +174,8 @@ export const MATH_1RE_S: ChapterSpec[] = [
             "méthode de Mayer : on partage le nuage en deux groupes et on trace la droite qui passe par les deux points moyens ;",
             "méthode des moindres carrés : la droite de régression de y en x passe par G et a pour coefficient cov(x, y) ÷ V(x).",
           ])}
-          ${retenir("Un ajustement permet des estimations (interpolation, extrapolation prudente).")}`,
+          ${retenir("Un ajustement permet des estimations (interpolation, extrapolation prudente).")}
+          ${figure(schema("m1-nuage", "Nuage de points et droite de Mayer."), "Exemple : on partage les points en deux groupes de même effectif ; la droite de Mayer passe par leurs points moyens G₁ et G₂.")}`,
       },
     ],
   },
@@ -288,7 +295,8 @@ export const MATH_1RE_L: ChapterSpec[] = [
             "Représenter la région des solutions (polygone des contraintes).",
             "Le maximum ou le minimum de la quantité à optimiser est atteint en un sommet du polygone.",
           ])}
-          ${exemple(["Contraintes : x ≥ 0, y ≥ 0, x + y ≤ 10 et x ≤ 6 ; bénéfice B = 3x + 2y. Aux sommets (0 ; 0), (6 ; 0), (6 ; 4) et (0 ; 10), B vaut 0, 18, 26 et 20 : le maximum, 26, est atteint pour x = 6 et y = 4."])}`,
+          ${exemple(["Contraintes : x ≥ 0, y ≥ 0, x + y ≤ 10 et x ≤ 6 ; bénéfice B = 3x + 2y. Aux sommets (0 ; 0), (6 ; 0), (6 ; 4) et (0 ; 10), B vaut 0, 18, 26 et 20 : le maximum, 26, est atteint pour x = 6 et y = 4."])}
+          ${figure(schema("m1-optimisation", "Région des contraintes et droite du bénéfice maximal."), "On fait glisser la droite 3x + 2y = B vers le haut : le dernier point de la région touché, le sommet (6 ; 4), donne le maximum.")}`,
       },
     ],
   },
@@ -356,7 +364,8 @@ export const MATH_1RE_L: ChapterSpec[] = [
             `géométrique : on multiplie toujours par la même raison q : ${u("n")} = ${u("0")} × q${sup("n")} ;`,
             "application : un capital placé à intérêts composés de 5 % par an est multiplié par 1,05 chaque année.",
           ])}
-          ${exemple(["Un salaire de 100 000 F qui augmente de 5 000 F par an vaut 125 000 F au bout de 5 ans (suite arithmétique)."])}`,
+          ${exemple(["Un salaire de 100 000 F qui augmente de 5 000 F par an vaut 125 000 F au bout de 5 ans (suite arithmétique)."])}
+          ${figure(schema("m1-suites", "Termes d’une suite arithmétique et d’une suite géométrique."), "Une suite arithmétique augmente toujours de la même quantité ; une suite géométrique de raison supérieure à 1 augmente de plus en plus.")}`,
       },
     ],
   },
@@ -368,7 +377,8 @@ export const MATH_1RE_L: ChapterSpec[] = [
       {
         title: "La droite de Mayer",
         minutes: 12,
-        body: `${methode(["Représenter le nuage de points.", "Partager la série (rangée selon x) en deux groupes de même effectif.", "Calculer le point moyen de chaque groupe.", "Tracer la droite qui passe par ces deux points : elle sert à faire des prévisions."])}`,
+        body: `${methode(["Représenter le nuage de points.", "Partager la série (rangée selon x) en deux groupes de même effectif.", "Calculer le point moyen de chaque groupe.", "Tracer la droite qui passe par ces deux points : elle sert à faire des prévisions."])}
+          ${figure(schema("m1-nuage", "Nuage de points et droite de Mayer."), "Exemple : on partage les points en deux groupes de même effectif ; la droite de Mayer passe par leurs points moyens G₁ et G₂.")}`,
       },
     ],
   },
@@ -425,7 +435,8 @@ const FINANCE_1RE: ChapterSpec = {
       minutes: 15,
       body: `${formula(`C<sub>n</sub> = C<sub>0</sub> × (1 + i)${sup("n")}`)}
         ${liste(["les intérêts de chaque période s’ajoutent au capital et produisent à leur tour des intérêts ;", "la suite des valeurs acquises est géométrique de raison 1 + i."])}
-        ${exemple(["500 000 F placés 3 ans à 6 % : intérêts simples 90 000 F ; intérêts composés : 500 000 × 1,06³ ≈ 595 508 F, soit 95 508 F d’intérêts."])}`,
+        ${exemple(["500 000 F placés 3 ans à 6 % : intérêts simples 90 000 F ; intérêts composés : 500 000 × 1,06³ ≈ 595 508 F, soit 95 508 F d’intérêts."])}
+          ${figure(schema("m1-interets", "Valeur d’un placement avec intérêts simples et composés."), "Avec les intérêts composés, les intérêts rapportent eux-mêmes des intérêts : l’écart grandit chaque année.")}`,
     },
   ],
 };
@@ -450,7 +461,8 @@ const COMPLEXES_1RE: ChapterSpec = {
       minutes: 15,
       body: `${formula(`|z| = √(a${sup("2")} + b${sup("2")}) ; z = r(cos θ + i sin θ)`)}
         ${liste(["le point M(a ; b) est l’image de z dans le plan complexe ;", "r = |z| est la distance OM ; θ est un argument de z (angle entre l’axe des réels et OM)."])}
-        ${exemple(["z = 1 + i : |z| = √2 et un argument est π/4, donc z = √2(cos π/4 + i sin π/4)."])}`,
+        ${exemple(["z = 1 + i : |z| = √2 et un argument est π/4, donc z = √2(cos π/4 + i sin π/4)."])}
+          ${figure(schema("m1-complexe", "Le point M d’affixe 1 + i dans le plan complexe."), "Le module est la distance OM ; l’argument est l’angle que fait OM avec l’axe des réels.")}`,
     },
   ],
 };

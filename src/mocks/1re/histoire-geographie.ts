@@ -4,6 +4,7 @@
 // d’histoire-géographie.
 
 import { type ChapterSpec, exemple, liste, retenir, tableau } from "../tle/blocks";
+import { figure, schema } from "../lesson-figures";
 
 const H = "Histoire";
 const G = "Géographie";
@@ -50,7 +51,8 @@ export const HG_1RE: ChapterSpec[] = [
             "la conférence de Berlin (1884-1885) fixe les règles de l’occupation des côtes africaines ;",
             "en 1914, seuls l’Éthiopie et le Liberia restent indépendants.",
           ])}
-          ${retenir("Les frontières tracées par les colonisateurs ont souvent ignoré les réalités africaines.")}`,
+          ${retenir("Les frontières tracées par les colonisateurs ont souvent ignoré les réalités africaines.")}
+          ${figure(schema("h3-afrique-1914", "Carte de l’Afrique colonisée vers 1914."), "Vers 1914, seuls le Liberia et l’Éthiopie échappent à la colonisation. Frontières actuelles, approximatives pour 1914.")}`,
       },
     ],
   },
@@ -101,7 +103,8 @@ export const HG_1RE: ChapterSpec[] = [
             "guerre de mouvement puis de tranchées (Verdun, 1916) ; l’entrée des États-Unis (1917) ;",
             "l’armistice est signé le 11 novembre 1918 ; le traité de Versailles (1919) sanctionne l’Allemagne ;",
             "l’Afrique fournit soldats (tirailleurs), travailleurs et ressources ; les colonies allemandes sont partagées.",
-          ])}`,
+          ])}
+          ${figure(schema("h3-frise-guerres", "Frise de 1910 à 1950."), "La Première Guerre mondiale (1914-1918) ouvre une période de crises qui mène à la Seconde.")}`,
       },
     ],
   },
@@ -187,7 +190,8 @@ export const HG_1RE: ChapterSpec[] = [
             "le PIB par habitant mesure la richesse produite ; l’IDH combine revenu, santé (espérance de vie) et éducation ;",
             "pays développés, pays émergents (Chine, Inde, Brésil), pays moins avancés ;",
             "les inégalités existent aussi à l’intérieur des pays (villes et campagnes).",
-          ])}`,
+          ])}
+          ${figure(schema("g3-nord-sud", "Planisphère des pays développés, émergents et en développement."), "Classement simplifié : l’IDH et le PIB par habitant permettent de comparer les pays.")}`,
       },
     ],
   },
@@ -205,7 +209,9 @@ export const HG_1RE: ChapterSpec[] = [
             "la population est concentrée en Asie de l’Est et du Sud, en Europe, en Afrique de l’Ouest ; les déserts et les régions froides sont presque vides ;",
             "migrations internes (exode rural) et internationales ; politiques natalistes ou de limitation des naissances.",
           ])}
-          ${exemple(["Densité = population ÷ superficie : environ 18 millions d’habitants pour 196 722 km² donnent un peu plus de 90 hab./km² au Sénégal."])}`,
+          ${exemple(["Densité = population ÷ superficie : environ 18 millions d’habitants pour 196 722 km² donnent un peu plus de 90 hab./km² au Sénégal."])}
+          ${figure(schema("g1-population", "Courbe de la population mondiale depuis 1800."), "La population mondiale a été multipliée par 8 en deux siècles.")}
+          ${figure(schema("g1-transition", "Schéma de la transition démographique."), "Pendant la transition, la mortalité baisse avant la natalité : la population augmente vite. Beaucoup de pays africains, dont le Sénégal, sont dans cette phase.")}`,
       },
     ],
   },
@@ -241,7 +247,8 @@ export const HG_1RE: ChapterSpec[] = [
             "fonctions : politique, économique, culturelle, religieuse (Touba), portuaire (Dakar) ;",
             "l’industrie se transforme (délocalisations, nouvelles technologies) ; les services dominent les économies développées ;",
             "problèmes des villes du Sud : quartiers spontanés, embouteillages, chômage, inondations, déchets.",
-          ])}`,
+          ])}
+          ${figure(schema("g1-urbanisation", "Part des citadins dans la population mondiale depuis 1950."), "Depuis 2007, plus de la moitié de l’humanité vit en ville.")}`,
       },
     ],
   },

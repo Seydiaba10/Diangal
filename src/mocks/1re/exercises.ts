@@ -4,10 +4,13 @@ import "server-only";
 // rangées par matière et par titre de chapitre ; un chapitre commun à plusieurs séries reçoit la même
 // série. Écrits par DIANGAL d’après les leçons, à faire relire par des enseignants. Corrigés inclus : ce
 // fichier ne doit jamais atteindre le navigateur.
+// Questions illustrées (schémas des leçons) ajoutées par 1re/enrich.ts.
 
 import type { SubjectCode } from "@/types/domain";
 import { CHAPTERS_1RE } from "../curriculum-1re";
 import { buildExerciseSeries, type ExerciseSeries, type ExerciseSpec } from "../exercise-series";
+import { withSubjectExtras } from "../illustrated-questions";
+import { EXTRA_1RE } from "./enrich";
 import { LYCEE_SERIES_EXERCISES, MATH_1RE_SERIES_EXERCISES } from "../lycee/exercises";
 
 const BANK: Partial<Record<SubjectCode, Record<string, ExerciseSpec[]>>> = {
@@ -431,7 +434,7 @@ const SERIES: ExerciseSeries[] = CHAPTERS_1RE.map((chapter) => {
   return { subject: chapter.subjectCode, chapter: chapter.title, series: chapter.seriesCode ?? undefined, questions };
 });
 
-const built = buildExerciseSeries("1RE", CHAPTERS_1RE, SERIES);
+const built = buildExerciseSeries("1RE", CHAPTERS_1RE, withSubjectExtras(SERIES, EXTRA_1RE));
 
 export const QUESTIONS_1RE = built.questions;
 export const ANSWER_KEYS_1RE = built.keys;

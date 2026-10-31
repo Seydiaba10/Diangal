@@ -1,6 +1,8 @@
 // Leçons de Thalès (3e), le premier chapitre rédigé, et gabarit affiché pour une leçon sans
 // contenu (ex. une leçon que l’admin vient de créer). Les autres leçons de 3e sont dans src/mocks/3e/.
 
+import { figure, schema } from "./lesson-figures";
+
 const frac = (num: string, den: string) => `<span class="frac"><span>${num}</span><span>${den}</span></span>`;
 
 const THALES_FORMULA = `<p class="formula">${frac("AM", "AB")} = ${frac("AN", "AC")} = ${frac("MN", "BC")}</p>`;
@@ -13,6 +15,7 @@ export const LESSON_BODIES: Record<string, string> = {
       <li><strong>Le triangle</strong> : M est sur [AB], N est sur [AC] et (MN) est parallèle à (BC).</li>
       <li><strong>Le papillon</strong> : M et N sont de l’autre côté de A par rapport à B et C, et (MN) est parallèle à (BC).</li>
     </ul>
+    ${figure(schema("m3-thales", "Les deux configurations de Thalès : le triangle et le papillon."), "À gauche, le triangle : M et N sont sur les côtés. À droite, le papillon : M et N sont de l’autre côté de A. Dans les deux cas, (MN) est parallèle à (BC).")}
     <div class="callout"><p class="callout-title">À retenir</p><p>Avant d’appliquer Thalès, vérifie toujours : deux droites sécantes en A <strong>et</strong> deux droites parallèles.</p></div>`,
 
   "math-theoreme-de-thales--l-enonce-du-theoreme": `

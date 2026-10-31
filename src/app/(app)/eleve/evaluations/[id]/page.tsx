@@ -1,4 +1,4 @@
-import { CircleCheck, ClipboardList, Scale, Timer, Trophy } from "lucide-react";
+import { CircleCheck, ClipboardList, History, Scale, Timer, Trophy } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -11,9 +11,16 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { getCurrentStudent } from "@/features/account/data";
-import { startAttemptAction } from "@/features/assessments/actions";
+import { restartAttemptAction, startAttemptAction } from "@/features/assessments/actions";
+import { RestartAttemptButton } from "@/features/assessments/components/restart-attempt-button";
 import { WorkbookPage } from "@/features/assessments/components/workbook-page";
-import { getAssessment, getAssessmentBestScore, getAssessmentPage, getPrerenderedAssessmentIds } from "@/features/assessments/data";
+import {
+  getAssessment,
+  getAssessmentBestScore,
+  getAssessmentPage,
+  getOpenAttempts,
+  getPrerenderedAssessmentIds,
+} from "@/features/assessments/data";
 import { PaywallCard } from "@/features/payments/components/paywall-card";
 import { formatDuration, formatScore } from "@/lib/format";
 import type { AssessmentSummary } from "@/types/domain";
@@ -36,15 +43,19 @@ function InfoTile({ icon, label, value }: { icon: ReactNode; label: string; valu
   );
 }
 
-/** Partie propre à l'élève : accès Premium, meilleure note et bouton de démarrage. */
+/** Partie propre à l'élève : accès Premium, meilleure note, reprise d'un essai en cours et bouton de démarrage. */
 async function StartPanel({ assessment }: { assessment: AssessmentSummary }) {
-  const [student, best, t, tAssessment] = await Promise.all([
+  const [student, best, open, t, tAssessment] = await Promise.all([
     getCurrentStudent(),
     getAssessmentBestScore(assessment.id),
+    getOpenAttempts(),
     getTranslations("intro"),
     getTranslations("assessment"),
   ]);
   if (assessment.isPremium && !student.isPremium) return <PaywallCard title={t("lockedTitle")} />;
+  // Essai commencé (au moins une réponse ou une question passée) : on le reprend, start_attempt le rouvre.
+  const current = open.find((o) => o.assessmentId === assessment.id);
+  const resumable = current && (current.answered > 0 || current.currentIndex > 0) ? current : null;
 
   return (
     <div className="space-y-3">
@@ -54,11 +65,32 @@ async function StartPanel({ assessment }: { assessment: AssessmentSummary }) {
           {tAssessment("bestScore", { score: formatScore(best) })}
         </p>
       ) : null}
+      {resumable ? (
+        <p className="flex items-center justify-center gap-2 text-center text-sm text-ink">
+          <History className="size-4 shrink-0 text-info-700" aria-hidden />
+          {t("resumeHint", { answered: resumable.answered, total: resumable.total, number: resumable.currentIndex + 1 })}
+        </p>
+      ) : null}
+      {resumable?.timed ? <p className="text-center text-sm font-medium text-premium-700">{t("resumeTimed")}</p> : null}
       <form action={startAttemptAction.bind(null, assessment.id)}>
         <Button type="submit" className="w-full">
-          {assessment.durationS ? t("startQuiz") : t("startExercise")}
+          {resumable ? <History className="size-4" aria-hidden /> : null}
+          {resumable ? t("resume") : assessment.durationS ? t("startQuiz") : t("startExercise")}
         </Button>
       </form>
+      {/* Un contrôle chronométré ne se recommence pas : son temps continue. */}
+      {resumable && !resumable.timed ? (
+        <RestartAttemptButton
+          action={restartAttemptAction.bind(null, assessment.id, resumable.attemptId)}
+          labels={{
+            open: t("restart"),
+            title: t("restartTitle"),
+            body: t("restartBody"),
+            confirm: t("restartConfirm"),
+            cancel: t("restartCancel"),
+          }}
+        />
+      ) : null}
     </div>
   );
 }

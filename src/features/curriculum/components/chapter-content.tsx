@@ -7,7 +7,7 @@ import { ProgressBar } from "@/components/ui/progress-bar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentStudent } from "@/features/account/data";
 import { AssessmentCard } from "@/features/assessments/components/assessment-card";
-import { getChapterAssessments } from "@/features/assessments/data";
+import { getChapterAssessments, getOpenAttempts } from "@/features/assessments/data";
 import { DownloadChapterButton } from "@/features/offline/components/download-chapter-button";
 import { cn } from "@/lib/cn";
 import { formatBytes } from "@/lib/format";
@@ -23,9 +23,10 @@ const RESOURCE_ICONS: Record<LessonResourceKind, typeof FileText> = {
 
 /** Partie propre à l'élève de la page chapitre : progression, leçons faites, évaluations. */
 export async function ChapterContent({ subject, chapter }: { subject: Subject; chapter: Chapter }) {
-  const [{ summary, statuses }, chapterAssessments, student, t, tBadges, messages] = await Promise.all([
+  const [{ summary, statuses }, chapterAssessments, openAttempts, student, t, tBadges, messages] = await Promise.all([
     getChapterProgress(chapter),
     getChapterAssessments(chapter.id),
+    getOpenAttempts(),
     getCurrentStudent(),
     getTranslations("chapter"),
     getTranslations("badges"),
@@ -33,6 +34,7 @@ export async function ChapterContent({ subject, chapter }: { subject: Subject; c
   ]);
   // Séries du chapitre dans leur ordre (série 1, 2…). Les pages recopiées d'un cahier ne sont pas affichées.
   const assessments = chapterAssessments.filter((a) => !a.workbook).sort((a, b) => a.id.localeCompare(b.id));
+  const open = new Map(openAttempts.filter((o) => o.answered > 0 || o.currentIndex > 0).map((o) => [o.assessmentId, o]));
   const style = subjectStyle(subject.code);
   const nextLesson = chapter.lessons.find((l) => statuses[l.id] !== "completed");
   const totalSize = chapter.lessons.flatMap((l) => l.resources).reduce((sum, r) => sum + r.sizeBytes, 0);
@@ -96,7 +98,7 @@ export async function ChapterContent({ subject, chapter }: { subject: Subject; c
             <ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {assessments.map((a) => (
                 <li key={a.id}>
-                  <AssessmentCard assessment={a} />
+                  <AssessmentCard assessment={a} open={open.get(a.id) ?? null} />
                 </li>
               ))}
             </ul>

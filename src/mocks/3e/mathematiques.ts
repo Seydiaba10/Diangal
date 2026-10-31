@@ -2,6 +2,7 @@
 // de Thalès » est dans lesson-content.ts. Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { type Chapter3eSpec, exemple, formula, frac, liste, methode, retenir, tableau } from "./blocks";
+import { figure, schema } from "../lesson-figures";
 
 const sqrt = (x: string) => `√${x}`;
 
@@ -69,6 +70,7 @@ export const MATH_3E_BEFORE_THALES: Chapter3eSpec[] = [
           ${formula("(a + b)² = a² + 2ab + b²")}
           ${formula("(a − b)² = a² − 2ab + b²")}
           ${formula("(a + b)(a − b) = a² − b²")}
+          ${figure(schema("m3-identite", "Carré de côté a + b découpé en a², b² et deux rectangles ab."), "L’aire du grand carré, (a + b)², est la somme des quatre morceaux : a² + ab + ab + b². Le double produit 2ab correspond aux deux rectangles.")}
           ${exemple(["(3x + 2)² = 9x² + 12x + 4.", "(x − 5)² = x² − 10x + 25.", "(2x + 7)(2x − 7) = 4x² − 49."])}
           ${retenir("(a + b)² n’est pas égal à a² + b² : il ne faut pas oublier le double produit 2ab.")}`,
       },
@@ -145,13 +147,15 @@ export const MATH_3E_BEFORE_THALES: Chapter3eSpec[] = [
             "Au marché, 2 kg de riz et 1 kg de sucre coûtent 1 500 F ; 1 kg de riz et 2 kg de sucre coûtent 1 800 F.",
             "Soit x le prix du kg de riz et y celui du sucre : { 2x + y = 1 500 ; x + 2y = 1 800 }.",
             "On trouve x = 400 F et y = 700 F.",
-          ], "Problème corrigé")}`,
+          ], "Problème corrigé")}
+          ${figure(schema("m3-systeme", "Les deux droites du système se coupent au point (400 ; 700)."), "Le point commun aux deux droites donne la solution : le riz coûte 400 F le kilo et le sucre 700 F.")}`,
       },
       {
         title: "Inéquations à deux inconnues",
         body: `<p>Les solutions d’une inéquation comme 2x + y − 4 &gt; 0 forment un <strong>demi-plan</strong> limité par la droite d’équation 2x + y − 4 = 0.</p>
           ${methode(["Tracer la droite frontière.", "Tester un point qui n’est pas sur la droite (souvent l’origine O).", "Si le point vérifie l’inéquation, son demi-plan est la solution ; sinon, c’est l’autre.", "Hachurer la partie qui ne convient pas."])}
-          ${retenir("Pour un système d’inéquations, la solution est l’intersection des demi-plans (partie non hachurée).")}`,
+          ${retenir("Pour un système d’inéquations, la solution est l’intersection des demi-plans (partie non hachurée).")}
+          ${figure(schema("m3-demi-plan", "Droite d’équation 2x + y − 4 = 0 et demi-plan hachuré qui contient l’origine."), "L’origine O ne vérifie pas 2x + y − 4 > 0 (−4 n’est pas positif) : on hachure son côté ; les solutions sont de l’autre côté de la droite.")}`,
       },
     ],
   },
@@ -169,7 +173,8 @@ export const MATH_3E_BEFORE_THALES: Chapter3eSpec[] = [
         title: "Représentation graphique",
         body: `<p>La représentation graphique d’une application affine est une <strong>droite</strong>. Celle d’une application linéaire passe par l’origine.</p>
           ${methode(["Calculer les images de deux nombres.", "Placer les deux points dans le repère.", "Tracer la droite qui passe par ces points."])}
-          ${retenir("Le coefficient a donne la pente : si a &gt; 0, la droite « monte » ; si a &lt; 0, elle « descend ».")}`,
+          ${retenir("Le coefficient a donne la pente : si a &gt; 0, la droite « monte » ; si a &lt; 0, elle « descend ».")}
+          ${figure(schema("m3-affines", "Deux droites : f(x) = 2x − 1 qui monte et g(x) = −x + 3 qui descend."), "Pour tracer f(x) = 2x − 1, on place deux points, par exemple (0 ; −1) et (1 ; 1). Le signe du coefficient a dit si la droite monte ou descend.")}`,
       },
       {
         title: "Déterminer une application affine",
@@ -185,6 +190,7 @@ export const MATH_3E_BEFORE_THALES: Chapter3eSpec[] = [
             "Pour 0 ≤ x ≤ 10 : f(x) = 200x + 500. Pour x &gt; 10 : f(x) = 150(x − 10) + 2 500.",
             "La représentation est faite de deux segments de droites qui se rejoignent au point (10 ; 2 500).",
           ])}
+          ${figure(schema("m3-taxi", "Graphique du prix d’une course de taxi selon la distance : deux segments."), "Deux segments qui se rejoignent au point (10 ; 2 500) : au-delà de 10 km, le prix augmente moins vite (150 F par km au lieu de 200 F).")}
           ${retenir("La valeur absolue |x| est un exemple : |x| = x si x ≥ 0 et |x| = −x si x &lt; 0.")}`,
       },
     ],
@@ -221,7 +227,8 @@ export const MATH_3E_BEFORE_THALES: Chapter3eSpec[] = [
             "Le <strong>diagramme circulaire</strong> : l’angle de chaque secteur vaut fréquence × 360°.",
             "L’<strong>histogramme</strong> : pour des classes, l’aire de chaque rectangle est proportionnelle à l’effectif.",
           ])}
-          ${exemple(["Une modalité de fréquence 25 % occupe un secteur de 0,25 × 360° = 90°."])}`,
+          ${exemple(["Une modalité de fréquence 25 % occupe un secteur de 0,25 × 360° = 90°."])}
+          ${figure(schema("m3-circulaire", "Diagramme circulaire de quatre secteurs : 50 %, 25 %, 15 % et 10 %."), "Chaque secteur a un angle proportionnel à la fréquence : 25 % donne 90°, la moitié du disque 180°.")}`,
       },
     ],
   },
@@ -237,6 +244,7 @@ export const MATH_3E_AFTER_THALES: Chapter3eSpec[] = [
         title: "Cosinus, sinus et tangente",
         body: `<p>Dans un triangle ABC rectangle en A, pour l’angle aigu B̂ :</p>
           ${formula(`cos B̂ = ${frac("côté adjacent", "hypoténuse")} = ${frac("AB", "BC")} &nbsp; sin B̂ = ${frac("côté opposé", "hypoténuse")} = ${frac("AC", "BC")} &nbsp; tan B̂ = ${frac("côté opposé", "côté adjacent")} = ${frac("AC", "AB")}`)}
+          ${figure(schema("m3-trigo", "Triangle rectangle avec le côté adjacent, le côté opposé et l’hypoténuse pour l’angle B."), "Les noms des côtés dépendent de l’angle choisi : pour B̂, le côté adjacent touche B, le côté opposé est en face.")}
           ${retenir("Le cosinus et le sinus d’un angle aigu sont compris entre 0 et 1, car l’hypoténuse est le plus grand côté.")}`,
       },
       {
@@ -271,12 +279,14 @@ export const MATH_3E_AFTER_THALES: Chapter3eSpec[] = [
       {
         title: "Somme de vecteurs et relation de Chasles",
         body: `${formula("Relation de Chasles : AB⃗ + BC⃗ = AC⃗")}
+          ${figure(schema("m3-chasles", "Vecteurs AB et BC mis bout à bout, et vecteur AC."), "La flèche de A à C remplace les deux flèches enchaînées A → B → C.")}
           <p>Pour additionner deux vecteurs de même origine, on construit le parallélogramme : AB⃗ + AD⃗ = AC⃗ si ABCD est un parallélogramme.</p>
           ${exemple(["Simplifier AB⃗ + CA⃗ + BC⃗ = CA⃗ + AB⃗ + BC⃗ = CB⃗ + BC⃗ = 0⃗."], "Exercice corrigé")}`,
       },
       {
         title: "Produit d’un vecteur par un réel",
-        body: `<p>Pour un réel k, le vecteur kAB⃗ a la même direction que AB⃗, une longueur |k| × AB, et le même sens si k &gt; 0 (sens contraire si k &lt; 0).</p>
+        body: `${figure(schema("m3-colineaires", "Vecteurs u, 2u et −u."), "Multiplier un vecteur par 2 double sa longueur ; par −1, on change son sens.")}
+          <p>Pour un réel k, le vecteur kAB⃗ a la même direction que AB⃗, une longueur |k| × AB, et le même sens si k &gt; 0 (sens contraire si k &lt; 0).</p>
           ${retenir("Deux vecteurs u⃗ et v⃗ sont colinéaires s’il existe un réel k tel que v⃗ = ku⃗. Trois points A, B, C sont alignés ⇔ AB⃗ et AC⃗ sont colinéaires.")}`,
       },
     ],
@@ -290,6 +300,7 @@ export const MATH_3E_AFTER_THALES: Chapter3eSpec[] = [
         body: `<p>Dans un repère, si A(x_A ; y_A) et B(x_B ; y_B), alors :</p>
           ${formula("AB⃗ (x_B − x_A ; y_B − y_A)")}
           ${exemple(["A(1 ; 3) et B(4 ; −1) : AB⃗(3 ; −4)."])}
+          ${figure(schema("m3-coord-vecteur", "Vecteur AB de A(1 ; 3) à B(4 ; −1) dans un repère."), "Pour aller de A à B, on avance de 3 et on descend de 4 : le vecteur AB a pour coordonnées (3 ; −4).")}
           ${retenir("Deux vecteurs sont égaux si et seulement s’ils ont les mêmes coordonnées.")}`,
       },
       {
@@ -307,7 +318,8 @@ export const MATH_3E_AFTER_THALES: Chapter3eSpec[] = [
         title: "Droites parallèles et perpendiculaires",
         body: `<p>Soit (D) : y = ax + b et (D′) : y = a′x + b′.</p>
           ${liste(["(D) // (D′) ⇔ a = a′ (même coefficient directeur).", "Dans un repère orthonormé : (D) ⊥ (D′) ⇔ a × a′ = −1."])}
-          ${exemple(["y = 2x + 1 et y = −½x + 3 sont perpendiculaires, car 2 × (−½) = −1."])}`,
+          ${exemple(["y = 2x + 1 et y = −½x + 3 sont perpendiculaires, car 2 × (−½) = −1."])}
+          ${figure(schema("m3-perpendiculaires", "Droites y = 2x + 1 et y = −½x + 3, perpendiculaires."), "Le produit des coefficients directeurs vaut −1 : les droites se coupent à angle droit.")}`,
       },
     ],
   },
@@ -323,12 +335,14 @@ export const MATH_3E_AFTER_THALES: Chapter3eSpec[] = [
             "Les deux angles <strong>interceptent le même arc</strong> s’ils s’appuient sur les mêmes points du cercle.",
           ])}
           ${retenir("La mesure d’un angle inscrit est égale à la moitié de celle de l’angle au centre qui intercepte le même arc.")}
-          ${exemple(["Si l’angle au centre AÔB mesure 100°, tout angle inscrit AMB interceptant l’arc AB mesure 50°."])}`,
+          ${exemple(["Si l’angle au centre AÔB mesure 100°, tout angle inscrit AMB interceptant l’arc AB mesure 50°."])}
+          ${figure(schema("m3-angle-inscrit", "Cercle avec un angle au centre de 100° et un angle inscrit de 50° qui interceptent le même arc."), "L’angle inscrit et l’angle au centre s’appuient sur le même arc AB (en rouge) : l’angle inscrit vaut la moitié.")}`,
       },
       {
         title: "Angles inscrits interceptant le même arc",
         body: `${retenir("Deux angles inscrits qui interceptent le même arc ont la même mesure.")}
           ${retenir("Un angle inscrit qui intercepte un demi-cercle est droit : si [AB] est un diamètre et M un point du cercle, le triangle AMB est rectangle en M.", "Cas particulier")}
+          ${figure(schema("m3-demi-cercle", "Triangle AMB inscrit dans un demi-cercle de diamètre [AB], rectangle en M."), "Un angle inscrit qui intercepte un demi-cercle mesure la moitié de 180°, c’est-à-dire 90°.")}
           ${exemple(["A, B, C, D sont sur un cercle et AĈB = 35°. Alors AD̂B = 35° si C et D sont du même côté de (AB)."])}`,
       },
       {
@@ -346,6 +360,7 @@ export const MATH_3E_AFTER_THALES: Chapter3eSpec[] = [
       {
         title: "La pyramide et le cône",
         body: `${liste(["Une <strong>pyramide</strong> a une base polygonale et des faces latérales triangulaires qui se rejoignent au sommet.", "Un <strong>cône de révolution</strong> est engendré par la rotation d’un triangle rectangle autour d’un côté de l’angle droit."])}
+          ${figure(schema("m3-pyramide-cone", "Une pyramide à base carrée et un cône de révolution, avec leur hauteur."), "La hauteur va du sommet au centre de la base, perpendiculairement à la base.")}
           ${formula(`Volume = ${frac("aire de la base × hauteur", "3")}`)}
           ${exemple(["Pyramide à base carrée de côté 6 cm et de hauteur 5 cm : V = 36 × 5 / 3 = 60 cm³.", "Cône de rayon 3 cm et de hauteur 4 cm : V = π × 9 × 4 / 3 = 12π ≈ 37,7 cm³."])}`,
       },
@@ -353,7 +368,8 @@ export const MATH_3E_AFTER_THALES: Chapter3eSpec[] = [
         title: "Sections planes",
         body: `<p>La section d’une pyramide ou d’un cône par un plan <strong>parallèle à la base</strong> est une réduction de la base.</p>
           ${liste(["Pyramide : la section est un polygone de même forme que la base.", "Cône : la section est un disque."])}
-          ${retenir("Si la section est à la distance h′ du sommet et que la hauteur totale est h, le coefficient de réduction est k = h′/h.")}`,
+          ${retenir("Si la section est à la distance h′ du sommet et que la hauteur totale est h, le coefficient de réduction est k = h′/h.")}
+          ${figure(schema("m3-section-pyramide", "Pyramide coupée par un plan parallèle à sa base."), "La section a la même forme que la base, en plus petit : c’est une réduction.")}`,
       },
       {
         title: "Agrandissement et réduction",
@@ -364,7 +380,8 @@ export const MATH_3E_AFTER_THALES: Chapter3eSpec[] = [
             ["Aires", "k²"],
             ["Volumes", "k³"],
           ])}
-          ${exemple(["On coupe un cône de volume 120 cm³ à mi-hauteur (k = ½). Le petit cône a pour volume 120 × (½)³ = 15 cm³."])}`,
+          ${exemple(["On coupe un cône de volume 120 cm³ à mi-hauteur (k = ½). Le petit cône a pour volume 120 × (½)³ = 15 cm³."])}
+          ${figure(schema("m3-reduction", "Cône coupé à mi-hauteur : le petit cône du haut."), "Les longueurs sont divisées par 2, les aires par 4 et les volumes par 8.")}`,
       },
     ],
   },

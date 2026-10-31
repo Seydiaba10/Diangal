@@ -243,7 +243,10 @@
     "untimed": "Sans chrono",
     "bestScore": "Meilleure note : {score}",
     "start": "Commencer",
-    "retry": "Refaire"
+    "retry": "Refaire",
+    "resume": "Reprendre",
+    "inProgress": "En cours",
+    "progress": "Question {number} sur {total}"
   },
   "practice": {
     "subtitle": "Exercices corrigés et contrôles chronométrés, avec correction immédiate.",
@@ -255,6 +258,12 @@
     "allSubjects": "Toutes",
     "filterLabel": "Filtrer par matière",
     "empty": "Aucun exercice pour cette matière pour l’instant.",
+    "open": {
+      "title": "Reprendre où tu t’es arrêté",
+      "hint": "Tes réponses sont enregistrées : tu retrouves chaque exercice à la question où tu l’as quitté.",
+      "progress": "{answered, plural, =0 {Aucune réponse pour l’instant} one {# réponse sur {total}} other {# réponses sur {total}}} · question {number}",
+      "timed": "Chrono en cours"
+    },
     "prepare": {
       "title": "Préparer mon prochain devoir",
       "hint": "Choisis les chapitres de ton devoir : DIANGAL te pose des questions tirées au hasard, puis te montre la correction.",
@@ -281,7 +290,7 @@
     "rulesTitle": "Avant de commencer",
     "rules": {
       "timer": "Le chronomètre démarre dès que tu cliques sur « Commencer ».",
-      "saved": "Tes réponses restent sur ce téléphone, même si la connexion coupe.",
+      "saved": "Tes réponses s’enregistrent toutes seules : tu peux quitter à tout moment et reprendre plus tard.",
       "auto": "À la fin du temps, ta copie est envoyée automatiquement.",
       "online": "Il faut être connecté pour commencer et pour envoyer ta copie.",
       "practice": "Prends ton temps : tu peux revenir sur chaque question avant de valider.",
@@ -290,6 +299,14 @@
     },
     "startQuiz": "Commencer le contrôle",
     "startExercise": "Commencer les exercices",
+    "resume": "Reprendre où je me suis arrêté",
+    "resumeHint": "{answered, plural, =0 {Commencé, aucune réponse pour l’instant} one {# réponse donnée sur {total}} other {# réponses données sur {total}}} · reprise à la question {number}",
+    "resumeTimed": "Le chrono de ce contrôle continue : termine-le avant la fin du temps.",
+    "restart": "Recommencer à zéro",
+    "restartTitle": "Recommencer à zéro ?",
+    "restartBody": "Les réponses de cet essai seront effacées. Il ne compte pas dans tes notes.",
+    "restartConfirm": "Oui, recommencer",
+    "restartCancel": "Non, garder mes réponses",
     "lockedTitle": "Ce contrôle est réservé aux abonnés Premium",
     "chapterLink": "Chapitre : {title}",
     "pageTitle": "La page du cahier"
@@ -299,6 +316,25 @@
     "points": "{points, plural, one {# point} other {# points}}",
     "timeLeft": "Temps restant",
     "untimed": "Sans chrono",
+    "quit": "Quitter",
+    "resumed": "Tu reprends là où tu t’étais arrêté : question {number}.",
+    "saveStatus": {
+      "saving": "Enregistrement…",
+      "saved": "Réponses enregistrées sur ton compte",
+      "offline": "Hors connexion : réponses gardées sur ce téléphone",
+      "local": "Réponses gardées sur ce téléphone"
+    },
+    "quitTitle": "Quitter l’exercice ?",
+    "quitSaved": "{answered, plural, =0 {Tu n’as encore répondu à aucune question.} one {Ta réponse est enregistrée (# sur {total}).} other {Tes # réponses sont enregistrées (sur {total}).}}",
+    "quitOffline": "Pas de connexion : tes réponses sont gardées sur ce téléphone et partiront quand tu rouvriras l’exercice avec du réseau.",
+    "quitResume": "Tu reprendras à la question {number}.",
+    "quitNotSent": "Ta copie n’est pas envoyée : tu pourras la terminer plus tard.",
+    "quitTimer": "Le chrono continue pendant ton absence. À la fin du temps, ta copie sera envoyée avec tes réponses enregistrées.",
+    "backToExercises": "Retour aux exercices",
+    "backToExams": "Retour aux examens",
+    "backToLesson": "Revoir la leçon",
+    "continueExercise": "Continuer l’exercice",
+    "quitSaving": "Enregistrement de tes réponses…",
     "warning5": "Attention : il reste 5 minutes.",
     "warning1": "Attention : il reste 1 minute.",
     "timeUp": "Temps écoulé : envoi de ta copie…",
@@ -313,7 +349,6 @@
     "navigator": "Aller à une question",
     "goTo": "Question {number}",
     "answered": "répondue",
-    "saved": "Réponses enregistrées sur ce téléphone",
     "confirmTitle": "Envoyer ta copie ?",
     "confirmBody": "{answered, plural, one {Tu as répondu à # question} other {Tu as répondu à # questions}} sur {total}.",
     "confirmUnanswered": "{count, plural, one {# question est encore sans réponse.} other {# questions sont encore sans réponse.}}",
