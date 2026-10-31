@@ -2639,6 +2639,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      abandon_attempt: { Args: { p_attempt: string }; Returns: undefined }
       admin_content_tracking: {
         Args: never
         Returns: {
@@ -2687,7 +2688,6 @@ export type Database = {
         Args: { p_enabled: boolean; p_scenario: string }
         Returns: Json
       }
-      abandon_attempt: { Args: { p_attempt: string }; Returns: undefined }
       answer_account_deletion_request: {
         Args: { p_approve: boolean; p_student: string }
         Returns: undefined
