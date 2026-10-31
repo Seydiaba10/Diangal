@@ -4,6 +4,7 @@
 
 import { tableau } from "../3e/blocks";
 import { bullets, type CiChapterSpec, keyPoint, practice } from "../ci/blocks";
+import { figure, pic, row } from "../lesson-figures";
 
 const LECT = "Lecture";
 const GRAM = "Grammaire";
@@ -20,7 +21,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Comprendre un texte",
-        body: `${bullets([
+        body: `${figure(row(pic("livre", "je lis le titre", 44), pic("oeil", "je regarde les images", 28)), "Avant de lire : le titre et les images ; après : qui ? quoi ? où ? quand ?")}
+          ${bullets([
             "Je lis le titre et je regarde les illustrations pour deviner le sujet.",
             "Je lis le texte en entier, puis je cherche : qui ? quoi ? où ? quand ? pourquoi ?",
             "Je trouve l’idée principale de chaque paragraphe.",
@@ -45,7 +47,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Lire et écrire un dialogue",
-        body: `${bullets([
+        body: `${figure("<table><tr><td>« Où vas-tu ? demanda Awa.</td></tr><tr><td>— Au marché, répondit Modou. »</td></tr></table>", "Les guillemets ouvrent et ferment le dialogue ; le tiret marque le changement de personne.")}
+          ${bullets([
             "Les guillemets « » ouvrent et ferment le dialogue.",
             "Un tiret marque chaque changement de personne qui parle.",
             "Les verbes de parole disent qui parle et comment : demanda, répondit, cria, murmura.",
@@ -63,7 +66,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Types et formes de phrases",
-        body: `${tableau([
+        body: `${figure(row(pic("camion", "Le car part à 7 h.", 36), pic("telephone", "Quand part le car ?", 56)), "Une phrase déclarative (.) et une phrase interrogative (?).")}
+          ${tableau([
             ["Type", "Ponctuation", "Exemple"],
             ["déclarative", ".", "Le car part à 7 h."],
             ["interrogative", "?", "Quand part le car ?"],
@@ -82,7 +86,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Reconnaître la nature des mots",
-        body: `${tableau([
+        body: `${figure("<table><tr><td>Awa</td><td>mange</td><td>une</td><td>mangue</td><td>mûre.</td></tr><tr><th>nom</th><th>verbe</th><th>déterminant</th><th>nom</th><th>adjectif</th></tr></table>", "Chaque mot a une nature : nom, verbe, déterminant, adjectif…")}
+          ${tableau([
             ["Nature", "Exemples"],
             ["nom", "Dakar, école, mangue"],
             ["déterminant", "le, une, mon, ce, trois"],
@@ -104,7 +109,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Sujet, COD, COI et attribut",
-        body: `${tableau([
+        body: `${figure(row(pic("pirogue", "Les pêcheurs rentrent.", 40)), "« Les pêcheurs » est le sujet : qui est-ce qui rentre ?")}
+          ${tableau([
             ["Fonction", "Question", "Exemple"],
             ["sujet", "qui est-ce qui ?", "<strong>Les pêcheurs</strong> rentrent."],
             ["COD", "verbe + quoi ? qui ?", "Ils vendent <strong>du poisson</strong>."],
@@ -123,7 +129,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Indépendantes, juxtaposées et coordonnées",
-        body: `${bullets([
+        body: `${figure(row(pic("soleil", "Le soleil se lève,", 46), pic("coq", "le coq chante.", 56)), "Deux propositions juxtaposées, séparées par une virgule.")}
+          ${bullets([
             "Une proposition se construit autour d’un verbe conjugué.",
             "Propositions <strong>juxtaposées</strong> : séparées par une virgule ou un point-virgule (Il pleut, nous restons à la maison.).",
             "Propositions <strong>coordonnées</strong> : reliées par mais, ou, et, donc, or, ni, car.",
@@ -140,7 +147,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Le présent des trois groupes",
-        body: `${tableau([
+        body: `${figure(row(pic("eleve-garcon", "je parle (1er groupe)", 80), pic("plante", "elle grandit (2e groupe)", 46), pic("tasse", "nous faisons du thé (3e groupe)", 36)), "parler, grandir, faire : trois groupes de verbes.")}
+          ${tableau([
             ["", "1er groupe (parler)", "2e groupe (grandir)", "3e groupe (faire)"],
             ["je", "parle", "grandis", "fais"],
             ["nous", "parlons", "grandissons", "faisons"],
@@ -158,7 +166,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Imparfait et passé simple",
-        body: `${bullets([
+        body: `${figure(row(pic("lion", "Le lion dormait sous l’arbre.", 52), pic("lapin", "Soudain, le lièvre arriva.", 52, "un lièvre")), "L’imparfait pour le décor ; le passé simple pour l’action soudaine.")}
+          ${bullets([
             "<strong>Imparfait</strong> (terminaisons -ais, -ais, -ait, -ions, -iez, -aient) : décor, habitudes, actions longues.",
             "<strong>Passé simple</strong> (surtout à la 3e personne : il chanta, ils chantèrent ; il finit, ils finirent) : actions brèves dans un récit.",
           ])}
@@ -168,7 +177,8 @@ export const FR_CM1: CiChapterSpec[] = [
       },
       {
         title: "Passé composé et plus-que-parfait",
-        body: `${tableau([
+        body: `${figure(row(pic("pain", "Elle avait acheté le pain…", 30), pic("maison", "… puis elle est rentrée.", 52)), "Le plus-que-parfait dit ce qui s’était passé avant.")}
+          ${tableau([
             ["Temps", "Formation", "Exemple"],
             ["passé composé", "avoir ou être au présent + participe passé", "j’ai mangé, je suis parti"],
             ["plus-que-parfait", "avoir ou être à l’imparfait + participe passé", "j’avais mangé, j’étais parti"],
@@ -185,7 +195,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Futur simple et conditionnel présent",
-        body: `${tableau([
+        body: `${figure(row(pic("avion", "Demain, je partirai.", 28), pic("velo", "Si j’avais un vélo, j’irais plus vite.", 40)), "Le futur dit ce qui arrivera ; le conditionnel ce qui arriverait.")}
+          ${tableau([
             ["", "Futur", "Conditionnel"],
             ["je", "je parlerai", "je parlerais"],
             ["nous", "nous parlerons", "nous parlerions"],
@@ -203,7 +214,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Accorder le groupe nominal et le verbe",
-        body: `${bullets([
+        body: `${figure(row(pic("fleur", "de belles fleurs rouges")), "Le déterminant et l’adjectif s’accordent avec le nom : fleurs, belles, rouges.")}
+          ${bullets([
             "Dans le groupe nominal, le déterminant et l’adjectif s’accordent avec le nom : de belles fleurs rouges.",
             "Le verbe s’accorde avec son sujet, même s’il est loin : Les enfants de mon voisin jouent.",
             "Avec être, le participe passé s’accorde avec le sujet : Les filles sont parties.",
@@ -220,7 +232,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Ne pas confondre les homophones",
-        body: `${tableau([
+        body: `${figure(row(pic("eleve-fille", "On joue dans la cour.", 80), pic("ballon", "Ils ont un ballon.", 40)), "« ont » peut se remplacer par « avaient » ; « on » par « il ».")}
+          ${tableau([
             ["Homophones", "Astuce"],
             ["on / ont", "ont = avaient ; on = il"],
             ["ce / se", "se est devant un verbe pronominal (il se lave) ; ce devant un nom (ce livre)"],
@@ -239,7 +252,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Enrichir son vocabulaire",
-        body: `${bullets([
+        body: `${figure("<table><tr><th>synonymes</th><td>peur, crainte, frayeur</td></tr><tr><th>contraires</th><td>heureux, malheureux</td></tr><tr><th>famille</th><td>terre, terrain, enterrer</td></tr></table>", "Des mots de sens proche, de sens opposé, et de la même famille.")}
+          ${bullets([
             "<strong>Synonymes</strong> : mots de sens proche (peur, crainte, frayeur).",
             "<strong>Contraires</strong> : mots de sens opposé (heureux / malheureux).",
             "<strong>Famille de mots</strong> : même radical (dent, dentiste, dentifrice).",
@@ -257,7 +271,8 @@ export const FR_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Écrire un texte bien organisé",
-        body: `${bullets([
+        body: `${figure("<table><tr><th>introduction</th><td>je présente le sujet</td></tr><tr><th>développement</th><td>j’explique, je raconte, en paragraphes</td></tr><tr><th>conclusion</th><td>je termine et je donne mon avis</td></tr></table>", "Un plan en trois parties.")}
+          ${bullets([
             "Je lis la consigne et je cherche des idées au brouillon.",
             "Je fais un plan : introduction, développement, conclusion.",
             "J’écris des phrases courtes et claires, reliées par des mots de liaison (d’abord, ensuite, puis, enfin, mais, car).",

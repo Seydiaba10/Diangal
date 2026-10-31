@@ -6,6 +6,7 @@
 // l’étape 3 non trouvé). Leçons rédigées par DIANGAL, à faire valider par des enseignants.
 
 import { type ChapterSpec, exemple, liste, retenir, tableau } from "./blocks";
+import { figure, pic, row, schema } from "../lesson-figures";
 
 const HIST = "Histoire";
 const GEO = "Géographie";
@@ -23,7 +24,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Les empires du Ghana, du Mali et du Songhaï",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(schema("cm2-empires", "Une frise : le Ghana, puis le Mali, puis l’empire songhaï."), "Trois grands empires se sont succédé ; ils s’enrichissaient grâce au commerce transsaharien.")}
+          ${tableau([
             ["Empire", "Repères", "Grands personnages"],
             ["Ghana (Wagadou)", "riche grâce au commerce de l’or ; capitale Koumbi Saleh ; affaibli par les Almoravides au XI<sup>e</sup> siècle", "les Kaya Maghan, rois « maîtres de l’or »"],
             ["Mali", "fondé après la bataille de Kirina (vers 1235) ; charte du Kouroukan Fouga", "Soundjata Keïta ; Kankou Moussa, célèbre pour son pèlerinage à La Mecque (1324)"],
@@ -41,7 +43,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Le Tékrour et l’empire du Djolof",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Le Tékrour, dans la vallée du fleuve au nord (Saint-Louis, Matam) ; le Djolof autour de Linguère (Louga).")}
+          ${liste([
             "le <strong>Tékrour</strong>, dans la vallée du fleuve Sénégal, est l’un des plus anciens royaumes ; son roi War Jaabi se convertit à l’islam au XI<sup>e</sup> siècle ;",
             "l’empire du <strong>Djolof</strong> est fondé par Ndiadiane Ndiaye ; son roi porte le titre de Bourba ; il domine le Walo, le Cayor, le Baol, le Sine et le Saloum.",
           ])}
@@ -50,7 +53,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Les royaumes issus du Djolof et le Gabou",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Le Cayor entre Dakar et Saint-Louis, le Baol autour de Diourbel, le Walo près du fleuve, le Sine autour de Fatick, le Saloum autour de Kaolack, le Gabou au sud.")}
+          ${tableau([
             ["Royaume", "Titre du roi"],
             ["Cayor", "Damel"],
             ["Baol", "Teigne"],
@@ -72,6 +76,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "La traite atlantique et ses conséquences",
         minutes: 15,
         body: `<p>Du XVI<sup>e</sup> au XIX<sup>e</sup> siècle, des millions d’Africains ont été capturés, vendus et déportés vers l’Amérique, où ils travaillaient comme esclaves dans les plantations.</p>
+          ${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "L’île de Gorée, au large de Dakar, est aujourd’hui un lieu de mémoire de la traite.")}
           ${liste([
             "le <strong>commerce triangulaire</strong> : les navires partaient d’Europe avec des marchandises, achetaient des captifs en Afrique et revenaient d’Amérique avec du sucre, du coton, du café ;",
             "au Sénégal, Gorée et Saint-Louis étaient des comptoirs de traite ; la Maison des esclaves de Gorée est un lieu de mémoire inscrit au patrimoine mondial ;",
@@ -90,12 +95,14 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "La conquête coloniale",
         minutes: 12,
         body: `<p>Au XIX<sup>e</sup> siècle, la France conquiert le Sénégal à partir de Saint-Louis. Le gouverneur <strong>Louis Faidherbe</strong> (à partir de 1854) mène la conquête : postes militaires, routes, culture de l’arachide.</p>
+          ${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "La conquête française partit de Saint-Louis, au nord-ouest, avec le gouverneur Faidherbe à partir de 1854.")}
           ${retenir("La construction du chemin de fer Dakar–Saint-Louis (achevé en 1885) servait à transporter l’arachide et les troupes ; elle a provoqué la résistance de Lat Dior.")}`,
       },
       {
         title: "Les résistants",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Lat Dior au Cayor, Alboury Ndiaye au Djolof, Maba Diakhou Bâ au Saloum, Cheikh Ahmadou Bamba au Baol, Aline Sitoé Diatta en Casamance.")}
+          ${tableau([
             ["Résistant", "Région", "Ce qu’il faut retenir"],
             ["Lat Dior Ngoné Latyr Diop", "Cayor", "s’oppose au chemin de fer ; meurt au combat à Dékheulé (1886)"],
             ["El Hadji Omar Tall", "Fouta, Haut-Sénégal", "assiège Médine (1857) ; fonde un empire au Soudan"],
@@ -117,7 +124,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Le Sénégal colonial",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Dakar devient la capitale de l’AOF en 1902 ; Saint-Louis, Gorée, Rufisque et Dakar forment les Quatre Communes.")}
+          ${liste([
             "1895 : création de l’Afrique-Occidentale française (AOF) ; Dakar en devient la capitale en 1902 ;",
             "les habitants des <strong>Quatre communes</strong> (Saint-Louis, Gorée, Rufisque, Dakar) avaient des droits de citoyens ;",
             "1914 : Blaise Diagne est le premier Africain élu député à l’Assemblée nationale française ;",
@@ -129,6 +137,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "L’indépendance et le Sénégal indépendant",
         minutes: 12,
         body: `<p>En 1959, le Sénégal et le Soudan français forment la Fédération du Mali, indépendante le 20 juin 1960. Elle éclate le 20 août 1960. Le Sénégal célèbre sa fête de l’indépendance le <strong>4 avril</strong>.</p>
+          ${figure(row(pic("drapeau", "le drapeau du Sénégal")), "Le Sénégal est indépendant depuis 1960 ; la fête de l’indépendance a lieu le 4 avril.")}
           ${tableau([
             ["Président de la République", "Période"],
             ["Léopold Sédar Senghor", "1960-1980"],
@@ -151,6 +160,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "Situation, frontières et relief",
         minutes: 12,
         body: `<p>Le Sénégal est situé à l’extrême ouest de l’Afrique ; la pointe des Almadies, à Dakar, est le point le plus occidental du continent. Sa superficie est de 196 722 km².</p>
+          ${figure(schema("sn-carte-legende", "Carte du Sénégal et de ses 14 régions, avec une légende."), "Le Sénégal est à l’extrême ouest de l’Afrique ; ses voisins : Mauritanie, Mali, Guinée, Guinée-Bissau ; la Gambie est enclavée.")}
           ${tableau([
             ["Direction", "Voisin"],
             ["nord", "Mauritanie"],
@@ -163,7 +173,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Climat, cours d’eau et végétation",
         minutes: 15,
-        body: `${liste([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Le fleuve Sénégal au nord, la Gambie et la Casamance au sud ; il pleut davantage au sud.")}
+          ${liste([
             "deux saisons : la saison des pluies ou <strong>hivernage</strong> (de juin-juillet à octobre) et la saison sèche ;",
             "il pleut de moins en moins du sud (Casamance, plus de 1 000 mm par an) vers le nord (moins de 300 mm) ;",
             "vents : alizé maritime (frais et humide), harmattan (chaud et sec, venu du Sahara), mousson (apporte la pluie).",
@@ -188,6 +199,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "La population et les régions",
         minutes: 15,
         body: `<p>Le Sénégal compte environ <strong>18 millions d’habitants</strong> (recensement de 2023). La population est jeune et inégalement répartie : elle se concentre à l’ouest, surtout dans la région de Dakar, très peuplée sur une petite surface ; l’est est peu peuplé.</p>
+          ${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Environ 18 millions d’habitants (2023), concentrés à l’ouest, surtout dans la région de Dakar.")}
           ${tableau([
             ["Les 14 régions du Sénégal", ""],
             ["Dakar, Thiès, Diourbel, Fatick, Kaolack", "Kaffrine, Louga, Saint-Louis, Matam"],
@@ -209,7 +221,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Agriculture, élevage et pêche",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("plante", "arachide et mil", 46), pic("vache", "l’élevage", 46), pic("pirogue", "la pêche", 30)), "Le bassin arachidier, l’élevage du Ferlo et la pêche le long de la côte.")}
+          ${tableau([
             ["Activité", "Productions et zones"],
             ["agriculture", "arachide et mil (bassin arachidier), riz (vallée du fleuve, Casamance), coton (sud-est), légumes (Niayes)"],
             ["élevage", "bovins, ovins, caprins ; surtout dans le Ferlo ; la Tabaski augmente la demande de moutons"],
@@ -220,7 +233,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Mines, industrie, commerce et services",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(row(pic("camion", "les mines et l’industrie", 38), pic("boutique", "le commerce", 48), pic("avion", "les services et le tourisme", 26)), "Phosphates, or, pétrole et gaz ; commerce, transports et tourisme.")}
+          ${liste([
             "<strong>mines</strong> : phosphates (Taïba), or (Sabodala), zircon ; le pays produit aussi du pétrole et du gaz depuis 2024 ;",
             "<strong>industries</strong> : huileries, industries chimiques, cimenteries, agroalimentaire ;",
             "<strong>transports</strong> : port de Dakar, aéroport international Blaise Diagne, routes et autoroutes, Train express régional (TER) ;",
@@ -238,7 +252,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Les continents, les océans et l’Afrique",
         minutes: 15,
-        body: `${liste([
+        body: `${figure("<table><tr><th>continents</th><td>Afrique, Amérique, Asie, Europe, Océanie, Antarctique</td></tr><tr><th>océans</th><td>Atlantique, Pacifique, Indien, Arctique, Austral</td></tr></table>", "Le Sénégal est en Afrique, au bord de l’océan Atlantique.")}
+          ${liste([
             "les continents : Afrique, Amérique, Asie, Europe, Océanie (et l’Antarctique) ;",
             "les océans : Atlantique, Pacifique, Indien, Arctique, Austral ;",
             "l’Afrique compte 54 pays ; on y trouve le plus grand désert chaud (Sahara), le plus long fleuve (le Nil) et le Kilimandjaro (5 895 m), son plus haut sommet.",
@@ -262,7 +277,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "L’appareil digestif et la digestion",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(schema("cm2-digestion", "Le trajet des aliments dans l’appareil digestif."), "Les aliments passent de la bouche à l’estomac, puis dans l’intestin, où ils sont digérés.")}
+          ${tableau([
             ["Organe", "Rôle"],
             ["bouche (dents, salive)", "broie les aliments ; la salive commence la digestion de l’amidon"],
             ["œsophage", "conduit les aliments vers l’estomac"],
@@ -284,6 +300,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "La respiration",
         minutes: 12,
         body: `<p>L’air entre par le nez ou la bouche, passe dans la trachée, les bronches, puis arrive dans les <strong>poumons</strong>, jusqu’aux alvéoles pulmonaires.</p>
+          ${figure(schema("cm2-respiration", "Le trajet de l’air jusqu’aux poumons."), "L’air entre par le nez, passe par la trachée et les bronches, et arrive aux poumons.")}
           ${liste([
             "<strong>inspiration</strong> : la cage thoracique s’agrandit, l’air entre ;",
             "<strong>expiration</strong> : elle se resserre, l’air sort ;",
@@ -295,6 +312,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "Le cœur et la circulation du sang",
         minutes: 12,
         body: `<p>Le <strong>cœur</strong> est un muscle qui fonctionne comme une pompe : il envoie le sang dans tout le corps par les <strong>artères</strong> ; le sang revient au cœur par les <strong>veines</strong>.</p>
+          ${figure(schema("cm2-circulation", "La circulation du sang : cœur, artères, organes, veines."), "Le cœur pompe le sang dans les artères ; le sang revient au cœur par les veines.")}
           ${liste([
             "le sang transporte le dioxygène et les nutriments vers les organes ;",
             "il ramène le dioxyde de carbone vers les poumons et les déchets vers les reins.",
@@ -311,7 +329,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Milieu terrestre et milieu aquatique",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("lion", "milieu terrestre", 52), pic("poisson", "milieu aquatique", 32)), "Chaque être vivant est adapté à son milieu.")}
+          ${tableau([
             ["", "Milieu terrestre", "Milieu aquatique"],
             ["exemples", "lion, chèvre, baobab, criquet", "poisson, crevette, nénuphar, algue"],
             ["respiration", "poumons (mammifères, oiseaux), trachées (insectes)", "branchies (poissons)"],
@@ -323,6 +342,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "Les chaînes alimentaires",
         minutes: 12,
         body: `<p>Une <strong>chaîne alimentaire</strong> montre « qui mange qui » : herbe → criquet → poule → chacal. La flèche signifie « est mangé par ».</p>
+          ${figure(schema("cm2-chaine", "Une chaîne alimentaire : l’herbe, la chèvre, le lion."), "La flèche veut dire « est mangé par » : l’herbe est mangée par la chèvre, la chèvre par le lion.")}
           ${liste([
             "les <strong>producteurs</strong> (plantes vertes) fabriquent leur matière grâce à la lumière ;",
             "les <strong>consommateurs</strong> (herbivores, carnivores) mangent d’autres êtres vivants ;",
@@ -341,6 +361,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "Les outils et les machines simples",
         minutes: 12,
         body: `<p>Un <strong>outil</strong> prolonge la main de l’homme pour faire un travail plus facilement.</p>
+          ${figure(row(pic("marteau", "le marteau", 50), pic("ciseaux", "les ciseaux : un levier", 40), pic("puits", "la poulie du puits", 56)), "Un outil prolonge la main ; une machine simple rend le travail plus facile.")}
           ${tableau([
             ["Machine simple", "Exemple", "Avantage"],
             ["levier", "pied-de-biche, brouette, ciseaux", "soulever une lourde charge avec moins de force"],
@@ -353,6 +374,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "Le circuit électrique",
         minutes: 12,
         body: `<p>Un <strong>circuit électrique</strong> simple comprend une source (pile, batterie, panneau solaire), des fils, un interrupteur et un récepteur (ampoule, moteur). La lampe ne s’allume que si le circuit est <strong>fermé</strong>.</p>
+          ${figure(schema("ce2-circuit", "Un circuit électrique fermé."), "Une source (la pile), des fils, un interrupteur et un récepteur (l’ampoule).")}
           ${liste([
             "les métaux (cuivre, fer, aluminium) sont des <strong>conducteurs</strong> : ils laissent passer le courant ;",
             "le plastique, le bois sec, le caoutchouc, le verre sont des <strong>isolants</strong>.",
@@ -370,7 +392,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Drapeau, hymne et devise",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("drapeau", "vert, or, rouge, étoile verte"), pic("lion", "le lion des armoiries", 52)), "La devise du Sénégal : « Un Peuple – Un But – Une Foi ».")}
+          ${tableau([
             ["Symbole", "Description"],
             ["drapeau", "trois bandes verticales égales : vert, or, rouge, avec une étoile verte à cinq branches au centre de la bande or"],
             ["hymne national", "« Le Lion rouge » : paroles de Léopold Sédar Senghor (« Pincez tous vos koras, frappez les balafons… »)"],
@@ -390,7 +413,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Le Président, le Gouvernement et l’Assemblée nationale",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure("<table><tr><th>Président de la République</th><td>élu par le peuple</td></tr><tr><th>Gouvernement</th><td>le Premier ministre et les ministres</td></tr><tr><th>Assemblée nationale</th><td>les députés votent les lois</td></tr></table>", "Trois institutions de la République.")}
+          ${tableau([
             ["Institution", "Rôle"],
             ["Président de la République", "élu au suffrage universel direct pour 5 ans ; garant de la Constitution, chef de l’État et des armées ; il nomme le Premier ministre"],
             ["Gouvernement", "le Premier ministre et les ministres appliquent la politique de la nation"],
@@ -402,6 +426,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "Le pouvoir judiciaire",
         minutes: 12,
         body: `<p>Le <strong>pouvoir judiciaire</strong> est indépendant des autres pouvoirs. Il est exercé par le Conseil constitutionnel, la Cour suprême, la Cour des comptes, les cours et les tribunaux.</p>
+          ${figure("<table><tr><th>pouvoir législatif</th><td>fait les lois (Assemblée nationale)</td></tr><tr><th>pouvoir exécutif</th><td>applique les lois (Président, Gouvernement)</td></tr><tr><th>pouvoir judiciaire</th><td>juge (cours et tribunaux)</td></tr></table>", "Le pouvoir judiciaire est indépendant des autres pouvoirs.")}
           ${liste([
             "les juges règlent les conflits entre personnes et punissent ceux qui enfreignent la loi ;",
             "le Conseil constitutionnel vérifie que les lois respectent la Constitution et proclame les résultats de l’élection présidentielle ;",
@@ -420,6 +445,7 @@ export const ESVS_CM2: ChapterSpec[] = [
         title: "Droits et devoirs de l’enfant",
         minutes: 12,
         body: `<p>La Convention internationale des droits de l’enfant (1989), que le Sénégal a ratifiée, protège tous les enfants de moins de 18 ans.</p>
+          ${figure(row(pic("ecole", "le droit à l’éducation", 50), pic("balai", "le devoir d’aider", 62)), "La Convention des droits de l’enfant (1989) protège tous les enfants ; chacun a aussi des devoirs.")}
           ${tableau([
             ["Droits", "Devoirs"],
             ["être nourri, soigné, logé", "respecter ses parents et les adultes"],
@@ -432,7 +458,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Les organisations communautaires",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(row(pic("ballon", "l’ASC du quartier", 36), pic("maman", "le groupement de femmes", 80)), "Des associations pour le sport, la culture et le développement du quartier.")}
+          ${liste([
             "<strong>organisations communautaires</strong> : associations sportives et culturelles (ASC), groupements de promotion féminine, groupements d’intérêt économique (GIE), associations de parents d’élèves ;",
             "<strong>organisations confessionnelles</strong> : dahiras, associations caritatives religieuses comme Caritas, qui aident les plus pauvres ;",
             "<strong>organisations sportives</strong> : le Comité international olympique (CIO) organise les Jeux olympiques ; Dakar accueille en 2026 les Jeux olympiques de la jeunesse, les premiers en Afrique.",
@@ -450,7 +477,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Les causes et les conséquences de la dégradation",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("feu", "les feux de brousse", 54), pic("arbre", "la coupe du bois", 58)), "La forêt recule ; le sol s’appauvrit et le désert avance.")}
+          ${tableau([
             ["Problème", "Causes", "Conséquences"],
             ["déforestation", "coupe du bois, charbon de bois, défrichement", "disparition des animaux, sols nus, avancée du désert"],
             ["feux de brousse", "imprudence, chasse, défrichement", "destruction de la végétation et des récoltes"],
@@ -463,7 +491,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Protéger le milieu",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(row(pic("arbre", "reboiser", 58), pic("feu", "les foyers améliorés", 50), pic("poubelle", "gérer les déchets", 50)), "Reboiser, économiser le bois, gérer les déchets.")}
+          ${liste([
             "reboiser (Journée nationale de l’arbre, Grande Muraille verte) et utiliser des foyers améliorés ;",
             "faire des pare-feu et ne jamais allumer de feu en brousse ;",
             "fixer les dunes avec des filaos (Niayes) et construire des diguettes contre l’érosion ;",
@@ -482,7 +511,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Une alimentation équilibrée",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("sac-riz", "l’énergie : mil, riz", 46), pic("poisson", "grandir : poisson, œufs", 30), pic("mangue", "la protection : fruits", 44)), "Chaque repas réunit les trois groupes d’aliments.")}
+          ${tableau([
             ["Groupe d’aliments", "Rôle", "Exemples"],
             ["aliments énergétiques", "donnent de l’énergie", "mil, riz, maïs, manioc, huile, sucre"],
             ["aliments de construction", "font grandir et réparent le corps", "poisson, viande, œufs, lait, niébé, arachide"],
@@ -493,7 +523,8 @@ export const ESVS_CM2: ChapterSpec[] = [
       {
         title: "Les carences nutritionnelles",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(row(pic("poisson", "des protéines : poisson, lait", 30), pic("mangue", "des vitamines : fruits, légumes", 44)), "Une alimentation variée évite les carences.")}
+          ${tableau([
             ["Carence", "Maladie", "Prévention"],
             ["protéines", "kwashiorkor (ventre gonflé, cheveux décolorés)", "poisson, lait, œufs, niébé"],
             ["de tous les aliments", "marasme (enfant très maigre)", "repas suffisants et variés"],

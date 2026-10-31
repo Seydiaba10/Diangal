@@ -38,11 +38,13 @@ function seededShuffle<T>(items: T[], seed: string): T[] {
 function startMockAttempt(assessment: Assessment): never {
   const id = crypto.randomUUID();
   const now = Date.now();
+  // Comme start_attempt : options mélangées, sauf vrai / faux et pages de cahier (ordre du document).
+  const shuffle = assessment.shuffleOptions !== false;
   const optionOrder = Object.fromEntries(
     assessment.questionIds.map((qid) => {
       const q = CATALOG_QUESTIONS[qid]!;
       const ids = q.options.map((o) => o.id);
-      return [qid, q.type === "true_false" ? ids : seededShuffle(ids, `${id}:${qid}`)];
+      return [qid, q.type === "true_false" || !shuffle ? ids : seededShuffle(ids, `${id}:${qid}`)];
     }),
   );
   mockState.attempts.set(id, {
@@ -190,6 +192,7 @@ export async function submitAttemptAction(attemptId: string, answers: AnswerMap)
       promptHtml: q.promptHtml,
       points: q.points,
       options: order.map((oid) => q.options.find((o) => o.id === oid)!),
+      ...(q.stemHtml ? { stemHtml: q.stemHtml } : {}),
       response,
       isCorrect: outcome.isCorrect,
       pointsAwarded: outcome.pointsAwarded,

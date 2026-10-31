@@ -4,6 +4,7 @@
 
 import { tableau } from "../3e/blocks";
 import { bullets, type CiChapterSpec, keyPoint, practice } from "../ci/blocks";
+import { counted, figure, pic, row, schema } from "../lesson-figures";
 
 const NUM = "Activités numériques";
 const GEO = "Activités géométriques";
@@ -19,7 +20,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Les nombres jusqu’au million",
-        body: `${tableau([
+        body: `${figure(schema("cm1-million", "Une droite graduée de 1 200 000 à 1 300 000 : A est à 1 250 430."), "1 250 430 se place entre 1 250 000 et 1 260 000.")}
+          ${tableau([
             ["Classe des millions", "Classe des mille", "Classe des unités"],
             ["1", "250", "430"],
           ])}
@@ -36,7 +38,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Reconnaître un nombre divisible",
-        body: `${tableau([
+        body: `${figure("<table><tr><th>Nombre</th><th>par 2</th><th>par 3</th><th>par 5</th><th>par 9</th><th>par 10</th></tr><tr><th>4 568</th><td>oui</td><td>non</td><td>non</td><td>non</td><td>non</td></tr><tr><th>3 405</th><td>non</td><td>oui</td><td>oui</td><td>non</td><td>non</td></tr><tr><th>2 340</th><td>oui</td><td>oui</td><td>oui</td><td>oui</td><td>oui</td></tr></table>", "2 340 : il finit par 0 et 2 + 3 + 4 + 0 = 9 : il est divisible par 2, 3, 5, 9 et 10.")}
+          ${tableau([
             ["Par…", "Règle", "Exemple"],
             ["2", "il est pair", "4 568"],
             ["5", "il finit par 0 ou 5", "3 405"],
@@ -56,7 +59,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Additionner et soustraire",
-        body: `${bullets([
+        body: `${figure(schema("cm1-addition", "L’addition 48 975 + 36 250 posée en colonnes, avec les retenues en rouge."), "48 975 + 36 250 = 85 225 : les retenues sont écrites en rouge.")}
+          ${bullets([
             "J’additionne pour trouver un total ; je soustrais pour trouver un reste, un écart ou une différence.",
             "Je pose en colonnes en alignant les unités et je n’oublie pas les retenues.",
             "Je vérifie une soustraction par une addition.",
@@ -74,7 +78,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Multiplier par un nombre de plusieurs chiffres",
-        body: `${bullets([
+        body: `${figure(schema("cm1-multiplication", "La multiplication 245 × 32 posée : deux produits partiels puis leur somme."), "245 × 2 = 490 ; 245 × 30 = 7 350 ; 490 + 7 350 = <strong>7 840</strong>.")}
+          ${bullets([
             "Je multiplie par le chiffre des unités, puis par celui des dizaines (décalage d’un rang), puis des centaines (décalage de deux rangs).",
             "J’additionne les produits partiels.",
           ])}
@@ -91,7 +96,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Diviser par un nombre de deux chiffres",
-        body: `${bullets([
+        body: `${figure(schema("cm1-division", "La division 1 248 divisé par 24 posée : quotient 52, reste 0."), "1 248 : 24 = 52, reste 0. Preuve : 52 × 24 = 1 248.")}
+          ${bullets([
             "Je prends à gauche assez de chiffres pour contenir le diviseur.",
             "J’estime le quotient (je peux arrondir le diviseur : 23 ≈ 20).",
             "Je multiplie, je soustrais, j’abaisse le chiffre suivant et je recommence.",
@@ -109,7 +115,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Lire, écrire et comparer les nombres décimaux",
-        body: `${tableau([
+        body: `${figure(schema("cm1-decimal", "Une droite graduée de 4 à 4,1 en millièmes : A est à 4,075."), "4,075 est entre 4 et 4,1 : 4 unités, 0 dixième, 7 centièmes et 5 millièmes.")}
+          ${tableau([
             ["Unités", ",", "dixièmes", "centièmes", "millièmes"],
             ["4", ",", "0", "7", "5"],
           ])}
@@ -127,14 +134,16 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Additionner et soustraire des décimaux",
-        body: `${bullets(["J’aligne les virgules les unes sous les autres.", "Je complète avec des zéros si besoin.", "Je place la virgule au résultat sous les autres virgules."])}
+        body: `${figure("<table><tr><td></td><td>1</td><td>2</td><td>,</td><td>5</td><td>0</td></tr><tr><td>+</td><td></td><td>3</td><td>,</td><td>7</td><td>5</td></tr><tr><th>=</th><th>1</th><th>6</th><th>,</th><th>2</th><th>5</th></tr></table>", "J’aligne les virgules : 12,50 + 3,75 = 16,25.")}
+          ${bullets(["J’aligne les virgules les unes sous les autres.", "Je complète avec des zéros si besoin.", "Je place la virgule au résultat sous les autres virgules."])}
           <p>Exemples : 12,5 + 7,35 = 19,85 ; 10 − 3,25 = 6,75.</p>
           ${keyPoint("Une virgule mal placée change complètement le résultat.")}
           ${practice(["Calcule 25,4 + 3,75 et 15 − 6,8."])}`,
       },
       {
         title: "Multiplier et diviser des décimaux",
-        body: `${bullets([
+        body: `${figure(row(counted("sac-riz", 3, "3 sacs de 2,5 kg", 34)), "3 × 2,5 kg = 7,5 kg : je calcule 3 × 25 = 75, puis je remets un chiffre après la virgule.")}
+          ${bullets([
             "Multiplier un décimal par un entier : je calcule sans la virgule, puis je remets autant de chiffres après la virgule : 2,35 × 4 = 9,40.",
             "Multiplier par 10, 100, 1 000 : la virgule avance de 1, 2 ou 3 rangs vers la droite.",
             "Diviser un décimal par un entier : je mets la virgule au quotient quand j’abaisse le premier chiffre décimal : 9,6 ÷ 3 = 3,2.",
@@ -151,7 +160,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Fractions ordinaires et fractions décimales",
-        body: `${bullets([
+        body: `${figure(schema("cm1-fraction", "Une bande partagée en 5 parts égales, dont 3 sont coloriées."), "3/5 : le dénominateur 5 donne le nombre de parts, le numérateur 3 les parts prises.")}
+          ${bullets([
             "Dans 3/5, 5 est le <strong>dénominateur</strong> (le nombre de parts égales) et 3 le <strong>numérateur</strong> (les parts prises).",
             "Une <strong>fraction décimale</strong> a pour dénominateur 10, 100, 1 000 : 7/10 = 0,7 ; 25/100 = 0,25.",
           ])}
@@ -160,7 +170,8 @@ export const MATH_CM1: CiChapterSpec[] = [
       },
       {
         title: "Comparer et simplifier des fractions",
-        body: `${bullets([
+        body: `${figure(schema("cm1-fractions-comparer", "Deux bandes : 5/8 et 3/8."), "Même dénominateur : 5/8 &gt; 3/8, car 5 parts sont plus que 3 parts.")}
+          ${bullets([
             "Même dénominateur : la plus grande fraction a le plus grand numérateur (5/8 &gt; 3/8).",
             "Même numérateur : la plus grande a le plus petit dénominateur (1/3 &gt; 1/4).",
             "Simplifier : je divise le numérateur et le dénominateur par un même nombre : 6/8 = 3/4.",
@@ -177,7 +188,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Additionner et soustraire des fractions",
-        body: `${bullets([
+        body: `${figure(schema("cm1-fractions-somme", "Trois bandes : 2/7, 3/7 et 5/7."), "2/7 + 3/7 = 5/7 : on additionne les numérateurs, le dénominateur ne change pas.")}
+          ${bullets([
             "Avec le même dénominateur, j’additionne (ou je soustrais) les numérateurs : 2/7 + 3/7 = 5/7.",
             "Sinon, je réduis d’abord au même dénominateur : 1/2 + 1/4 = 2/4 + 1/4 = 3/4.",
           ])}
@@ -186,7 +198,8 @@ export const MATH_CM1: CiChapterSpec[] = [
       },
       {
         title: "Fraction d’une grandeur",
-        body: `${bullets([
+        body: `${figure(schema("ce2-fraction", "Une bande partagée en 4 parts égales, dont 3 sont coloriées."), "Les 3/4 de 800 F : 800 : 4 = 200 ; 200 × 3 = <strong>600 F</strong>.")}
+          ${bullets([
             "Les 3/4 de 800 F : 800 ÷ 4 = 200 ; 200 × 3 = 600 F.",
             "Si les 2/5 d’un champ font 40 m², 1/5 fait 20 m² et le champ fait 100 m².",
           ])}
@@ -203,7 +216,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Tracer des droites et reconnaître des angles",
-        body: `${bullets([
+        body: `${figure(schema("ce1-droites", "Trois paires de droites : A sécantes, B perpendiculaires, C parallèles."), "A : sécantes ; B : perpendiculaires ; C : parallèles.")}${figure(schema("ce2-angles", "Trois angles A, B et C."), "A : angle droit ; B : angle aigu ; C : angle obtus.")}
+          ${bullets([
             "Deux droites <strong>sécantes</strong> se coupent ; si elles forment un angle droit, elles sont <strong>perpendiculaires</strong>.",
             "Deux droites <strong>parallèles</strong> ne se coupent jamais.",
             "Un angle <strong>aigu</strong> est plus petit qu’un angle droit ; un angle <strong>obtus</strong> est plus grand.",
@@ -220,7 +234,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Reconnaître et construire les figures",
-        body: `${tableau([
+        body: `${figure(schema("cm1-quadrilateres", "Cinq quadrilatères."), "Le carré, le rectangle, le losange, le parallélogramme et le trapèze ont tous 4 côtés.")}
+          ${tableau([
             ["Figure", "Propriétés"],
             ["carré", "4 côtés égaux, 4 angles droits"],
             ["rectangle", "côtés opposés égaux, 4 angles droits"],
@@ -240,7 +255,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Cube, pavé droit et cylindre",
-        body: `${tableau([
+        body: `${figure(schema("ci-solides", "Un cube A, un pavé droit B et un cylindre C."), "Le cube et le pavé droit ont 6 faces, 12 arêtes et 8 sommets ; le cylindre a 2 faces planes en forme de disque.")}
+          ${tableau([
             ["Solide", "Faces", "Arêtes", "Sommets"],
             ["cube", "6 carrés", "12", "8"],
             ["pavé droit", "6 rectangles", "12", "8"],
@@ -258,7 +274,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Symétrie et translation",
-        body: `${bullets([
+        body: `${figure(schema("cm1-translation", "Sur un quadrillage, la figure A glisse pour devenir la figure B."), "La figure A a glissé de 4 carreaux vers la droite et de 2 vers le bas : c’est une <strong>translation</strong>.")}
+          ${bullets([
             "Deux figures sont <strong>symétriques</strong> par rapport à une droite si elles se superposent quand on plie le long de cette droite (l’axe).",
             "Une <strong>translation</strong> fait glisser une figure sans la tourner : sur un quadrillage, « 4 carreaux à droite, 2 vers le haut ».",
           ])}
@@ -275,7 +292,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Les unités de longueur",
-        body: `${tableau([
+        body: `${figure("<table><tr><th>km</th><th>hm</th><th>dam</th><th>m</th><th>dm</th><th>cm</th><th>mm</th></tr><tr><td>3</td><td>2</td><td>5</td><td>0</td><td></td><td></td><td></td></tr></table>", "3,25 km = 3 250 m : chaque colonne vaut 10 fois la suivante.")}
+          ${tableau([
             ["km", "hm", "dam", "m", "dm", "cm", "mm"],
             ["1 000 m", "100 m", "10 m", "1 m", "0,1 m", "0,01 m", "0,001 m"],
           ])}
@@ -284,7 +302,8 @@ export const MATH_CM1: CiChapterSpec[] = [
       },
       {
         title: "Les périmètres",
-        body: `${tableau([
+        body: `${figure(schema("cm1-cercle", "Un cercle de centre O avec un diamètre tracé en rouge."), "Périmètre du cercle = diamètre × 3,14. Avec 4 cm de diamètre : 4 × 3,14 = 12,56 cm.")}
+          ${tableau([
             ["Figure", "Périmètre"],
             ["carré", "côté × 4"],
             ["rectangle", "(longueur + largeur) × 2"],
@@ -302,7 +321,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Capacités et masses",
-        body: `${bullets([
+        body: `${figure(row(pic("sac-riz", "1 quintal = 100 kg", 52), pic("camion", "1 tonne = 1 000 kg", 38), pic("seau", "1 hL = 100 L", 48)), "Les grandes masses en quintaux et en tonnes ; les grandes capacités en hectolitres.")}
+          ${bullets([
             "1 L = 10 dL = 100 cL = 1 000 mL ; 1 hL = 100 L.",
             "1 kg = 1 000 g ; 1 q = 100 kg ; 1 t = 1 000 kg.",
             "Masse brute = masse nette + tare.",
@@ -319,7 +339,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Unités d’aire et aires des figures",
-        body: `${tableau([
+        body: `${figure(schema("cm1-triangle-aire", "Un triangle de 6 cm de base et 4 cm de hauteur."), "Aire du triangle = base × hauteur : 2 = 6 × 4 : 2 = <strong>12 cm²</strong>.")}
+          ${tableau([
             ["Figure", "Aire"],
             ["carré", "côté × côté"],
             ["rectangle", "longueur × largeur"],
@@ -339,7 +360,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Volume, capacité et masse",
-        body: `${bullets([
+        body: `${figure(schema("cm1-litre", "Un cube de 10 cm de côté : 1 dm³."), "1 dm³ = 1 L, et 1 litre d’eau pèse 1 kg.")}
+          ${bullets([
             "1 m³ = 1 000 dm³ ; 1 dm³ = 1 000 cm³.",
             "1 dm³ = 1 L ; 1 litre d’eau pèse 1 kg.",
             "La <strong>masse volumique</strong> est la masse d’un dm³ (ou d’un m³) d’une matière : 1 kg/dm³ pour l’eau.",
@@ -356,14 +378,16 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Calculer avec les durées",
-        body: `${bullets(["1 h = 60 min ; 1 min = 60 s ; 1 jour = 24 h.", "J’additionne les heures et les minutes séparément ; 60 min font 1 h."])}
+        body: `${figure(schema("cm1-durees", "Deux horloges : 7 h 45, puis 9 h 20."), "De 7 h 45 à 9 h 20 : 15 min jusqu’à 8 h, puis 1 h 20 min. En tout, <strong>1 h 35 min</strong>.")}
+          ${bullets(["1 h = 60 min ; 1 min = 60 s ; 1 jour = 24 h.", "J’additionne les heures et les minutes séparément ; 60 min font 1 h."])}
           <p>Exemple : 2 h 45 min + 1 h 30 min = 3 h 75 min = 4 h 15 min.</p>
           ${keyPoint("Pour une durée : heure d’arrivée − heure de départ.")}
           ${practice(["Le car part à 6 h 50 et arrive à 9 h 20. Combien de temps a duré le voyage ?"])}`,
       },
       {
         title: "Vitesse, distance et durée",
-        body: `${bullets(["Distance = vitesse × durée.", "Vitesse = distance ÷ durée.", "Durée = distance ÷ vitesse."])}
+        body: `${figure(schema("cm1-vitesse", "Une droite graduée en kilomètres : 60 km en 1 h, 120 km en 2 h, 180 km en 3 h."), "À 60 km/h : distance = vitesse × durée, soit 60 × 3 = 180 km en 3 h.")}
+          ${bullets(["Distance = vitesse × durée.", "Vitesse = distance ÷ durée.", "Durée = distance ÷ vitesse."])}
           ${keyPoint("Un mouvement est uniforme quand la vitesse ne change pas.")}
           ${practice(["Un vélo roule à 15 km/h pendant 2 h. Quelle distance parcourt-il ?"])}`,
       },
@@ -376,7 +400,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Budget et prix",
-        body: `${bullets([
+        body: `${figure(schema("cm1-budget", "Une bande : dépenses 85 000 F et économie 15 000 F, en tout 100 000 F."), "Économie = recettes − dépenses : 100 000 − 85 000 = 15 000 F.")}
+          ${bullets([
             "Budget : recettes − dépenses = économie (ou déficit si les dépenses sont plus grandes).",
             "Prix de revient = prix d’achat + frais ; bénéfice = prix de vente − prix de revient.",
           ])}
@@ -385,7 +410,8 @@ export const MATH_CM1: CiChapterSpec[] = [
       },
       {
         title: "Parts égales et parts inégales",
-        body: `${bullets([
+        body: `${figure(schema("cm1-parts-inegales", "12 000 F partagés : Awa 7 000 F, Modou 5 000 F."), "Awa reçoit 2 000 F de plus : (12 000 − 2 000) : 2 = 5 000 F pour Modou ; 5 000 + 2 000 = 7 000 F pour Awa.")}
+          ${bullets([
             "Parts égales : total ÷ nombre de parts.",
             "Parts inégales (somme et différence connues) : j’enlève la différence, je partage en parts égales, puis j’ajoute la différence à la plus grande part.",
           ])}
@@ -403,7 +429,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Lire et organiser l’énoncé",
-        body: `${bullets([
+        body: `${figure(row(pic("eleve-garcon", "je redis l’énoncé avec mes mots", 80), pic("crayon", "je souligne les données utiles", 24), pic("cahier", "je fais un schéma", 44)), "Comprendre avant de calculer.")}
+          ${bullets([
             "Je lis l’énoncé deux fois et je le redis avec mes mots.",
             "Je souligne les données utiles, je barre les inutiles, je cherche s’il en manque.",
             "Je repère la consigne et la question finale, puis les questions intermédiaires.",
@@ -420,7 +447,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Utiliser tableaux et graphiques",
-        body: `${bullets([
+        body: `${figure(schema("cm1-graphique", "Un graphique en barres : le nombre d’élèves en CE2, CM1 et CM2."), "On lit le haut de chaque barre : 45 élèves en CE2, 40 en CM1, 50 en CM2.")}
+          ${bullets([
             "Un <strong>tableau</strong> range les données en lignes et en colonnes.",
             "Une <strong>facture</strong> indique la quantité, le prix unitaire, le montant et le total.",
             "Un <strong>graphique</strong> (diagramme en bâtons, courbe) montre des comparaisons ou une évolution.",
@@ -437,7 +465,8 @@ export const MATH_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Résoudre et vérifier",
-        body: `${bullets([
+        body: `${figure("<table><tr><th>Ce qu’on sait</th><td>Awa a dépensé 1 500 F ; il lui reste 500 F.</td></tr><tr><th>On remonte</th><td>500 + 1 500 = 2 000 F</td></tr><tr><th>On vérifie</th><td>2 000 − 1 500 = 500 F</td></tr></table>", "Démarche régressive : on part du résultat et on fait l’opération inverse, puis on vérifie.")}
+          ${bullets([
             "<strong>Démarche progressive</strong> : je pars des données vers la question.",
             "<strong>Démarche régressive</strong> : je pars du résultat et je fais les opérations inverses.",
             "Je peux inventer un énoncé à partir d’un calcul, et chercher l’erreur dans une solution.",

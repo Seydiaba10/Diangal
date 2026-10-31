@@ -132,10 +132,10 @@ for (const question of Object.values(CATALOG_QUESTIONS)) {
   const assessment = CATALOG_ASSESSMENTS.find((a) => a.questionIds.includes(question.id))!;
   const chapterId = QUESTION_CHAPTERS[question.id];
   out.push(
-    `insert into public.questions (slug, subject_id, chapter_id, type, prompt_html, explanation_html, points) values (` +
+    `insert into public.questions (slug, subject_id, chapter_id, type, prompt_html, explanation_html, points, stem_html) values (` +
       `${q(question.id)}, (select id from public.subjects where code = ${q(assessment.subjectCode)}), ` +
       `${chapterId ? chapterRef(chapterId) : "null"}, ${q(question.type)}, ${html(question.promptHtml)}, ` +
-      `${html(question.explanationHtml)}, ${question.points});`,
+      `${html(question.explanationHtml)}, ${question.points}, ${html(question.stemHtml ?? "")});`,
   );
   question.options.forEach((option, i) => {
     out.push(
@@ -154,12 +154,26 @@ for (const question of Object.values(CATALOG_QUESTIONS)) {
 }
 
 for (const a of CATALOG_ASSESSMENTS) {
+  // Page d'un cahier d'exercices : place dans le document d'origine (clés en snake_case, comme en SQL).
+  const workbook = a.workbook
+    ? q(
+        JSON.stringify({
+          code: a.workbook.code,
+          page: a.workbook.page,
+          pdf_page: a.workbook.pdfPage,
+          domain: a.workbook.domain,
+          palier: a.workbook.palier,
+          lesson: a.workbook.lesson,
+        }),
+      ) + "::jsonb"
+    : "null";
   out.push(
-    `insert into public.assessments (slug, kind, title, level_id, series_id, subject_id, chapter_id, exam_type, duration_s, is_premium, status, verification, sources, correction_source) values (` +
+    `insert into public.assessments (slug, kind, title, level_id, series_id, subject_id, chapter_id, exam_type, duration_s, is_premium, status, verification, sources, correction_source, shuffle_options, intro_html, workbook) values (` +
       `${q(a.id)}, ${q(a.kind)}, ${q(a.title)}, (select id from public.levels where code = ${q(a.levelCode)}), ${seriesRef(a.seriesCode)}, ` +
       `(select id from public.subjects where code = ${q(a.subjectCode)}), ${a.chapterId ? chapterRef(a.chapterId) : "null"}, ` +
       `${a.kind === "mock_exam" ? "'BFEM'" : "null"}, ${a.durationS ?? "null"}, ${a.isPremium}, 'published', ` +
-      `${q(a.verification ?? "unverified")}, ${q(JSON.stringify(a.sources ?? []))}::jsonb, ${q(a.correctionSource ?? null)});`,
+      `${q(a.verification ?? "unverified")}, ${q(JSON.stringify(a.sources ?? []))}::jsonb, ${q(a.correctionSource ?? null)}, ` +
+      `${a.shuffleOptions !== false}, ${html(a.introHtml ?? "")}, ${workbook});`,
   );
   a.questionIds.forEach((qid, i) => {
     out.push(

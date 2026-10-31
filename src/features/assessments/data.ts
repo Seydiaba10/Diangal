@@ -18,6 +18,7 @@ import type {
   PracticeHistoryItem,
   Subject,
   SubjectCode,
+  WorkbookRef,
 } from "@/types/domain";
 import {
   fetchAttemptResult,
@@ -26,6 +27,7 @@ import {
   fetchPracticeAttempts,
   getSubmittedAttempts,
   loadAssessmentCatalog,
+  loadAssessmentPage,
   loadChapterQuestionCounts,
 } from "./supabase";
 
@@ -53,6 +55,8 @@ export interface AssessmentInfo {
   verification: ContentVerification;
   sources: ContentSource[];
   correctionSource: string | null;
+  /** Page d'un cahier d'exercices officiel, sinon null. */
+  workbook: WorkbookRef | null;
 }
 
 function mockInfo(a: Assessment): AssessmentInfo {
@@ -74,6 +78,7 @@ function mockInfo(a: Assessment): AssessmentInfo {
     verification: a.verification ?? "unverified",
     sources: a.sources ?? [],
     correctionSource: a.correctionSource ?? null,
+    workbook: a.workbook ?? null,
   };
 }
 
@@ -97,7 +102,14 @@ export async function getAssessmentCatalog(): Promise<AssessmentInfo[]> {
     verification: a.verification,
     sources: a.sources,
     correctionSource: a.correctionSource,
+    workbook: a.workbook,
   }));
+}
+
+/** Page entière d'un cahier d'exercices (rappel, consignes, figures), ou null pour une autre évaluation. */
+export async function getAssessmentPage(id: string): Promise<string | null> {
+  if (!isSupabaseConfigured()) return CATALOG_ASSESSMENTS.find((a) => a.id === id)?.introHtml ?? null;
+  return loadAssessmentPage(id);
 }
 
 export async function findAssessment(id: string): Promise<AssessmentInfo | undefined> {
@@ -153,6 +165,8 @@ async function toSummaries(infos: AssessmentInfo[], withBestScore: boolean): Pro
           fallbackSubject(a.subjectCode, a.levelCode),
         chapterTitle: found?.chapter.title ?? null,
         chapterHref: found ? chapterHref(found.subject, found.chapter) : null,
+        chapterId: found?.chapter.id ?? null,
+        chapterNumber: found?.chapter.number ?? null,
         durationS: a.durationS,
         questionsCount: a.questionsCount,
         isPremium: a.isPremium,
@@ -163,6 +177,7 @@ async function toSummaries(infos: AssessmentInfo[], withBestScore: boolean): Pro
         verification: a.verification,
         sources: a.sources,
         correctionSource: a.correctionSource,
+        workbook: a.workbook,
       };
     }),
   );
@@ -256,6 +271,7 @@ export const getAttemptSession = cache(async (attemptId: string): Promise<Attemp
       deadlineAt: remote.deadlineAt,
       serverNow: remote.serverNow,
       questions: remote.questions,
+      introHtml: assessment.workbook ? await getAssessmentPage(assessment.id) : null,
     };
   }
 
@@ -269,6 +285,7 @@ export const getAttemptSession = cache(async (attemptId: string): Promise<Attemp
     startedAt: new Date(attempt.startedAt).toISOString(),
     deadlineAt: attempt.deadlineAt ? new Date(attempt.deadlineAt).toISOString() : null,
     serverNow: Date.now(),
+    introHtml: assessment.introHtml ?? null,
     questions: assessment.questionIds.map((qid) => {
       const q = CATALOG_QUESTIONS[qid]!;
       const order = attempt.optionOrder[qid] ?? q.options.map((o) => o.id);
@@ -278,6 +295,9 @@ export const getAttemptSession = cache(async (attemptId: string): Promise<Attemp
         promptHtml: q.promptHtml,
         points: q.points,
         options: order.map((oid) => q.options.find((o) => o.id === oid)!),
+        ...(q.stemHtml ? { stemHtml: q.stemHtml } : {}),
+        // Le corrigé d'une question self_check n'est pas secret : l'élève le voit avant de s'évaluer.
+        ...(q.type === "self_check" ? { modelHtml: q.modelHtml ?? q.explanationHtml } : {}),
       };
     }),
   };
@@ -360,11 +380,20 @@ export const getRecentResults = cache(async (studentId?: string): Promise<Recent
 
 // ── « Préparer mon prochain devoir » ────────────────────────────────────────
 
+/** Démo : questions des pages recopiées d'un cahier, hors de la banque (elles ne sont pas affichées). */
+const WORKBOOK_QUESTION_IDS = new Set(CATALOG_ASSESSMENTS.filter((a) => a.workbook).flatMap((a) => a.questionIds));
+
+/** Démo : question de la banque « Préparer mon prochain devoir ». */
+const inMockBank = (questionId: string) =>
+  CATALOG_QUESTIONS[questionId]?.type !== "self_check" && !WORKBOOK_QUESTION_IDS.has(questionId);
+
 /** Nombre de questions de la banque par chapitre. */
 async function chapterQuestionCounts(): Promise<Record<string, number>> {
   if (isSupabaseConfigured()) return loadChapterQuestionCounts();
   const counts: Record<string, number> = {};
-  for (const chapterId of Object.values(QUESTION_CHAPTERS)) counts[chapterId] = (counts[chapterId] ?? 0) + 1;
+  for (const [questionId, chapterId] of Object.entries(QUESTION_CHAPTERS)) {
+    if (inMockBank(questionId)) counts[chapterId] = (counts[chapterId] ?? 0) + 1;
+  }
   return counts;
 }
 
@@ -391,10 +420,10 @@ export const getPracticeOptions = cache(
   },
 );
 
-/** Démo : questions de la banque appartenant aux chapitres donnés. */
+/** Démo : questions de la banque appartenant aux chapitres donnés (sans le travail sur l'ardoise, qui s'auto-évalue). */
 export function mockQuestionsOfChapters(chapterIds: string[]): string[] {
   return Object.entries(QUESTION_CHAPTERS)
-    .filter(([, chapterId]) => chapterIds.includes(chapterId))
+    .filter(([questionId, chapterId]) => chapterIds.includes(chapterId) && inMockBank(questionId))
     .map(([questionId]) => questionId);
 }
 

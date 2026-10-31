@@ -14,7 +14,7 @@ import { SubjectIcon } from "@/components/ui/subject-icon";
 import { AnswerKeyList } from "@/features/admin/components/answer-key-list";
 import { PublishStatusBadge, VerificationBadge } from "@/features/admin/components/content-badges";
 import { getAdminAssessment, getAdminChapter, getAdminLesson, getAdminPrograms } from "@/features/admin/data";
-import { getAssessmentCatalog } from "@/features/assessments/data";
+import { getAssessmentCatalog, getAssessmentPage } from "@/features/assessments/data";
 import type { LevelCode } from "@/lib/levels";
 import type { AdminChapterRow, SubjectCode } from "@/types/domain";
 
@@ -44,6 +44,10 @@ async function ChapterReview({ params }: Pick<Props, "params">) {
   ]);
   const series = (await Promise.all(catalog.filter((a) => a.chapterId === chapter.id).map((a) => getAdminAssessment(a.id)))).filter(
     (s) => s !== null,
+  );
+  // Pages de cahier : la page entière, pour la comparer au document d'origine.
+  const pages = new Map(
+    await Promise.all(series.filter((s) => s.assessment.workbook).map(async (s) => [s.assessment.id, await getAssessmentPage(s.assessment.id)] as const)),
   );
   const siblings = programs.find((p) => p.id === program.id)?.chapters ?? [];
   const index = siblings.findIndex((c) => c.id === chapter.id);
@@ -143,6 +147,12 @@ async function ChapterReview({ params }: Pick<Props, "params">) {
                 {t("openAssessment")}
               </Link>
             </div>
+            {pages.get(assessment.id) ? (
+              <details className="rounded-2xl border border-line bg-surface p-5">
+                <summary className="min-h-11 cursor-pointer font-medium text-ink">{t("workbookPage")}</summary>
+                <RichText html={pages.get(assessment.id)!} className="mt-3 text-base text-ink" />
+              </details>
+            ) : null}
             <AnswerKeyList questions={questions} />
           </div>
         ))}

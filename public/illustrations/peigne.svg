@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" width="120" height="60">
+  <defs><linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e35b4f"/><stop offset="1" stop-color="#a3241c"/></linearGradient></defs>
+  <rect x="6" y="8" width="108" height="16" rx="6" fill="url(#p)" stroke="#7a1a14" stroke-width="1.2"/>
+  <path d="M12 24V52M18 24V52M24 24V52M30 24V52M36 24V52M42 24V52M48 24V52M54 24V52M60 24V52M66 24V52M72 24V52M78 24V52M84 24V52M90 24V52M96 24V52M102 24V52M108 24V52" stroke="#c6221a" stroke-width="3.2" stroke-linecap="round"/>
+</svg>

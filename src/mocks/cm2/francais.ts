@@ -4,6 +4,7 @@
 // chapitres est indicatif. Leçons rédigées par DIANGAL, à faire valider par des enseignants.
 
 import { type ChapterSpec, exemple, liste, methode, retenir, tableau } from "./blocks";
+import { figure, pic, row } from "../lesson-figures";
 
 export const FR_CM2: ChapterSpec[] = [
   // ── Lecture ───────────────────────────────────────────────────────────────
@@ -16,6 +17,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Comprendre un texte",
         minutes: 15,
         body: `<p>Pour bien comprendre un texte, on le lit plusieurs fois et on se pose des questions : <strong>qui ? quoi ? où ? quand ? comment ? pourquoi ?</strong></p>
+          ${figure(row(pic("livre", "je lis plusieurs fois", 44), pic("oeil", "je cherche les indices", 28)), "Qui ? quoi ? où ? quand ? comment ? pourquoi ?")}
           ${methode([
             "Lire le titre et regarder les illustrations : de quoi le texte va-t-il parler ?",
             "Lire tout le texte une première fois.",
@@ -28,7 +30,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Les différents types de textes",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("lapin", "un conte : raconter", 50, "un lièvre"), pic("bol", "une recette : expliquer quoi faire", 38), pic("case", "une description : faire voir", 52)), "Chaque type de texte a son but et ses indices.")}
+          ${tableau([
             ["Type de texte", "But", "Indices"],
             ["narratif (récit, conte)", "raconter une histoire", "personnages, événements, temps du passé"],
             ["descriptif", "décrire une personne, un lieu, un objet", "adjectifs, verbes d’état, présent ou imparfait"],
@@ -48,7 +51,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Lire et écrire un dialogue",
         minutes: 12,
-        body: `${liste([
+        body: `${figure("<table><tr><td>« Tu viens jouer ? demanda Fatou.</td></tr><tr><td>— J’arrive ! cria Ibou. »</td></tr></table>", "Les guillemets ouvrent et ferment le dialogue ; un tiret annonce chaque changement de personne.")}
+          ${liste([
             "on ouvre les guillemets « au début du dialogue et on les ferme » à la fin ;",
             "un tiret (—) annonce chaque changement de personne qui parle ;",
             "les <strong>verbes de parole</strong> indiquent qui parle et comment : dire, demander, répondre, crier, murmurer, s’exclamer…",
@@ -67,7 +71,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Types et formes de phrases",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("camion", "Le car part à 7 h.", 36), pic("feu-tricolore", "Ne traverse pas !", 70)), "Une phrase déclarative, puis une phrase injonctive à la forme négative.")}
+          ${tableau([
             ["Type de phrase", "Sert à…", "Ponctuation", "Exemple"],
             ["déclarative", "donner une information", ".", "Le car part à 8 heures."],
             ["interrogative", "poser une question", "?", "À quelle heure part le car ?"],
@@ -81,6 +86,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Les propositions indépendantes",
         minutes: 12,
         body: `<p>Une <strong>proposition</strong> est un groupe de mots organisé autour d’un verbe conjugué. Il y a autant de propositions que de verbes conjugués.</p>
+          ${figure(row(pic("nuage", "Il pleut,", 44), pic("eleve-garcon", "Modou rentre.", 80)), "Deux verbes conjugués : deux propositions indépendantes, juxtaposées.")}
           ${liste([
             "proposition <strong>indépendante</strong> : elle a un sens seule (Le soleil brille.) ;",
             "propositions <strong>juxtaposées</strong> : séparées par une virgule, un point-virgule ou deux-points (Il pleut, la route est glissante.) ;",
@@ -98,7 +104,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Le sujet, les compléments d’objet et l’attribut",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(row(pic("eleve-fille", "Awa (sujet) lit…", 80), pic("livre", "… un livre (COD)", 44)), "« Awa lit un livre » : qui lit ? Awa ; lit quoi ? un livre.")}
+          ${tableau([
             ["Fonction", "Question à poser", "Exemple"],
             ["sujet", "qui est-ce qui ? qu’est-ce qui ? + verbe", "<strong>Les pêcheurs</strong> reviennent."],
             ["COD (complément d’objet direct)", "verbe + qui ? quoi ?", "Ils vendent <strong>le poisson</strong>."],
@@ -112,6 +119,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Les compléments circonstanciels",
         minutes: 12,
         body: `<p>Les compléments circonstanciels (CC) précisent les circonstances de l’action. On peut souvent les déplacer ou les supprimer.</p>
+          ${figure(row(pic("soleil", "Le matin : temps", 44), pic("ecole", "à l’école : lieu", 52)), "« Le matin, je vais à l’école. » On peut déplacer ou supprimer les compléments circonstanciels.")}
           ${tableau([
             ["CC de…", "Question", "Exemple"],
             ["lieu", "où ?", "Nous jouons <strong>dans la cour</strong>."],
@@ -132,6 +140,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "La proposition subordonnée relative",
         minutes: 15,
         body: `<p>Une phrase complexe peut contenir une proposition <strong>principale</strong> et une proposition <strong>subordonnée</strong>, qui dépend d’elle.</p>
+          ${figure(row(pic("chien", "Le chien qui aboie est à Modou.", 56)), "« qui aboie » complète le nom chien : c’est une proposition subordonnée relative.")}
           <p>La subordonnée <strong>relative</strong> commence par un <strong>pronom relatif</strong> (qui, que, quoi, dont, où, lequel…) et complète un nom, l’<strong>antécédent</strong>.</p>
           ${exemple([
             "J’ai lu le livre <strong>que tu m’as prêté</strong>. (antécédent : le livre)",
@@ -144,6 +153,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Les propositions subordonnées conjonctives",
         minutes: 15,
         body: `<p>La subordonnée <strong>conjonctive</strong> commence par une conjonction de subordination (que, quand, lorsque, parce que, puisque, comme, si, pour que…).</p>
+          ${figure(row(pic("nuage", "Quand il pleut,", 44), pic("maison", "nous restons à la maison.", 52)), "« Quand il pleut » : une subordonnée de temps, introduite par « quand ».")}
           ${tableau([
             ["Subordonnée", "Mot introducteur", "Exemple"],
             ["complétive (COD)", "que", "Je sais <strong>que tu viendras</strong>."],
@@ -163,7 +173,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Les déterminants",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("cartable", "mon cartable", 50), pic("velo", "ce vélo", 38), pic("mangue", "trois mangues", 44)), "Un possessif, un démonstratif, un numéral.")}
+          ${tableau([
             ["Déterminant", "Exemples"],
             ["articles définis / indéfinis", "le, la, les, l’ / un, une, des"],
             ["adjectifs possessifs", "mon, ton, son, notre, votre, leur, mes, ses, leurs…"],
@@ -177,6 +188,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Les pronoms personnels",
         minutes: 12,
         body: `<p>Le <strong>pronom</strong> remplace un nom ou un groupe nominal pour éviter une répétition.</p>
+          ${figure(row(pic("eleve-garcon", "Modou mange la mangue.", 80), pic("mangue", "Il la mange.", 44)), "« Il » remplace Modou, « la » remplace la mangue.")}
           ${tableau([
             ["Fonction", "Pronoms"],
             ["sujet", "je, tu, il, elle, on, nous, vous, ils, elles"],
@@ -196,7 +208,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Le présent des trois groupes",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(row(pic("coq", "il chante (1er)", 54), pic("plante", "elle grandit (2e)", 44), pic("taxi", "nous prenons le taxi (3e)", 34)), "chanter, finir, prendre : trois groupes au présent.")}
+          ${tableau([
             ["", "1er groupe (chanter)", "2e groupe (finir)", "3e groupe (prendre)"],
             ["je", "chante", "finis", "prends"],
             ["tu", "chantes", "finis", "prends"],
@@ -211,7 +224,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Verbes en -eler, -eter, -yer",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(row(pic("telephone", "j’appelle", 56), pic("poubelle", "je jette", 56), pic("balai", "je nettoie")), "appeler → j’appelle ; jeter → je jette ; nettoyer → je nettoie.")}
+          ${liste([
             "la plupart des verbes en -eler et -eter doublent la consonne devant un e muet : j’appelle, je jette, nous appelons ;",
             "quelques-uns prennent un accent grave : j’achète, je gèle, il pèle ;",
             "les verbes en -oyer et -uyer changent y en i devant un e muet : j’envoie, j’essuie, nous envoyons ;",
@@ -229,7 +243,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Imparfait et passé simple",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(row(pic("pirogue", "La mer était calme…", 34), pic("poisson", "… quand un gros poisson sauta.", 30)), "L’imparfait pour le décor ; le passé simple pour l’action qui surgit.")}
+          ${tableau([
             ["", "Imparfait", "Passé simple (1er gr.)", "Passé simple (2e gr.)"],
             ["je", "chantais", "chantai", "finis"],
             ["il", "chantait", "chanta", "finit"],
@@ -242,6 +257,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Les temps composés du passé",
         minutes: 15,
         body: `<p>Les temps composés se forment avec l’auxiliaire <strong>être</strong> ou <strong>avoir</strong> conjugué, suivi du participe passé.</p>
+          ${figure(row(pic("enveloppe", "Il a écrit une lettre.", 46), pic("avion", "Ils étaient partis.", 26)), "Passé composé et plus-que-parfait : un auxiliaire + le participe passé.")}
           ${tableau([
             ["Temps", "Auxiliaire au…", "Exemple"],
             ["passé composé", "présent", "j’ai chanté, je suis parti"],
@@ -261,6 +277,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Futur simple et futur antérieur",
         minutes: 12,
         body: `<p>Au futur simple, les terminaisons sont les mêmes pour tous les verbes : -rai, -ras, -ra, -rons, -rez, -ront.</p>
+          ${figure(row(pic("cahier", "Quand j’aurai fini mon devoir…", 40), pic("ballon", "… je jouerai.", 38)), "Le futur antérieur dit ce qui sera fini avant une autre action future.")}
           ${exemple(["je chanterai, tu finiras, il prendra, nous serons, vous aurez, ils iront, je viendrai, je pourrai."])}
           ${retenir("Futur antérieur = auxiliaire au futur + participe passé. Il marque une action future terminée avant une autre : Quand tu auras fini, tu sortiras.")}`,
       },
@@ -268,6 +285,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Le conditionnel présent",
         minutes: 12,
         body: `<p>Le conditionnel présent se forme comme le futur, avec les terminaisons de l’imparfait : -rais, -rais, -rait, -rions, -riez, -raient.</p>
+          ${figure(row(pic("verre-eau", "Je voudrais de l’eau, s’il vous plaît.", 44)), "Le conditionnel exprime la politesse, un souhait ou une condition.")}
           ${exemple(["Si j’avais de l’argent, j’achèterais un vélo.", "Je voudrais un verre d’eau, s’il vous plaît (politesse)."])}
           ${retenir("Ne confonds pas « je chanterai » (futur) et « je chanterais » (conditionnel) : remplace par « nous » pour entendre la différence (nous chanterons / nous chanterions).")}`,
       },
@@ -282,6 +300,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Le présent du subjonctif et de l’impératif",
         minutes: 15,
         body: `<p>Le <strong>subjonctif</strong> s’emploie après « il faut que », « pour que », « avant que », ou pour exprimer un souhait. Terminaisons : -e, -es, -e, -ions, -iez, -ent.</p>
+          ${figure(row(pic("savon", "Il faut que tu te laves les mains.", 34), pic("cartable", "Range ton cartable !", 48)), "Le subjonctif après « il faut que » ; l’impératif pour un ordre.")}
           ${tableau([
             ["", "chanter", "finir", "pouvoir", "recevoir"],
             ["que je", "chante", "finisse", "puisse", "reçoive"],
@@ -302,6 +321,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "L’accord de l’adjectif qualificatif",
         minutes: 12,
         body: `<p>L’adjectif s’accorde en genre et en nombre avec le nom qu’il qualifie.</p>
+          ${figure(row(pic("chemise", "une chemise blanche", 44), pic("fleur", "des fleurs rouges", 56)), "L’adjectif s’accorde en genre et en nombre avec le nom.")}
           ${tableau([
             ["Règle du féminin", "Exemples"],
             ["on ajoute -e", "grand → grande"],
@@ -315,7 +335,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "L’accord du participe passé",
         minutes: 15,
-        body: `${liste([
+        body: `${figure(row(pic("eleve-fille", "Les filles sont arrivées.", 80), pic("mangue", "Elles ont mangé des mangues.", 44)), "Avec être, le participe s’accorde avec le sujet ; avec avoir, il ne s’accorde pas avec le sujet.")}
+          ${liste([
             "avec <strong>être</strong>, le participe passé s’accorde avec le sujet : Les filles sont arrivées ;",
             "avec <strong>avoir</strong>, il ne s’accorde pas avec le sujet ; il s’accorde avec le COD seulement si celui-ci est placé avant le verbe : J’ai cueilli des mangues. Les mangues que j’ai cueillies.",
             "employé seul, il s’accorde comme un adjectif : des portes fermées.",
@@ -332,7 +353,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Distinguer les homophones",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure("<table><tr><th>a / à</th><td>Il a un vélo. Il va à l’école.</td></tr><tr><th>et / est</th><td>Awa et Fatou. Le ciel est bleu.</td></tr><tr><th>son / sont</th><td>son cartable. Ils sont là.</td></tr><tr><th>on / ont</th><td>On joue. Ils ont joué.</td></tr></table>", "On remplace par « avait », « était », « mon » ou « il » pour vérifier.")}
+          ${tableau([
             ["Homophones", "Astuce"],
             ["a / à", "a = avait (verbe avoir) ; sinon à"],
             ["et / est", "est = était ; et = et puis"],
@@ -354,7 +376,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Les adverbes en -ment et les prépositions",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(row(pic("tortue", "lentement", 48), pic("cheval", "rapidement", 48)), "lent → lente → lentement ; rapide → rapidement.")}
+          ${liste([
             "on forme l’adverbe sur le féminin de l’adjectif : lent → lente → lentement ;",
             "adjectifs en -ant → -amment, en -ent → -emment : courant → couramment, prudent → prudemment ;",
             "les <strong>prépositions</strong> (à, de, dans, par, pour, sans, sous, sur, avec, chez…) sont invariables.",
@@ -364,7 +387,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "La ponctuation",
         minutes: 10,
-        body: `${tableau([
+        body: `${figure("<table><tr><th>;</th><td>Il pleut ; nous restons.</td></tr><tr><th>:</th><td>Il a acheté : du riz, du sucre et du lait.</td></tr><tr><th>« »</th><td>« Viens ! » dit maman.</td></tr></table>", "Le point-virgule, les deux-points et les guillemets.")}
+          ${tableau([
             ["Signe", "Emploi"],
             ["point .", "fin d’une phrase déclarative"],
             ["virgule ,", "sépare des éléments d’une énumération ou des propositions"],
@@ -387,6 +411,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Sens propre, sens figuré et contexte",
         minutes: 12,
         body: `<p>Un même mot peut avoir plusieurs sens. C’est le <strong>contexte</strong> (la phrase) qui permet de choisir le bon.</p>
+          ${figure(row(pic("lion", "un lion : sens propre", 52), pic("eleve-garcon", "« Modou est un lion ! » : il est courageux", 80)), "Le contexte de la phrase donne le bon sens du mot.")}
           ${exemple([
             "Sens propre : Le lion a <strong>dévoré</strong> la gazelle.",
             "Sens figuré : Awa <strong>dévore</strong> les livres (elle lit beaucoup).",
@@ -396,7 +421,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Homonymes, synonymes et contraires",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("verre-eau", "un verre", 40), pic("feuille", "vert", 36), pic("lunettes", "les verres des lunettes", 22)), "verre, vert, vers : des homonymes ; et « verre » a plusieurs sens.")}
+          ${tableau([
             ["Notion", "Définition", "Exemple"],
             ["homonymes", "mots qui se prononcent de la même façon mais ont des sens différents", "le vers / le ver / vert / le verre"],
             ["synonymes", "mots de sens proche", "content, joyeux, heureux"],
@@ -415,6 +441,7 @@ export const FR_CM2: ChapterSpec[] = [
         title: "Familles de mots, préfixes et suffixes",
         minutes: 12,
         body: `<p>Les mots d’une même <strong>famille</strong> ont un radical commun : terre, terrain, terrasse, enterrer, souterrain.</p>
+          ${figure("<table><tr><th>radical</th><td>terr-</td></tr><tr><th>mots de la famille</th><td>terre, terrain, terrasse, enterrer, souterrain</td></tr><tr><th>préfixe et suffixe</th><td>en-terr-er ; terr-ain</td></tr></table>", "Les mots d’une même famille ont un radical commun.")}
           ${tableau([
             ["Élément", "Sens", "Exemples"],
             ["préfixe in-, im-, dé-", "contraire", "inutile, impossible, défaire"],
@@ -436,7 +463,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Préparer et écrire une rédaction",
         minutes: 15,
-        body: `${methode([
+        body: `${figure("<table><tr><th>1. Je comprends le sujet</th><td>je souligne les mots importants</td></tr><tr><th>2. Je cherche des idées</th><td>au brouillon</td></tr><tr><th>3. Je fais un plan</th><td>introduction, développement, conclusion</td></tr><tr><th>4. Je rédige et je relis</th><td>orthographe, ponctuation</td></tr></table>", "Les étapes d’une rédaction.")}
+          ${methode([
             "Lire attentivement le sujet et souligner les mots importants : que faut-il raconter, décrire ou expliquer ?",
             "Chercher des idées au brouillon et les classer.",
             "Faire un plan : introduction, développement (plusieurs paragraphes), conclusion.",
@@ -448,7 +476,8 @@ export const FR_CM2: ChapterSpec[] = [
       {
         title: "Décrire et écrire une lettre",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(row(pic("enveloppe", "la lettre", 56), pic("maison", "je décris ma maison", 52)), "Décrire : du général au particulier, avec des adjectifs précis et des comparaisons.")}
+          ${liste([
             "<strong>décrire</strong> : aller du général au particulier, utiliser des adjectifs précis et des comparaisons, faire appel aux sens (vue, ouïe, odorat…) ;",
             "<strong>écrire une lettre</strong> : lieu et date en haut à droite, formule d’appel (Cher oncle,), le message en paragraphes, une formule de politesse, la signature.",
           ])}

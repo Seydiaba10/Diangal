@@ -16,9 +16,28 @@ import type {
   QuestionReview,
   QuestionType,
   SubjectCode,
+  WorkbookDomain,
+  WorkbookRef,
 } from "@/types/domain";
 
 // Lecture Supabase des évaluations et des tentatives (questions via fonctions : jamais de corrigé avant l'envoi).
+
+const WORKBOOK_DOMAINS = new Set<WorkbookDomain>(["AN", "AG", "AM", "RP", "II"]);
+
+/** Colonne jsonb « workbook » (page d'un cahier d'exercices) ; null si absente ou mal formée. */
+function parseWorkbook(value: unknown): WorkbookRef | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const { code, page, pdf_page, domain, palier, lesson } = value as Record<string, unknown>;
+  if (typeof code !== "string" || typeof page !== "number" || !WORKBOOK_DOMAINS.has(domain as WorkbookDomain)) return null;
+  return {
+    code,
+    page,
+    pdfPage: typeof pdf_page === "number" ? pdf_page : page,
+    domain: domain as WorkbookDomain,
+    palier: typeof palier === "number" ? palier : 0,
+    lesson: typeof lesson === "number" ? lesson : null,
+  };
+}
 
 export interface CatalogAssessment {
   uuid: string;
@@ -39,6 +58,7 @@ export interface CatalogAssessment {
   verification: ContentVerification;
   sources: ContentSource[];
   correctionSource: string | null;
+  workbook: WorkbookRef | null;
 }
 
 /** Évaluations publiées (identiques pour tous) : mises en cache, invalidées avec le catalogue. */
@@ -69,7 +89,18 @@ export async function loadAssessmentCatalog(): Promise<CatalogAssessment[]> {
     verification: a.verification,
     sources: parseSources(a.sources),
     correctionSource: a.correction_source ?? null,
+    workbook: parseWorkbook(a.workbook),
   }));
+}
+
+/** Page entière d'un cahier d'exercices (contenu public, mis en cache avec le catalogue). */
+export async function loadAssessmentPage(slug: string): Promise<string | null> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("catalog");
+  const supabase = createSupabasePublicClient();
+  const { data } = await supabase.from("assessments").select("intro_html").eq("slug", slug).maybeSingle();
+  return data?.intro_html || null;
 }
 
 /** Nombre de questions publiées par chapitre (banque des séances « Préparer mon prochain devoir »). */
@@ -113,6 +144,7 @@ export async function fetchPersonalAssessment(idOrSlug: string): Promise<Catalog
     verification: data.verification,
     sources: parseSources(data.sources),
     correctionSource: data.correction_source ?? null,
+    workbook: null,
   };
 }
 
@@ -178,6 +210,9 @@ interface RawQuestion {
   prompt_html: string;
   points: number | string;
   options: { id: string; label_html: string }[];
+  stem_html?: string | null;
+  /** self_check seulement (get_attempt_session). */
+  model_html?: string | null;
 }
 
 function toPlayerQuestion(q: RawQuestion): PlayerQuestion {
@@ -187,6 +222,8 @@ function toPlayerQuestion(q: RawQuestion): PlayerQuestion {
     promptHtml: q.prompt_html,
     points: Number(q.points),
     options: q.options.map((o) => ({ id: o.id, labelHtml: o.label_html })),
+    ...(q.stem_html ? { stemHtml: q.stem_html } : {}),
+    ...(q.model_html ? { modelHtml: q.model_html } : {}),
   };
 }
 

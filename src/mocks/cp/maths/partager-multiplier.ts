@@ -1,0 +1,130 @@
+import "server-only";
+
+// CP, « Partager et multiplier » : séries DIANGAL du même genre que les leçons du cahier de l'école
+// (sens de la multiplication et de la division, écritures multiplicatives et de partage), avec
+// d'autres nombres et d'autres situations. Groupes de jetons dessinés par mocks/drawings.ts.
+
+import { groups } from "../../drawings";
+import type { ExerciseSeries } from "../../exercise-series";
+import { product, quotient, repeatedSum, share, signOf, whichOperation } from "../../primary-exercises";
+import { seriesOf } from "./helpers";
+
+const series = seriesOf("Partager et multiplier");
+
+export const SHARE_MULTIPLY: ExerciseSeries[] = [
+  series(1, "le sens de la multiplication", [
+    signOf("multiplication"),
+    repeatedSum(2, 4),
+    repeatedSum(3, 3),
+    repeatedSum(5, 2),
+    product(2, 5, "Il y a <strong>5</strong> paquets de <strong>2</strong> photos."),
+    product(4, 3),
+    repeatedSum(4, 3),
+    product(2, 6, "Maman range <strong>6</strong> paquets de <strong>2</strong> mangues."),
+    repeatedSum(10, 2),
+    product(3, 4),
+  ]),
+  series(2, "choisir la multiplication", [
+    whichOperation(
+      "Il y a <strong>4</strong> paquets de <strong>3</strong> cubes. Combien de cubes y a-t-il ?",
+      "multiplication",
+      3,
+      4,
+      "4 paquets de 3 cubes : on prend 4 fois le même nombre.",
+      groups(4, 3, "cube"),
+    ),
+    product(3, 4, "Il y a <strong>4</strong> paquets de <strong>3</strong> cubes."),
+    whichOperation("Awa a <strong>12</strong> billes. Elle en perd <strong>5</strong>. Combien lui en reste-t-il ?", "soustraction", 12, 5, "Elle en perd : on enlève."),
+    whichOperation("Il y a <strong>2</strong> caisses de <strong>9</strong> pommes. Combien de pommes y a-t-il en tout ?", "multiplication", 9, 2, "2 caisses de 9 pommes : c’est 2 fois 9."),
+    product(9, 2, "Il y a <strong>2</strong> caisses de <strong>9</strong> pommes."),
+    whichOperation("Modou a <strong>15</strong> cahiers. On lui en donne <strong>4</strong>. Combien en a-t-il maintenant ?", "addition", 15, 4, "On lui en donne : on ajoute."),
+    whichOperation("Il y a <strong>5</strong> sachets de <strong>4</strong> bonbons. Combien de bonbons y a-t-il ?", "multiplication", 4, 5, "5 sachets de 4 bonbons : c’est 5 fois 4."),
+    product(4, 5, "Il y a <strong>5</strong> sachets de <strong>4</strong> bonbons."),
+    whichOperation("Dans la salle, il y a <strong>3</strong> rangées de <strong>6</strong> chaises. Combien de chaises y a-t-il ?", "multiplication", 6, 3, "3 rangées de 6 chaises : c’est 3 fois 6."),
+    product(6, 3, "Il y a <strong>3</strong> rangées de <strong>6</strong> chaises."),
+  ]),
+  series(3, "le sens de la division (partage)", [
+    signOf("division"),
+    share(9, 3, "Papa partage équitablement <strong>9</strong> billes entre ses <strong>3</strong> enfants.", "billes"),
+    share(10, 2, "Le maître partage équitablement <strong>10</strong> cahiers entre <strong>2</strong> élèves.", "cahiers"),
+    share(12, 4, "Maman partage équitablement <strong>12</strong> beignets entre ses <strong>4</strong> enfants.", "beignets"),
+    share(8, 4, "Grand-père partage équitablement <strong>8</strong> mangues entre <strong>4</strong> enfants.", "mangues"),
+    share(6, 2, "Fatou partage équitablement <strong>6</strong> oranges entre ses <strong>2</strong> frères.", "oranges"),
+    share(15, 5, "Le maître partage équitablement <strong>15</strong> craies entre <strong>5</strong> groupes.", "craies"),
+    share(14, 2, "Maman partage équitablement <strong>14</strong> bonbons entre ses <strong>2</strong> filles.", "bonbons"),
+    quotient(10, 5),
+    quotient(12, 3),
+  ]),
+  series(4, "choisir la division", [
+    whichOperation("Le maître partage équitablement <strong>20</strong> cahiers entre <strong>5</strong> élèves.", "division", 20, 5, "On partage 20 cahiers en parts égales."),
+    share(20, 5, "Le maître partage équitablement <strong>20</strong> cahiers entre <strong>5</strong> élèves.", "cahiers"),
+    whichOperation("Pour un jeu, le maître répartit <strong>24</strong> élèves en <strong>4</strong> équipes égales.", "division", 24, 4, "On répartit les élèves en équipes égales."),
+    share(24, 4, "Le maître répartit <strong>24</strong> élèves en <strong>4</strong> équipes égales.", "élèves"),
+    whichOperation("Il y a <strong>3</strong> caisses de <strong>5</strong> bouteilles. Combien de bouteilles y a-t-il ?", "multiplication", 5, 3, "3 caisses de 5 bouteilles : c’est 3 fois 5."),
+    whichOperation("Ali avait <strong>30</strong> francs. Il dépense <strong>10</strong> francs. Combien lui reste-t-il ?", "soustraction", 30, 10, "Il dépense : on enlève."),
+    whichOperation("Grand-mère partage équitablement <strong>18</strong> mangues entre <strong>3</strong> enfants.", "division", 18, 3, "On partage les mangues en parts égales."),
+    share(18, 3, "Grand-mère partage équitablement <strong>18</strong> mangues entre <strong>3</strong> enfants.", "mangues"),
+    whichOperation("Binta a <strong>13</strong> perles. Sa sœur lui en donne <strong>6</strong>. Combien en a-t-elle ?", "addition", 13, 6, "Sa sœur lui en donne : on ajoute."),
+    quotient(16, 4),
+  ]),
+  series(5, "les écritures multiplicatives", [
+    product(20, 2, "Il y a <strong>2</strong> garçons. Chacun a <strong>20</strong> billes."),
+    product(5, 4, "Il y a <strong>4</strong> paniers de <strong>5</strong> oranges."),
+    product(10, 3),
+    product(2, 8),
+    product(3, 5),
+    product(30, 3, "Il y a <strong>3</strong> sacs de <strong>30</strong> mangues."),
+    product(4, 4),
+    product(10, 6),
+    product(25, 2, "Il y a <strong>2</strong> sacs de riz de <strong>25</strong> kg."),
+    product(5, 5),
+  ]),
+  series(6, "les écritures de partage", [
+    share(12, 3, "On partage équitablement <strong>12</strong> crayons entre <strong>3</strong> élèves.", "crayons"),
+    quotient(20, 4),
+    share(16, 2, "On partage équitablement <strong>16</strong> billes entre <strong>2</strong> enfants.", "billes"),
+    quotient(30, 5),
+    share(18, 6, "On partage équitablement <strong>18</strong> oranges entre <strong>6</strong> enfants.", "oranges"),
+    quotient(14, 7),
+    share(25, 5, "On partage équitablement <strong>25</strong> bonbons entre <strong>5</strong> enfants.", "bonbons"),
+    quotient(50, 5),
+    quotient(24, 3),
+    quotient(40, 4),
+  ]),
+  series(7, "les écritures multiplicatives (2)", [
+    product(6, 2),
+    product(7, 3),
+    product(10, 4),
+    product(20, 4, "Il y a <strong>4</strong> boîtes de <strong>20</strong> craies."),
+    product(15, 2, "Il y a <strong>2</strong> sachets de <strong>15</strong> bonbons."),
+    product(5, 6),
+    product(8, 2),
+    product(9, 3),
+    product(40, 2, "Il y a <strong>2</strong> cartons de <strong>40</strong> cahiers."),
+    product(11, 3, "Il y a <strong>3</strong> équipes de <strong>11</strong> joueurs."),
+  ]),
+  series(8, "les écritures de partage (2)", [
+    quotient(18, 2),
+    share(21, 3, "On partage équitablement <strong>21</strong> mangues entre <strong>3</strong> enfants.", "mangues"),
+    quotient(28, 4),
+    share(30, 6, "Le maître forme <strong>6</strong> groupes égaux avec <strong>30</strong> élèves.", "élèves"),
+    quotient(35, 5),
+    quotient(16, 8),
+    share(20, 4, "On partage équitablement <strong>20</strong> crayons entre <strong>4</strong> élèves.", "crayons"),
+    quotient(45, 5),
+    quotient(32, 4),
+    quotient(27, 3),
+  ]),
+  series(9, "multiplier et partager", [
+    product(4, 6),
+    quotient(24, 6),
+    product(5, 7),
+    quotient(35, 7),
+    product(3, 9),
+    quotient(27, 9),
+    product(10, 5),
+    quotient(50, 10),
+    product(2, 9),
+    quotient(18, 9),
+  ]),
+];

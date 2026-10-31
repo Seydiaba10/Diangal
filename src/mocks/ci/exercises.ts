@@ -1,172 +1,41 @@
 import "server-only";
 
-// Exercices corrigés du CI : une série par chapitre, écrite par DIANGAL d'après les chapitres
+// Exercices corrigés du CI : en maths, une série par leçon du cahier de l'école (src/mocks/ci/maths/) ;
+// dans les autres matières, une série par chapitre, écrite par DIANGAL d'après les chapitres
 // du guide officiel de l'étape 1 (à faire relire par des enseignants). Questions courtes, avec
-// des mots du quotidien, pour des enfants de 6 ans qui apprennent à lire.
+// des mots du quotidien, pour des enfants de 6 ans qui apprennent à lire, complétées par les
+// questions illustrées de ci/enrich.ts.
 // Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
 
 import { CHAPTERS_CI } from "../curriculum-ci";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withExtras } from "../illustrated-questions";
+import { EXTRA_CI } from "./enrich";
+import { SETS_CI } from "./maths/ensembles";
+import { FIGURES_CI, LINES_CI, SOLIDS_CI, SPACE_CI } from "./maths/geometrie";
+import { LENGTHS_CI, MASSES_CI, TIME_CI } from "./maths/mesure";
+import { ADD_SUB_10, NUMBERS_0_5, NUMBERS_6_10 } from "./maths/nombres-0-10";
+import { CALC_20, NUMBERS_11_20 } from "./maths/nombres-11-20";
+import { IMAGES_CI, SOLVE_CI, UNDERSTAND_CI } from "./maths/problemes";
 
 const SERIES: ExerciseSeries[] = [
-  // ── Mathématiques ──────────────────────────────────────────────────────────
-  {
-    subject: "MATH",
-    chapter: "Se repérer dans l’espace",
-    questions: [
-      { qcm: "Le chat dort sous la table. Où est le chat ?", choices: ["Sur la table", "*Sous la table", "Derrière la porte"], why: "« Sous » veut dire en dessous : le chat est en dessous de la table." },
-      { qcm: "Dans la file, Awa est avant Moussa. Qui passe en premier ?", choices: ["*Awa", "Moussa", "Ils passent ensemble"], why: "« Avant » veut dire en premier : Awa passe avant Moussa." },
-      { vf: "Le livre est posé sur le pupitre : il est au-dessus du pupitre.", answer: true, why: "« Sur » veut dire au-dessus, en touchant le pupitre." },
-      { qcm: "Fatou habite près de l’école, Ali habite loin de l’école. Qui a le moins de chemin à faire ?", choices: ["Ali", "*Fatou"], why: "« Près » veut dire à une petite distance : Fatou a moins de chemin à faire." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les ensembles",
-    questions: [
-      { qcm: "Dans l’ensemble des fruits, lequel n’a pas sa place ?", choices: ["mangue", "banane", "*cahier", "orange"], why: "Le cahier n’est pas un fruit : c’est l’intrus." },
-      { qcm: "Lamine a 5 billes, Binta a 1 bille. Qui a beaucoup de billes ?", choices: ["*Lamine", "Binta"], why: "5 billes, c’est beaucoup plus qu’une seule bille." },
-      { vf: "Un ensemble vide ne contient aucun objet.", answer: true, why: "Vide veut dire qu’il n’y a rien dedans : zéro objet." },
-      { qcm: "Awa a 3 bonbons et Ousmane a 3 bonbons. Que peut-on dire ?", choices: ["Awa en a plus", "*Ils en ont autant", "Ousmane en a plus"], why: "3 et 3, c’est la même quantité : ils en ont autant." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Longueurs, distances et quantités",
-    questions: [
-      { qcm: "Le serpent mesure 3 carreaux, le ver de terre mesure 1 carreau. Lequel est le plus long ?", choices: ["*Le serpent", "Le ver de terre"], why: "3 carreaux, c’est plus long qu’un seul carreau." },
-      { qcm: "Quel bâton est le plus court ?<br>A : ▬▬▬▬<br>B : ▬▬<br>C : ▬▬▬", choices: ["A", "*B", "C"], why: "Le bâton B n’a que deux morceaux : c’est le plus court." },
-      { qcm: "Un seau rempli d’eau jusqu’en haut est…", choices: ["vide", "à moitié plein", "*plein"], why: "Quand l’eau arrive tout en haut, le seau est plein." },
-      { vf: "Une maison loin de l’école demande plus de chemin qu’une maison près de l’école.", answer: true, why: "Loin veut dire à une grande distance : il faut marcher plus longtemps." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Observer une image",
-    questions: [
-      { qcm: "Continue le rythme : ● ○ ● ○ ● …", choices: ["●", "*○", "▲"], why: "On alterne un rond plein et un rond vide : après ● vient ○." },
-      { qcm: "Quel est l’intrus : chèvre, mouton, vache, voiture ?", choices: ["chèvre", "mouton", "*voiture", "vache"], why: "La voiture n’est pas un animal : c’est l’intrus." },
-      { qcm: "Continue le rythme : ▲ ▲ ■ ▲ ▲ ■ ▲ ▲ …", choices: ["*■", "▲", "●"], why: "Le motif est deux triangles puis un carré : après ▲ ▲ vient ■." },
-      { vf: "Dans un tableau, on trouve une case avec sa ligne et sa colonne.", answer: true, why: "La ligne et la colonne se croisent sur une seule case." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les solides",
-    questions: [
-      { qcm: "Quel objet a la forme d’un cylindre ?", choices: ["Un dé", "*Une boîte de lait en conserve", "Un livre"], why: "La boîte de conserve est ronde et peut rouler : c’est un cylindre." },
-      { qcm: "Un dé à jouer a la forme d’un…", choices: ["*cube", "cylindre", "rond"], why: "Toutes les faces du dé sont des carrés pareils : c’est un cube." },
-      { vf: "Un cylindre peut rouler.", answer: true, why: "Sa face courbe lui permet de rouler." },
-      { qcm: "Une boîte d’allumettes a la forme d’un…", choices: ["cube", "cylindre", "*pavé"], why: "Ses faces sont des rectangles : c’est un pavé." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les figures planes",
-    questions: [
-      { num: "Combien de côtés a un triangle ?", answer: 3, why: "Un triangle a 3 côtés et 3 coins." },
-      { qcm: "Quelle figure a 4 côtés de la même longueur ?", choices: ["Le triangle", "Le rond", "*Le carré"], why: "Le carré a 4 côtés pareils." },
-      { vf: "Un rond n’a pas de coin.", answer: true, why: "Le rond est une ligne courbe : il n’a ni côté droit ni coin." },
-      { num: "Combien de coins a un rectangle ?", answer: 4, why: "Un rectangle a 4 côtés et 4 coins." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les nombres de 0 à 5",
-    questions: [
-      { num: "Compte les points : ● ● ●<br>Combien y en a-t-il ?", answer: 3, why: "Un, deux, trois : il y a 3 points." },
-      { qcm: "Quel nombre vient juste après 4 ?", choices: ["3", "*5", "6"], why: "On compte 3, 4, 5 : après 4 vient 5." },
-      { vf: "Une assiette vide contient 0 mangue.", answer: true, why: "Zéro veut dire rien du tout." },
-      { num: "Compte les carrés : ■ ■ ■ ■ ■<br>Combien y en a-t-il ?", answer: 5, why: "Un, deux, trois, quatre, cinq : il y a 5 carrés." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les nombres de 6 à 10",
-    questions: [
-      { num: "Compte les étoiles : ★ ★ ★ ★ ★ ★ ★<br>Combien y en a-t-il ?", answer: 7, why: "En comptant une par une, on trouve 7 étoiles." },
-      { qcm: "Quel nombre est le plus grand ?", choices: ["6", "8", "*9"], why: "9 vient après 6 et 8 quand on compte : c’est le plus grand." },
-      { qcm: "10 objets, c’est…", choices: ["*une dizaine", "une moitié", "une paire"], why: "Un groupe de 10, c’est une dizaine." },
-      { num: "Quel nombre vient juste avant 10 ?", answer: 9, why: "On compte 8, 9, 10 : juste avant 10 vient 9." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Ajouter et enlever jusqu’à 10",
-    questions: [
-      { num: "Awa a 3 mangues. Sa maman lui en donne 2. Combien en a-t-elle maintenant ?", answer: 5, why: "On ajoute : 3 + 2 = 5 mangues." },
-      { num: "Il y a 7 oiseaux sur l’arbre. 3 s’envolent. Combien en reste-t-il ?", answer: 4, why: "On enlève : 7 − 3 = 4 oiseaux." },
-      { num: "Le double de 4, c’est combien ?", answer: 8, why: "Le double, c’est deux fois le même nombre : 4 + 4 = 8." },
-      { num: "La moitié de 6, c’est combien ?", answer: 3, why: "On partage 6 en deux parts égales : 3 et 3." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Lourd ou léger ?",
-    questions: [
-      { qcm: "Qu’est-ce qui est le plus lourd ?", choices: ["Une plume", "*Un sac de riz", "Une feuille"], why: "Un sac de riz est difficile à porter : il est bien plus lourd." },
-      { qcm: "Sur une balance à deux plateaux, le plateau qui descend porte l’objet…", choices: ["*le plus lourd", "le plus léger"], why: "L’objet le plus lourd fait descendre son plateau." },
-      { vf: "Un gros objet est toujours plus lourd qu’un petit objet.", answer: false, why: "Non : un gros ballon gonflé peut être plus léger qu’une petite pierre. La taille ne dit pas le poids." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Comprendre un problème",
-    questions: [
-      { qcm: "« Moussa a 4 billes. Il gagne 2 billes. Combien a-t-il de billes ? »<br>Quelle est la question ?", choices: ["Moussa a 4 billes.", "Il gagne 2 billes.", "*Combien a-t-il de billes ?"], why: "La question se termine par un point d’interrogation : « Combien a-t-il de billes ? »" },
-      { vf: "Dans un problème, les données sont les informations qui servent à trouver la réponse.", answer: true, why: "Les données, ce sont les nombres et les informations du texte." },
-      { num: "« Binta a 2 cahiers et 3 crayons. »<br>Combien a-t-elle de cahiers ?", answer: 2, why: "Le texte dit : 2 cahiers. Les crayons ne comptent pas ici." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Lignes et chemins",
-    questions: [
-      { qcm: "Une ligne qui se referme, comme un rond, est une ligne…", choices: ["ouverte", "*fermée"], why: "Quand le bout rejoint le début, la ligne est fermée." },
-      { vf: "Une ligne ouverte a deux bouts.", answer: true, why: "Elle ne se referme pas : on voit son début et sa fin." },
-      { qcm: "Dans un quadrillage, pour trouver une case, on regarde…", choices: ["*sa ligne et sa colonne", "sa couleur seulement", "sa taille"], why: "Chaque case se trouve au croisement d’une ligne et d’une colonne." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les nombres de 11 à 20",
-    questions: [
-      { qcm: "Quel nombre vient juste après 15 ?", choices: ["14", "*16", "17"], why: "On compte 15, 16 : après 15 vient 16." },
-      { num: "Combien font 1 dizaine et 3 unités ?", answer: 13, why: "10 et encore 3, cela fait 13." },
-      { qcm: "Quel est le plus petit nombre ?", choices: ["18", "20", "*12"], why: "12 vient avant 18 et 20 quand on compte : c’est le plus petit." },
-      { num: "Quel nombre vient juste avant 20 ?", answer: 19, why: "On compte 18, 19, 20 : juste avant 20 vient 19." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Calculer jusqu’à 20",
-    questions: [
-      { num: "10 + 5 = ?", answer: 15, why: "Une dizaine et 5 unités : 15." },
-      { num: "18 − 8 = ?", answer: 10, why: "On enlève les 8 unités de 18 : il reste une dizaine, 10." },
-      { num: "Le double de 7, c’est combien ?", answer: 14, why: "7 + 7 = 14." },
-      { num: "13 + 4 = ?", answer: 17, why: "On part de 13 et on avance de 4 : 14, 15, 16, 17." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Le temps qui passe",
-    questions: [
-      { qcm: "Quel jour vient après lundi ?", choices: ["dimanche", "*mardi", "jeudi"], why: "Lundi, mardi, mercredi… : après lundi vient mardi." },
-      { num: "Combien y a-t-il de jours dans une semaine ?", answer: 7, why: "Lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche : 7 jours." },
-      { qcm: "On prend le petit-déjeuner…", choices: ["*le matin", "à midi", "le soir"], why: "Le petit-déjeuner est le premier repas de la journée, le matin." },
-      { qcm: "Qu’est-ce qui dure le plus longtemps ?", choices: ["Boire un verre d’eau", "Taper dans ses mains", "*Une journée d’école"], why: "Une journée d’école dure plusieurs heures." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Résoudre un petit problème",
-    questions: [
-      { num: "Ali a 6 œufs. Il en casse 2. Combien lui en reste-t-il ?", answer: 4, why: "On enlève les œufs cassés : 6 − 2 = 4." },
-      { num: "Dans l’équipe, il y a 5 filles et 4 garçons. Combien d’enfants en tout ?", answer: 9, why: "On ajoute : 5 + 4 = 9 enfants." },
-      { qcm: "« Fatou a 8 oranges. Elle en donne 3 à sa sœur. »<br>Pour trouver combien il lui reste, on…", choices: ["ajoute 3 à 8", "*enlève 3 à 8", "compte jusqu’à 3"], why: "Elle donne des oranges : il lui en reste moins, on enlève. 8 − 3 = 5." },
-      { vf: "Pour répondre à un problème, on écrit une phrase réponse.", answer: true, why: "Par exemple : « Il reste 5 oranges à Fatou. »" },
-    ],
-  },
+  // ── Mathématiques (une série par leçon du cahier de l'école : src/mocks/ci/maths/) ──
+  ...SPACE_CI,
+  ...SETS_CI,
+  ...LENGTHS_CI,
+  ...IMAGES_CI,
+  ...SOLIDS_CI,
+  ...FIGURES_CI,
+  ...NUMBERS_0_5,
+  ...NUMBERS_6_10,
+  ...ADD_SUB_10,
+  ...MASSES_CI,
+  ...UNDERSTAND_CI,
+  ...LINES_CI,
+  ...NUMBERS_11_20,
+  ...CALC_20,
+  ...TIME_CI,
+  ...SOLVE_CI,
 
   // ── Français ───────────────────────────────────────────────────────────────
   {
@@ -411,7 +280,7 @@ const SERIES: ExerciseSeries[] = [
   },
 ];
 
-const built = buildExerciseSeries("CI", CHAPTERS_CI, SERIES);
+const built = buildExerciseSeries("CI", CHAPTERS_CI, withExtras(SERIES, EXTRA_CI));
 
 export const QUESTIONS_CI = built.questions;
 export const ANSWER_KEYS_CI = built.keys;

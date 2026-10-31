@@ -1,108 +1,41 @@
 import "server-only";
 
-// Exercices corrigés du CE2 : une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
-// relire par des enseignants). Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// Exercices corrigés du CE2 : en maths, une série par leçon du cahier de l’école (maths/) ; ailleurs,
+// une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
+// relire par des enseignants), complétée par les questions illustrées de ce2/enrich.ts.
+// Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
 
 import { CHAPTERS_CE2 } from "../curriculum-ce2";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withExtras } from "../illustrated-questions";
+import { EXTRA_CE2 } from "./enrich";
+import { CIRCLE_CE2, LINES_CE2, NETS_CE2, SHAPES_CE2 } from "./maths/geometrie";
+import { AREAS_CE2, LENGTHS_CE2, MASSES_CE2, NET_CE2, PERIMETERS_CE2, PRICES_CE2 } from "./maths/mesure";
+import { ADD_SUB_CE2, BIG_NUMBERS_CE2, DECIMALS_CE2, DIV_CE2, DOUBLE_CE2, MULT_CE2, REVISIONS_CE2 } from "./maths/nombres";
+import { DATA_CE2, METHOD_CE2 } from "./maths/problemes";
 
 const SERIES: ExerciseSeries[] = [
-  // ── Mathématiques ──────────────────────────────────────────────────────────
-  { subject: "MATH", chapter: "Révisions : nombres et opérations jusqu’à 10 000", questions: [
-    { num: "Calcule 4 508 + 3 297.", answer: 7805, why: "8 + 7 = 15, je retiens 1 ; 0 + 9 + 1 = 10, je retiens 1 ; 5 + 2 + 1 = 8 ; 4 + 3 = 7." },
-    { num: "Calcule 7 000 − 2 486.", answer: 4514, why: "Vérification : 4 514 + 2 486 = 7 000." },
-    { num: "On partage 84 billes entre 7 enfants. Combien chacun en reçoit-il ?", answer: 12, why: "84 ÷ 7 = 12." },
-  ] },
-  { subject: "MATH", chapter: "Les nombres jusqu’à 100 000", questions: [
-    { num: "Écris en chiffres : soixante-cinq mille quarante.", answer: 65040, why: "65 000 + 40." },
-    { num: "Complète : 99 999 + 1 = …", answer: 100000, why: "Cent mille." },
-    { qcm: "Le plus petit nombre est…", choices: ["56 300", "*53 600", "65 030"], why: "53 &lt; 56 &lt; 65 milliers." },
-  ] },
-  { subject: "MATH", chapter: "Addition et soustraction des grands nombres", questions: [
-    { num: "Calcule 12 450 + 9 875.", answer: 22325, why: "12 450 + 9 875 = 22 325." },
-    { num: "Calcule 50 000 − 18 725.", answer: 31275, why: "Vérification : 31 275 + 18 725 = 50 000." },
-    { qcm: "35 000 + 18 000 vaut environ…", choices: ["43 000", "*53 000", "63 000"], why: "35 + 18 = 53 milliers." },
-  ] },
-  { subject: "MATH", chapter: "La multiplication", questions: [
-    { num: "Calcule 24 × 100.", answer: 2400, why: "On ajoute deux zéros." },
-    { num: "Un sac de riz coûte 18 500 F. Combien coûtent 3 sacs ?", answer: 55500, why: "18 500 × 3 = 55 500 F." },
-    { num: "Calcule 408 × 26.", answer: 10608, why: "408 × 6 = 2 448 ; 408 × 20 = 8 160 ; total 10 608." },
-  ] },
-  { subject: "MATH", chapter: "La division", questions: [
-    { num: "Partage 12 600 F entre 4 enfants. Combien chacun reçoit-il ?", answer: 3150, why: "12 600 ÷ 4 = 3 150 F." },
-    { num: "Calcule 3 875 ÷ 25.", answer: 155, why: "25 × 155 = 3 875." },
-    { num: "1 000 ÷ 12 = 83. Quel est le reste ?", answer: 4, why: "12 × 83 = 996 et 1 000 − 996 = 4." },
-  ] },
-  { subject: "MATH", chapter: "Double, moitié, triple et divisibilité", questions: [
-    { num: "Quel est le triple de 1 200 ?", answer: 3600, why: "1 200 × 3 = 3 600." },
-    { vf: "2 718 est divisible par 9.", answer: true, why: "2 + 7 + 1 + 8 = 18, qui est dans la table de 9." },
-    { num: "Quelle est la moitié de 450 ?", answer: 225, why: "450 ÷ 2 = 225." },
-  ] },
-  { subject: "MATH", chapter: "Nombres décimaux et fractions simples", questions: [
-    { num: "Combien vaut le quart de 100 F ?", answer: 25, why: "100 ÷ 4 = 25 F." },
-    { qcm: "3 m 25 cm s’écrit…", choices: ["32,5 m", "*3,25 m", "325 m"], why: "25 cm = 0,25 m." },
-    { qcm: "« Un tiers » s’écrit…", choices: ["1/2", "*1/3", "3/1"], why: "Une part sur trois." },
-  ] },
-  { subject: "MATH", chapter: "Lignes, droites et angles", questions: [
-    { qcm: "Un angle plus petit qu’un angle droit est…", choices: ["*aigu", "obtus", "plat"], why: "Aigu = plus fermé que l’angle droit." },
-    { qcm: "Deux droites perpendiculaires forment…", choices: ["*des angles droits", "des angles obtus", "aucun angle"], why: "Quatre angles droits." },
-    { vf: "Deux droites parallèles se coupent.", answer: false, why: "Elles ne se coupent jamais." },
-  ] },
-  { subject: "MATH", chapter: "Carré, rectangle et triangle", questions: [
-    { num: "Combien de côtés a un triangle ?", answer: 3, why: "Trois côtés, trois sommets, trois angles." },
-    { qcm: "Un triangle qui a trois côtés égaux est…", choices: ["rectangle", "isocèle", "*équilatéral"], why: "Équilatéral = côtés égaux." },
-    { qcm: "Un triangle avec un angle droit est…", choices: ["*rectangle", "équilatéral", "isocèle"], why: "C’est sa définition." },
-  ] },
-  { subject: "MATH", chapter: "Le cercle et la symétrie", questions: [
-    { num: "Le rayon d’un cercle mesure 3 cm. Combien mesure le diamètre (en cm) ?", answer: 6, why: "Diamètre = 2 × rayon." },
-    { num: "Combien d’axes de symétrie a un rectangle ?", answer: 2, why: "Les deux médianes." },
-    { qcm: "Pour tracer un cercle, j’utilise…", choices: ["l’équerre", "*le compas", "la règle seule"], why: "On pique le compas au centre." },
-  ] },
-  { subject: "MATH", chapter: "Les patrons des solides", questions: [
-    { num: "Combien de carrés y a-t-il dans le patron d’un cube ?", answer: 6, why: "Le cube a 6 faces carrées." },
-    { qcm: "Le patron d’un cylindre contient…", choices: ["6 rectangles", "*2 disques et un rectangle", "4 triangles"], why: "Les deux bases et la surface courbe déroulée." },
-    { vf: "Une boîte d’allumettes a la forme d’un pavé droit.", answer: true, why: "Ses faces sont des rectangles." },
-  ] },
-  { subject: "MATH", chapter: "Les longueurs", questions: [
-    { num: "Convertis 3 km en mètres.", answer: 3000, why: "1 km = 1 000 m." },
-    { num: "Combien de décamètres y a-t-il dans 1 hm ?", answer: 10, why: "Chaque unité vaut 10 fois la suivante." },
-    { num: "Convertis 2 m en centimètres.", answer: 200, why: "1 m = 100 cm." },
-  ] },
-  { subject: "MATH", chapter: "Les masses et les capacités", questions: [
-    { num: "Combien de kilogrammes y a-t-il dans 1 tonne ?", answer: 1000, why: "1 t = 1 000 kg." },
-    { num: "Combien de sacs de 50 kg y a-t-il dans 1 tonne ?", answer: 20, why: "1 000 ÷ 50 = 20." },
-    { num: "Convertis 3 hL en litres.", answer: 300, why: "1 hL = 100 L." },
-  ] },
-  { subject: "MATH", chapter: "Masse nette, masse brute et durées", questions: [
-    { num: "Masse brute 550 g, tare 50 g. Quelle est la masse nette (en g) ?", answer: 500, why: "550 − 50 = 500 g." },
-    { num: "Combien de secondes y a-t-il dans 2 minutes ?", answer: 120, why: "2 × 60 = 120 s." },
-    { qcm: "Un car part à 8 h 15 et arrive à 10 h 45. Il a mis…", choices: ["2 h", "*2 h 30 min", "3 h"], why: "10 h 45 − 8 h 15 = 2 h 30 min." },
-  ] },
-  { subject: "MATH", chapter: "Prix et partages", questions: [
-    { num: "Achat 25 000 F, frais 3 000 F, vente 32 000 F. Quel est le bénéfice (en F) ?", answer: 4000, why: "32 000 − 28 000 = 4 000 F." },
-    { qcm: "Achat 1 500 F, vente 1 200 F : il y a…", choices: ["un bénéfice", "*une perte", "ni l’un ni l’autre"], why: "On vend moins cher qu’on a acheté : perte de 300 F." },
-    { num: "On partage 12 000 F en parts égales entre 4 frères. Combien chacun reçoit-il ?", answer: 3000, why: "12 000 ÷ 4 = 3 000 F." },
-  ] },
-  { subject: "MATH", chapter: "Les périmètres", questions: [
-    { num: "Calcule le périmètre (en cm) d’un triangle de côtés 5 cm, 7 cm et 8 cm.", answer: 20, why: "5 + 7 + 8 = 20 cm." },
-    { num: "Le périmètre d’un carré est 36 m. Combien mesure son côté (en m) ?", answer: 9, why: "36 ÷ 4 = 9 m." },
-    { num: "Un rectangle a un périmètre de 30 m et une largeur de 5 m. Quelle est sa longueur (en m) ?", answer: 10, why: "30 ÷ 2 = 15 ; 15 − 5 = 10 m." },
-  ] },
-  { subject: "MATH", chapter: "Les aires", questions: [
-    { num: "Calcule l’aire (en m²) d’un carré de 4 m de côté.", answer: 16, why: "4 × 4 = 16 m²." },
-    { num: "Calcule l’aire (en m²) d’une salle de 8 m sur 6 m.", answer: 48, why: "8 × 6 = 48 m²." },
-    { vf: "L’aire se mesure en mètres carrés.", answer: true, why: "Le périmètre, lui, se mesure en mètres." },
-  ] },
-  { subject: "MATH", chapter: "Données et questions d’un problème", questions: [
-    { num: "Un éleveur a 120 moutons et en vend 45. Combien lui en reste-t-il ?", answer: 75, why: "120 − 45 = 75 moutons." },
-    { num: "Il les vend 60 000 F l’un. Combien reçoit-il (en F) ?", answer: 2700000, why: "45 × 60 000 = 2 700 000 F." },
-    { vf: "Une donnée inutile ne sert pas à répondre à la question.", answer: true, why: "On peut la barrer." },
-  ] },
-  { subject: "MATH", chapter: "Démarche et énoncé d’un problème", questions: [
-    { num: "Fatou achète 3 cahiers à 250 F. Combien paie-t-elle ?", answer: 750, why: "3 × 250 = 750 F." },
-    { qcm: "Quel énoncé correspond à 5 000 − 1 750 ?", choices: ["*J’ai 5 000 F, je dépense 1 750 F. Combien me reste-t-il ?", "J’achète 5 objets à 1 750 F.", "Je partage 5 000 F entre 1 750 personnes."], why: "On enlève une dépense d’une somme." },
-    { vf: "Une réponse doit contenir l’unité.", answer: true, why: "Par exemple : « Fatou paie 750 F »." },
-  ] },
+  // ── Mathématiques (une série par leçon du cahier de l'école : maths/) ──
+  ...REVISIONS_CE2,
+  ...BIG_NUMBERS_CE2,
+  ...ADD_SUB_CE2,
+  ...MULT_CE2,
+  ...DIV_CE2,
+  ...DOUBLE_CE2,
+  ...DECIMALS_CE2,
+  ...LINES_CE2,
+  ...SHAPES_CE2,
+  ...CIRCLE_CE2,
+  ...NETS_CE2,
+  ...LENGTHS_CE2,
+  ...MASSES_CE2,
+  ...NET_CE2,
+  ...PRICES_CE2,
+  ...PERIMETERS_CE2,
+  ...AREAS_CE2,
+  ...DATA_CE2,
+  ...METHOD_CE2,
+
   // ── Français ───────────────────────────────────────────────────────────────
   { subject: "FR", chapter: "Prendre la parole", questions: [
     { qcm: "Quand je parle devant la classe, je…", choices: ["parle très vite et bas", "*parle fort et regarde mon public", "tourne le dos"], why: "Pour être compris." },
@@ -272,7 +205,7 @@ const SERIES: ExerciseSeries[] = [
   ] },
 ];
 
-const built = buildExerciseSeries("CE2", CHAPTERS_CE2, SERIES);
+const built = buildExerciseSeries("CE2", CHAPTERS_CE2, withExtras(SERIES, EXTRA_CE2));
 
 export const QUESTIONS_CE2 = built.questions;
 export const ANSWER_KEYS_CE2 = built.keys;

@@ -116,6 +116,14 @@
   --color-subject-agri-soft: #f7fee7;
   --color-subject-agro: #9d174d;
   --color-subject-agro-soft: #fdf2f8;
+
+  /* Cahiers d'exercices PAAME : bandeaux et encadrés des pages d'origine (contraste AA avec le blanc). */
+  --color-workbook-os: #46519c;
+  --color-workbook-revision: #c42a71;
+  --color-workbook-integration: #874394;
+  --color-workbook-interdisciplinary: #23746c;
+  --color-workbook-recall: #fffbd6;
+  --color-workbook-recall-line: #f0dd4f;
 }
 
 @layer base {
@@ -190,6 +198,56 @@
   .rich-text blockquote p:first-child {
     font-style: italic;
   }
+  /* Figure explicative d'une leçon (mocks/lesson-figures.ts) : dessins ou schéma, avec légende. */
+  .rich-text .lesson-figure {
+    margin: 1rem 0;
+    border: 1px solid var(--color-line);
+    border-radius: 1rem;
+    background-color: var(--color-surface);
+    padding: 0.75rem;
+    text-align: center;
+  }
+  .rich-text .lesson-figure img {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    vertical-align: bottom;
+  }
+  .rich-text .lesson-figure figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    color: var(--color-ink-muted);
+  }
+  .rich-text .lf-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem 1.25rem;
+  }
+  /* Objets d'un même groupe à compter : serrés, pour que les groupes se distinguent. */
+  .rich-text .lf-item .lf-row {
+    gap: 0.25rem 0.375rem;
+  }
+  .rich-text .lf-item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  /* Une légende longue passe à la ligne au lieu d’élargir le dessin (deux dessins par ligne à 360 px). */
+  .rich-text .lf-item > .lf-label {
+    max-width: 8rem;
+    text-align: center;
+  }
+  .rich-text .lf-label {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .rich-text .lf-hl {
+    color: var(--color-cycle-secondary-ink);
+    text-decoration: underline;
+  }
   .rich-text blockquote p + p {
     font-size: 0.875rem;
     color: var(--color-ink-muted);
@@ -238,6 +296,742 @@
   .frac > span:last-child {
     border-top: 1.5px solid currentColor;
     padding-top: 0.05em;
+  }
+
+  /* ── Cahiers d'exercices (PAAME) : page reprise du document d'origine ── */
+  .wb-page > * + *,
+  .wb-recall > * + *,
+  .wb-block > * + * {
+    margin-top: 0.75rem;
+  }
+  .wb-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .wb-head > span {
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+  }
+  .wb-domain {
+    background-color: var(--color-info-50);
+    color: var(--color-info-700);
+  }
+  .wb-palier {
+    background-color: var(--color-brand-600);
+    color: var(--color-white);
+  }
+  .wb-lesson {
+    background-color: var(--color-workbook-os);
+    color: var(--color-white);
+  }
+  .wb-print {
+    display: inline-block;
+    border: 1px solid var(--color-ink-subtle);
+    padding: 0.125rem 0.5rem;
+    font-size: 0.8125rem;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--color-info-700);
+  }
+  .wb-banner {
+    border-radius: 9999px;
+    padding: 0.375rem 1rem;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--color-white);
+  }
+  .wb-banner-lesson {
+    background-color: var(--color-workbook-os);
+  }
+  .wb-banner-revision {
+    background-color: var(--color-workbook-revision);
+  }
+  .wb-banner-integration {
+    background-color: var(--color-workbook-integration);
+  }
+  .wb-banner-interdisciplinary {
+    background-color: var(--color-workbook-interdisciplinary);
+  }
+  .wb-recall {
+    border: 2px solid var(--color-workbook-recall-line);
+    background-color: var(--color-workbook-recall);
+    padding: 0.75rem;
+  }
+  .rich-text .wb-rubric {
+    display: inline-block;
+    margin-top: 0;
+    border-radius: 9999px;
+    background-color: var(--color-brand-600);
+    padding: 0.125rem 0.875rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.6;
+    color: var(--color-white);
+  }
+  .wb-block {
+    margin-top: 1.25rem;
+  }
+  .wb-item + .wb-item {
+    margin-top: 0.875rem;
+  }
+  /* Items côte à côte comme dans le cahier, empilés sur un petit écran. */
+  .wb-items-2 {
+    display: grid;
+    gap: 0.875rem 2rem;
+  }
+  .wb-items-2 > .wb-item + .wb-item {
+    margin-top: 0;
+  }
+  @media (min-width: 40rem) {
+    .wb-items-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .wb-n {
+    font-weight: 700;
+  }
+  .wb-figs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .wb-fig {
+    max-width: 100%;
+    height: auto;
+  }
+  .wb-line .wb-fig {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .wb-part .wb-line .wb-fig {
+    vertical-align: top;
+  }
+  .wb-recall .wb-figs {
+    justify-content: center;
+  }
+  .wb-parts {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-left: 1.25rem;
+  }
+  .wb-parts-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.75rem;
+  }
+  .wb-part .wb-figs {
+    margin-top: 0.25rem;
+  }
+  .wb-cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+  }
+  .wb-cols > div {
+    min-width: 0;
+    flex: 1 1 14rem;
+  }
+  .wb-cols > div > * + * {
+    margin-top: 0.5rem;
+  }
+  .wb-cols-narrow {
+    gap: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+  .wb-cols-narrow > div {
+    flex-basis: 5.25rem;
+  }
+  .wb-cols .wb-figs {
+    justify-content: center;
+  }
+  /* Cadre vide, rangée de cases et bande numérique, dessinés comme dans le cahier. */
+  .wb-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25em;
+    height: 1.9em;
+    margin: 0 0.25em;
+    border: 1.5px solid currentColor;
+    padding: 0 0.2em;
+    vertical-align: middle;
+  }
+  .wb-cells {
+    display: inline-flex;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+  .wb-cells > span {
+    width: 2.5em;
+    height: 2.2em;
+    border: 1.5px solid currentColor;
+  }
+  .wb-cells > span + span,
+  .wb-band > span + span {
+    border-left: 0;
+  }
+  .wb-band {
+    display: inline-flex;
+    max-width: 100%;
+    vertical-align: middle;
+  }
+  .wb-band > span {
+    min-width: 2.6em;
+    border: 1.5px solid currentColor;
+    padding: 0.15em 0.3em;
+    text-align: center;
+    font-weight: 700;
+  }
+  .wb-band > .wb-gap {
+    align-self: stretch;
+    font-weight: 400;
+    color: var(--color-ink-muted);
+  }
+  .wb-nums {
+    word-spacing: 0.6em;
+  }
+  /* Réponses écrites à la main en rouge dans les exemples du cahier. */
+  .wb-red {
+    font-family: var(--font-cursive), cursive;
+    font-size: 0.8em;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--color-senegal-red);
+  }
+  .wb-blue {
+    font-weight: 700;
+    color: var(--color-info-700);
+  }
+  .wb-circled {
+    border: 1.5px solid var(--color-senegal-red);
+    border-radius: 9999px;
+    padding: 0 0.5em;
+  }
+  .wb-sub {
+    padding-left: 1.25rem;
+  }
+  .wb-spaced {
+    word-spacing: 2em;
+  }
+  .wb-right {
+    display: block;
+    text-align: right;
+  }
+  /* Ligne pointillée pour écrire une démarche, sur toute la largeur. */
+  .wb-write {
+    display: block;
+    height: 1.75em;
+    border-bottom: 2px dotted var(--color-ink-subtle);
+  }
+  /* Bandes de jours ou de mois reliées par des flèches. */
+  .wb-chain {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.15rem;
+    vertical-align: middle;
+  }
+  .wb-chain .wb-cell {
+    min-width: 5em;
+    min-height: 1.9em;
+    border: 1.5px solid currentColor;
+    padding: 0.1em 0.5em;
+    text-align: center;
+  }
+  .wb-chain .wb-blank {
+    background-color: var(--color-idle-200);
+  }
+  .wb-chain .wb-open {
+    min-width: 1.5em;
+    border-color: var(--color-ink-subtle);
+    border-right: 0;
+  }
+  .wb-arrow {
+    font-size: 0.8em;
+    color: var(--color-info-700);
+  }
+  /* Calendrier d'un mois, comme dans le cahier. */
+  .rich-text .wb-cal {
+    width: max-content;
+  }
+  .rich-text .wb-cal caption {
+    padding-bottom: 0.25rem;
+    font-weight: 700;
+  }
+  .rich-text .wb-cal th,
+  .rich-text .wb-cal td {
+    min-width: 2.2em;
+    border-color: var(--color-ink);
+    padding: 0.2rem 0.35rem;
+    text-align: center;
+    /* Noms des jours jamais coupés (« Mercredi ») : le tableau défile plutôt. */
+    overflow-wrap: normal;
+  }
+  .rich-text .wb-cal th {
+    font-size: 0.8125rem;
+  }
+  /* Dessins des exercices (mocks/drawings.ts) : SVG dans l'énoncé, aux couleurs du thème. */
+  .rich-text .dg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-top: 0.75rem;
+    color: var(--color-ink);
+  }
+  /* Géométrie (mocks/geometry.ts) : quadrillages, parcours, lignes, zones, figures, drapeau. */
+  .dg-grid {
+    fill: none;
+    stroke: var(--color-ink-subtle);
+    stroke-width: 1;
+  }
+  .dg-path {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .dg-path-end {
+    fill: var(--color-cycle-secondary);
+  }
+  .dg-start {
+    fill: var(--color-cycle-elementary);
+    stroke: var(--color-surface);
+    stroke-width: 2;
+  }
+  .dg-node {
+    fill: var(--color-ink);
+  }
+  .dg-arrow {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 2;
+  }
+  .dg-figure,
+  .dg-segment {
+    fill: none;
+    stroke: var(--color-cycle-elementary-ink);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .dg-zone {
+    fill: var(--color-cycle-middle-soft);
+    stroke: var(--color-cycle-middle-ink);
+    stroke-width: 3;
+  }
+  .dg-shape-fill,
+  .dg-part {
+    fill: var(--color-cycle-elementary-soft);
+    stroke: var(--color-cycle-elementary-ink);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+  .dg-eye {
+    fill: var(--color-ink);
+  }
+  .dg-mark {
+    fill: var(--color-cycle-secondary-ink);
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .dg-band {
+    stroke: var(--color-ink);
+    stroke-width: 1;
+  }
+  .dg-flag-green {
+    fill: var(--color-senegal-green);
+  }
+  .dg-flag-yellow {
+    fill: var(--color-senegal-yellow);
+  }
+  .dg-flag-red {
+    fill: var(--color-senegal-red);
+  }
+  .dg-flag-star {
+    fill: var(--color-senegal-green);
+  }
+  /* Mesures (mocks/measure.ts) : objets mesurés, verres, bouteilles, balance, horloge, calendrier. */
+  .dg-object {
+    fill: var(--color-cycle-middle-soft);
+    stroke: var(--color-cycle-middle-ink);
+    stroke-width: 2;
+  }
+  .dg-stick {
+    fill: var(--color-cycle-middle);
+    stroke: var(--color-ink);
+    stroke-width: 1;
+  }
+  .dg-stick-alt {
+    fill: var(--color-surface);
+    stroke: var(--color-ink);
+    stroke-width: 1;
+  }
+  .dg-span {
+    fill: none;
+    stroke: var(--color-cycle-secondary);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+  .dg-dash {
+    fill: none;
+    stroke: var(--color-ink-subtle);
+    stroke-width: 2;
+    stroke-dasharray: 4 4;
+  }
+  .dg-water {
+    fill: var(--color-info-500);
+    opacity: 0.55;
+  }
+  /* Schémas des leçons : billets, terrain (relief, plan), cours d'eau, retenues des opérations. */
+  .dg-note {
+    fill: var(--color-cycle-elementary-soft);
+    stroke: var(--color-cycle-elementary-ink);
+    stroke-width: 2;
+  }
+  .dg-land {
+    fill: var(--color-cycle-elementary-soft);
+    stroke: var(--color-cycle-elementary-ink);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .dg-land-alt {
+    fill: var(--color-cycle-middle-soft);
+    stroke: var(--color-cycle-elementary-ink);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .dg-map {
+    fill: var(--color-ink);
+    font-size: 10px;
+    font-weight: 700;
+    paint-order: stroke;
+    stroke: var(--color-surface);
+    stroke-width: 3px;
+  }
+  .dg-source {
+    fill: var(--color-ink-muted);
+    font-size: 8px;
+  }
+  .dg-capital {
+    fill: var(--color-cycle-secondary);
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+  }
+  .dg-river {
+    fill: none;
+    stroke: var(--color-info-500);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+  .dg-carry {
+    fill: var(--color-cycle-secondary);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .dg-glass,
+  .dg-bottle {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .dg-bottle {
+    fill: var(--color-cycle-elementary-soft);
+  }
+  .dg-bottle-cap {
+    fill: var(--color-cycle-secondary);
+  }
+  .dg-cap,
+  .dg-kg {
+    fill: currentColor;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .dg-kg {
+    fill: var(--color-surface);
+    font-size: 10px;
+  }
+  /* Graduations et étiquettes d'un graphique. */
+  .dg-axis {
+    fill: currentColor;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .dg-scale {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+  .dg-pan {
+    fill: var(--color-cycle-middle-soft);
+    stroke: var(--color-ink);
+    stroke-width: 2;
+  }
+  /* Solides en perspective : face avant, dessus plus clair, côté plus sombre. */
+  .dg-solid,
+  .dg-solid-top,
+  .dg-solid-side {
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .dg-solid {
+    fill: var(--color-cycle-middle);
+  }
+  .dg-solid-top {
+    fill: var(--color-cycle-middle-soft);
+  }
+  .dg-solid-side {
+    fill: var(--color-cycle-middle-ink);
+  }
+  .dg-weight {
+    fill: var(--color-ink-muted);
+    stroke: var(--color-ink);
+    stroke-width: 1;
+  }
+  .dg-clock {
+    fill: var(--color-surface);
+    stroke: var(--color-ink);
+    stroke-width: 3;
+  }
+  .dg-clock-num {
+    fill: currentColor;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .dg-hand-h,
+  .dg-hand-m {
+    stroke: var(--color-ink);
+    stroke-linecap: round;
+  }
+  .dg-hand-h {
+    stroke-width: 6;
+  }
+  .dg-hand-m {
+    stroke-width: 3;
+    stroke: var(--color-cycle-secondary-ink);
+  }
+  .dg-ruler {
+    fill: var(--color-cycle-middle-soft);
+    stroke: var(--color-cycle-middle-ink);
+    stroke-width: 1.5;
+  }
+  .dg-ruler-num {
+    fill: currentColor;
+    font-size: 11px;
+  }
+  .dg-pencil {
+    fill: var(--color-cycle-middle);
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+  }
+  .dg-pencil-tip {
+    fill: var(--color-cycle-middle-soft);
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+  }
+  .rich-text .dg-cal {
+    width: max-content;
+    margin-top: 0.75rem;
+  }
+  .rich-text .dg-cal caption {
+    padding-bottom: 0.25rem;
+    font-weight: 700;
+  }
+  /* Compact : les 7 colonnes tiennent sur un téléphone de 360 px. */
+  .rich-text .dg-cal th,
+  .rich-text .dg-cal td {
+    min-width: 1.9em;
+    border-color: var(--color-ink);
+    padding: 0.15rem 0.2rem;
+    font-size: 0.875rem;
+    text-align: center;
+    overflow-wrap: normal;
+  }
+  /* Énoncé d'un problème, encadré comme dans le cahier. */
+  .rich-text .dg-enonce {
+    display: block;
+    margin: 0.25rem 0 0.5rem;
+    border: 1px solid var(--color-ink-subtle);
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+  /* Cadre d'un groupe de jetons (paquet, part d'un partage). */
+  .dg-group {
+    fill: var(--color-cycle-elementary-soft);
+    stroke: var(--color-cycle-elementary-ink);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+  }
+  /* Trait de l'opération posée (sous le second nombre). */
+  .dg-rule {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+  }
+  /* Illustrations réalistes (public/illustrations) : une ou plusieurs, à la suite. */
+  .rich-text .dg-pics {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+  .rich-text .dg-pic {
+    max-width: 100%;
+    height: auto;
+  }
+  /* Longue rangée de formes : elle défile seule dans son cadre, jamais la page. */
+  .dg-scroll {
+    overflow-x: auto;
+  }
+  .dg-line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+  .dg-box,
+  .dg-shape {
+    fill: var(--color-surface);
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+  .dg-blank {
+    fill: var(--color-cycle-elementary-soft);
+    stroke: var(--color-cycle-elementary-ink);
+    stroke-width: 2;
+    stroke-dasharray: 5 3;
+  }
+  /* Cubes et jetons en relief : face colorée, arête claire, arête sombre, reflet. */
+  .dg-cube,
+  .dg-token {
+    fill: var(--color-cycle-middle);
+    stroke: var(--color-cycle-middle-ink);
+    stroke-width: 1;
+  }
+  .dg-hi {
+    fill: none;
+    stroke: var(--color-surface);
+    stroke-width: 1.5;
+    opacity: 0.85;
+  }
+  .dg-shade {
+    fill: none;
+    stroke: var(--color-cycle-middle-ink);
+    stroke-width: 1.5;
+    opacity: 0.45;
+  }
+  .dg-token-ring {
+    fill: none;
+    stroke: var(--color-cycle-middle-ink);
+    stroke-width: 0.8;
+    opacity: 0.5;
+  }
+  .dg-hi-dot {
+    fill: var(--color-surface);
+    opacity: 0.85;
+  }
+  .dg-text {
+    fill: currentColor;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .dg-letter {
+    fill: var(--color-cycle-elementary-ink);
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .rich-text .wb-cal-big td {
+    font-size: 1.15em;
+  }
+  /* Énoncé encadré des pages de résolution de problèmes. */
+  .wb-enonce {
+    display: block;
+    margin: 0.4rem 0;
+    border: 1px solid var(--color-ink-subtle);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+  /* Étiquette encadrée (heure lue sur une horloge du rappel). */
+  .wb-label {
+    display: inline-block;
+    border: 1.5px solid currentColor;
+    padding: 0.1em 0.6em;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  /* Pièces de monnaie dessinées dans les opérations (texte « 10F » lisible). */
+  .wb-coin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2em;
+    height: 2.2em;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 9999px;
+    background-color: var(--color-workbook-recall-line);
+    font-size: 0.8em;
+    font-weight: 700;
+    vertical-align: middle;
+  }
+  .wb-coin-big {
+    width: 2.8em;
+    height: 2.8em;
+  }
+  .wb-coin-silver {
+    background-color: var(--color-idle-200);
+  }
+  .wb-coin-empty {
+    width: 3em;
+    height: 3em;
+    justify-content: flex-end;
+    padding-right: 0.3em;
+    background-color: var(--color-surface);
+    font-size: 1em;
+  }
+  /* Caillou gris dessiné dans une consigne. */
+  .wb-pebble {
+    font-size: 1.2em;
+    line-height: 1;
+    color: var(--color-idle-700);
+  }
+  /* Trait bleu épais qui désigne les longueurs « en gras » à mesurer. */
+  .wb-sample {
+    display: inline-block;
+    width: 3em;
+    border-top: 3px solid var(--color-info-700);
+    vertical-align: middle;
+  }
+  .wb-cols-narrow > div:has(> .wb-dots) {
+    flex: 0 0 auto;
+    align-self: center;
+  }
+  .wb-page .wb-line + .wb-sub,
+  .wb-page .wb-sub + .wb-sub {
+    margin-top: 0.25rem;
+  }
+  .wb-center {
+    text-align: center;
+  }
+  .wb-folio {
+    text-align: right;
+    font-size: 0.8125rem;
+    color: var(--color-ink-muted);
+  }
+  .cursive {
+    font-family: var(--font-cursive), cursive;
+    font-size: 1.05em;
   }
 }
 

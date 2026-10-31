@@ -4,6 +4,7 @@
 
 import { tableau } from "../3e/blocks";
 import { bullets, type CiChapterSpec, keyPoint, practice } from "../ci/blocks";
+import { figure, pic, row, schema } from "../lesson-figures";
 
 const HIST = "Histoire";
 const GEO = "Géographie";
@@ -20,7 +21,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Les progrès de l’homme",
-        body: `${tableau([
+        body: `${figure(row(pic("feu", "le feu", 56), pic("lampe", "la lampe", 26), pic("telephone", "le téléphone", 60)), "Des progrès de l’homme : maîtriser le feu, s’éclairer, communiquer de loin.")}
+          ${tableau([
             ["Autrefois", "Aujourd’hui"],
             ["chasse, pêche et cueillette pour se nourrir", "agriculture, élevage, pêche avec des moteurs"],
             ["outils en pierre, puis en fer", "machines, tracteurs"],
@@ -40,7 +42,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "L’histoire de ma localité",
-        body: `${bullets([
+        body: `${figure(row(pic("grand-pere", "les anciens racontent", 80), pic("case", "les vieux quartiers", 56)), "Pour connaître l’histoire de ma localité, j’interroge les anciens et j’observe les lieux.")}
+          ${bullets([
             "Événements marquants : batailles, fondation de villages, sécheresses, épidémies, années de famine ou d’abondance.",
             "Personnages marquants : rois et reines, chefs religieux et coutumiers, résistants, héros de la localité.",
             "Exemples : Lat Dior au Cayor, la reine Ndatté Yalla au Walo, Aline Sitoé Diatta en Casamance, El Hadji Omar dans le Fouta.",
@@ -57,7 +60,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Royaumes et empires",
-        body: `${bullets([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Le Tékrour et le Fouta au nord, le long du fleuve ; le Djolof, le Walo, le Cayor et le Baol au nord-ouest et au centre ; le Sine et le Saloum au centre-ouest ; le Gabou et les royaumes de Casamance au sud.")}
+          ${bullets([
             "Un <strong>royaume</strong> est un territoire dirigé par un roi ; des chefs lui doivent obéissance (vassalité).",
             "Un <strong>empire</strong> est plus grand : il domine plusieurs royaumes.",
             "Principaux royaumes : Tékrour, Fouta, Djolof, Cayor, Baol, Walo, Sine, Saloum, Niani, Gabou, royaumes de Casamance, et la « république » lébou du Cap-Vert.",
@@ -74,7 +78,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Du grand Djolof aux royaumes du Cayor, du Baol, du Walo, du Sine et du Saloum",
-        body: `${bullets([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Le Djolof autour de Linguère (Louga) ; le Walo près du fleuve (Saint-Louis) ; le Cayor entre Dakar et Saint-Louis ; le Baol autour de Diourbel ; le Sine autour de Fatick ; le Saloum autour de Kaolack.")}
+          ${bullets([
             "Le Djolof, fondé par Ndiadiane Ndiaye, réunissait plusieurs royaumes. Son roi était le Bourba.",
             "Après la bataille de Danki (XVI<sup>e</sup> siècle), le Cayor devient indépendant, puis d’autres royaumes s’en séparent.",
             "Rois : damel au Cayor, teigne au Baol, brak au Walo, bour au Sine et au Saloum.",
@@ -85,7 +90,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
       },
       {
         title: "Le Gabou et les royaumes du sud et de l’est",
-        body: `${bullets([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Le Gabou au sud, vers Kolda et la Guinée-Bissau ; les royaumes diolas en Casamance (Ziguinchor) ; le Boundou à l’est (Tambacounda).")}
+          ${bullets([
             "Le <strong>Gabou</strong>, royaume mandingue, dirigé par un mansa, s’étendait vers la Guinée-Bissau.",
             "Au sud : les royaumes diolas de Casamance, organisés autour des villages et des rois-prêtres.",
             "À l’est : les royaumes mandingues et peuls, le Boundou.",
@@ -103,7 +109,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Lire une carte",
-        body: `${bullets([
+        body: `${figure(schema("sn-carte-legende", "Carte du Sénégal et de ses 14 régions, avec une légende."), "Le nord est en haut ; la légende explique les signes : le point rouge, c’est Dakar, la capitale.")}
+          ${bullets([
             "Une carte représente un territoire vu de dessus, en plus petit.",
             "Le nord est en haut de la carte.",
             "La <strong>légende</strong> explique les couleurs et les signes : bleu pour l’eau, points pour les villes, traits pour les routes ou les frontières.",
@@ -120,7 +127,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Le milieu physique de ma région",
-        body: `${tableau([
+        body: `${figure(row(pic("arbre", "la végétation"), pic("pirogue", "les cours d’eau", 34), pic("soleil", "le climat", 48)), "Le milieu physique : le relief, l’eau, le climat et la végétation.")}
+          ${tableau([
             ["Élément", "Ce que j’observe"],
             ["relief", "plaine, plateau, dunes, collines, vallée"],
             ["eau", "fleuve, rivière, marigot, lac, mer"],
@@ -139,7 +147,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Agriculture, élevage, pêche et tourisme",
-        body: `${tableau([
+        body: `${figure(row(pic("plante", "l’agriculture", 48), pic("vache", "l’élevage", 48), pic("pirogue", "la pêche", 32), pic("avion", "le tourisme", 28)), "Les grandes activités du Sénégal.")}
+          ${tableau([
             ["Activité", "Exemples"],
             ["agriculture", "cultures vivrières (mil, riz, maïs, niébé) et industrielles (arachide, coton) ; techniques traditionnelles (hilaire, daba) ou modernes (tracteur)"],
             ["élevage", "bovins, ovins, caprins, chevaux, ânes ; transhumance et embouche"],
@@ -151,7 +160,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
       },
       {
         title: "Les mouvements de population et l’habitat",
-        body: `${bullets([
+        body: `${figure(row(pic("case", "le village", 52), pic("taxi", "l’exode vers la ville", 34), pic("vache", "la transhumance", 46)), "Des jeunes partent en ville ; des éleveurs se déplacent avec leurs troupeaux.")}
+          ${bullets([
             "<strong>Exode rural</strong> : des jeunes quittent les villages pour la ville.",
             "<strong>Transhumance</strong> : les éleveurs se déplacent avec leurs troupeaux à la recherche de pâturages.",
             "Types d’habitat : case, maison en dur, villa, immeuble, mais aussi baraques et bidonvilles.",
@@ -169,7 +179,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Les cinq sens et la peau",
-        body: `${tableau([
+        body: `${figure(row(pic("oeil", "la vue", 30), pic("oreille", "l’ouïe", 46), pic("main", "le toucher", 46)), "Nos cinq sens : la vue, l’ouïe, le toucher, le goût et l’odorat.")}
+          ${tableau([
             ["Sens", "Organe", "Hygiène"],
             ["la vue", "les yeux", "ne pas fixer le soleil, lire à la lumière"],
             ["l’ouïe", "les oreilles", "pas de bruit trop fort, pas d’objet pointu"],
@@ -182,7 +193,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
       },
       {
         title: "Le squelette, les muscles et la croissance",
-        body: `${bullets([
+        body: `${figure(schema("ce2-squelette", "Un squelette simplifié et le nom de quelques os."), "Le squelette soutient le corps ; les articulations, comme le coude et le genou, permettent de plier.")}
+          ${bullets([
             "Le <strong>squelette</strong> soutient le corps ; les <strong>articulations</strong> (coude, genou) permettent de plier.",
             "Les <strong>muscles</strong> font bouger les os.",
             "L’enfant grandit : sa taille et son poids augmentent. Le bébé rampe, puis marche à quatre pattes, puis se tient debout.",
@@ -199,7 +211,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Comment vivent les animaux",
-        body: `${tableau([
+        body: `${figure(row(pic("chevre", "elle marche", 48), pic("poisson", "il nage", 32), pic("oiseau", "il vole", 34)), "Les animaux se déplacent de façons différentes.")}
+          ${tableau([
             ["Caractère", "Exemples"],
             ["régime alimentaire", "herbivore (vache), carnivore (lion), omnivore (poule)"],
             ["déplacement", "marche (chèvre), nage (poisson), vol (oiseau), reptation (serpent)"],
@@ -218,7 +231,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "La vie des plantes",
-        body: `${bullets([
+        body: `${figure(schema("ce2-plante", "Une plante et ses parties."), "Les racines, la tige, les feuilles, la fleur et le fruit.")}
+          ${bullets([
             "Parties : racines, tronc ou tige, branches, feuilles, fleurs, fruits, écorce.",
             "Croissance : la graine germe, la plante se développe, fleurit puis donne des fruits.",
             "Nutrition : la plante puise l’eau et les éléments du sol par ses racines ; la sève circule dans la tige.",
@@ -236,7 +250,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Le circuit électrique et les objets fabriqués",
-        body: `${bullets([
+        body: `${figure(schema("ce2-circuit", "Un circuit électrique fermé."), "Le circuit est fermé : le courant passe et l’ampoule s’allume.")}
+          ${bullets([
             "Une lampe de poche fonctionne avec des piles : la pile, les fils et l’ampoule forment un <strong>circuit</strong>.",
             "Circuit <strong>fermé</strong> : l’ampoule s’allume. Circuit <strong>ouvert</strong> : elle s’éteint.",
             "Les objets s’entretiennent : nettoyage, graissage, dépoussiérage.",
@@ -255,7 +270,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Le paludisme",
-        body: `${bullets([
+        body: `${figure(row(pic("moustique", "l’anophèle femelle", 40), pic("moustiquaire", "la moustiquaire imprégnée")), "Le moustique transmet le paludisme ; la moustiquaire protège pendant le sommeil.")}
+          ${bullets([
             "Le paludisme est transmis par la piqûre d’un moustique, l’<strong>anophèle</strong> femelle.",
             "Les moustiques se multiplient dans les eaux stagnantes.",
             "Signes : fièvre, maux de tête, vomissements, fatigue.",
@@ -273,7 +289,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Le sida : se protéger",
-        body: `${bullets([
+        body: `${figure(row(pic("ciseaux", "les objets qui coupent", 40), pic("medicament", "le centre de santé", 46)), "Le VIH peut passer par le sang : on ne partage pas les objets qui coupent ou qui piquent.")}
+          ${bullets([
             "Le sida est une maladie causée par un virus, le VIH, qui affaiblit les défenses du corps.",
             "Il peut se transmettre par le sang : objets pointus ou tranchants déjà utilisés (lames, aiguilles), tatouages.",
             "Il ne se transmet pas en jouant, en mangeant ensemble ou en se serrant la main.",
@@ -290,7 +307,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Protéger l’environnement",
-        body: `${tableau([
+        body: `${figure(row(pic("arbre", "reboiser"), pic("arrosoir", "arroser", 40), pic("poubelle", "ramasser les déchets", 56)), "Reboiser, entretenir et garder propre : on protège notre environnement.")}
+          ${tableau([
             ["Problème", "Solutions"],
             ["désertification, déforestation", "reboisement, brise-vent, foyers améliorés"],
             ["érosion", "diguettes, plantations"],
@@ -303,7 +321,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
       },
       {
         title: "Les problèmes de population",
-        body: `${bullets([
+        body: `${figure(row(pic("ecole", "scolariser les enfants", 52), pic("savon", "l’hygiène", 34), pic("mangue", "bien se nourrir", 44)), "Des solutions : l’école, l’hygiène, une bonne alimentation.")}
+          ${bullets([
             "Problèmes : manque d’hygiène, malnutrition, maladies, logements trop petits (promiscuité), enfants non scolarisés, pauvreté.",
             "Solutions : informer et sensibiliser, aller à l’école, se soigner, bien se nourrir, garder un milieu propre.",
           ])}
@@ -320,7 +339,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Mes droits et mes devoirs",
-        body: `${tableau([
+        body: `${figure(row(pic("ecole", "le droit d’aller à l’école", 52), pic("balai", "le devoir d’aider")), "À chaque droit correspond un devoir.")}
+          ${tableau([
             ["Mes droits", "Mes devoirs"],
             ["m’exprimer, donner mon avis", "respecter l’avis des autres"],
             ["être protégé, être en sécurité", "ne pas faire de mal aux autres"],
@@ -339,7 +359,8 @@ export const ESVS_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Vivre en paix",
-        body: `${bullets([
+        body: `${figure(row(pic("eleve-fille", "Awa", 80), pic("eleve-garcon", "Modou", 80), pic("grand-mere", "Mère Penda", 80)), "La teranga, la tolérance et le dialogue nous aident à vivre en paix.")}
+          ${bullets([
             "Idéaux de paix : tolérance, respect des différences (religion, ethnie, opinion), solidarité, liberté, égalité, démocratie.",
             "Valeurs de notre milieu : la <em>teranga</em> (hospitalité), la solidarité, l’humilité, la politesse, le courage, le respect des anciens, la mesure (<em>kersa</em>).",
             "En cas de dispute, on discute calmement ou on demande l’aide d’un médiateur.",

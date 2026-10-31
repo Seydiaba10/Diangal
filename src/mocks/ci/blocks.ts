@@ -1,6 +1,9 @@
 // Briques HTML des leçons du CI (classes de lib/sanitize.ts : callout, example).
 // Les leçons du CI se lisent avec un adulte : l'élève de 6 ans apprend à peine à lire.
 
+import type { PictureName } from "../drawings";
+import { figure, highlight, pic, row } from "../lesson-figures";
+
 export interface CiLessonSpec {
   title: string;
   /** Corps de la leçon, en HTML déjà assaini (balises de la liste blanche). */
@@ -45,6 +48,7 @@ export function soundLesson({
   words,
   sentence,
   writing,
+  pictures = [],
 }: {
   sound: string;
   /** Façons d'écrire le son (« a A », « au eau o »…). */
@@ -57,9 +61,14 @@ export function soundLesson({
   sentence?: string;
   /** Conseil pour écrire la lettre. */
   writing: string;
+  /** Mots dessinés où l'on entend le son : dessin, mot, partie du mot à mettre en évidence. */
+  pictures?: [PictureName, string, string][];
 }): string {
   return [
     `<p>Écoute bien : on entend le son <strong>${sound}</strong> dans ${heardIn.map((w) => `« ${w} »`).join(", ")}.</p>`,
+    pictures.length
+      ? figure(row(...pictures.map(([name, word, part]) => pic(name, highlight(word, part), 64, word))), `On entend le son <strong>${sound}</strong> dans ces mots.`)
+      : "",
     `<h2>Je le vois</h2><p>Il s’écrit : <strong>${spellings}</strong>.</p>`,
     `<h2>Je lis</h2><p>Des syllabes : <strong>${syllables.join(" · ")}</strong></p><p>Des mots : <strong>${words.join(" · ")}</strong></p>`,
     sentence ? `<p>Une phrase : <strong>${sentence}</strong></p>` : "",

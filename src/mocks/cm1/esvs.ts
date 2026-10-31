@@ -5,6 +5,7 @@
 
 import { tableau } from "../3e/blocks";
 import { bullets, type CiChapterSpec, keyPoint, practice } from "../ci/blocks";
+import { figure, pic, row, schema } from "../lesson-figures";
 
 const HIST = "Histoire";
 const GEO = "Géographie";
@@ -21,7 +22,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Les traces des premiers habitants",
-        body: `${bullets([
+        body: `${figure(row(pic("caillou", "un outil en pierre taillée", 44), pic("feu", "la maîtrise du feu", 56)), "À la préhistoire, les hommes taillaient la pierre, chassaient, pêchaient et cueillaient.")}
+          ${bullets([
             "La <strong>préhistoire</strong> est la période avant l’écriture. Les hommes taillaient des outils en pierre, chassaient, pêchaient et cueillaient.",
             "Au <strong>néolithique</strong>, ils ont commencé à cultiver, à élever des animaux et à fabriquer des poteries.",
             "Dans le delta du Saloum, les <strong>amas coquilliers</strong> (montagnes de coquillages) montrent que des hommes y vivaient de la pêche.",
@@ -39,7 +41,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "L’empire du Ghana",
-        body: `${bullets([
+        body: `${figure("<table><tr><th>du nord (Sahara)</th><td>le sel, apporté par les caravanes</td></tr><tr><th>du sud</th><td>l’or</td></tr></table>", "Le Ghana s’enrichissait en échangeant l’or contre le sel ; sa capitale était Koumbi Saleh.")}
+          ${bullets([
             "Le Ghana (ou Wagadou) était un grand empire soninké situé entre le fleuve Sénégal et le Niger.",
             "Il était riche grâce à l’or, échangé contre le sel apporté du nord par les caravanes du Sahara.",
             "Sa capitale était Koumbi Saleh.",
@@ -49,7 +52,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
       },
       {
         title: "Le Tékrour et l’islam",
-        body: `${bullets([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Le Tékrour se trouvait dans la vallée du fleuve Sénégal, au nord : dans les régions actuelles de Saint-Louis et de Matam.")}
+          ${bullets([
             "Le Tékrour, dans la vallée du fleuve Sénégal, est l’un des plus anciens royaumes du pays.",
             "Son roi War Jaabi adopta l’islam au XI<sup>e</sup> siècle.",
             "L’islam s’est ensuite répandu par les commerçants, les marabouts et le mouvement almoravide.",
@@ -67,7 +71,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Situation et organisation du Sénégal",
-        body: `${bullets([
+        body: `${figure(schema("sn-carte-legende", "Carte du Sénégal et de ses 14 régions, avec une légende."), "Le Sénégal, en Afrique de l’Ouest, au bord de l’Atlantique : 14 régions ; Dakar est la capitale.")}
+          ${bullets([
             "Le Sénégal est en Afrique de l’Ouest, au bord de l’océan Atlantique.",
             "Ses voisins : la Mauritanie au nord, le Mali à l’est, la Guinée et la Guinée-Bissau au sud ; la Gambie est enclavée dans le pays.",
             "Il est découpé en 14 régions, elles-mêmes divisées en départements, arrondissements et communes.",
@@ -84,7 +89,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Saisons, pluies et vents",
-        body: `${tableau([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Il pleut moins au nord (Podor, Matam) et davantage au sud (Ziguinchor, Kolda).")}
+          ${tableau([
             ["Zone", "Pluies", "Exemple"],
             ["nord (sahélienne)", "faibles (moins de 400 mm par an)", "Podor, Matam"],
             ["centre (soudanienne)", "moyennes", "Kaolack, Tambacounda"],
@@ -103,7 +109,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Végétation et parcs nationaux",
-        body: `${bullets([
+        body: `${figure(row(pic("arbre", "la savane"), pic("lion", "le parc du Niokolo-Koba", 52)), "Steppe au nord, savane au centre, forêt claire au sud ; les parcs protègent les animaux sauvages.")}
+          ${bullets([
             "Steppe au nord, savane au centre, forêt claire au sud, mangrove dans les estuaires.",
             "Parcs nationaux : Niokolo-Koba (lions, éléphants, hippopotames), Djoudj (oiseaux migrateurs), delta du Saloum, Langue de Barbarie, îles de la Madeleine.",
           ])}
@@ -119,7 +126,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Se déplacer et échanger",
-        body: `${tableau([
+        body: `${figure(row(pic("camion", "la route", 38), pic("train", "le train", 34), pic("avion", "l’avion", 26), pic("pirogue", "le bateau", 28)), "Des transports pour les personnes et les marchandises.")}
+          ${tableau([
             ["Transport", "Exemples"],
             ["routier", "routes nationales, autoroutes, cars, taxis-brousse"],
             ["ferroviaire", "Train express régional (TER) Dakar–Diamniadio"],
@@ -139,7 +147,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "L’eau change d’état",
-        body: `${tableau([
+        body: `${figure(schema("cm1-etats-eau", "Les trois états de l’eau et les changements d’état."), "Solide, liquide, gaz : la glace fond, l’eau s’évapore, la vapeur se condense.")}
+          ${tableau([
             ["Changement", "De… à…", "Exemple"],
             ["solidification", "liquide → solide", "l’eau devient glace au congélateur"],
             ["fusion", "solide → liquide", "la glace fond au soleil"],
@@ -158,7 +167,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Le feu a besoin d’air",
-        body: `${bullets([
+        body: `${figure(schema("cm1-bougies", "Deux bougies : l’une brûle à l’air, l’autre s’éteint sous un verre retourné."), "Sous le verre, il n’y a bientôt plus assez d’air : la bougie s’éteint.")}
+          ${bullets([
             "L’air est invisible mais il existe : il gonfle un ballon, fait tourner les éoliennes.",
             "Une bougie sous un verre retourné s’éteint : le feu a besoin de l’air (du dioxygène) pour brûler.",
             "Pour qu’il y ait un feu, il faut un combustible, de l’air et de la chaleur.",
@@ -175,7 +185,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "De la fleur à la graine",
-        body: `${bullets([
+        body: `${figure(schema("cm1-fleur-graine", "De la fleur au fruit, puis la graine germe et donne une jeune plante."), "La fleur fécondée devient un fruit ; la graine germe et donne une nouvelle plante.")}
+          ${bullets([
             "La <strong>fleur</strong> contient les étamines (qui produisent le pollen) et le pistil.",
             "Le pollen est transporté par le vent ou les insectes (abeilles) : c’est la <strong>pollinisation</strong>.",
             "La fleur devient un <strong>fruit</strong> qui contient des <strong>graines</strong>.",
@@ -193,7 +204,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Conserver les aliments",
-        body: `${tableau([
+        body: `${figure(row(pic("poisson", "le poisson séché (guedj)", 32), pic("mangue", "les mangues séchées", 46), pic("sac-riz", "le riz au sec", 48)), "Sécher, fumer, saler ou garder au frais : on conserve les aliments.")}
+          ${tableau([
             ["Technique", "Exemples"],
             ["séchage", "poisson séché (guedj), viande séchée (kilichi), mangues séchées"],
             ["fumage", "poisson fumé (kéthiakh)"],
@@ -213,7 +225,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Circuit, conducteurs et isolants",
-        body: `${bullets([
+        body: `${figure(schema("ce2-circuit", "Un circuit électrique fermé."), "Les fils en métal sont conducteurs ; le plastique qui les entoure est isolant.")}
+          ${bullets([
             "Un circuit électrique comprend une source (pile), des fils, un interrupteur et une ampoule.",
             "Les métaux sont <strong>conducteurs</strong> ; le plastique, le bois sec et le caoutchouc sont <strong>isolants</strong>.",
             "Le courant de la maison (220 V) peut tuer : on ne touche pas les fils dénudés et on ne met rien dans les prises.",
@@ -231,7 +244,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Qui administre le territoire ?",
-        body: `${tableau([
+        body: `${figure(schema("sn-regions", "Carte du Sénégal et de ses 14 régions."), "Le Sénégal compte 14 régions ; chaque région est dirigée par un gouverneur.")}
+          ${tableau([
             ["Circonscription", "Autorité"],
             ["région", "gouverneur"],
             ["département", "préfet ; un conseil départemental élu"],
@@ -250,7 +264,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Les droits de l’enfant",
-        body: `${bullets([
+        body: `${figure(row(pic("ecole", "l’éducation", 50), pic("medicament", "la santé", 42), pic("ballon", "le jeu", 36)), "Tout enfant a droit à l’éducation, à la santé et au jeu.")}
+          ${bullets([
             "Tout enfant a droit à un nom et à une nationalité (l’acte de naissance), à la santé, à l’éducation, au jeu et à la protection.",
             "Il doit être protégé contre la violence, le travail dangereux, la mendicité forcée et le mariage précoce.",
             "En échange, il a des devoirs : respecter les autres, étudier, aider sa famille selon son âge.",
@@ -267,7 +282,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Circuler en sécurité",
-        body: `${bullets([
+        body: `${figure(schema("cm1-passage-pieton", "Une route, un passage piéton et un feu."), "Je traverse au passage piéton, au feu vert pour les piétons, après avoir regardé des deux côtés.")}
+          ${bullets([
             "Je marche sur le trottoir ou, s’il n’y en a pas, sur le bord gauche de la route, face aux voitures.",
             "Je traverse au passage piéton, quand le feu des piétons est vert, après avoir regardé à gauche puis à droite.",
             "Je ne joue pas au bord de la route ; je ne monte pas dans un véhicule surchargé.",
@@ -291,7 +307,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Se protéger des maladies",
-        body: `${tableau([
+        body: `${figure(row(pic("savon", "se laver les mains", 34), pic("verre-eau", "boire de l’eau potable", 44), pic("moustiquaire", "dormir sous une moustiquaire", 58)), "L’hygiène, l’eau potable et la moustiquaire protègent de nombreuses maladies.")}
+          ${tableau([
             ["Maladie", "Cause", "Prévention"],
             ["diarrhée, choléra", "eau ou aliments souillés", "eau potable, lavage des mains, aliments couverts"],
             ["vers intestinaux", "mains sales, marcher pieds nus", "se laver les mains, porter des chaussures, déparasiter"],
@@ -309,7 +326,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Réduire, trier, recycler",
-        body: `${bullets([
+        body: `${figure(row(pic("poubelle", "trier les déchets", 56), pic("jouet", "recycler les objets", 34)), "Moins de sachets plastiques, des déchets triés, des objets réutilisés.")}
+          ${bullets([
             "Les sachets plastiques mettent des centaines d’années à disparaître ; ils tuent les animaux qui les avalent et bouchent les canalisations.",
             "Brûler les ordures dégage des fumées toxiques.",
             "On peut <strong>réduire</strong> (sac en tissu), <strong>réutiliser</strong> (bouteilles), <strong>recycler</strong> (plastique, métal, papier) et faire du compost avec les épluchures.",
@@ -326,7 +344,8 @@ export const ESVS_CM1: CiChapterSpec[] = [
     lessons: [
       {
         title: "Gérer les ressources naturelles",
-        body: `${tableau([
+        body: `${figure(row(pic("fontaine", "l’eau", 58), pic("arbre", "la forêt", 58), pic("poisson", "les poissons", 28)), "On protège l’eau, les forêts et les poissons pour les générations futures.")}
+          ${tableau([
             ["Ressource", "Menace", "Bonne pratique"],
             ["eau", "gaspillage, pollution", "fermer les robinets, protéger les puits"],
             ["sol", "érosion, surpâturage", "diguettes, jachère, engrais naturels"],

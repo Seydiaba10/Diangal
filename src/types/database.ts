@@ -99,6 +99,7 @@ export type Database = {
           exam_type: Database["public"]["Enums"]["exam_type"] | null
           exam_year: number | null
           id: string
+          intro_html: string
           is_premium: boolean
           kind: Database["public"]["Enums"]["assessment_kind"]
           level_id: number
@@ -112,6 +113,7 @@ export type Database = {
           title: string
           updated_at: string
           verification: Database["public"]["Enums"]["content_verification"]
+          workbook: Json | null
         }
         Insert: {
           chapter_id?: string | null
@@ -121,6 +123,7 @@ export type Database = {
           exam_type?: Database["public"]["Enums"]["exam_type"] | null
           exam_year?: number | null
           id?: string
+          intro_html?: string
           is_premium?: boolean
           kind: Database["public"]["Enums"]["assessment_kind"]
           level_id: number
@@ -134,6 +137,7 @@ export type Database = {
           title: string
           updated_at?: string
           verification?: Database["public"]["Enums"]["content_verification"]
+          workbook?: Json | null
         }
         Update: {
           chapter_id?: string | null
@@ -143,6 +147,7 @@ export type Database = {
           exam_type?: Database["public"]["Enums"]["exam_type"] | null
           exam_year?: number | null
           id?: string
+          intro_html?: string
           is_premium?: boolean
           kind?: Database["public"]["Enums"]["assessment_kind"]
           level_id?: number
@@ -156,6 +161,7 @@ export type Database = {
           title?: string
           updated_at?: string
           verification?: Database["public"]["Enums"]["content_verification"]
+          workbook?: Json | null
         }
         Relationships: [
           {
@@ -1606,6 +1612,7 @@ export type Database = {
           prompt_html: string
           slug: string | null
           status: Database["public"]["Enums"]["publish_status"]
+          stem_html: string
           subject_id: number
           tags: string[]
           type: Database["public"]["Enums"]["question_type"]
@@ -1619,6 +1626,7 @@ export type Database = {
           prompt_html: string
           slug?: string | null
           status?: Database["public"]["Enums"]["publish_status"]
+          stem_html?: string
           subject_id: number
           tags?: string[]
           type: Database["public"]["Enums"]["question_type"]
@@ -1632,6 +1640,7 @@ export type Database = {
           prompt_html?: string
           slug?: string | null
           status?: Database["public"]["Enums"]["publish_status"]
+          stem_html?: string
           subject_id?: number
           tags?: string[]
           type?: Database["public"]["Enums"]["question_type"]
@@ -2756,6 +2765,7 @@ export type Database = {
           title: string
           total_points: number
           verification: Database["public"]["Enums"]["content_verification"]
+          workbook: Json
         }[]
       }
       get_attempt_review: { Args: { p_attempt: string }; Returns: Json }
@@ -2944,6 +2954,7 @@ export type Database = {
         | "true_false"
         | "short_text"
         | "numeric"
+        | "self_check"
       referral_status:
         | "pending"
         | "qualified"
@@ -3121,6 +3132,7 @@ export const Constants = {
         "true_false",
         "short_text",
         "numeric",
+        "self_check",
       ],
       referral_status: [
         "pending",

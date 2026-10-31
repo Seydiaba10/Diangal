@@ -30,6 +30,10 @@ export function parseNumber(value: string): number | null {
   return match ? Number(match[0]) : null;
 }
 
+/** Réponses d'une question self_check : l'élève a comparé avec le corrigé puis s'est évalué. */
+export const SELF_CHECK_SUCCESS = "reussi";
+export const SELF_CHECK_RETRY = "a_revoir";
+
 export interface GradeOutcome {
   isCorrect: boolean;
   pointsAwarded: number;
@@ -84,6 +88,9 @@ export function gradeAnswer(
       if (!answer) return none;
       return (key.acceptedTexts ?? []).some((accepted) => normalizeText(accepted) === answer) ? full : none;
     }
+    case "self_check":
+      // Auto-évaluation : pas de corrigé secret, l'élève déclare avoir réussi après comparaison.
+      return asText(response) === SELF_CHECK_SUCCESS ? full : none;
   }
 }
 

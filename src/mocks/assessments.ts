@@ -26,7 +26,8 @@ const chapterNumber = new Map(CATALOG_CHAPTERS.map((c) => [c.id, c.number]));
 
 function withFreeTier(a: Assessment): Assessment {
   const number = a.chapterId ? chapterNumber.get(a.chapterId) : undefined;
-  if (number === undefined || (a.kind !== "exercise" && a.kind !== "quiz")) return a;
+  // Les pages des cahiers officiels restent ouvertes à tous (comme private.sync_free_tier).
+  if (number === undefined || a.workbook || (a.kind !== "exercise" && a.kind !== "quiz")) return a;
   return { ...a, isPremium: !isFreeChapter(number) };
 }
 

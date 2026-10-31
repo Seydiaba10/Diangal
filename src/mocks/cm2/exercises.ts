@@ -1,223 +1,45 @@
 import "server-only";
 
-// Exercices corrigés du CM2 : une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
-// relire par des enseignants). Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// Exercices corrigés du CM2 : en maths, une série par leçon du cahier de l’école (maths/) ; ailleurs,
+// une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
+// relire par des enseignants), complétée par les questions illustrées de cm2/enrich.ts.
+// Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
 
 import { CHAPTERS_CM2 } from "../curriculum-cm2";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withExtras } from "../illustrated-questions";
+import { EXTRA_CM2 } from "./enrich";
+import { CIRCLES_CM2, QUADS_CM2, SOLIDS_CM2, SYMMETRY_CM2 } from "./maths/geometrie";
+import { AREAS_CM2, CAPACITIES_CM2, DURATIONS_CM2, INTERESTS_CM2, LENGTHS_CM2, PRICES_CM2, SHARES_CM2, VOLUMES_CM2 } from "./maths/mesure";
+import { BIG_CM2, DECIMAL_OPS_CM2, DECIMALS_CM2, DIVISIBILITY_CM2, FRACTION_OPS_CM2, FRACTIONS_CM2, OPS_CM2, PERCENT_CM2 } from "./maths/nombres";
+import { CHARTS_CM2, METHOD_CM2, UNDERSTAND_CM2 } from "./maths/problemes";
 
 const SERIES: ExerciseSeries[] = [
-  // ── Mathématiques : activités numériques ──────────────────────────────────
-  {
-    subject: "MATH",
-    chapter: "Les grands nombres",
-    questions: [
-      { qcm: "« Deux millions trois cent mille » s’écrit…", choices: ["2 030 000", "*2 300 000", "2 000 300"], why: "2 millions et 300 mille : 2 300 000." },
-      { num: "Quel est le chiffre des centaines de mille dans 4 572 316 ?", answer: 5, why: "4 | 572 | 316 : 5 centaines de mille." },
-      { vf: "1 250 000 est plus grand que 1 205 000.", answer: true, why: "Au rang des dizaines de mille : 5 &gt; 0." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les caractères de divisibilité",
-    questions: [
-      { qcm: "Lequel de ces nombres est divisible par 3 ?", choices: ["452", "*513", "731"], why: "5 + 1 + 3 = 9, divisible par 3." },
-      { vf: "2 345 est divisible par 5.", answer: true, why: "Il se termine par 5." },
-      { qcm: "Un nombre divisible par 2 et par 5 est divisible par…", choices: ["3", "*10", "25"], why: "Il se termine par 0." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les quatre opérations sur les grands nombres",
-    questions: [
-      { num: "Calcule 125 × 24.", answer: 3000, why: "125 × 24 = 125 × 4 × 6 = 500 × 6 = 3 000." },
-      { num: "Calcule 7 200 ÷ 24.", answer: 300, why: "24 × 300 = 7 200." },
-      { num: "Dans la division de 100 par 7, quel est le reste ?", answer: 2, why: "7 × 14 = 98 et 100 − 98 = 2." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les nombres décimaux",
-    questions: [
-      { qcm: "Le plus grand de ces nombres est…", choices: ["3,45", "*3,5", "3,405"], why: "3,5 = 3,500, plus grand que 3,450 et 3,405." },
-      { qcm: "45 centièmes s’écrit…", choices: ["4,5", "*0,45", "0,045"], why: "45/100 = 0,45." },
-      { vf: "2,50 est égal à 2,5.", answer: true, why: "Un zéro à la fin de la partie décimale ne change rien." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Opérations sur les nombres décimaux",
-    questions: [
-      { num: "Calcule 12,5 + 3,75.", answer: 16.25, why: "12,50 + 3,75 = 16,25." },
-      { num: "Calcule 2,5 × 4.", answer: 10, why: "25 × 4 = 100, avec un chiffre après la virgule : 10,0." },
-      { num: "Calcule 3,6 ÷ 100.", answer: 0.036, why: "On déplace la virgule de deux rangs vers la gauche." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les fractions",
-    questions: [
-      { qcm: "La forme simplifiée de 12/18 est…", choices: ["6/8", "*2/3", "3/4"], why: "On divise par 6 : 12/18 = 2/3." },
-      { qcm: "Laquelle de ces fractions est plus grande que 1 ?", choices: ["3/4", "5/5", "*7/4"], why: "Le numérateur est plus grand que le dénominateur." },
-      { vf: "1/3 est plus grand que 1/5.", answer: true, why: "Même numérateur : le plus petit dénominateur donne la plus grande fraction." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Opérations sur les fractions",
-    questions: [
-      { qcm: "1/2 + 1/4 =", choices: ["2/6", "*3/4", "1/6"], why: "1/2 = 2/4, donc 2/4 + 1/4 = 3/4." },
-      { num: "Combien valent les 3/4 de 2 000 F ?", answer: 1500, why: "2 000 ÷ 4 = 500 ; 500 × 3 = 1 500 F." },
-      { num: "Les 2/5 d’une somme valent 400 F. Quelle est cette somme (en F) ?", answer: 1000, why: "Une part : 400 ÷ 2 = 200 ; la somme : 200 × 5 = 1 000 F." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Pourcentages, échelles et proportionnalité",
-    questions: [
-      { num: "Calcule 20 % de 5 000 F.", answer: 1000, why: "5 000 × 20 ÷ 100 = 1 000 F." },
-      { num: "Sur une carte à 1/100 000, 3 cm représentent combien de kilomètres ?", answer: 3, why: "3 × 100 000 cm = 300 000 cm = 3 km." },
-      { num: "2 kg de sucre coûtent 1 400 F. Combien coûtent 5 kg (en F) ?", answer: 3500, why: "1 kg : 700 F ; 5 kg : 3 500 F." },
-    ],
-  },
-  // ── Mathématiques : géométrie ──────────────────────────────────────────────
-  {
-    subject: "MATH",
-    chapter: "Les quadrilatères et le triangle",
-    questions: [
-      { qcm: "Un quadrilatère qui a 4 côtés égaux et 4 angles droits est…", choices: ["un losange", "*un carré", "un trapèze"], why: "Le carré a 4 côtés égaux et 4 angles droits." },
-      { num: "Dans un triangle, deux angles mesurent 50° et 70°. Combien mesure le troisième (en degrés) ?", answer: 60, why: "180 − 50 − 70 = 60°." },
-      { vf: "Un trapèze a deux côtés parallèles.", answer: true, why: "Ce sont ses deux bases." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Le cercle et les polygones",
-    questions: [
-      { num: "Le rayon d’un cercle mesure 4 cm. Combien mesure son diamètre (en cm) ?", answer: 8, why: "d = 2 × r = 8 cm." },
-      { qcm: "Un polygone à 6 côtés s’appelle…", choices: ["un pentagone", "*un hexagone", "un octogone"], why: "6 côtés : hexagone." },
-      { qcm: "Un octogone a…", choices: ["6 côtés", "*8 côtés", "10 côtés"], why: "Octo = 8." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les solides",
-    questions: [
-      { num: "Combien un cube a-t-il de faces ?", answer: 6, why: "6 faces carrées identiques." },
-      { num: "Combien un pavé droit a-t-il d’arêtes ?", answer: 12, why: "Comme le cube, il a 12 arêtes." },
-      { qcm: "Les bases d’un cylindre sont…", choices: ["des carrés", "*des disques", "des triangles"], why: "Deux disques identiques." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Symétrie, translation, agrandissement et réduction",
-    questions: [
-      { num: "Combien un carré a-t-il d’axes de symétrie ?", answer: 4, why: "Les deux médianes et les deux diagonales." },
-      { qcm: "On agrandit 3 fois un segment de 5 cm. Il mesure…", choices: ["8 cm", "*15 cm", "53 cm"], why: "5 × 3 = 15 cm." },
-      { vf: "Une translation fait tourner une figure.", answer: false, why: "Elle la fait glisser sans la tourner." },
-    ],
-  },
-  // ── Mathématiques : mesure ─────────────────────────────────────────────────
-  {
-    subject: "MATH",
-    chapter: "Longueurs et périmètres",
-    questions: [
-      { num: "Convertis 3,5 km en mètres.", answer: 3500, why: "1 km = 1 000 m." },
-      { num: "Calcule le périmètre (en m) d’un rectangle de 30 m sur 20 m.", answer: 100, why: "(30 + 20) × 2 = 100 m." },
-      { num: "Calcule le périmètre (en cm) d’un cercle de 10 cm de diamètre (π ≈ 3,14).", answer: 31.4, why: "10 × 3,14 = 31,4 cm." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Capacités, masses et angles",
-    questions: [
-      { num: "Combien de centilitres y a-t-il dans 2 L ?", answer: 200, why: "1 L = 100 cL." },
-      { num: "Une boîte pèse 500 g en tout ; l’emballage pèse 80 g. Quelle est la masse nette (en g) ?", answer: 420, why: "500 − 80 = 420 g." },
-      { qcm: "Un angle de 120° est…", choices: ["aigu", "droit", "*obtus"], why: "Entre 90° et 180°." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les aires",
-    questions: [
-      { num: "Calcule l’aire (en m²) d’un rectangle de 12 m sur 8 m.", answer: 96, why: "12 × 8 = 96 m²." },
-      { num: "Calcule l’aire (en cm²) d’un triangle de base 10 cm et de hauteur 6 cm.", answer: 30, why: "10 × 6 ÷ 2 = 30 cm²." },
-      { num: "Combien de mètres carrés y a-t-il dans 1 hectare ?", answer: 10000, why: "1 ha = 1 hm² = 10 000 m²." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les volumes",
-    questions: [
-      { num: "Calcule le volume (en cm³) d’un cube de 3 cm d’arête.", answer: 27, why: "3 × 3 × 3 = 27 cm³." },
-      { num: "Combien de litres contient un récipient de 1 m³ ?", answer: 1000, why: "1 m³ = 1 000 dm³ = 1 000 L." },
-      { num: "Calcule le volume (en m³) d’un pavé de 4 m × 2 m × 1,5 m.", answer: 12, why: "4 × 2 × 1,5 = 12 m³." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Durées, vitesse et débit",
-    questions: [
-      { num: "Combien de minutes y a-t-il dans 2 h 15 min ?", answer: 135, why: "2 × 60 + 15 = 135 min." },
-      { num: "Une voiture roule à 80 km/h pendant 3 h. Quelle distance parcourt-elle (en km) ?", answer: 240, why: "d = v × t = 80 × 3 = 240 km." },
-      { num: "Un robinet débite 10 L par minute. En combien de minutes remplit-il un fût de 200 L ?", answer: 20, why: "200 ÷ 10 = 20 min." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Prix, budget et pourcentages",
-    questions: [
-      { num: "Prix d’achat 8 000 F, frais 500 F, prix de vente 10 000 F. Quel est le bénéfice (en F) ?", answer: 1500, why: "Prix de revient : 8 500 F ; bénéfice : 10 000 − 8 500 = 1 500 F." },
-      { qcm: "Si le prix de vente est inférieur au prix de revient, il y a…", choices: ["un bénéfice", "*une perte", "une économie"], why: "On vend moins cher que ce que l’objet a coûté." },
-      { num: "Une remise de 10 % sur 6 000 F : combien paie-t-on (en F) ?", answer: 5400, why: "Remise : 600 F ; prix payé : 5 400 F." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Les intérêts",
-    questions: [
-      { num: "Quel intérêt (en F) rapportent 50 000 F placés à 4 % pendant 1 an ?", answer: 2000, why: "50 000 × 4 × 1 ÷ 100 = 2 000 F." },
-      { num: "Quel intérêt (en F) rapportent 100 000 F placés à 5 % pendant 2 ans ?", answer: 10000, why: "100 000 × 5 × 2 ÷ 100 = 10 000 F." },
-      { vf: "Le capital augmenté de ses intérêts s’appelle la valeur acquise.", answer: true, why: "C’est la définition." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Partages et moyenne",
-    questions: [
-      { num: "Deux frères se partagent 3 000 F ; l’aîné reçoit 1 000 F de plus. Combien reçoit le cadet (en F) ?", answer: 1000, why: "3 000 − 1 000 = 2 000 ; 2 000 ÷ 2 = 1 000 F." },
-      { num: "Calcule la moyenne de 10, 12 et 14.", answer: 12, why: "36 ÷ 3 = 12." },
-      { num: "On partage 9 000 F en parts proportionnelles à 1 et 2. Combien vaut la plus grande part (en F) ?", answer: 6000, why: "3 parts : 3 000 F l’une ; la plus grande : 6 000 F." },
-    ],
-  },
-  // ── Mathématiques : résolution de problèmes ────────────────────────────────
-  {
-    subject: "MATH",
-    chapter: "Comprendre l’énoncé d’un problème",
-    questions: [
-      { qcm: "« Awa, 11 ans, achète 4 stylos à 150 F. Combien paie-t-elle ? » La donnée inutile est…", choices: ["4 stylos", "150 F", "*11 ans"], why: "L’âge ne sert pas au calcul." },
-      { num: "Combien paie Awa (en F) ?", answer: 600, why: "4 × 150 = 600 F." },
-      { vf: "Une question intermédiaire aide à répondre à la question finale.", answer: true, why: "On la résout d’abord." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Tableaux, schémas et graphiques",
-    questions: [
-      { num: "Une facture : 3 cahiers à 250 F et 2 stylos à 100 F. Quel est le total (en F) ?", answer: 950, why: "750 + 200 = 950 F." },
-      { num: "On paie cette facture avec 1 000 F. Combien rend-on (en F) ?", answer: 50, why: "1 000 − 950 = 50 F." },
-      { qcm: "Pour montrer l’évolution de la température dans la journée, on utilise surtout…", choices: ["un tableau de prix", "*une courbe", "un patron"], why: "La courbe montre une évolution." },
-    ],
-  },
-  {
-    subject: "MATH",
-    chapter: "Démarches de résolution et vérification",
-    questions: [
-      { num: "Il me reste 1 500 F après avoir dépensé 2 500 F. Combien avais-je (en F) ?", answer: 4000, why: "Démarche régressive : 1 500 + 2 500 = 4 000 F." },
-      { qcm: "Pour vérifier une soustraction, on fait…", choices: ["une multiplication", "*une addition", "une division"], why: "C’est l’opération inverse." },
-      { vf: "Une réponse de problème doit préciser l’unité.", answer: true, why: "Par exemple « 600 F » ou « 12 m »." },
-    ],
-  },
+  // ── Mathématiques (une série par leçon du cahier de l'école : maths/) ──
+  ...BIG_CM2,
+  ...DIVISIBILITY_CM2,
+  ...OPS_CM2,
+  ...DECIMALS_CM2,
+  ...DECIMAL_OPS_CM2,
+  ...FRACTIONS_CM2,
+  ...FRACTION_OPS_CM2,
+  ...PERCENT_CM2,
+  ...QUADS_CM2,
+  ...CIRCLES_CM2,
+  ...SOLIDS_CM2,
+  ...SYMMETRY_CM2,
+  ...LENGTHS_CM2,
+  ...CAPACITIES_CM2,
+  ...AREAS_CM2,
+  ...VOLUMES_CM2,
+  ...DURATIONS_CM2,
+  ...PRICES_CM2,
+  ...INTERESTS_CM2,
+  ...SHARES_CM2,
+  ...UNDERSTAND_CM2,
+  ...CHARTS_CM2,
+  ...METHOD_CM2,
+
   // ── Français ───────────────────────────────────────────────────────────────
   {
     subject: "FR",
@@ -528,7 +350,7 @@ const SERIES: ExerciseSeries[] = [
   },
 ];
 
-const built = buildExerciseSeries("CM2", CHAPTERS_CM2, SERIES);
+const built = buildExerciseSeries("CM2", CHAPTERS_CM2, withExtras(SERIES, EXTRA_CM2));
 
 export const QUESTIONS_CM2 = built.questions;
 export const ANSWER_KEYS_CM2 = built.keys;

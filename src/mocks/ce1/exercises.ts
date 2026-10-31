@@ -1,98 +1,40 @@
 import "server-only";
 
-// Exercices corrigés du CE1 : une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
-// relire par des enseignants). Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// Exercices corrigés du CE1, écrits par DIANGAL d’après les leçons (à faire relire par des enseignants) :
+// en maths, plusieurs séries par chapitre (src/mocks/ce1/maths/, pas de cahier d’école au CE1) ; en
+// français et en ESVS, une série par chapitre, complétée par les questions illustrées de ce1/enrich.ts.
+// Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
 
 import { CHAPTERS_CE1 } from "../curriculum-ce1";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withExtras } from "../illustrated-questions";
+import { EXTRA_CE1 } from "./enrich";
+import { LINES_CE1, SHAPES_CE1 } from "./maths/geometrie";
+import { CAPACITIES_CE1, LENGTHS_CE1, MASSES_CE1, MONEY_CE1, PERIMETERS_CE1, TIME_CE1 } from "./maths/mesure";
+import { NUMBERS_1000_CE1, NUMBERS_10000_CE1, NUMBERS_500_CE1 } from "./maths/nombres";
+import { ADDITION_CE1, DIVISION_CE1, MULTIPLICATION_CE1, SUBTRACTION_CE1 } from "./maths/operations";
+import { DATA_CE1, PROBLEM_QUESTIONS_CE1 } from "./maths/problemes";
 
 const SERIES: ExerciseSeries[] = [
-  // ── Mathématiques ──────────────────────────────────────────────────────────
-  { subject: "MATH", chapter: "Les nombres jusqu’à 500", questions: [
-    { num: "Écris en chiffres : trois cent quarante-sept.", answer: 347, why: "3 centaines, 4 dizaines, 7 unités." },
-    { num: "Quel est le double de 25 ?", answer: 50, why: "25 + 25 = 50." },
-    { vf: "36 est un nombre pair.", answer: true, why: "Il se termine par 6." },
-  ] },
-  { subject: "MATH", chapter: "Les nombres jusqu’à 1 000", questions: [
-    { num: "Complète : 999 + 1 = …", answer: 1000, why: "Après 999 vient 1 000." },
-    { qcm: "Le plus grand nombre est…", choices: ["712", "*721", "698"], why: "7 centaines et 2 dizaines : 721." },
-    { num: "Combien faut-il ajouter à 600 pour avoir 1 000 ?", answer: 400, why: "600 + 400 = 1 000." },
-  ] },
-  { subject: "MATH", chapter: "Les nombres jusqu’à 10 000", questions: [
-    { num: "Écris en chiffres : quatre mille deux cent cinq.", answer: 4205, why: "4 000 + 200 + 5." },
-    { qcm: "Quel signe faut-il entre 5 432 et 5 621 ?", choices: ["&gt;", "*&lt;", "="], why: "4 centaines &lt; 6 centaines." },
-    { vf: "Le chiffre des milliers de 7 089 est 7.", answer: true, why: "7 unités de mille." },
-  ] },
-  { subject: "MATH", chapter: "L’addition", questions: [
-    { num: "Calcule 368 + 254.", answer: 622, why: "8 + 4 = 12, je retiens 1 ; 6 + 5 + 1 = 12, je retiens 1 ; 3 + 2 + 1 = 6." },
-    { num: "Moussa a 350 F, on lui donne 200 F. Combien a-t-il en tout ?", answer: 550, why: "350 + 200 = 550 F." },
-    { num: "Calcule 125 + 75.", answer: 200, why: "125 + 75 = 200." },
-  ] },
-  { subject: "MATH", chapter: "La soustraction", questions: [
-    { num: "Calcule 742 − 318.", answer: 424, why: "Vérification : 424 + 318 = 742." },
-    { num: "Awa a 500 F. Elle achète du pain à 150 F. Combien lui reste-t-il ?", answer: 350, why: "500 − 150 = 350 F." },
-    { qcm: "Pour vérifier une soustraction, je fais…", choices: ["une multiplication", "*une addition", "une division"], why: "Résultat + nombre enlevé = premier nombre." },
-  ] },
-  { subject: "MATH", chapter: "La multiplication", questions: [
-    { num: "Calcule 6 × 4.", answer: 24, why: "6 + 6 + 6 + 6 = 24." },
-    { num: "Un cahier coûte 125 F. Combien coûtent 4 cahiers ?", answer: 500, why: "125 × 4 = 500 F." },
-    { num: "Quel est le triple de 7 ?", answer: 21, why: "3 × 7 = 21." },
-  ] },
-  { subject: "MATH", chapter: "La division", questions: [
-    { num: "On partage 24 bonbons entre 6 enfants. Combien chacun en reçoit-il ?", answer: 4, why: "24 ÷ 6 = 4." },
-    { num: "17 ÷ 5 = 3. Quel est le reste ?", answer: 2, why: "5 × 3 = 15 et 17 − 15 = 2." },
-    { qcm: "Lequel est divisible par 5 ?", choices: ["22", "*35", "41"], why: "Il se termine par 5." },
-  ] },
-  { subject: "MATH", chapter: "Lignes et droites", questions: [
-    { qcm: "Deux droites qui ne se coupent jamais sont…", choices: ["sécantes", "*parallèles", "perpendiculaires"], why: "Elles restent à la même distance." },
-    { qcm: "Pour vérifier un angle droit, j’utilise…", choices: ["la règle", "*l’équerre", "le compas"], why: "L’équerre a un angle droit." },
-    { vf: "Une ligne brisée est faite de plusieurs segments.", answer: true, why: "C’est sa définition." },
-  ] },
-  { subject: "MATH", chapter: "Le carré et le rectangle", questions: [
-    { num: "Combien d’angles droits a un carré ?", answer: 4, why: "Ses 4 angles sont droits." },
-    { qcm: "Un rectangle a…", choices: ["4 côtés égaux", "*2 longueurs égales et 2 largeurs égales", "3 côtés"], why: "Côtés opposés égaux." },
-    { vf: "Les diagonales d’un carré ont la même longueur.", answer: true, why: "Elles se coupent en leur milieu." },
-  ] },
-  { subject: "MATH", chapter: "Mesurer des longueurs", questions: [
-    { num: "Combien de centimètres y a-t-il dans 1 mètre ?", answer: 100, why: "1 m = 100 cm." },
-    { num: "Convertis 3 m en centimètres.", answer: 300, why: "3 × 100 = 300 cm." },
-    { num: "Combien de millimètres y a-t-il dans 1 cm ?", answer: 10, why: "1 cm = 10 mm." },
-  ] },
-  { subject: "MATH", chapter: "Mesurer des capacités", questions: [
-    { num: "Combien de décilitres y a-t-il dans 1 litre ?", answer: 10, why: "1 L = 10 dL." },
-    { num: "Combien de verres de 20 cL remplit-on avec 1 L ?", answer: 5, why: "1 L = 100 cL et 100 ÷ 20 = 5." },
-    { qcm: "On mesure l’eau d’un seau en…", choices: ["mètres", "*litres", "kilogrammes"], why: "C’est une capacité." },
-  ] },
-  { subject: "MATH", chapter: "Les masses", questions: [
-    { num: "Combien de grammes y a-t-il dans 1 kg ?", answer: 1000, why: "1 kg = 1 000 g." },
-    { num: "Combien de paquets de 250 g faut-il pour faire 1 kg ?", answer: 4, why: "4 × 250 = 1 000 g." },
-    { qcm: "On pèse un sac de riz en…", choices: ["*kilogrammes", "litres", "mètres"], why: "C’est une masse." },
-  ] },
-  { subject: "MATH", chapter: "Le temps", questions: [
-    { num: "Combien de jours y a-t-il dans une semaine ?", answer: 7, why: "Du lundi au dimanche." },
-    { num: "Combien de minutes y a-t-il dans une heure ?", answer: 60, why: "1 h = 60 min." },
-    { num: "Combien de mois y a-t-il dans une année ?", answer: 12, why: "De janvier à décembre." },
-  ] },
-  { subject: "MATH", chapter: "Le périmètre du carré et du rectangle", questions: [
-    { num: "Calcule le périmètre (en cm) d’un carré de 6 cm de côté.", answer: 24, why: "6 × 4 = 24 cm." },
-    { num: "Calcule le périmètre (en m) d’un rectangle de 8 m sur 3 m.", answer: 22, why: "(8 + 3) × 2 = 22 m." },
-    { vf: "Le périmètre est la longueur du tour d’une figure.", answer: true, why: "C’est sa définition." },
-  ] },
-  { subject: "MATH", chapter: "La monnaie et les prix", questions: [
-    { num: "Combien de pièces de 100 F faut-il pour faire 1 000 F ?", answer: 10, why: "10 × 100 = 1 000." },
-    { num: "Un pain coûte 150 F. Je paie avec 200 F. Combien me rend-on ?", answer: 50, why: "200 − 150 = 50 F." },
-    { num: "Prix d’achat 2 000 F, transport 300 F. Quel est le prix de revient (en F) ?", answer: 2300, why: "2 000 + 300 = 2 300 F." },
-  ] },
-  { subject: "MATH", chapter: "Les données d’un problème", questions: [
-    { qcm: "« Fatou a 8 ans. Elle achète 3 mangues à 100 F. » La donnée inutile pour trouver le prix est…", choices: ["3 mangues", "100 F", "*8 ans"], why: "L’âge ne sert pas au calcul." },
-    { num: "Combien Fatou paie-t-elle ?", answer: 300, why: "3 × 100 = 300 F." },
-    { vf: "Une donnée manquante empêche de répondre à la question.", answer: true, why: "Il faut la connaître pour calculer." },
-  ] },
-  { subject: "MATH", chapter: "Les questions d’un problème", questions: [
-    { num: "Modou achète 2 cahiers à 200 F et un stylo à 100 F. Combien dépense-t-il ?", answer: 500, why: "2 × 200 + 100 = 500 F." },
-    { num: "Il donne 1 000 F. Combien lui rend-on ?", answer: 500, why: "1 000 − 500 = 500 F." },
-    { vf: "La question intermédiaire aide à répondre à la question finale.", answer: true, why: "On la résout d’abord." },
-  ] },
+  // ── Mathématiques (séries DIANGAL, progression du CP au CE2 : src/mocks/ce1/maths/) ──
+  ...NUMBERS_500_CE1,
+  ...NUMBERS_1000_CE1,
+  ...NUMBERS_10000_CE1,
+  ...ADDITION_CE1,
+  ...SUBTRACTION_CE1,
+  ...MULTIPLICATION_CE1,
+  ...DIVISION_CE1,
+  ...LINES_CE1,
+  ...SHAPES_CE1,
+  ...LENGTHS_CE1,
+  ...CAPACITIES_CE1,
+  ...MASSES_CE1,
+  ...TIME_CE1,
+  ...PERIMETERS_CE1,
+  ...MONEY_CE1,
+  ...DATA_CE1,
+  ...PROBLEM_QUESTIONS_CE1,
+
   // ── Français ───────────────────────────────────────────────────────────────
   { subject: "FR", chapter: "Raconter, décrire et converser", questions: [
     { qcm: "Pour raconter dans l’ordre, j’utilise…", choices: ["*d’abord, ensuite, enfin", "rouge, vert, bleu", "devant, derrière"], why: "Ce sont des mots du temps." },
@@ -257,7 +199,7 @@ const SERIES: ExerciseSeries[] = [
   ] },
 ];
 
-const built = buildExerciseSeries("CE1", CHAPTERS_CE1, SERIES);
+const built = buildExerciseSeries("CE1", CHAPTERS_CE1, withExtras(SERIES, EXTRA_CE1));
 
 export const QUESTIONS_CE1 = built.questions;
 export const ANSWER_KEYS_CE1 = built.keys;

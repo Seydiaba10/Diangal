@@ -4,6 +4,7 @@
 // production d'écrits d'au moins deux phrases. Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { bullets, type CiChapterSpec, keyPoint, practice, soundLesson } from "../ci/blocks";
+import { figure, pic, row, schema } from "../lesson-figures";
 
 export const FR_CP: CiChapterSpec[] = [
   // ── Palier 5 : l'invitation ───────────────────────────────────────────────
@@ -15,6 +16,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Inviter quelqu’un",
         body: `<p>Pour <strong>inviter</strong> quelqu’un, on dit à quoi on l’invite, quand et où.</p>
+          ${figure(row(pic("eleve-fille", "Awa", 90), pic("ballon-baudruche", "la fête"), pic("eleve-garcon", "Modou", 90)), "« Modou, je t’invite à ma fête, samedi à 16 heures, chez moi. » : à quoi, quand et où.")}
           <h2>Je découvre</h2>
           ${bullets([
             "« Moussa, je t’invite à mon anniversaire samedi, à la maison. »",
@@ -27,6 +29,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Recommander quelque chose",
         body: `<p><strong>Recommander</strong>, c’est conseiller quelque chose à quelqu’un parce que c’est bien pour lui.</p>
+          ${figure(row(pic("moustiquaire", "la moustiquaire", 72)), "« Je te recommande de dormir sous une moustiquaire : elle te protège du paludisme. »")}
           <h2>Je découvre</h2>
           ${bullets([
             "« Je te recommande ce livre : l’histoire est très drôle. »",
@@ -46,6 +49,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Les sons du CI",
         body: `<p>Au CI, tu as appris beaucoup de sons. On les relit pour bien commencer l’année.</p>
+          ${figure(row(pic("ballon", "ball<strong class=\"lf-hl\">on</strong>", 56, "ballon"), pic("roue", "r<strong class=\"lf-hl\">ou</strong>e", 56, "roue"), pic("lune", "l<strong class=\"lf-hl\">u</strong>ne", 56, "lune"), pic("moto", "m<strong class=\"lf-hl\">o</strong>to", 56, "moto")), "Des sons du CI : on, ou, u, o.")}
           <h2>Je relis</h2>
           ${bullets([
             "Les voyelles : <strong>a · e · i · o · u · é · è</strong>.",
@@ -59,6 +63,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Lire et comprendre un petit texte",
         body: `<p>Lire, ce n’est pas seulement dire les mots : c’est aussi <strong>comprendre</strong> l’histoire.</p>
+          ${figure(row(pic("livre", "je lis", 56), pic("eleve-fille", "je comprends l’histoire", 90)), "Après la lecture, je dis <strong>qui</strong>, <strong>où</strong> et <strong>ce qui se passe</strong>.")}
           <h2>Je lis</h2>
           <p><strong>Le ballon de Fatou</strong><br>Fatou a un ballon rouge. Elle joue avec Moussa dans la cour. Le ballon roule sous la moto de papa. Moussa le ramène. Fatou dit : « Merci ! »</p>
           <h2>Je comprends</h2>
@@ -78,6 +83,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Relater ce qu’on a fait",
         body: `<p>Pour raconter ce qu’on a fait, on dit les actions <strong>dans l’ordre</strong>.</p>
+          ${figure(schema("ci-journee", "Ma journée dans l’ordre : le matin, l’école, le repas, la nuit."), "Je raconte dans l’ordre : d’abord, ensuite, puis, enfin.")}
           <h2>Je découvre</h2>
           ${bullets([
             "« Hier, je suis allé au marché avec ma mère. »",
@@ -90,6 +96,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Raconter un conte",
         body: `<p>Un <strong>conte</strong> est une histoire inventée, souvent avec des animaux qui parlent.</p>
+          ${figure(row(pic("lapin", "Leuk, le lièvre", 70, "un lièvre"), pic("lion", "le lion", 70)), "Dans les contes, les animaux parlent : Leuk le lièvre est rusé.")}
           <h2>Je lis</h2>
           <p><strong>Leuk et la gourde</strong><br>Un jour de grande chaleur, Leuk le lièvre a très soif. Il trouve une gourde, mais il ne peut pas boire : l’eau est tout au fond. Leuk réfléchit. Il met des cailloux dans la gourde, un par un. L’eau monte, monte… et Leuk peut enfin boire !</p>
           ${keyPoint("Un conte commence souvent par « Il était une fois » ou « Un jour ». Il y a un problème, puis une solution.")}
@@ -98,6 +105,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Raconter une histoire en images",
         body: `<p>Une <strong>bande dessinée</strong> raconte une histoire avec des images, case après case.</p>
+          ${figure(row(pic("plante", "1. Awa plante une graine", 50), pic("arrosoir", "2. elle l’arrose", 50), pic("fleur", "3. une fleur pousse", 66)), "Une histoire en trois images, dans l’ordre.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Image 1 : Awa plante une graine dans un pot.",
@@ -117,6 +125,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son v",
         body: soundLesson({
+          pictures: [["vache","vache","v"],["velo","vélo","v"],["avion","avion","v"]],
           sound: "v",
           spellings: "v · V (et parfois w, comme dans wagon)",
           heardIn: ["vélo", "lave", "avion"],
@@ -129,6 +138,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son oi",
         body: soundLesson({
+          pictures: [["oiseau","oiseau","oi"],["etoile","étoile","oi"],["poisson","poisson","oi"]],
           sound: "oi",
           spellings: "oi",
           heardIn: ["roi", "moi", "étoile"],
@@ -148,6 +158,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son ch",
         body: soundLesson({
+          pictures: [["chat","chat","ch"],["chemise","chemise","ch"],["vache","vache","ch"]],
           sound: "ch",
           spellings: "ch (deux lettres pour un seul son)",
           heardIn: ["chat", "vache", "chocolat"],
@@ -160,6 +171,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Les écritures du son é",
         body: soundLesson({
+          pictures: [["bebe","bébé","é"],["panier","panier","er"],["cle","clé","é"]],
           sound: "é",
           spellings: "é · er · ez · es (dans les, des, mes, tes)",
           heardIn: ["bébé", "nez", "manger"],
@@ -179,6 +191,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son k : c, qu, q, k",
         body: soundLesson({
+          pictures: [["cahier","cahier","c"],["kora","kora","k"],["coq","coq","q"]],
           sound: "k",
           spellings: "c (ca, co, cu) · qu · q · k",
           heardIn: ["canard", "coq", "kilo"],
@@ -191,6 +204,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son f : f et ph",
         body: soundLesson({
+          pictures: [["fleur","fleur","f"],["telephone","téléphone","ph"],["feu","feu","f"]],
           sound: "f",
           spellings: "f · F · ph",
           heardIn: ["feu", "photo", "café"],
@@ -210,6 +224,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son eu : eu et œu",
         body: soundLesson({
+          pictures: [["feu","feu","eu"],["oeuf","œuf","œu"]],
           sound: "eu",
           spellings: "eu · œu",
           heardIn: ["feu", "cheveu", "sœur"],
@@ -222,6 +237,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son s : s, ss, c, ç",
         body: soundLesson({
+          pictures: [["tasse","tasse","ss"],["eleve-garcon","garçon","ç"],["ciseaux","ciseaux","c"]],
           sound: "s",
           spellings: "s · ss · c (ce, ci) · ç (ça, ço, çu)",
           heardIn: ["sac", "poisson", "garçon"],
@@ -234,6 +250,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Quand s se lit z",
         body: soundLesson({
+          pictures: [["maison","maison","s"],["oiseau","oiseau","s"],["chemise","chemise","s"]],
           sound: "z",
           spellings: "z · s entre deux voyelles",
           heardIn: ["maison", "rose", "zéro"],
@@ -253,6 +270,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son g : g et gu",
         body: soundLesson({
+          pictures: [["gomme","gomme","g"],["mangue","mangue","gu"],["grenouille","grenouille","g"]],
           sound: "g",
           spellings: "g (ga, go, gu) · gu (gue, gui)",
           heardIn: ["gâteau", "légume", "guitare"],
@@ -265,6 +283,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son j : j, ge, gi",
         body: soundLesson({
+          pictures: [["jouet","jouet","j"],["girafe","girafe","gi"],["orange","orange","ge"]],
           sound: "j",
           spellings: "j · g devant e, i, y (ge, gi)",
           heardIn: ["jupe", "girafe", "page"],
@@ -277,6 +296,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son gn",
         body: soundLesson({
+          pictures: [["oignon","oignon","gn"],["peigne","peigne","gn"]],
           sound: "gn",
           spellings: "gn",
           heardIn: ["montagne", "peigne", "agneau"],
@@ -296,6 +316,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son in : in, ain, ein",
         body: soundLesson({
+          pictures: [["lapin","lapin","in"],["pain","pain","ain"],["main","main","ain"]],
           sound: "in",
           spellings: "in · ain · ein",
           heardIn: ["lapin", "pain", "peinture"],
@@ -308,6 +329,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Le son an : an, en, am, em",
         body: soundLesson({
+          pictures: [["mangue","mangue","an"],["orange","orange","an"],["tambour","tambour","am"]],
           sound: "an",
           spellings: "an · en · am · em",
           heardIn: ["maman", "enfant", "lampe"],
@@ -327,6 +349,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Les lettres à boucle et à pont",
         body: `<p>Au CP, on écrit surtout en <strong>lettres attachées</strong> (cursives) : les lettres d’un mot se tiennent la main.</p>
+          ${figure(schema("ci-gestes", "Quatre gestes d’écriture : un trait, un rond, un pont et une boucle."), "Les lettres l, b et h ont une <strong>boucle</strong> ; m et n ont des <strong>ponts</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Révision des lettres rondes : <strong>o · c · a · d · q</strong>.",
@@ -339,6 +362,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Les dernières lettres cursives",
         body: `<p>On termine l’alphabet en lettres attachées.</p>
+          ${figure("<table><tr><td>a</td><td>b</td><td>c</td><td>d</td><td>e</td><td>f</td><td>g</td><td>h</td><td>i</td><td>j</td><td>k</td><td>l</td><td>m</td></tr><tr><td>n</td><td>o</td><td>p</td><td>q</td><td>r</td><td>s</td><td>t</td><td>u</td><td>v</td><td>w</td><td>x</td><td>y</td><td>z</td></tr></table>", "Les 26 lettres de l’alphabet : on termine de les écrire en lettres attachées.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Les lettres qui descendent sous la ligne : <strong>j · y · g</strong>.",
@@ -360,6 +384,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Décrire un objet ou un lieu",
         body: `<p><strong>Décrire</strong>, c’est dire comment est quelque chose pour que l’autre puisse l’imaginer.</p>
+          ${figure(row(pic("ecole", "l’école", 80)), "« L’école a un toit rouge, deux fenêtres et un drapeau. » : je dis ce que je vois.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Un objet : sa forme, sa couleur, sa taille, sa matière, son usage. « Mon cartable est bleu, en tissu, avec deux poches. »",
@@ -371,6 +396,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Décrire un animal ou une personne, et comparer",
         body: `<p>On peut décrire un animal ou une personne, puis les comparer.</p>
+          ${figure(row(pic("chat", "le chat : petit", 60), pic("chien", "le chien : plus grand")), "Le chien est <strong>plus grand que</strong> le chat.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Un animal : « Le zébu est grand. Il a des cornes et une bosse sur le dos. »",
@@ -390,6 +416,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "tr, pr, dr, br, cr, fr, gr",
         body: soundLesson({
+          pictures: [["train","train","tr"],["drapeau","drapeau","dr"],["crayon","crayon","cr"],["brosse-a-dents","brosse","br"]],
           sound: "r après une consonne",
           spellings: "tr · pr · dr · br · cr · fr · gr",
           heardIn: ["train", "prune", "arbre"],
@@ -402,6 +429,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "fl, pl, gl, bl, cl",
         body: soundLesson({
+          pictures: [["fleur","fleur","fl"],["plante","plante","pl"],["table","table","bl"],["cle","clé","cl"]],
           sound: "l après une consonne",
           spellings: "fl · pl · gl · bl · cl",
           heardIn: ["fleur", "plume", "table"],
@@ -421,6 +449,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "ac, oir et eur",
         body: soundLesson({
+          pictures: [["sac","sac","ac"],["arrosoir","arrosoir","oir"],["fleur","fleur","eur"]],
           sound: "oir et eur",
           spellings: "ac · oir · eur",
           heardIn: ["sac", "miroir", "fleur"],
@@ -433,6 +462,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "el, ec, es et les lettres muettes",
         body: `<p>Certaines lettres s’entendent, d’autres sont <strong>muettes</strong> : on les écrit, mais on ne les entend pas.</p>
+          ${figure(row(pic("nid", "ni<strong class=\"lf-hl\">d</strong>", 56, "nid"), pic("lit", "li<strong class=\"lf-hl\">t</strong>", 56, "lit"), pic("sac-riz", "ri<strong class=\"lf-hl\">z</strong>", 56, "riz")), "La lettre en couleur s’écrit, mais ne s’entend pas : c’est une lettre <strong>muette</strong>.")}
           <h2>Je lis</h2>
           <p>Le e se lit è devant une consonne qui se prononce : <strong>sel · bec · reste · ciel</strong>.</p>
           <p>Des lettres muettes à la fin des mots : <strong>chat · lit · nid · riz · loup · tapis</strong>.</p>
@@ -451,6 +481,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Donner une consigne",
         body: `<p>Pour faire faire quelque chose, on donne une <strong>consigne</strong> avec un verbe d’action.</p>
+          ${figure(row(pic("regle", "Prends ta règle.", 28), pic("crayon", "Trace un trait.", 28)), "Une consigne commence par un verbe d’action : prends, trace.")}
           <h2>Je découvre</h2>
           ${bullets([
             "« Ferme la porte, s’il te plaît. »",
@@ -463,6 +494,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Interdire quelque chose",
         body: `<p>Pour <strong>interdire</strong>, on dit ce qu’il ne faut pas faire, et on explique pourquoi.</p>
+          ${figure(row(pic("feu-tricolore", "Ne traverse pas au feu rouge !", 80), pic("javel", "Ne touche pas !", 70)), "Pour interdire : « Ne… pas », et on dit pourquoi : c’est dangereux.")}
           <h2>Je découvre</h2>
           ${bullets([
             "« Ne jette pas tes papiers par terre : la cour doit rester propre. »",
@@ -482,6 +514,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "-ette, -erre, -esse, -elle, -enne",
         body: soundLesson({
+          pictures: [["fourchette","fourchette","ette"],["verre-eau","verre","erre"],["poubelle","poubelle","elle"],["lunettes","lunettes","ette"]],
           sound: "è devant deux consonnes",
           spellings: "ette · erre · esse · elle · enne",
           heardIn: ["lunette", "terre", "pelle"],
@@ -494,6 +527,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "ill, ail, eil, euil, ouil",
         body: soundLesson({
+          pictures: [["eleve-fille","fille","ill"],["soleil","soleil","eil"],["feuille","feuille","euil"],["grenouille","grenouille","ouil"]],
           sound: "ill",
           spellings: "ill · ail · aill · eil · eill · euil · ouil · ouill",
           heardIn: ["fille", "soleil", "grenouille"],
@@ -513,6 +547,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "y, ier, ieu et ien",
         body: soundLesson({
+          pictures: [["cahier","cahier","ier"],["panier","panier","ier"],["chien","chien","ien"]],
           sound: "i suivi d’un autre son",
           spellings: "y (= deux i, comme dans crayon) · ier · iez · iau · ieu · ien",
           heardIn: ["crayon", "panier", "chien"],
@@ -525,6 +560,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "ui, oin, ion et les lettres h et x",
         body: soundLesson({
+          pictures: [["puits","puits","ui"],["camion","camion","ion"],["lion","lion","ion"],["taxi","taxi","x"]],
           sound: "ui, oin, ion",
           spellings: "ui · oin · ion (et sc, st, sp ; h muet ; x)",
           heardIn: ["nuit", "loin", "camion"],
@@ -544,6 +580,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Raconter par écrit",
         body: `<p>Au CP, tu écris de petits textes d’<strong>au moins deux phrases</strong>.</p>
+          ${figure(row(pic("eleve-garcon", "Modou", 80), pic("ballon", "joue au ballon", 46), pic("lit", "puis il dort", 46)), "« Modou joue au ballon. Ensuite, il va se coucher. » : deux phrases, dans l’ordre.")}
           <h2>Je découvre</h2>
           <p>Exemple : « Dimanche, je suis allé à la plage avec mon oncle. Nous avons ramassé des coquillages. »</p>
           ${keyPoint("Chaque phrase commence par une majuscule et se termine par un point. Je dis qui, quand, où et ce qui se passe.")}
@@ -552,6 +589,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Décrire par écrit",
         body: `<p>Pour décrire par écrit, je regarde bien et j’utilise des mots précis.</p>
+          ${figure(row(pic("maison", "la maison", 70)), "« La maison a un toit gris et une porte bleue. Elle a deux fenêtres. »")}
           <h2>Je découvre</h2>
           <p>Exemple : « Mon chat s’appelle Tigre. Il est gris avec des rayures noires. Il dort toujours sur la natte. »</p>
           ${keyPoint("Pour décrire, je dis comment est la chose : sa couleur, sa forme, sa taille, ce qu’elle fait.")}
@@ -560,6 +598,7 @@ export const FR_CP: CiChapterSpec[] = [
       {
         title: "Écrire une consigne",
         body: `<p>Une consigne écrite explique ce qu’il faut faire, étape par étape.</p>
+          ${figure(row(pic("arrosoir", "1. Remplis l’arrosoir.", 50), pic("plante", "2. Arrose la plante.", 56)), "Une consigne écrite, étape par étape, avec des verbes d’action.")}
           <h2>Je découvre</h2>
           <p>Exemple : « Prends une feuille. Plie-la en deux. Dessine un soleil sur la première moitié. »</p>
           ${keyPoint("J’écris une action par phrase, avec un verbe au début : prends, plie, dessine.")}

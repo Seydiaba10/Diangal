@@ -188,7 +188,28 @@ export interface ChapterSearchHit {
 
 export type AssessmentKind = "exercise" | "quiz" | "mock_exam" | "past_paper";
 
-export type QuestionType = "single_choice" | "multiple_choice" | "true_false" | "short_text" | "numeric";
+/**
+ * self_check : travail fait sur l'ardoise ou le cahier (tracer, colorier, reproduire). L'élève compare
+ * avec le corrigé puis s'évalue : « réussi » ou « à revoir ».
+ */
+export type QuestionType = "single_choice" | "multiple_choice" | "true_false" | "short_text" | "numeric" | "self_check";
+
+/** Rubrique d'un cahier d'exercices (PAAME) : activités numériques, géométriques, de mesure, résolution de problèmes, intégration interdisciplinaire. */
+export type WorkbookDomain = "AN" | "AG" | "AM" | "RP" | "II";
+
+/** Page d'un cahier d'exercices officiel reprise dans DIANGAL, avec sa place dans le document d'origine. */
+export interface WorkbookRef {
+  /** Cahier (ex. « paame2-cp »). */
+  code: string;
+  /** Numéro imprimé en bas de la page du cahier. */
+  page: number;
+  /** Page du fichier PDF d'origine (couverture comprise). */
+  pdfPage: number;
+  domain: WorkbookDomain;
+  palier: number;
+  /** Numéro de leçon dans la rubrique (null pour une intégration interdisciplinaire). */
+  lesson: number | null;
+}
 
 export interface Assessment {
   id: string;
@@ -208,6 +229,12 @@ export interface Assessment {
   verification?: ContentVerification;
   sources?: ContentSource[];
   correctionSource?: string | null;
+  /** Page d'un cahier d'exercices : sa place dans le document d'origine. */
+  workbook?: WorkbookRef;
+  /** Page entière telle que dans le cahier (rappel, consignes, figures), affichée avant de commencer. */
+  introHtml?: string;
+  /** false : réponses des QCM dans l'ordre du document (A, B, C…). */
+  shuffleOptions?: boolean;
 }
 
 export interface AssessmentSummary {
@@ -217,6 +244,9 @@ export interface AssessmentSummary {
   subject: Subject;
   chapterTitle: string | null;
   chapterHref: string | null;
+  /** Chapitre et son numéro : regroupement des séries par chapitre, dans l'ordre du programme. */
+  chapterId?: string | null;
+  chapterNumber?: number | null;
   durationS: number | null;
   questionsCount: number;
   isPremium: boolean;
@@ -230,6 +260,8 @@ export interface AssessmentSummary {
   verification?: ContentVerification;
   sources?: ContentSource[];
   correctionSource?: string | null;
+  /** Page d'un cahier d'exercices officiel (PAAME). */
+  workbook?: WorkbookRef | null;
 }
 
 /** Chapitre proposé pour « Préparer mon prochain devoir ». */
@@ -260,6 +292,10 @@ export interface PlayerQuestion {
   promptHtml: string;
   points: number;
   options: { id: string; labelHtml: string }[];
+  /** Énoncé commun à plusieurs questions (rubrique, consigne, figure), affiché au-dessus. */
+  stemHtml?: string;
+  /** self_check seulement : corrigé montré quand l'élève a fini, avant qu'il s'évalue. */
+  modelHtml?: string;
 }
 
 /** Ids d'options cochées (QCM, vrai/faux) ou texte saisi (réponse courte, numérique). */
@@ -276,6 +312,8 @@ export interface AttemptSession {
   deadlineAt: string | null;
   /** Heure du serveur au chargement (ms) : le chronomètre ne dépend pas de l'horloge du téléphone. */
   serverNow: number;
+  /** Page du cahier d'exercices, que l'élève peut revoir pendant l'exercice. */
+  introHtml?: string | null;
 }
 
 export interface QuestionReview extends PlayerQuestion {

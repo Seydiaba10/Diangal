@@ -29,6 +29,16 @@ export function hasReadAloud(levelCode: string): boolean {
   return (READ_ALOUD_LEVELS as readonly string[]).includes(levelCode);
 }
 
+/**
+ * Classes dont chaque leçon a ses propres figures explicatives (mocks/lesson-figures.ts) : le dessin
+ * d'en-tête commun à toute la matière n'y est plus affiché.
+ */
+export const FIGURE_LEVELS: readonly LevelCode[] = ["CI", "CP", "CE1", "CE2", "CM1", "CM2"];
+
+export function hasLessonFigures(levelCode: string): boolean {
+  return (FIGURE_LEVELS as readonly string[]).includes(levelCode);
+}
+
 export function isLevelCode(value: string): value is LevelCode {
   return (LEVEL_CODES as readonly string[]).includes(value);
 }

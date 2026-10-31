@@ -17,7 +17,7 @@ import { ClassSwitcher } from "@/features/schooling/components/class-switcher";
 import { getBrowsedClass, getClassOptions } from "@/features/schooling/data";
 import { cn } from "@/lib/cn";
 import { formatDate, formatScore } from "@/lib/format";
-import type { AssessmentSummary } from "@/types/domain";
+import type { AssessmentSummary, Subject } from "@/types/domain";
 
 type SearchParams = PageProps<"/eleve/exercices">["searchParams"];
 
@@ -38,6 +38,65 @@ function AssessmentGrid({ items }: { items: AssessmentSummary[] }) {
   );
 }
 
+/**
+ * Séries regroupées par chapitre, dans l'ordre du programme (matière, puis numéro du chapitre) ; un
+ * chapitre peut en compter plusieurs (série 1, 2…). Les évaluations sans chapitre viennent à la fin.
+ */
+function ChapterGroups({
+  items,
+  subjects,
+  showSubject,
+  countLabel,
+  othersLabel,
+}: {
+  items: AssessmentSummary[];
+  subjects: Subject[];
+  showSubject: boolean;
+  countLabel: (count: number) => string;
+  othersLabel: string;
+}) {
+  const groups = new Map<string, AssessmentSummary[]>();
+  const others: AssessmentSummary[] = [];
+  for (const a of items) {
+    if (!a.chapterId) others.push(a);
+    else groups.set(a.chapterId, [...(groups.get(a.chapterId) ?? []), a]);
+  }
+  const subjectRank = (a: AssessmentSummary) => {
+    const i = subjects.findIndex((s) => s.code === a.subject.code);
+    return i < 0 ? subjects.length : i;
+  };
+  const ordered = [...groups.values()]
+    .map((list) => list.sort((x, y) => x.id.localeCompare(y.id)))
+    .sort((x, y) => subjectRank(x[0]!) - subjectRank(y[0]!) || (x[0]!.chapterNumber ?? 0) - (y[0]!.chapterNumber ?? 0));
+  return (
+    <div className="mt-3 space-y-3">
+      {ordered.map((list) => (
+        <details key={list[0]!.chapterId} className="group rounded-2xl border border-line bg-surface">
+          <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 font-semibold text-ink">
+            <span className="min-w-0">
+              {showSubject ? <span className="block text-xs font-medium text-ink-muted">{list[0]!.subject.name}</span> : null}
+              {list[0]!.chapterTitle}
+            </span>
+            <span className="flex shrink-0 items-center gap-2 text-sm font-medium text-ink-muted">
+              {countLabel(list.length)}
+              <ChevronRight className="size-4 transition-transform group-open:rotate-90" aria-hidden />
+            </span>
+          </summary>
+          <div className="border-t border-line px-3 pb-3 sm:px-4 sm:pb-4">
+            <AssessmentGrid items={list} />
+          </div>
+        </details>
+      ))}
+      {others.length > 0 ? (
+        <section aria-label={othersLabel}>
+          <h3 className="pt-2 font-semibold text-ink">{othersLabel}</h3>
+          <AssessmentGrid items={others} />
+        </section>
+      ) : null}
+    </div>
+  );
+}
+
 async function PracticeContent({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const { matiere } = params;
@@ -45,13 +104,18 @@ async function PracticeContent({ searchParams }: { searchParams: SearchParams })
   const [browsed, classes] = await Promise.all([getBrowsedClass(params), getClassOptions()]);
   const [subjects, t] = await Promise.all([getSubjects(browsed.levelCode, browsed.seriesCode), getTranslations("practice")]);
   const selected = subjects.find((s) => s.slug === matiere);
-  const [all, dashboard, history] = await Promise.all([
+  const [practice, dashboard, history] = await Promise.all([
     getPracticeAssessments(browsed.levelCode, selected?.code, browsed.seriesCode),
     getStudentDashboard(),
     getPracticeHistory(),
   ]);
+  // Pages des cahiers officiels : listées à part, dans l'ordre du cahier.
+  const all = practice.filter((a) => !a.workbook);
+  // Recommandations : séries des chapitres faibles (les pages recopiées d'un cahier ne sont pas proposées).
   const recommended =
-    selected || !browsed.isCurrent ? [] : await getRecommendedAssessments(dashboard.weakPoints.map((w) => w.chapterId));
+    selected || !browsed.isCurrent
+      ? []
+      : (await getRecommendedAssessments(dashboard.weakPoints.map((w) => w.chapterId))).filter((a) => !a.workbook);
   const withClass = (path: string, extra: Record<string, string> = {}) => {
     const query = new URLSearchParams({ ...classQuery(browsed), ...extra });
     return query.size ? `${path}?${query}` : path;
@@ -115,7 +179,17 @@ async function PracticeContent({ searchParams }: { searchParams: SearchParams })
         <h2 id="tous-titre" className="text-lg font-semibold text-ink">
           {selected ? selected.name : t("all")}
         </h2>
-        {all.length > 0 ? <AssessmentGrid items={all} /> : <p className="mt-2 text-sm text-ink-muted">{t("empty")}</p>}
+        {all.length > 0 ? (
+          <ChapterGroups
+            items={all}
+            subjects={subjects}
+            showSubject={!selected}
+            countLabel={(count) => t("chapterSeries", { count })}
+            othersLabel={t("otherAssessments")}
+          />
+        ) : (
+          <p className="mt-2 text-sm text-ink-muted">{t("empty")}</p>
+        )}
       </section>
 
       {history.length > 0 ? (

@@ -5,6 +5,7 @@
 // problèmes (données, questions, démarche). Leçons rédigées par DIANGAL, à faire valider par un enseignant.
 
 import { bullets, type CiChapterSpec, keyPoint, practice } from "../ci/blocks";
+import { counted, figure, pic, row, schema, sign } from "../lesson-figures";
 
 export const MATH_CP: CiChapterSpec[] = [
   // ── Activités géométriques ────────────────────────────────────────────────
@@ -16,6 +17,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Lignes ouvertes, lignes fermées, frontière",
         body: `<p>Une ligne <strong>fermée</strong> se referme sur elle-même ; une ligne <strong>ouverte</strong> a deux bouts.</p>
+          ${figure(schema("cp-zone", "Un terrain entouré d’une ligne fermée : le ballon A est dedans, le ballon B dehors."), "Le ballon A est à l’<strong>intérieur</strong> du terrain, le ballon B à l’<strong>extérieur</strong>. La ligne fermée est la <strong>frontière</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Une ligne fermée sépare l’<strong>intérieur</strong> de l’<strong>extérieur</strong>.",
@@ -28,6 +30,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Les rythmes graphiques",
         body: `<p>Un <strong>rythme graphique</strong> est un dessin qui se répète toujours dans le même ordre.</p>
+          ${figure(schema("ci-rythme", "Rond, carré, rond, carré, qui se répète."), "Rond, carré, rond, carré… : le motif se répète toujours dans le même ordre.")}
           <h2>Je découvre</h2>
           <p>Rond, trait, rond, trait… Deux carrés, un triangle, deux carrés, un triangle…</p>
           ${keyPoint("Pour continuer un rythme, je trouve le motif qui se répète, puis je le recopie dans le même ordre.")}
@@ -43,6 +46,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Se repérer sur un quadrillage",
         body: `<p>Un <strong>quadrillage</strong> est fait de lignes qui se croisent. Les points de croisement sont des <strong>nœuds</strong> ; les petits carrés sont des <strong>cases</strong>.</p>
+          ${figure(schema("cp-case", "Un quadrillage de 3 lignes A, B, C et 4 colonnes, avec une étoile dans une case."), "L’étoile est dans la <strong>case</strong> de la ligne B et de la colonne 3.")}${figure(schema("cp-noeuds", "Un quadrillage avec une flèche A qui montre un nœud."), "La flèche A montre un <strong>nœud</strong> : le croisement de la ligne B et de la ligne 3.")}
           <h2>Je découvre</h2>
           <p>Sur un damier, on trouve une case avec sa <strong>ligne</strong> et sa <strong>colonne</strong> : « la case de la 2<sup>e</sup> ligne et de la 3<sup>e</sup> colonne ».</p>
           ${keyPoint("Pour décrire une case, je donne sa ligne et sa colonne ; pour un nœud, je donne les deux lignes qui se croisent.")}
@@ -51,6 +55,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Représenter un itinéraire",
         body: `<p>Un <strong>itinéraire</strong> est le chemin qu’on suit pour aller d’un <strong>point de départ</strong> à un <strong>point d’arrivée</strong>.</p>
+          ${figure(schema("cp-itineraire", "Un quadrillage : un chemin rouge va de la maison à l’école en passant près de la boutique."), "Le chemin rouge part de la <strong>maison</strong> (départ), passe près de la boutique (repère) et arrive à l’<strong>école</strong> (arrivée).")}
           <h2>Je découvre</h2>
           <p>De la maison à l’école : je sors, je tourne à droite après la boutique, je passe devant la mosquée, puis l’école est à gauche.</p>
           ${keyPoint("Pour dessiner un itinéraire, je place le départ, l’arrivée et les repères, puis je trace le chemin dans l’ordre.")}
@@ -66,6 +71,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Tracer à la règle",
         body: `<p>Pour tracer une <strong>ligne droite</strong>, on utilise une règle ou un double décimètre.</p>
+          ${figure(row(pic("regle", "la règle", 30), pic("crayon", "un crayon bien taillé", 30)), "Pour tracer une ligne droite : une règle posée à plat et un crayon bien taillé.")}
           <h2>Je découvre</h2>
           ${bullets(["Je pose la règle à plat et je la tiens bien avec une main.", "Je trace avec un crayon bien taillé, le long de la règle, sans m’arrêter.", "Pour relier deux points, je place la règle contre les deux points avant de tracer."])}
           ${keyPoint("La main qui tient la règle appuie fort : la règle ne doit pas bouger pendant le tracé.")}
@@ -74,6 +80,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Lignes droites, courbes et brisées",
         body: `<p>Il existe plusieurs sortes de lignes.</p>
+          ${figure(schema("cp-lignes", "Trois lignes : A droite, B courbe, C brisée."), "A est une ligne <strong>droite</strong>, B une ligne <strong>courbe</strong>, C une ligne <strong>brisée</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Une ligne <strong>droite</strong> ne tourne jamais : on la trace à la règle.",
@@ -86,6 +93,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Les frises",
         body: `<p>Une <strong>frise</strong> est une bande décorée avec un motif qui se répète.</p>
+          ${figure(schema("cp-frise", "Une frise : triangle, rond, rond, trois fois de suite."), "Une <strong>frise</strong> : le même motif (triangle, rond, rond) se répète tout le long de la bande.")}
           <h2>Je découvre</h2>
           <p>Sur les pagnes, les tapis et les murs, on voit souvent des frises : triangles, losanges, vagues…</p>
           ${keyPoint("Pour faire une frise, je dessine un motif, puis je le répète à la même distance, tout le long de la bande.")}
@@ -101,6 +109,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Le carré et le rectangle",
         body: `<p>Le carré et le rectangle ont tous les deux <strong>4 côtés</strong> et <strong>4 coins</strong> bien droits.</p>
+          ${figure(schema("cp-carre-rectangle", "Un carré A et un rectangle B sur un quadrillage."), "Le carré A a 4 côtés égaux. Le rectangle B a 2 grands côtés et 2 petits côtés.")}
           <h2>Je découvre</h2>
           ${bullets(["Le <strong>carré</strong> a 4 côtés de la même longueur.", "Le <strong>rectangle</strong> a 2 grands côtés et 2 petits côtés."])}
           ${keyPoint("Sur un quadrillage, je reproduis un carré en comptant le même nombre de cases sur chaque côté.")}
@@ -109,6 +118,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Le triangle et le rond",
         body: `<p>Le <strong>triangle</strong> a 3 côtés et 3 coins. Le <strong>rond</strong> n’a ni côté droit ni coin.</p>
+          ${figure(schema("cp-triangle-rond", "Un triangle A et un rond B sur un quadrillage."), "Le triangle A a 3 côtés et 3 coins. Le rond B n’a ni côté droit ni coin.")}
           <h2>Je découvre</h2>
           ${bullets(["Pour un triangle, je place 3 points et je les relie à la règle.", "Pour un rond, je fais le tour d’un objet rond : un verre, une boîte, une assiette."])}
           ${keyPoint("Un triangle a 3 côtés ; un rond se trace sans compas, en faisant le tour d’un objet rond.")}
@@ -126,6 +136,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Écrire et ranger les nombres jusqu’à 20",
         body: `<p>Tu connais déjà les nombres de 0 à 20. On les révise.</p>
+          ${figure(schema("ci-dix-sept", "Une barre de dix cubes et 7 cubes."), "17, c’est <strong>1 dizaine et 7 unités</strong>. Il vient après 16 et avant 18.")}
           <h2>Je relis</h2>
           ${bullets([
             "En chiffres : 0, 1, 2, 3… 10, 11, 12… 19, 20.",
@@ -138,6 +149,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Calculer jusqu’à 20",
         body: `<p>Additionner, c’est <strong>ajouter</strong> ; soustraire, c’est <strong>enlever</strong>.</p>
+          ${figure(row(counted("bonbon", 7, "7", 22), counted("bonbon", 5, "+ 5", 22), counted("bonbon", 12, "= 12", 22)), "7 bonbons et encore 5 bonbons : 7 + 5 = 12.")}
           <h2>Je découvre</h2>
           ${bullets(["8 + 5 = 13 : je fais 8 + 2 = 10, puis 10 + 3 = 13.", "15 − 4 = 11.", "Le double de 6, c’est 6 + 6 = 12."])}
           ${keyPoint("Pour ajouter, je peux d’abord compléter jusqu’à 10, puis ajouter le reste.")}
@@ -153,6 +165,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Dizaines et unités jusqu’à 50",
         body: `<p>On fait des <strong>paquets de 10</strong> : ce sont des dizaines. Ce qui reste, ce sont les unités.</p>
+          ${figure(schema("cp-34", "34 : 3 barres de dix cubes et 4 cubes."), "34, c’est <strong>3 dizaines et 4 unités</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "23 = 2 dizaines et 3 unités = 20 + 3 (vingt-trois).",
@@ -165,6 +178,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Comparer : plus petit, égal, plus grand",
         body: `<p>Pour comparer deux nombres, on utilise les signes <strong>&lt;</strong>, <strong>=</strong> et <strong>&gt;</strong>.</p>
+          ${figure(schema("cp-34-43", "34 et 43 dans des tableaux d et u : 34 a 3 dizaines, 43 en a 4."), "34 &lt; 43 : 34 a moins de dizaines que 43.")}
           <h2>Je découvre</h2>
           ${bullets(["28 &lt; 34 : 28 est plus petit que 34 (2 dizaines, c’est moins que 3 dizaines).", "41 &gt; 39.", "25 = 20 + 5."])}
           ${keyPoint("Je compare d’abord les dizaines ; si elles sont pareilles, je compare les unités : 46 &gt; 43.")}
@@ -173,6 +187,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Composer et décomposer un nombre",
         body: `<p>Un nombre peut s’écrire de plusieurs façons, avec des additions : ce sont ses <strong>écritures additives</strong>.</p>
+          ${figure(schema("cp-arbre-25", "Un arbre : 25 se sépare en 20 et 5."), "25 = 20 + 5 : on décompose 25 en dizaines et en unités.")}
           <h2>Je découvre</h2>
           ${bullets(["36 = 30 + 6.", "36 = 10 + 10 + 10 + 6.", "36 = 20 + 16."])}
           ${keyPoint("Décomposer un nombre en dizaines et unités aide à calculer : 36 = 30 + 6.")}
@@ -188,6 +203,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Le sens de l’addition et de la soustraction",
         body: `<p>Dans un problème, on choisit l’opération selon ce qui se passe.</p>
+          ${figure(row(counted("mangue", 5, "5"), sign("−"), counted("mangue", 2, "2"), sign("="), counted("mangue", 3, "3")), "Awa a 5 mangues et en donne 2 : on enlève, c’est une <strong>soustraction</strong>. 5 − 2 = 3.")}
           <h2>Je découvre</h2>
           ${bullets([
             "On <strong>ajoute</strong>, on réunit, on gagne → addition : « Awa a 12 billes, elle en gagne 7. » 12 + 7 = 19.",
@@ -199,6 +215,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Poser une addition et une soustraction",
         body: `<p>Pour calculer avec de grands nombres, on <strong>pose</strong> l’opération en colonnes.</p>
+          ${figure(schema("cp-pose", "L’addition 23 + 14 posée dans un tableau d et u."), "On écrit les unités sous les unités et les dizaines sous les dizaines : 23 + 14 = 37.")}
           <h2>Je découvre</h2>
           <p>Pour 23 + 14 : je mets les unités sous les unités et les dizaines sous les dizaines. 3 + 4 = 7 unités ; 2 + 1 = 3 dizaines. Résultat : <strong>37</strong>.</p>
           <p>Pour 48 − 25 : 8 − 5 = 3 unités ; 4 − 2 = 2 dizaines. Résultat : <strong>23</strong>.</p>
@@ -215,6 +232,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Les nombres pairs et impairs",
         body: `<p>Un nombre est <strong>pair</strong> si on peut faire des paires sans qu’il reste d’objet. Sinon, il est <strong>impair</strong>.</p>
+          ${figure(schema("cp-pairs", "7 jetons rangés par deux : il en reste un seul."), "7 jetons : on fait 3 paires et il en reste 1. 7 est <strong>impair</strong>.")}
           <h2>Je découvre</h2>
           ${bullets(["Nombres pairs : 0, 2, 4, 6, 8, 10, 12…", "Nombres impairs : 1, 3, 5, 7, 9, 11, 13…"])}
           ${keyPoint("Un nombre pair se termine par 0, 2, 4, 6 ou 8.")}
@@ -223,6 +241,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Ajouter 2, 3, 5 ou 10",
         body: `<p>Ajouter 10, c’est ajouter une dizaine : le chiffre des dizaines augmente de 1.</p>
+          ${figure(schema("cp-24-34", "24, puis 34 : on a ajouté une barre de dix."), "24 + 10 = 34 : on ajoute une barre de dix, le chiffre des dizaines augmente de 1.")}
           <h2>Je découvre</h2>
           ${bullets(["24 + 10 = 34 ; 31 + 10 = 41.", "17 + 2 = 19 ; 25 + 3 = 28 ; 35 + 5 = 40."])}
           ${keyPoint("Quand j’ajoute 10, les unités ne changent pas : 26 + 10 = 36.")}
@@ -231,6 +250,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Doubles et moitiés",
         body: `<p>Le <strong>double</strong> d’un nombre, c’est ce nombre ajouté à lui-même. La <strong>moitié</strong>, c’est un partage en deux parts égales.</p>
+          ${figure(row(counted("orange", 4, "4", 26), counted("orange", 4, "+ 4", 26), counted("orange", 8, "= 8", 26)), "Le <strong>double</strong> de 4, c’est 4 + 4 = 8. La <strong>moitié</strong> de 8, c’est 4.")}
           <h2>Je découvre</h2>
           ${bullets(["Le double de 15 est 30, car 15 + 15 = 30.", "La moitié de 20 est 10 ; la moitié de 40 est 20."])}
           ${keyPoint("Si le double de 12 est 24, alors la moitié de 24 est 12.")}
@@ -246,6 +266,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Lire et écrire les nombres de 51 à 79",
         body: `<p>Après cinquante viennent soixante, puis soixante-dix.</p>
+          ${figure(schema("cp-63", "63 : 6 barres de dix cubes et 3 cubes."), "63, c’est <strong>6 dizaines et 3 unités</strong> : soixante-trois.")}
           <h2>Je découvre</h2>
           ${bullets([
             "56 = 5 dizaines et 6 unités : cinquante-six.",
@@ -258,6 +279,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Additionner et soustraire avec une retenue",
         body: `<p>Quand les unités dépassent 9, on fait une <strong>retenue</strong> : 10 unités = 1 dizaine.</p>
+          ${figure(schema("cp-retenue", "L’addition 27 + 15 posée dans un tableau d et u."), "7 + 5 = 12 : j’écris 2 aux unités et je <strong>retiens</strong> 1 dizaine. 27 + 15 = 42.")}
           <h2>Je découvre</h2>
           <p>Pour 37 + 26 : 7 + 6 = 13. J’écris 3 et je retiens 1 dizaine. 3 + 2 + 1 = 6 dizaines. Résultat : <strong>63</strong>.</p>
           <p>Pour 52 − 18 : je ne peux pas faire 2 − 8. J’échange 1 dizaine contre 10 unités : 12 − 8 = 4 ; il reste 4 dizaines, 4 − 1 = 3. Résultat : <strong>34</strong>.</p>
@@ -274,6 +296,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Le partage",
         body: `<p>Partager équitablement, c’est donner <strong>la même quantité</strong> à chacun.</p>
+          ${figure(schema("cp-partage", "12 bonbons partagés en 3 groupes de 4."), "12 bonbons partagés entre 3 enfants : chacun en reçoit <strong>4</strong>.")}
           <h2>Je découvre</h2>
           <p>On partage 12 bonbons entre 3 enfants : on distribue un bonbon à chacun, tour après tour. Chaque enfant reçoit <strong>4</strong> bonbons.</p>
           ${keyPoint("Dans un partage juste, chacun reçoit autant. On peut vérifier : 4 + 4 + 4 = 12.")}
@@ -282,6 +305,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Multiplier par 2 et par 3",
         body: `<p>Quand on ajoute plusieurs fois le même nombre, on peut écrire une <strong>multiplication</strong>.</p>
+          ${figure(schema("cp-fois", "3 groupes de 2 jetons."), "3 groupes de 2 jetons : 2 + 2 + 2 = 6, c’est <strong>3 × 2 = 6</strong>.")}
           <h2>Je découvre</h2>
           ${bullets(["5 + 5 = 2 fois 5 = 2 × 5 = 10.", "4 + 4 + 4 = 3 fois 4 = 3 × 4 = 12."])}
           <p>La table de 2 : 2 × 1 = 2, 2 × 2 = 4, 2 × 3 = 6, 2 × 4 = 8, 2 × 5 = 10.</p>
@@ -298,6 +322,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Les nombres de 80 à 99",
         body: `<p>80 se dit <strong>quatre-vingts</strong> (4 fois 20).</p>
+          ${figure(schema("cp-85", "85 : 8 barres de dix cubes et 5 cubes."), "85, c’est <strong>8 dizaines et 5 unités</strong> : quatre-vingt-cinq.")}
           <h2>Je découvre</h2>
           ${bullets(["81 : quatre-vingt-un ; 85 : quatre-vingt-cinq.", "90 : quatre-vingt-dix (80 + 10) ; 95 : quatre-vingt-quinze ; 99 : quatre-vingt-dix-neuf."])}
           ${keyPoint("De 90 à 99, on dit quatre-vingt, puis on compte de 10 à 19.")}
@@ -306,6 +331,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Le nombre 100 : la centaine",
         body: `<p>Quand on a 10 dizaines, on a <strong>une centaine</strong> : c’est le nombre <strong>100</strong> (cent).</p>
+          ${figure(schema("cp-centaine", "Un carré de cent cubes dans la colonne des centaines."), "10 dizaines font <strong>1 centaine</strong> : 100.")}
           <h2>Je découvre</h2>
           ${bullets(["99 + 1 = 100.", "100 = 10 dizaines = 10 paquets de 10.", "90 + 10 = 100 ; 50 + 50 = 100."])}
           ${keyPoint("100 s’écrit avec trois chiffres : 1 centaine, 0 dizaine, 0 unité.")}
@@ -323,6 +349,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Mesurer avec son corps",
         body: `<p>Avant les instruments, on mesurait avec son corps : le <strong>pas</strong>, le <strong>pied</strong>, l’<strong>empan</strong> (la main ouverte), la <strong>coudée</strong>.</p>
+          ${figure(schema("cp-empans", "Deux bandes A et B mesurées en empans : A mesure 4 empans, B en mesure 6."), "A mesure 4 <strong>empans</strong>, B en mesure 6 : B est plus long.")}
           <h2>Je découvre</h2>
           <p>La table mesure 6 empans pour Awa, mais 5 empans pour son père : sa main est plus grande !</p>
           ${keyPoint("Avec le corps, les mesures changent d’une personne à l’autre. C’est pourquoi on a inventé le mètre.")}
@@ -331,6 +358,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Le mètre et le double décimètre",
         body: `<p>Le <strong>mètre</strong> (m) sert à mesurer de grandes longueurs. Le <strong>double décimètre</strong> (la règle de 20 cm) mesure les petites.</p>
+          ${figure(schema("cp-regle", "Un crayon posé contre une règle graduée en centimètres."), "Le crayon part du 0 de la règle et finit au 9 : il mesure <strong>9 cm</strong>.")}
           <h2>Je découvre</h2>
           ${bullets(["Une porte mesure environ 2 m de haut.", "Un crayon mesure environ 15 cm.", "Je pose le 0 de la règle au bout de l’objet, puis je lis le nombre à l’autre bout."])}
           ${keyPoint("Pour mesurer à la règle, je commence toujours au 0.")}
@@ -346,6 +374,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Comparer des contenances",
         body: `<p>La <strong>capacité</strong> d’un récipient, c’est la quantité de liquide qu’il peut contenir.</p>
+          ${figure(schema("cp-verres", "Trois verres pareils A, B et C : A est le plus rempli, C le moins."), "Les verres sont pareils : A contient le plus d’eau, C le moins.")}
           <h2>Je découvre</h2>
           <p>Pour remplir un seau, il faut 8 tasses d’eau ; pour remplir une bouteille, il en faut 3. Le seau contient <strong>plus</strong> que la bouteille.</p>
           ${keyPoint("Pour comparer deux récipients, je les remplis avec la même petite mesure et je compte.")}
@@ -354,6 +383,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Le litre, le demi-litre et le quart de litre",
         body: `<p>On mesure les liquides en <strong>litres</strong> (L).</p>
+          ${figure(schema("cp-litres", "Trois bouteilles : 1 litre, un demi-litre et un quart de litre."), "Une bouteille d’<strong>1 litre</strong>, d’un <strong>demi-litre</strong> et d’un <strong>quart de litre</strong>.")}
           <h2>Je découvre</h2>
           ${bullets(["Une bouteille d’eau de 1 L.", "Un demi-litre, c’est la moitié d’un litre : 2 demi-litres = 1 L.", "Un quart de litre : 4 quarts de litre = 1 L."])}
           ${keyPoint("1 litre = 2 demi-litres = 4 quarts de litre.")}
@@ -369,6 +399,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Lourd ou léger : comparer des masses",
         body: `<p>Pour comparer des masses, on soupèse dans ses mains ou on utilise une <strong>balance</strong>.</p>
+          ${figure(schema("cp-balance", "Une balance : le sac de riz d’un côté, le ballon de l’autre."), "Le plateau du sac de riz descend : le sac est <strong>plus lourd</strong> que le ballon.")}
           <h2>Je découvre</h2>
           <p>Sur une balance à deux plateaux, le côté le plus lourd descend. Si les plateaux sont au même niveau, les deux objets ont la même masse.</p>
           ${keyPoint("Un gros objet n’est pas toujours le plus lourd : il faut peser pour savoir.")}
@@ -377,6 +408,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Le kilogramme",
         body: `<p>On mesure les masses en <strong>kilogrammes</strong> (kg). Au marché, on achète le riz, le sucre ou les oignons au kilo.</p>
+          ${figure(schema("cp-kilo", "Une balance en équilibre : un sac de riz et une masse de 1 kg."), "La balance est en équilibre : le sac de riz pèse <strong>1 kg</strong>.")}
           <h2>Je découvre</h2>
           ${bullets(["1 kg de riz.", "Un demi-kilogramme : la moitié d’un kilo ; 2 demi-kilos = 1 kg.", "Un quart de kilogramme : 4 quarts = 1 kg."])}
           ${keyPoint("1 kg = 2 demi-kilogrammes = 4 quarts de kilogramme.")}
@@ -392,6 +424,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "La semaine, le mois et l’année",
         body: `<p>Le <strong>calendrier</strong> montre les jours, les semaines et les mois de l’année.</p>
+          ${figure("<table><tr><th>lun.</th><th>mar.</th><th>mer.</th><th>jeu.</th><th>ven.</th><th>sam.</th><th>dim.</th></tr><tr><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td></tr><tr><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td></tr><tr><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr><tr><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td></tr></table>", "Le mois d’octobre 2026 : 31 jours, rangés par semaines de 7 jours.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Une semaine a 7 jours : lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche.",
@@ -404,6 +437,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Lire l’heure",
         body: `<p>Sur une horloge, la <strong>petite aiguille</strong> montre les heures ; la <strong>grande aiguille</strong> montre les minutes.</p>
+          ${figure(row(schema("cp-heure-3", "Une horloge qui marque 3 heures."), schema("cp-heure-7-30", "Une horloge qui marque 7 heures et demie.")), "À gauche, il est <strong>3 heures</strong> : la grande aiguille est sur le 12. À droite, il est <strong>7 heures et demie</strong> : la grande aiguille est sur le 6.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Quand la grande aiguille est sur le 12, c’est une heure juste : 8 heures, 10 heures.",
@@ -423,6 +457,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Les pièces jusqu’à 100 francs",
         body: `<p>Au Sénégal, la monnaie est le <strong>franc CFA</strong> (F CFA).</p>
+          ${figure(row(pic("piece-5", "5 F", 48), pic("piece-10", "10 F", 48), pic("piece-25", "25 F", 48), pic("piece-50", "50 F", 48), pic("piece-100", "100 F", 48)), "Les pièces de 5, 10, 25, 50 et 100 francs CFA.")}
           <h2>Je découvre</h2>
           ${bullets(["Les pièces de 5 F, 10 F, 25 F, 50 F et 100 F.", "100 F = 2 pièces de 50 F = 4 pièces de 25 F = 10 pièces de 10 F."])}
           ${keyPoint("On peut faire la même somme avec des pièces différentes : 50 F = 25 F + 25 F = 5 pièces de 10 F.")}
@@ -431,6 +466,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Payer et rendre la monnaie",
         body: `<p>Quand on paie avec une pièce plus grande que le prix, le vendeur <strong>rend la monnaie</strong>.</p>
+          ${figure(row(pic("pain", "le pain : 75 F", 34), pic("piece-100", "Awa donne 100 F", 48), pic("piece-25", "on lui rend 25 F", 48)), "100 F − 75 F = 25 F : le boutiquier rend <strong>25 F</strong>.")}
           <h2>Je découvre</h2>
           <p>Un jus en sachet coûte 75 F. Je donne 100 F. Le vendeur me rend 100 − 75 = <strong>25 F</strong>.</p>
           ${keyPoint("Monnaie rendue = somme donnée − prix.")}
@@ -448,6 +484,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Données utiles et données inutiles",
         body: `<p>Les <strong>données</strong> sont les informations de l’énoncé. Certaines servent à répondre, d’autres non.</p>
+          ${figure(row(pic("eleve-garcon", "Modou", 90), counted("mangue", 6, "6 mangues"), pic("velo", "1 vélo", 40)), "Modou a 6 mangues et un vélo. Il mange 2 mangues : combien en reste-t-il ? Le vélo est une donnée <strong>inutile</strong>.")}
           <h2>Je découvre</h2>
           <p>« Jean a 8 ans. Il a 25 billes. Il en perd 10. Combien lui en reste-t-il ? »</p>
           ${bullets(["Données utiles : 25 billes, il en perd 10.", "Donnée inutile ici : Jean a 8 ans."])}
@@ -457,6 +494,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "La donnée qui manque",
         body: `<p>Parfois, il manque une donnée : on ne peut pas répondre à la question.</p>
+          ${figure(row(pic("boutique", "la boutique", 56), pic("sac-riz", "du riz : ? F", 56)), "« Fatou achète du riz. Combien paie-t-elle ? » Il manque le <strong>prix</strong> : on ne peut pas répondre.")}
           <h2>Je découvre</h2>
           <p>« Fatou va à la boutique avec 100 F. Elle achète des allumettes. Combien lui reste-t-il ? » Il manque le <strong>prix</strong> des allumettes !</p>
           ${keyPoint("Si je ne peux pas calculer, je cherche la donnée qui manque.")}
@@ -472,6 +510,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Question finale et questions intermédiaires",
         body: `<p>La <strong>question finale</strong> est la dernière question du problème. Pour y répondre, on passe parfois par des <strong>questions intermédiaires</strong>.</p>
+          ${figure(row(counted("orange", 5, "5 le matin"), sign("+"), counted("orange", 3, "3 le soir")), "Awa vend 5 oranges le matin et 3 le soir, à 25 F l’une. D’abord : combien d’oranges ? (question <strong>intermédiaire</strong>). Puis : combien d’argent ? (question <strong>finale</strong>).")}
           <h2>Je découvre</h2>
           <p>« Awa achète 2 cahiers à 50 F. Elle donne 200 F. Combien lui rend-on ? »</p>
           ${bullets(["Question intermédiaire : combien coûtent les 2 cahiers ? → 50 + 50 = 100 F.", "Question finale : combien lui rend-on ? → 200 − 100 = 100 F."])}
@@ -481,6 +520,7 @@ export const MATH_CP: CiChapterSpec[] = [
       {
         title: "Inventer un problème et le résoudre",
         body: `<p>Pour bien comprendre les problèmes, on apprend aussi à en <strong>inventer</strong>.</p>
+          ${figure(row(pic("eleve-fille", "Awa", 90), counted("bonbon", 4, "4 bonbons"), pic("eleve-garcon", "Modou", 90)), "Avec un dessin, j’invente : « Awa a 4 bonbons. Elle en donne 1 à Modou. Combien lui en reste-t-il ? »")}
           <h2>Je découvre</h2>
           <p>« Pendant la récréation, Jean avait 25 billes. À la fin du jeu, il lui en reste 10. » Je peux poser la question : « Combien de billes Jean a-t-il perdues ? » → 25 − 10 = <strong>15</strong>.</p>
           ${keyPoint("Ma démarche : je lis, je trouve les données utiles, je choisis l’opération, je calcule, puis j’écris une phrase réponse.")}

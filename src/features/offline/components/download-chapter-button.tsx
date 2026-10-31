@@ -28,7 +28,11 @@ export function DownloadChapterButton({ chapterId, sizeLabel }: { chapterId: str
     try {
       const response = await fetch(`/api/hors-ligne/chapitres/${encodeURIComponent(chapterId)}`);
       if (!response.ok) throw new Error(String(response.status));
-      await saveChapter((await response.json()) as OfflineChapter);
+      const chapter = (await response.json()) as OfflineChapter;
+      await saveChapter(chapter);
+      // Les dessins des leçons sont demandés une fois : le service worker les garde pour le hors ligne.
+      const images = new Set(JSON.stringify(chapter).match(/\/illustrations\/[\w/-]+\.svg/g) ?? []);
+      await Promise.allSettled([...images].map((src) => fetch(src)));
       setState("saved");
     } catch {
       setState("error");

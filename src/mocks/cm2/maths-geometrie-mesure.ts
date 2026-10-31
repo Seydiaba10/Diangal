@@ -2,6 +2,7 @@
 // 6) de la progression officielle des cahiers PAAME (MEN 2024, conformes au CEB). Rédigées par DIANGAL.
 
 import { type ChapterSpec, exemple, formula, frac, liste, methode, retenir, tableau } from "./blocks";
+import { figure, pic, row, schema } from "../lesson-figures";
 
 const GEO = "Activités géométriques";
 const MES = "Activités de mesure";
@@ -15,7 +16,8 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
       {
         title: "Carré, rectangle et losange",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(schema("cm1-quadrilateres", "Cinq quadrilatères."), "Le carré, le rectangle et le losange : leurs diagonales se coupent en leur milieu.")}
+          ${tableau([
             ["Figure", "Côtés", "Angles", "Diagonales"],
             ["carré", "4 côtés égaux", "4 angles droits", "égales, perpendiculaires, se coupent en leur milieu"],
             ["rectangle", "côtés opposés égaux et parallèles", "4 angles droits", "égales, se coupent en leur milieu"],
@@ -27,7 +29,8 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
       {
         title: "Parallélogramme et trapèze",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(schema("cm2-hauteurs", "Un parallélogramme et un trapèze, avec leur hauteur en pointillé."), "Le parallélogramme a ses côtés opposés parallèles ; le trapèze a deux côtés parallèles, les bases.")}
+          ${liste([
             "<strong>parallélogramme</strong> : quadrilatère dont les côtés opposés sont parallèles et de même longueur ; ses diagonales se coupent en leur milieu ;",
             "<strong>trapèze</strong> : quadrilatère qui a deux côtés parallèles, appelés grande base et petite base ; la distance entre les bases est la hauteur ;",
             "un trapèze rectangle a un angle droit ; un trapèze isocèle a ses deux côtés non parallèles égaux.",
@@ -37,7 +40,8 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
       {
         title: "Les triangles",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(schema("ce2-triangles", "Trois triangles : A rectangle, B isocèle, C équilatéral."), "Rectangle (un angle droit), isocèle (deux côtés égaux), équilatéral (trois côtés égaux).")}
+          ${tableau([
             ["Triangle", "Propriété"],
             ["quelconque", "trois côtés de longueurs différentes"],
             ["isocèle", "deux côtés égaux et deux angles égaux"],
@@ -58,6 +62,7 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
         title: "Le cercle",
         minutes: 10,
         body: `<p>Le <strong>cercle</strong> est l’ensemble des points situés à la même distance d’un point, le <strong>centre</strong>. Cette distance est le <strong>rayon</strong>. Le <strong>diamètre</strong> passe par le centre : d = 2 × r.</p>
+          ${figure(schema("cm1-cercle", "Un cercle de centre O avec un diamètre tracé en rouge."), "Le diamètre passe par le centre : il vaut deux rayons.")}
           ${liste(["une corde joint deux points du cercle ;", "un arc est une portion de cercle ;", "le disque est la surface limitée par le cercle."])}
           ${exemple(["Pour tracer un cercle de 3 cm de rayon, on ouvre le compas de 3 cm, on pique la pointe sur le centre et on tourne."])}`,
       },
@@ -65,6 +70,7 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
         title: "Les polygones",
         minutes: 12,
         body: `<p>Un <strong>polygone</strong> est une figure fermée formée de segments. On le nomme selon son nombre de côtés.</p>
+          ${figure(schema("cm2-polygones", "Des polygones et leur nombre de côtés."), "Un polygone se nomme selon son nombre de côtés : 5 pour le pentagone, 6 pour l’hexagone, 8 pour l’octogone.")}
           ${tableau([
             ["Nombre de côtés", "Nom"],
             ["3", "triangle"],
@@ -86,7 +92,8 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
       {
         title: "Cube et pavé droit",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(schema("ci-solides", "Un cube A, un pavé droit B et un cylindre C."), "Le cube et le pavé droit ont 6 faces, 12 arêtes et 8 sommets.")}
+          ${tableau([
             ["Solide", "Faces", "Arêtes", "Sommets"],
             ["cube", "6 carrés identiques", "12 de même longueur", "8"],
             ["pavé droit", "6 rectangles (opposés égaux deux à deux)", "12", "8"],
@@ -97,7 +104,8 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
       {
         title: "Cylindre et prisme droit",
         minutes: 12,
-        body: `${liste([
+        body: `${figure(schema("ci-solides", "Un cube A, un pavé droit B et un cylindre C."), "Le cylindre C a deux bases en forme de disque ; déroulée, sa surface latérale est un rectangle.")}
+          ${liste([
             "le <strong>cylindre</strong> a deux bases qui sont des disques identiques et une surface latérale qui, déroulée, est un rectangle (boîte de conserve, tuyau) ;",
             "le <strong>prisme droit</strong> a deux bases polygonales identiques et parallèles (triangles, hexagones…) et des faces latérales rectangulaires.",
           ])}
@@ -114,6 +122,7 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
         title: "Symétrie axiale et translation",
         minutes: 12,
         body: `<p>Deux figures sont <strong>symétriques</strong> par rapport à une droite (l’axe) si elles se superposent quand on plie le long de cet axe. Une figure a un <strong>axe de symétrie</strong> si ses deux moitiés se superposent par pliage.</p>
+          ${figure(schema("ce2-symetrie", "Une maison et son axe de symétrie."), "Symétrie : on plie le long de l’axe, les deux moitiés se superposent.")}${figure(schema("cm1-translation", "Une figure A qui glisse pour devenir la figure B."), "Translation : la figure glisse sans tourner.")}
           ${exemple(["Le carré a 4 axes de symétrie, le rectangle 2, le cercle une infinité ; le drapeau du Sénégal (sans l’étoile) a un axe horizontal."])}
           ${retenir("Une <strong>translation</strong> fait glisser une figure dans une direction, d’une longueur donnée, sans la tourner : la figure obtenue a la même forme et les mêmes dimensions.")}`,
       },
@@ -121,6 +130,7 @@ export const MATH_CM2_GEOMETRIE: ChapterSpec[] = [
         title: "Agrandissement et réduction",
         minutes: 12,
         body: `<p>Agrandir ou réduire une figure, c’est multiplier toutes ses longueurs par un même nombre : la forme et les angles ne changent pas.</p>
+          ${figure(schema("cm2-agrandir", "Un rectangle A et son agrandissement B."), "Toutes les longueurs de A sont multipliées par 2 : B est un agrandissement de A.")}
           ${exemple(["Un rectangle de 4 cm sur 2 cm agrandi 3 fois devient un rectangle de 12 cm sur 6 cm.", `Réduit de moitié (× ${frac("1", "2")}), il devient un rectangle de 2 cm sur 1 cm.`])}
           ${retenir("Sur un quadrillage, on agrandit une figure en multipliant le nombre de carreaux de chaque segment.")}`,
       },
@@ -137,7 +147,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Le mètre, ses multiples et sous-multiples",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure("<table><tr><th>km</th><th>hm</th><th>dam</th><th>m</th><th>dm</th><th>cm</th><th>mm</th></tr><tr><td>2</td><td>0</td><td>7</td><td>5</td><td></td><td></td><td></td></tr></table>", "2,075 km = 2 075 m : chaque unité vaut 10 fois la suivante.")}
+          ${tableau([
             ["km", "hm", "dam", "m", "dm", "cm", "mm"],
             ["1 000 m", "100 m", "10 m", "1 m", "0,1 m", "0,01 m", "0,001 m"],
           ])}
@@ -148,6 +159,7 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
         title: "Les périmètres",
         minutes: 15,
         body: `<p>Le <strong>périmètre</strong> est la longueur du tour d’une figure.</p>
+          ${figure(schema("ce2-perimetre", "Un rectangle de 25 m de longueur et 15 m de largeur."), "Périmètre : (25 + 15) × 2 = 80 m. Demi-périmètre : 40 m.")}
           ${tableau([
             ["Figure", "Périmètre", "Dimension à partir du périmètre"],
             ["carré de côté c", "P = c × 4", "c = P ÷ 4"],
@@ -167,7 +179,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Le litre et le gramme",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(row(pic("verre-eau", "un verre : 25 cL", 44), pic("seau", "un seau : 10 L", 48), pic("sac-riz", "un sac : 50 kg", 52)), "Le litre mesure les capacités ; le gramme et le kilogramme, les masses.")}
+          ${tableau([
             ["hL", "daL", "L", "dL", "cL", "mL"],
             ["100 L", "10 L", "1 L", "0,1 L", "0,01 L", "0,001 L"],
           ])}
@@ -180,7 +193,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Masse brute, masse nette et tare ; les angles",
         minutes: 12,
-        body: `${formula("Masse brute = masse nette + tare")}
+        body: `${figure(schema("ce2-tare", "Masse nette 500 g et tare 50 g : masse brute 550 g."), "Masse brute = masse nette + tare.")}${figure(schema("ce2-angles", "Trois angles A, B et C."), "A : angle droit (90°) ; B : aigu ; C : obtus.")}
+          ${formula("Masse brute = masse nette + tare")}
           <p>La <strong>masse nette</strong> est celle du produit seul ; la <strong>tare</strong> est la masse de l’emballage ; la <strong>masse brute</strong> est celle de l’ensemble.</p>
           ${exemple(["Une boîte de lait pèse 450 g ; l’emballage pèse 50 g : masse nette = 400 g."])}
           <h2>Les angles</h2>
@@ -197,6 +211,7 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
         title: "Le mètre carré et les mesures agraires",
         minutes: 12,
         body: `<p>L’<strong>aire</strong> est la mesure d’une surface. L’unité principale est le mètre carré (m²), aire d’un carré de 1 m de côté.</p>
+          ${figure("<table><tr><th>1 are (a)</th><td>100 m²</td><td>un carré de 10 m de côté</td></tr><tr><th>1 hectare (ha)</th><td>10 000 m²</td><td>un carré de 100 m de côté</td></tr></table>", "On mesure les champs en ares et en hectares.")}
           ${tableau([
             ["km²", "hm²", "dam²", "m²", "dm²", "cm²", "mm²"],
             ["", "1 ha", "1 a", "1 ca", "", "", ""],
@@ -207,7 +222,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Aires du carré, du rectangle et du triangle",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(schema("cm1-triangle-aire", "Un triangle de 6 cm de base et 4 cm de hauteur."), "Aire du triangle = base × hauteur : 2 = 6 × 4 : 2 = 12 cm².")}
+          ${tableau([
             ["Figure", "Aire", "Dimension à partir de l’aire"],
             ["carré", "A = c × c", "c = le nombre qui, multiplié par lui-même, donne A"],
             ["rectangle", "A = L × l", "L = A ÷ l"],
@@ -219,7 +235,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Aires du parallélogramme, du losange, du trapèze et du disque",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(schema("cm2-hauteurs", "Un parallélogramme et un trapèze, avec leur hauteur."), "Parallélogramme : base × hauteur. Trapèze : (grande base + petite base) × hauteur : 2.")}
+          ${tableau([
             ["Figure", "Aire"],
             ["parallélogramme", "A = b × h"],
             ["losange", "A = D × d ÷ 2 (produit des diagonales divisé par 2)"],
@@ -240,6 +257,7 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
         title: "Le mètre cube et le volume du cube et du pavé",
         minutes: 15,
         body: `<p>Le <strong>volume</strong> est la place occupée par un solide. L’unité principale est le mètre cube (m³), volume d’un cube de 1 m d’arête.</p>
+          ${figure(schema("cm2-pave", "Un pavé droit de 4 cm sur 3 cm sur 2 cm, fait de petits cubes."), "Volume du pavé = longueur × largeur × hauteur = 4 × 3 × 2 = <strong>24 cm³</strong>.")}
           ${retenir("Chaque unité de volume vaut 1 000 fois l’unité immédiatement inférieure : 1 m³ = 1 000 dm³ ; 1 dm³ = 1 000 cm³ (trois chiffres par colonne).")}
           ${tableau([
             ["Solide", "Volume"],
@@ -251,7 +269,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Volume du cylindre ; volume, capacité et masse",
         minutes: 15,
-        body: `${formula("Volume du cylindre = aire de la base × hauteur = r × r × 3,14 × h")}
+        body: `${figure(schema("cm1-litre", "Un cube de 10 cm de côté : 1 dm³."), "1 dm³ = 1 L ; 1 L d’eau pèse 1 kg.")}
+          ${formula("Volume du cylindre = aire de la base × hauteur = r × r × 3,14 × h")}
           ${exemple(["Un fût de 0,3 m de rayon et de 1 m de haut : V = 0,3 × 0,3 × 3,14 × 1 ≈ 0,283 m³, soit environ 283 L."])}
           ${tableau([
             ["Volume", "Capacité", "Masse d’eau"],
@@ -271,7 +290,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Les durées",
         minutes: 12,
-        body: `${tableau([
+        body: `${figure(schema("cm2-durees", "Deux horloges : 10 h 40, puis 13 h 15."), "De 10 h 40 à 13 h 15 : 20 min jusqu’à 11 h, puis 2 h 15 min. En tout <strong>2 h 35 min</strong>.")}
+          ${tableau([
             ["Unité", "Équivalence"],
             ["1 h", "60 min"],
             ["1 min", "60 s"],
@@ -284,7 +304,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Mouvements uniformes et débit",
         minutes: 15,
-        body: `${formula("distance = vitesse × durée ; vitesse = distance ÷ durée ; durée = distance ÷ vitesse")}
+        body: `${figure(schema("cm2-vitesse", "Une droite graduée : 80 km en 1 h, 160 km en 2 h, 240 km en 3 h."), "À 80 km/h : distance = vitesse × durée = 80 × 3 = 240 km en 3 h.")}
+          ${formula("distance = vitesse × durée ; vitesse = distance ÷ durée ; durée = distance ÷ vitesse")}
           ${exemple(["Un camion roule à 60 km/h pendant 2 h 30 min (2,5 h) : d = 60 × 2,5 = 150 km.", "Un cycliste parcourt 45 km en 3 h : v = 15 km/h."])}
           ${retenir("Un mouvement est uniforme quand la vitesse reste la même. Sa représentation graphique (distance en fonction du temps) est une droite.")}
           ${formula("Débit = volume ÷ durée (en L/min, m³/h…)")}
@@ -301,13 +322,15 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
         title: "Le budget familial",
         minutes: 12,
         body: `<p>Le <strong>budget</strong> compare les <strong>recettes</strong> (salaires, ventes) et les <strong>dépenses</strong> (nourriture, loyer, électricité, école, transport) d’une famille pendant une période.</p>
+          ${figure(schema("cm2-budget", "Un salaire de 200 000 F : 180 000 F de dépenses et 20 000 F d’épargne."), "Épargne = recettes − dépenses : 200 000 − 180 000 = 20 000 F.")}
           ${liste(["recettes &gt; dépenses : il y a une <strong>économie</strong> ;", "recettes &lt; dépenses : il y a un <strong>déficit</strong>."])}
           ${exemple(["Un père gagne 180 000 F par mois et dépense 165 000 F : il économise 15 000 F, soit 180 000 F en un an."])}`,
       },
       {
         title: "Prix d’achat, prix de vente, bénéfice et perte",
         minutes: 15,
-        body: `${formula("prix de revient = prix d’achat + frais ; bénéfice = prix de vente − prix de revient")}
+        body: `${figure(schema("ce2-benefice", "Prix de revient 13 000 F et bénéfice 2 000 F : prix de vente 15 000 F."), "Bénéfice = prix de vente − prix de revient.")}
+          ${formula("prix de revient = prix d’achat + frais ; bénéfice = prix de vente − prix de revient")}
           ${liste(["si le prix de vente est inférieur au prix de revient, il y a une <strong>perte</strong> ;", "le pourcentage de bénéfice se calcule en général sur le prix d’achat (ou de revient)."])}
           ${exemple([
             "Une commerçante achète un sac d’oignons 12 000 F, paie 1 000 F de transport et le revend 15 600 F.",
@@ -326,6 +349,7 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
         title: "Calculer un intérêt simple",
         minutes: 15,
         body: `<p>Quand on place de l’argent (le <strong>capital</strong>) à la banque, il rapporte un <strong>intérêt</strong>. Le <strong>taux</strong> indique l’intérêt rapporté par 100 F en un an.</p>
+          ${figure("<table><tr><th>capital</th><td>100 000 F</td></tr><tr><th>taux</th><td>5 % par an</td></tr><tr><th>intérêt en 1 an</th><td>100 000 × 5 : 100 = 5 000 F</td></tr><tr><th>intérêt en 3 ans</th><td>5 000 × 3 = 15 000 F</td></tr></table>", "Intérêt = capital × taux × durée : 100.")}
           ${formula(`Intérêt = ${frac("capital × taux × durée (en années)", "100")}`)}
           ${exemple([
             "100 000 F placés à 6 % pendant 2 ans : I = 100 000 × 6 × 2 ÷ 100 = 12 000 F.",
@@ -336,7 +360,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Retrouver le capital, le taux ou la durée",
         minutes: 15,
-        body: `${tableau([
+        body: `${figure(row(schema("cm2-capital", "Cinq billets de 10 000 F.")), "Un capital de 50 000 F placé à 4 % rapporte 2 000 F par an. Pour 6 000 F d’intérêt, il faut 3 ans.")}
+          ${tableau([
             ["On cherche…", "Formule (durée en années)"],
             ["le capital", "C = I × 100 ÷ (t × n)"],
             ["le taux", "t = I × 100 ÷ (C × n)"],
@@ -354,7 +379,8 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
       {
         title: "Partages en parts égales et inégales",
         minutes: 15,
-        body: `${methode([
+        body: `${figure(schema("cm1-parts-inegales", "12 000 F partagés : Awa 7 000 F, Modou 5 000 F."), "On retire la différence (2 000 F), on partage le reste en deux, puis on rajoute la différence à la plus grande part.")}
+          ${methode([
             "Représenter les parts par des segments (schéma).",
             "Retirer du total ce qui fait la différence entre les parts.",
             "Diviser le reste par le nombre de parts égales ; en déduire chaque part.",
@@ -369,6 +395,7 @@ export const MATH_CM2_MESURE: ChapterSpec[] = [
         title: "Partages proportionnels et moyenne",
         minutes: 15,
         body: `<p>Dans un <strong>partage proportionnel</strong>, chacun reçoit selon sa mise, son travail ou son nombre d’enfants.</p>
+          ${figure(schema("cm2-moyenne", "Un graphique des notes de Fatou : 14 en maths, 12 en français, 16 en sciences."), "Moyenne : (14 + 12 + 16) : 3 = 42 : 3 = <strong>14</strong>.")}
           ${exemple(["Trois associés ont versé 20 000 F, 30 000 F et 50 000 F, et gagnent 25 000 F. Total des mises : 100 000 F ; pour 1 000 F versés, on reçoit 250 F. Parts : 5 000 F, 7 500 F, 12 500 F."])}
           ${formula("Moyenne = somme des valeurs ÷ nombre de valeurs")}
           ${exemple(["Notes de Moussa : 12, 15, 9 et 14. Moyenne = 50 ÷ 4 = 12,5."])}`,

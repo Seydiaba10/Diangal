@@ -23,7 +23,7 @@ const RESOURCE_ICONS: Record<LessonResourceKind, typeof FileText> = {
 
 /** Partie propre à l'élève de la page chapitre : progression, leçons faites, évaluations. */
 export async function ChapterContent({ subject, chapter }: { subject: Subject; chapter: Chapter }) {
-  const [{ summary, statuses }, assessments, student, t, tBadges, messages] = await Promise.all([
+  const [{ summary, statuses }, chapterAssessments, student, t, tBadges, messages] = await Promise.all([
     getChapterProgress(chapter),
     getChapterAssessments(chapter.id),
     getCurrentStudent(),
@@ -31,6 +31,8 @@ export async function ChapterContent({ subject, chapter }: { subject: Subject; c
     getTranslations("badges"),
     getMessages(),
   ]);
+  // Séries du chapitre dans leur ordre (série 1, 2…). Les pages recopiées d'un cahier ne sont pas affichées.
+  const assessments = chapterAssessments.filter((a) => !a.workbook).sort((a, b) => a.id.localeCompare(b.id));
   const style = subjectStyle(subject.code);
   const nextLesson = chapter.lessons.find((l) => statuses[l.id] !== "completed");
   const totalSize = chapter.lessons.flatMap((l) => l.resources).reduce((sum, r) => sum + r.sizeBytes, 0);
@@ -102,6 +104,7 @@ export async function ChapterContent({ subject, chapter }: { subject: Subject; c
             <p className="mt-2 text-sm text-ink-muted">{t("practiceEmpty")}</p>
           )}
         </section>
+
       </div>
 
       {/* Sur mobile, l'action principale passe avant la liste des leçons. */}

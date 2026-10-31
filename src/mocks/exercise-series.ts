@@ -13,13 +13,14 @@ import type { MockQuestion } from "./assessments-3e";
  * Une question. QCM : la bonne réponse est précédée de « * » (sa place varie).
  * Vrai / faux, nombre ou mot attendu : champ answer. why : la correction expliquée.
  * pts : barème de la question (2 points par défaut), comme « (1,5 pt) » dans un sujet d'examen.
+ * fig : dessin affiché sous la question (SVG de mocks/drawings.ts).
  */
 export type ExerciseSpec = (
   | { qcm: string; choices: string[]; why: string }
   | { vf: string; answer: boolean; why: string }
   | { num: string; answer: number; why: string }
   | { text: string; answer: string; accept?: string[]; why: string }
-) & { pts?: number };
+) & { pts?: number; fig?: string };
 
 export interface ExerciseSeries {
   subject: SubjectCode;
@@ -27,6 +28,14 @@ export interface ExerciseSeries {
   chapter: string;
   /** Série du programme au lycée (S1, L2…). */
   series?: string;
+  /**
+   * Plusieurs séries dans un même chapitre : identifiant de la série dans le chapitre (« serie-01 »)
+   * et son titre. Sans clé, la série unique du chapitre garde ses identifiants historiques.
+   */
+  key?: string;
+  title?: string;
+  /** false : réponses proposées dans l'ordre écrit (A, B, C ; &lt;, &gt;, =), jamais mélangées. */
+  shuffle?: boolean;
   questions: ExerciseSpec[];
 }
 
@@ -36,13 +45,14 @@ const p = (html: string) => `<p>${html}</p>`;
 /** Question et corrigé d'une spécification compacte (identifiant donné par l'appelant). */
 function toQuestion(id: string, spec: ExerciseSpec, where: string): { question: MockQuestion; key: MockAnswerKey } {
   const points = spec.pts ?? POINTS;
+  const prompt = (text: string) => p(text) + (spec.fig ?? "");
   const option = (label: string, i: number) => ({ id: `${id}-${String.fromCharCode(97 + i)}`, labelHtml: label.replace(/^\*/, "") });
   if ("qcm" in spec) {
     const options = spec.choices.map(option);
     const correct = spec.choices.findIndex((c) => c.startsWith("*"));
     if (correct < 0) throw new Error(`${where} : bonne réponse manquante (${id})`);
     return {
-      question: { id, type: "single_choice", points, promptHtml: p(spec.qcm), options, explanationHtml: p(spec.why) },
+      question: { id, type: "single_choice", points, promptHtml: prompt(spec.qcm), options, explanationHtml: p(spec.why) },
       key: { correctOptionIds: [options[correct]!.id] },
     };
   }
@@ -52,18 +62,18 @@ function toQuestion(id: string, spec: ExerciseSpec, where: string): { question: 
       { id: `${id}-faux`, labelHtml: "Faux" },
     ];
     return {
-      question: { id, type: "true_false", points, promptHtml: p(spec.vf), options, explanationHtml: p(spec.why) },
+      question: { id, type: "true_false", points, promptHtml: prompt(spec.vf), options, explanationHtml: p(spec.why) },
       key: { correctOptionIds: [spec.answer ? options[0].id : options[1].id] },
     };
   }
   if ("num" in spec) {
     return {
-      question: { id, type: "numeric", points, promptHtml: p(spec.num), options: [], explanationHtml: p(spec.why) },
+      question: { id, type: "numeric", points, promptHtml: prompt(spec.num), options: [], explanationHtml: p(spec.why) },
       key: { numericValue: spec.answer, expectedAnswer: String(spec.answer) },
     };
   }
   return {
-    question: { id, type: "short_text", points, promptHtml: p(spec.text), options: [], explanationHtml: p(spec.why) },
+    question: { id, type: "short_text", points, promptHtml: prompt(spec.text), options: [], explanationHtml: p(spec.why) },
     key: { acceptedTexts: [spec.answer, ...(spec.accept ?? [])], expectedAnswer: spec.answer },
   };
 }
@@ -83,22 +93,26 @@ export function buildExerciseSeries(levelCode: string, chapters: Chapter[], seri
   const questionChapters: Record<string, string> = {};
   const where = `Exercices (${levelCode})`;
 
-  const assessments: Assessment[] = series.map(({ subject, chapter: title, series: seriesCode, questions: specs }) => {
+  const seen = new Set<string>();
+  const assessments: Assessment[] = series.map(({ subject, chapter: title, series: seriesCode, key: seriesKey, title: seriesTitle, shuffle, questions: specs }) => {
     const chapter = findChapter(chapters, subject, title, seriesCode ?? null, where);
+    const id = seriesKey ? `${chapter.id}--${seriesKey}` : `${chapter.id}--exercices`;
+    if (seen.has(id)) throw new Error(`${where} : série en double (${id})`);
+    seen.add(id);
 
     const questionIds = specs.map((spec, index) => {
-      const id = `${chapter.id}--q${index + 1}`;
-      const { question, key } = toQuestion(id, spec, where);
-      questions[id] = question;
-      keys[id] = key;
-      questionChapters[id] = chapter.id;
-      return id;
+      const questionId = seriesKey ? `${id}-q${index + 1}` : `${chapter.id}--q${index + 1}`;
+      const { question, key } = toQuestion(questionId, spec, where);
+      questions[questionId] = question;
+      keys[questionId] = key;
+      questionChapters[questionId] = chapter.id;
+      return questionId;
     });
 
     return {
-      id: `${chapter.id}--exercices`,
+      id,
       kind: "exercise",
-      title: `Exercices : ${chapter.title}`,
+      title: seriesTitle ?? `Exercices : ${chapter.title}`,
       subjectCode: subject,
       levelCode,
       seriesCode: chapter.seriesCode ?? null,
@@ -106,6 +120,7 @@ export function buildExerciseSeries(levelCode: string, chapters: Chapter[], seri
       durationS: null,
       isPremium: !isFreeChapter(chapter.number),
       questionIds,
+      ...(shuffle === false ? { shuffleOptions: false } : {}),
     };
   });
 

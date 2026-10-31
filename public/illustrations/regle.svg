@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" width="160" height="40">
+  <defs><linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset="1" stop-color="#f2c64a"/></linearGradient></defs>
+  <rect x="4" y="8" width="152" height="26" rx="3" fill="url(#r)" stroke="#a8861a" stroke-width="1.5"/>
+  <path d="M14 8V20M24 8V16M34 8V20M44 8V16M54 8V20M64 8V16M74 8V20M84 8V16M94 8V20M104 8V16M114 8V20M124 8V16M134 8V20M144 8V16" stroke="#6b5200" stroke-width="1.5"/>
+</svg>

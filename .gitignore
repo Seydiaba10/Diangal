@@ -43,3 +43,11 @@ next-env.d.ts
 
 # supabase (fichiers locaux de la CLI)
 supabase/.temp/
+
+# Modèle interne : pages recopiées des cahiers d'école (jamais publiées, ni sur le site ni sur GitHub).
+# Ces fichiers restent sur le poste du porteur du projet ; les tests qui les lisent y tournent aussi.
+/src/mocks/workbooks/
+/scripts/workbook-figures.ts
+/tests/unit/workbooks.test.ts
+/tests/db/workbooks.test.ts
+/tests/db/fixtures/workbook-page.sql

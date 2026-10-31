@@ -24,8 +24,14 @@ export async function AnswerKeyList({ questions }: { questions: AdminQuestion[] 
             </span>
             <span>{t("points", { points: question.points })}</span>
           </p>
+          {/* Énoncé commun : une seule fois pour les questions qui se suivent. */}
+          {question.stemHtml && question.stemHtml !== questions[i - 1]?.question.stemHtml ? (
+            <RichText html={question.stemHtml} className="mt-2 border-b border-line pb-3 text-ink" />
+          ) : null}
           <RichText html={question.promptHtml} className="mt-2 text-ink" />
-          {question.options.length > 0 ? (
+          {question.type === "self_check" ? (
+            <p className="mt-3 rounded-lg bg-info-50 px-3 py-2 text-sm text-info-700">{t("selfCheck")}</p>
+          ) : question.options.length > 0 ? (
             <ul className="mt-3 space-y-1.5">
               {question.options.map((o) => {
                 const right = key.correctOptionIds?.includes(o.id);

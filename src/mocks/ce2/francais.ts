@@ -5,6 +5,7 @@
 
 import { tableau } from "../3e/blocks";
 import { bullets, type CiChapterSpec, keyPoint, practice } from "../ci/blocks";
+import { figure, pic, row, schema } from "../lesson-figures";
 
 const ORAL = "Communication orale";
 const LECT = "Lecture";
@@ -22,7 +23,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Bien parler devant les autres",
-        body: `${bullets([
+        body: `${figure(row(pic("eleve-garcon", "je parle fort et je regarde mon public", 80), pic("oreille", "on m’écoute", 48)), "Je prépare mon exposé : un début, un milieu, une fin.")}
+          ${bullets([
             "Je prépare ce que je vais dire et je l’organise : début, milieu, fin.",
             "Je parle fort, lentement, en regardant mon public.",
             "Mes gestes et mon visage accompagnent ce que je dis.",
@@ -40,7 +42,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Reconnaître le type d’un texte",
-        body: `${tableau([
+        body: `${figure(row(pic("livre", "un conte : narratif", 44), pic("case", "une description : descriptif", 52), pic("bol", "une recette : injonctif", 38)), "Chaque type de texte a un but : raconter, décrire, dire quoi faire.")}
+          ${tableau([
             ["Type", "Il sert à…", "Je reconnais…"],
             ["narratif", "raconter", "des personnages, des événements, des mots du temps"],
             ["descriptif", "faire voir", "des adjectifs, des mots de lieu, des comparaisons"],
@@ -58,7 +61,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Lire et écrire une lettre",
-        body: `${tableau([
+        body: `${figure(row(pic("enveloppe", "la lettre dans son enveloppe", 60)), "Une lettre : le lieu et la date, la formule d’appel, le message, la formule de politesse, la signature.")}
+          ${tableau([
             ["Élément", "Exemple"],
             ["lieu et date", "Kaolack, le 3 mars 2026"],
             ["formule d’appel", "Cher grand-père, / Chère amie,"],
@@ -79,6 +83,7 @@ export const FR_CE2: CiChapterSpec[] = [
       {
         title: "Lire et fabriquer une affiche",
         body: `<p>Une <strong>affiche</strong> donne vite une information importante : un match, une campagne de vaccination, une kermesse.</p>
+          ${figure(schema("ce2-affiche", "Une affiche de kermesse."), "Le titre est en gros ; l’affiche dit quoi, quand, où et combien.")}
           ${bullets([
             "Le titre est écrit en gros ; l’information principale se voit d’abord.",
             "Les phrases sont courtes, souvent sans verbe (phrases nominales) : « Grand match de football samedi ».",
@@ -96,7 +101,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Lire et dire un poème",
-        body: `${bullets([
+        body: `${figure("<table><tr><td>Le soleil se lève sur la <strong>maison</strong>,</td></tr><tr><td>Les enfants chantent une <strong>chanson</strong>,</td></tr><tr><td>Le coq réveille tout le <strong>quartier</strong>,</td></tr><tr><td>C’est l’heure de se <strong>lever</strong>.</td></tr></table>", "Une strophe de quatre vers : maison et chanson riment, quartier et lever aussi.")}
+          ${bullets([
             "Un poème est écrit en <strong>vers</strong> (lignes courtes) regroupés en <strong>strophes</strong>.",
             "Les fins de vers se ressemblent : ce sont les <strong>rimes</strong> (maison / saison).",
             "Le poème joue avec les sons, les images et les émotions.",
@@ -113,7 +119,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "COD et COI",
-        body: `${bullets([
+        body: `${figure(row(pic("eleve-fille", "Awa lit…", 80), pic("livre", "… un livre : COD (quoi ?)", 44)), "« Awa lit un livre. » Lit quoi ? un livre : c’est le complément d’objet direct.")}
+          ${bullets([
             "Le <strong>COD</strong> répond à la question « quoi ? » ou « qui ? » après le verbe : Awa lit <strong>un livre</strong>.",
             "Le <strong>COI</strong> répond à « à qui ? », « à quoi ? », « de quoi ? » : Awa parle <strong>à sa mère</strong>.",
           ])}
@@ -129,7 +136,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Remplacer un nom par un pronom",
-        body: `${tableau([
+        body: `${figure(row(pic("eleve-garcon", "Moussa", 80), pic("mangue", "la mangue", 44)), "« Moussa mange la mangue. » devient « Il la mange. » : les pronoms remplacent les noms.")}
+          ${tableau([
             ["Pronoms sujets", "Pronoms compléments"],
             ["je, tu, il, elle, nous, vous, ils, elles", "me, te, le, la, les, lui, leur, nous, vous"],
           ])}
@@ -146,7 +154,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Phrase nominale, articles définis et indéfinis",
-        body: `${bullets([
+        body: `${figure(row(pic("ecole", "« Fermeture de l’école à midi. »", 56)), "Une phrase nominale n’a pas de verbe.")}
+          ${bullets([
             "Une <strong>phrase nominale</strong> n’a pas de verbe : « Fermeture de l’école à midi. »",
             "Articles <strong>définis</strong> (quelque chose de connu) : le, la, l’, les.",
             "Articles <strong>indéfinis</strong> (quelque chose de non précisé) : un, une, des.",
@@ -163,7 +172,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Dire où et quand",
-        body: `${bullets([
+        body: `${figure(row(pic("ballon", "dans la cour : où ?", 40), pic("soleil", "le matin : quand ?", 46)), "« Nous jouons au ballon dans la cour le matin. »")}
+          ${bullets([
             "Le complément circonstanciel de <strong>lieu</strong> répond à « où ? » : Nous jouons <strong>dans la cour</strong>.",
             "Le complément circonstanciel de <strong>temps</strong> répond à « quand ? » : <strong>Le matin</strong>, je vais à l’école.",
           ])}
@@ -179,7 +189,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Les adjectifs possessifs et démonstratifs",
-        body: `${tableau([
+        body: `${figure(row(pic("cartable", "mon cartable", 52), pic("velo", "ce vélo", 40)), "« mon » dit à qui est l’objet ; « ce » le montre.")}
+          ${tableau([
             ["Adjectifs possessifs", "Adjectifs démonstratifs"],
             ["mon, ton, son, ma, ta, sa, mes, tes, ses", "ce (ce livre), cet (cet arbre)"],
             ["notre, votre, leur, nos, vos, leurs", "cette (cette case), ces (ces enfants)"],
@@ -197,6 +208,7 @@ export const FR_CE2: CiChapterSpec[] = [
       {
         title: "L’imparfait de l’indicatif",
         body: `<p>L’<strong>imparfait</strong> sert à raconter ou décrire dans le passé, des actions qui duraient ou se répétaient.</p>
+          ${figure(row(pic("grand-pere", "Autrefois, grand-père cultivait le mil.", 80)), "L’imparfait raconte ce qui durait ou se répétait dans le passé.")}
           ${tableau([
             ["jouer", "terminaison"],
             ["je jouais", "-ais"],
@@ -218,7 +230,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Le passé composé des verbes usuels",
-        body: `${tableau([
+        body: `${figure(row(pic("eleve-fille", "Awa a pris le taxi.", 80), pic("taxi", "le taxi", 40)), "prendre → j’ai pris ; aller → je suis allé(e).")}
+          ${tableau([
             ["Verbe", "Passé composé"],
             ["faire", "j’ai fait"],
             ["courir", "j’ai couru"],
@@ -239,7 +252,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "L’impératif et le futur des verbes usuels",
-        body: `${tableau([
+        body: `${figure(row(pic("cahier", "Finis ton devoir !", 44), pic("ecole", "Demain, je ferai mes devoirs.", 56)), "L’impératif donne un ordre ; le futur dit ce qui se passera.")}
+          ${tableau([
             ["Verbe", "Impératif", "Futur"],
             ["finir", "finis, finissons, finissez", "je finirai"],
             ["faire", "fais, faisons, faites", "je ferai"],
@@ -260,7 +274,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Féminin et pluriel des noms",
-        body: `${tableau([
+        body: `${figure(row(pic("papa", "le vendeur", 80), pic("maman", "la vendeuse", 80)), "vendeur → vendeuse ; un vendeur → des vendeurs.")}
+          ${tableau([
             ["Féminin", "Exemples"],
             ["on ajoute -e", "cousin → cousine"],
             ["-eur → -euse", "vendeur → vendeuse"],
@@ -281,7 +296,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "son ou sont ?",
-        body: `${tableau([
+        body: `${figure(row(pic("cartable", "son cartable (le sien)", 52), pic("ecole", "Les élèves sont en classe.", 56)), "« son » peut se remplacer par « mon » ; « sont » par « étaient ».")}
+          ${tableau([
             ["Mot", "Astuce", "Exemple"],
             ["sont (verbe être)", "je peux dire « étaient »", "Les enfants sont en classe."],
             ["son (à lui, à elle)", "je peux dire « mon »", "Il prend son cartable."],
@@ -300,7 +316,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Synonymes, homonymes et familles de mots",
-        body: `${bullets([
+        body: `${figure(row(pic("verre-eau", "un verre", 44), pic("feuille", "vert", 40)), "verre et vert se prononcent pareil : ce sont des homonymes.")}
+          ${bullets([
             "<strong>Synonymes</strong> : mots de sens proche (content, joyeux).",
             "<strong>Homonymes</strong> : mots qui se prononcent pareil mais n’ont pas le même sens (verre, vert, ver).",
             "<strong>Famille de mots</strong> : mots formés à partir du même mot (terre, terrain, enterrer).",
@@ -318,7 +335,8 @@ export const FR_CE2: CiChapterSpec[] = [
     lessons: [
       {
         title: "Écrire, relire, réécrire",
-        body: `${bullets([
+        body: `${figure(row(pic("cahier", "le premier jet", 44), pic("crayon", "je corrige", 24), pic("cahier", "je recopie au propre", 44)), "J’écris, je relis avec la fiche de critères, puis je réécris.")}
+          ${bullets([
             "Je lis bien la consigne : qu’est-ce que je dois écrire et pour qui ?",
             "J’écris un premier jet en suivant la fiche de critères (éléments de la lettre, de l’affiche ou du poème).",
             "Je relis : sens, ponctuation, accords, orthographe.",

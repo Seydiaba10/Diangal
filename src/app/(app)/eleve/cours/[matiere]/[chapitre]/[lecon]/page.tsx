@@ -10,7 +10,7 @@ import { LessonIllustration } from "@/features/curriculum/components/lesson-illu
 import { LessonBody, LessonBodySkeleton, LessonResources } from "@/features/curriculum/components/lesson-parts";
 import { chapterHref, getLesson, getPrerenderedLessonParams, lessonHref } from "@/features/curriculum/data";
 import { coursesHrefFor } from "@/features/schooling/class-navigation";
-import { hasReadAloud } from "@/lib/levels";
+import { hasLessonFigures, hasReadAloud } from "@/lib/levels";
 
 type Params = PageProps<"/eleve/cours/[matiere]/[chapitre]/[lecon]">;
 
@@ -46,7 +46,7 @@ async function LessonContent({ params }: { params: Params["params"] }) {
           </p>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink lg:text-[28px]">{lesson.title}</h1>
         </div>
-        {hasReadAloud(subject.levelCode) ? <LessonIllustration subjectCode={subject.code} /> : null}
+        {hasReadAloud(subject.levelCode) && !hasLessonFigures(subject.levelCode) ? <LessonIllustration subjectCode={subject.code} /> : null}
       </header>
 
       <LessonResources lesson={lesson} />

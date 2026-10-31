@@ -3,6 +3,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { normalizeText, parseNumber } from "@/lib/grading";
 import { CATALOG_CHAPTERS } from "@/mocks/curriculum";
 import { CHAPTERS_CI } from "@/mocks/curriculum-ci";
+import { ASSESSMENTS_CP } from "@/mocks/cp/exercises";
 import { CHAPTERS_CP } from "@/mocks/curriculum-cp";
 import { ANON, as, createTestDatabase, createUser, type Actor } from "./harness";
 
@@ -90,13 +91,13 @@ describe("contenus", () => {
     expect(ci.every((r) => r.empty === 0)).toBe(true);
   });
 
-  it("publie le programme du CP (français, maths, ESVS), chaque leçon rédigée et une série d'exercices par chapitre", async () => {
+  it("publie le programme du CP (français, maths, ESVS), chaque leçon rédigée et ses séries d'exercices", async () => {
     const cp = await as(db, adminMfa, async (tx) =>
       (await tx.query<{ subject: string; chapters: number; empty: number; series: number }>(
         `select s.code as subject, count(distinct c.id)::int as chapters,
                 count(l.id) filter (where coalesce(b.body_html, '') not like '%<h2>%')::int as empty,
                 (select count(*)::int from public.assessments a where a.chapter_id in (
-                   select c2.id from public.chapters c2 where c2.program_id = p.id) and a.kind = 'exercise') as series
+                   select c2.id from public.chapters c2 where c2.program_id = p.id) and a.kind = 'exercise' and a.workbook is null) as series
          from public.programs p join public.levels lv on lv.id = p.level_id join public.subjects s on s.id = p.subject_id
          join public.chapters c on c.program_id = p.id join public.lessons l on l.chapter_id = c.id
          left join public.lesson_bodies b on b.lesson_id = l.id
@@ -106,7 +107,9 @@ describe("contenus", () => {
     expect(cp.map((r) => r.subject)).toEqual(["ESVS", "FR", "MATH"]);
     expect(cp.reduce((sum, r) => sum + r.chapters, 0)).toBe(CHAPTERS_CP.length);
     expect(cp.every((r) => r.empty === 0)).toBe(true);
-    expect(cp.reduce((sum, r) => sum + r.series, 0)).toBe(CHAPTERS_CP.length);
+    // Toutes les séries des mocks (plusieurs par chapitre en maths), et au moins une par chapitre.
+    expect(cp.reduce((sum, r) => sum + r.series, 0)).toBe(ASSESSMENTS_CP.length);
+    expect(new Set(ASSESSMENTS_CP.map((a) => a.chapterId)).size).toBe(CHAPTERS_CP.length);
   });
 
   it("n'expose jamais les questions ni les corrigés à un élève", async () => {

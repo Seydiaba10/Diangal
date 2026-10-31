@@ -12,7 +12,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SubjectIcon } from "@/components/ui/subject-icon";
 import { getCurrentStudent } from "@/features/account/data";
 import { startAttemptAction } from "@/features/assessments/actions";
-import { getAssessment, getAssessmentBestScore, getPrerenderedAssessmentIds } from "@/features/assessments/data";
+import { WorkbookPage } from "@/features/assessments/components/workbook-page";
+import { getAssessment, getAssessmentBestScore, getAssessmentPage, getPrerenderedAssessmentIds } from "@/features/assessments/data";
 import { PaywallCard } from "@/features/payments/components/paywall-card";
 import { formatDuration, formatScore } from "@/lib/format";
 import type { AssessmentSummary } from "@/types/domain";
@@ -73,7 +74,11 @@ async function AssessmentIntro({ params }: { params: PageProps<"/eleve/evaluatio
   const timed = assessment.durationS !== null;
   const rules = timed
     ? (["timer", "saved", "auto", "online", "correction"] as const)
-    : (["practice", "saved", "correction"] as const);
+    : assessment.workbook
+      ? (["practice", "workbook", "saved", "correction"] as const)
+      : (["practice", "saved", "correction"] as const);
+  // Page d'un cahier d'exercices : montrée en entier avant de commencer.
+  const page = assessment.workbook ? await getAssessmentPage(assessment.id) : null;
 
   return (
     <>
@@ -110,6 +115,10 @@ async function AssessmentIntro({ params }: { params: PageProps<"/eleve/evaluatio
         />
         <InfoTile icon={<Scale className="size-5" aria-hidden />} label={t("scale")} value={t("scaleValue")} />
       </div>
+
+      {assessment.workbook && page ? (
+        <WorkbookPage assessment={assessment} html={page} titleId="page-cahier-titre" title={t("pageTitle")} />
+      ) : null}
 
       <Card aria-labelledby="consignes-titre" className="p-5">
         <h2 id="consignes-titre" className="font-semibold text-ink">

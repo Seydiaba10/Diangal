@@ -336,6 +336,7 @@ export interface AdminQuestion {
     explanationHtml: string;
     points: number;
     options: { id: string; labelHtml: string }[];
+    stemHtml?: string;
   };
   key: MockAnswerKey;
 }
@@ -357,6 +358,7 @@ export async function fetchAdminAssessment(assessmentUuid: string): Promise<Admi
       accepted_texts: string[];
       numeric_value: number | string | null;
       expected_answer: string | null;
+      stem_html?: string | null;
     }[];
   };
   return raw.questions.map((q) => ({
@@ -367,6 +369,7 @@ export async function fetchAdminAssessment(assessmentUuid: string): Promise<Admi
       explanationHtml: q.explanation_html,
       points: Number(q.points),
       options: q.options.map((o) => ({ id: o.id, labelHtml: o.label_html })),
+      ...(q.stem_html ? { stemHtml: q.stem_html } : {}),
     },
     key: {
       correctOptionIds: q.correct_option_ids,

@@ -25,11 +25,13 @@ const BAND_STYLES: Record<Band, string> = {
   low: "bg-danger-50 text-danger-700",
 };
 
-type ReviewStatus = "correct" | "partial" | "wrong" | "empty";
+type ReviewStatus = "correct" | "partial" | "wrong" | "empty" | "selfSuccess" | "selfRetry";
 
 function statusOf(q: QuestionReview): ReviewStatus {
   const empty = q.response === null || (Array.isArray(q.response) ? q.response.length === 0 : !q.response.trim());
   if (empty) return "empty";
+  // Travail sur l'ardoise : l'élève s'est évalué lui-même.
+  if (q.type === "self_check") return q.isCorrect ? "selfSuccess" : "selfRetry";
   if (q.isCorrect) return "correct";
   return q.pointsAwarded > 0 ? "partial" : "wrong";
 }
@@ -39,6 +41,8 @@ const STATUS_BADGES = {
   partial: { tone: "premium", icon: CircleMinus },
   wrong: { tone: "danger", icon: CircleX },
   empty: { tone: "idle", icon: CircleMinus },
+  selfSuccess: { tone: "success", icon: CircleCheck },
+  selfRetry: { tone: "premium", icon: RotateCcw },
 } as const;
 
 export async function ResultView({ attemptId }: { attemptId: string }) {
@@ -65,7 +69,12 @@ export async function ResultView({ attemptId }: { attemptId: string }) {
         <ol className="space-y-3">
           {result.questions.map((q, i) => (
             <li key={q.id}>
-              <QuestionReviewCard question={q} number={i + 1} />
+              {/* Énoncé commun : affiché une seule fois pour les questions qui se suivent. */}
+              <QuestionReviewCard
+                question={q}
+                number={i + 1}
+                showStem={Boolean(q.stemHtml) && q.stemHtml !== result.questions[i - 1]?.stemHtml}
+              />
             </li>
           ))}
         </ol>
@@ -133,12 +142,21 @@ async function ScoreCard({ result, band }: { result: AttemptResult; band: Band }
   );
 }
 
-async function QuestionReviewCard({ question, number }: { question: QuestionReview; number: number }) {
+async function QuestionReviewCard({
+  question,
+  number,
+  showStem,
+}: {
+  question: QuestionReview;
+  number: number;
+  showStem: boolean;
+}) {
   const t = await getTranslations("result");
   const status = statusOf(question);
   const badge = STATUS_BADGES[status];
   const picked = Array.isArray(question.response) ? question.response : [];
   const isChoice = question.options.length > 0;
+  const isSelfCheck = question.type === "self_check";
 
   return (
     <Card className="p-4 sm:p-5">
@@ -153,9 +171,12 @@ async function QuestionReviewCard({ question, number }: { question: QuestionRevi
           </Badge>
         </div>
       </div>
+      {showStem && question.stemHtml ? (
+        <RichText html={question.stemHtml} className="mt-2 border-b border-line pb-3 text-ink" />
+      ) : null}
       <RichText html={question.promptHtml} className="mt-2 text-ink" />
 
-      {isChoice ? (
+      {isSelfCheck ? null : isChoice ? (
         <ul className="mt-3 space-y-2">
           {question.options.map((option) => {
             const isRight = question.correctOptionIds.includes(option.id);

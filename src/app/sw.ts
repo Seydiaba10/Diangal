@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 import { defaultCache } from "@serwist/turbopack/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
-import { Serwist } from "serwist";
+import { ExpirationPlugin, Serwist, StaleWhileRevalidate } from "serwist";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -23,7 +23,18 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: defaultCache,
+  runtimeCaching: [
+    // Dessins et schémas des leçons et des exercices (quelques Ko chacun) : gardés longtemps et en
+    // grand nombre, pour qu'une leçon téléchargée reste illustrée hors ligne.
+    {
+      matcher: ({ url }) => url.origin === self.location.origin && url.pathname.startsWith("/illustrations/"),
+      handler: new StaleWhileRevalidate({
+        cacheName: "diangal-illustrations",
+        plugins: [new ExpirationPlugin({ maxEntries: 3000, maxAgeSeconds: 365 * 24 * 60 * 60 })],
+      }),
+    },
+    ...defaultCache,
+  ],
   fallbacks: {
     entries: [
       {

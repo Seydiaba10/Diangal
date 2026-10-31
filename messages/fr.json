@@ -250,6 +250,8 @@
     "recommended": "Recommandé pour toi",
     "recommendedHint": "D’après tes points faibles",
     "all": "Tous les exercices et contrôles",
+    "chapterSeries": "{count, plural, one {# série} other {# séries}}",
+    "otherAssessments": "Contrôles et sujets",
     "allSubjects": "Toutes",
     "filterLabel": "Filtrer par matière",
     "empty": "Aucun exercice pour cette matière pour l’instant.",
@@ -263,6 +265,11 @@
       "questions": "{count, plural, one {# question} other {# questions}}",
       "timed": "chronométré",
       "inProgress": "En cours"
+    },
+    "workbook": {
+      "title": "Cahier d’exercices de mathématiques",
+      "hint": "Les pages du cahier d’exercices, avec un corrigé rédigé par DIANGAL.",
+      "pages": "{count, plural, one {# page} other {# pages}}"
     }
   },
   "intro": {
@@ -278,12 +285,14 @@
       "auto": "À la fin du temps, ta copie est envoyée automatiquement.",
       "online": "Il faut être connecté pour commencer et pour envoyer ta copie.",
       "practice": "Prends ton temps : tu peux revenir sur chaque question avant de valider.",
-      "correction": "Correction immédiate, avec un corrigé détaillé pour chaque question."
+      "correction": "Correction immédiate, avec un corrigé détaillé pour chaque question.",
+      "workbook": "Pour le travail sur l’ardoise ou le cahier, compare avec le corrigé, puis dis si tu as réussi."
     },
     "startQuiz": "Commencer le contrôle",
     "startExercise": "Commencer les exercices",
     "lockedTitle": "Ce contrôle est réservé aux abonnés Premium",
-    "chapterLink": "Chapitre : {title}"
+    "chapterLink": "Chapitre : {title}",
+    "pageTitle": "La page du cahier"
   },
   "player": {
     "question": "Question {current} sur {total}",
@@ -313,7 +322,18 @@
     "submitting": "Envoi en cours…",
     "error": "Impossible d’envoyer ta copie. Vérifie ta connexion : tes réponses sont gardées sur ce téléphone.",
     "retry": "Réessayer",
-    "notFound": "Cette tentative n’existe plus. Recommence depuis la page Exercices."
+    "notFound": "Cette tentative n’existe plus. Recommence depuis la page Exercices.",
+    "showPage": "Voir la page du cahier",
+    "pageTitle": "Page du cahier",
+    "closePage": "Fermer",
+    "selfCheck": {
+      "instruction": "Fais ce travail sur ton ardoise ou dans ton cahier.",
+      "done": "J’ai fini : je compare avec le corrigé",
+      "model": "Corrigé",
+      "question": "As-tu réussi ?",
+      "success": "J’ai réussi",
+      "retry": "Je dois revoir"
+    }
   },
   "result": {
     "title": "Résultat",
@@ -334,7 +354,9 @@
       "correct": "Juste",
       "partial": "En partie juste",
       "wrong": "Faux",
-      "empty": "Sans réponse"
+      "empty": "Sans réponse",
+      "selfSuccess": "Réussi (tu t’es évalué)",
+      "selfRetry": "À revoir (tu t’es évalué)"
     },
     "yourAnswer": "Ta réponse : {answer}",
     "noAnswer": "Tu n’as pas répondu.",
@@ -1532,7 +1554,8 @@
     "openAssessment": "Ouvrir la série",
     "chapterNav": "Chapitres de la matière",
     "previous": "Chapitre précédent",
-    "next": "Chapitre suivant"
+    "next": "Chapitre suivant",
+    "workbookPage": "Page du cahier, telle que l’élève la voit"
   },
   "adminLesson": {
     "title": "Modifier une leçon",
@@ -1569,7 +1592,8 @@
       "multiple_choice": "Choix multiples",
       "true_false": "Vrai ou faux",
       "short_text": "Réponse courte",
-      "numeric": "Réponse numérique"
+      "numeric": "Réponse numérique",
+      "self_check": "Sur l’ardoise (auto-évaluée)"
     },
     "points": "{points} pts",
     "expected": "Réponse attendue : {answer}",
@@ -1580,7 +1604,8 @@
     "correctionSourceHint": "Par exemple : « Corrigé officiel » ou « Corrigé rédigé par DIANGAL, relu par un enseignant ».",
     "provenanceSaved": "Vérification et provenance enregistrées.",
     "explanation": "Explication",
-    "rightAnswer": "bonne réponse"
+    "rightAnswer": "bonne réponse",
+    "selfCheck": "Travail sur l’ardoise ou le cahier : l’élève voit ce corrigé, puis indique s’il a réussi."
   },
   "adminExams": {
     "title": "Examens nationaux",
@@ -2432,5 +2457,19 @@
     "presetLine": "Parrain : {referrer} j · filleul : {referee} j · paiement minimum {min} · {cap} récompenses par mois au plus · valeur ≈ {cost} par filleul payant",
     "note": "Les jours restent {hold} jours en garde : un remboursement pendant ce délai les retire.",
     "save": "Enregistrer"
+  },
+  "workbook": {
+    "domain": {
+      "AN": "Activités numériques",
+      "AG": "Activités géométriques",
+      "AM": "Activités de mesure",
+      "RP": "Résolution de problèmes",
+      "II": "Intégration interdisciplinaire"
+    },
+    "palier": "Palier {palier}",
+    "lesson": "Leçon {lesson}",
+    "page": "Page {page} du cahier",
+    "source": "Source : {source}.",
+    "correction": "Corrigé : {correction}."
   }
 }

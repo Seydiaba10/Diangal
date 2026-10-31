@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, CircleAlert, Flag, Timer } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Check, CircleAlert, Flag, PencilLine, Timer, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SpeakButton } from "@/components/ui/read-aloud";
 import { hasReadAloud } from "@/lib/levels";
@@ -12,6 +12,7 @@ import { RichText } from "@/components/ui/rich-text";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/cn";
 import { formatClock } from "@/lib/format";
+import { SELF_CHECK_RETRY, SELF_CHECK_SUCCESS } from "@/lib/grading";
 import type { AnswerMap, AnswerValue, AttemptSession, PlayerQuestion } from "@/types/domain";
 import { submitAttemptAction } from "../actions";
 
@@ -45,11 +46,28 @@ interface AttemptPlayerProps {
   session: AttemptSession;
 }
 
+/** Texte d'un fragment HTML pour la lecture à voix haute : descriptions des figures comprises, sans les pointillés. */
+function plainText(html: string): string {
+  return html
+    .replace(/<img[^>]*\balt="([^"]*)"[^>]*>/g, " $1. ")
+    // Dessin SVG : sa description, pas les nombres écrits dedans.
+    .replace(/<svg[^>]*\baria-label="([^"]*)"[^>]*>[\s\S]*?<\/svg>/g, " $1. ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, "&")
+    .replace(/[.…]{3,}/g, " … ");
+}
+
 /** Les réponses sauvegardées ne sont lues qu'après le montage, pour éviter un écart d'hydratation. */
-/** Texte lu à voix haute : la question, puis les réponses proposées. */
+/** Texte lu à voix haute : l'énoncé commun, la question, puis les réponses proposées. */
 function spokenQuestion(question: PlayerQuestion): string {
-  const plain = (html: string) => html.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ");
-  return [plain(question.promptHtml), ...question.options.map((o) => plain(o.labelHtml))].join(". ");
+  return [question.stemHtml ?? "", question.promptHtml, ...question.options.map((o) => o.labelHtml)]
+    .filter(Boolean)
+    .map(plainText)
+    .join(". ");
 }
 
 export function AttemptPlayer(props: AttemptPlayerProps) {
@@ -73,6 +91,7 @@ function Player({ session }: AttemptPlayerProps) {
   const answersRef = useRef(answers);
   const submittedRef = useRef(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const pageRef = useRef<HTMLDialogElement>(null);
 
   const submit = () => {
     submittedRef.current = true;
@@ -169,7 +188,18 @@ function Player({ session }: AttemptPlayerProps) {
           <span>{t("points", { points: question.points })}</span>
         </p>
 
+        {/* Page d'un cahier d'exercices : consultable pendant tout l'exercice. */}
+        {session.introHtml ? (
+          <Button variant="outline" className="mt-3 w-full sm:w-auto" onClick={() => pageRef.current?.showModal()}>
+            <BookOpen className="size-4" aria-hidden />
+            {t("showPage")}
+          </Button>
+        ) : null}
+
         <section className="mt-3 rounded-2xl border border-line bg-surface p-5">
+          {question.stemHtml ? (
+            <RichText html={question.stemHtml} className="mb-4 border-b border-line pb-4 text-base text-ink" />
+          ) : null}
           <RichText html={question.promptHtml} className="text-lg text-ink" />
           {/* CI à CM1 : la question et ses réponses peuvent s'écouter. */}
           {hasReadAloud(session.assessment.subject.levelCode) ? (
@@ -188,6 +218,12 @@ function Player({ session }: AttemptPlayerProps) {
             yourAnswer: t("yourAnswer"),
             numericHint: t("numericHint"),
             textHint: t("textHint"),
+            selfInstruction: t("selfCheck.instruction"),
+            selfDone: t("selfCheck.done"),
+            selfModel: t("selfCheck.model"),
+            selfQuestion: t("selfCheck.question"),
+            selfSuccess: t("selfCheck.success"),
+            selfRetry: t("selfCheck.retry"),
           }}
         />
 
@@ -268,6 +304,25 @@ function Player({ session }: AttemptPlayerProps) {
         </div>
       </dialog>
 
+      {session.introHtml ? (
+        <dialog
+          ref={pageRef}
+          aria-labelledby="page-cahier-titre"
+          className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-3xl overflow-y-auto rounded-2xl bg-surface p-5 text-ink backdrop:bg-black/40"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <h2 id="page-cahier-titre" className="text-lg font-semibold">
+              {t("pageTitle")}
+            </h2>
+            <Button variant="outline" onClick={() => pageRef.current?.close()}>
+              <X className="size-4" aria-hidden />
+              {t("closePage")}
+            </Button>
+          </div>
+          <RichText html={session.introHtml} className="mt-4 text-base text-ink" />
+        </dialog>
+      ) : null}
+
       {isPending || error || timeUp ? (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4">
           <div role="alert" className="w-full max-w-md rounded-2xl bg-surface p-6 text-center">
@@ -296,10 +351,82 @@ interface QuestionInputProps {
   question: PlayerQuestion;
   value: AnswerValue | undefined;
   onChange: (value: AnswerValue) => void;
-  labels: { chooseOne: string; chooseMany: string; yourAnswer: string; numericHint: string; textHint: string };
+  labels: {
+    chooseOne: string;
+    chooseMany: string;
+    yourAnswer: string;
+    numericHint: string;
+    textHint: string;
+    selfInstruction: string;
+    selfDone: string;
+    selfModel: string;
+    selfQuestion: string;
+    selfSuccess: string;
+    selfRetry: string;
+  };
+}
+
+/** Travail sur l'ardoise : l'élève le fait, découvre le corrigé, puis dit s'il a réussi. */
+function SelfCheckInput({ question, value, onChange, labels }: QuestionInputProps) {
+  const [revealed, setRevealed] = useState(typeof value === "string" && value !== "");
+  const choices = [
+    { value: SELF_CHECK_SUCCESS, label: labels.selfSuccess },
+    { value: SELF_CHECK_RETRY, label: labels.selfRetry },
+  ];
+  return (
+    <div className="mt-4 space-y-3">
+      <p className="flex items-center gap-2 rounded-xl bg-info-50 px-4 py-3 text-sm font-medium text-info-700">
+        <PencilLine className="size-4 shrink-0" aria-hidden />
+        {labels.selfInstruction}
+      </p>
+      {revealed ? (
+        <>
+          <div className="rounded-xl bg-brand-50 p-4">
+            <p className="text-sm font-semibold text-brand-800">{labels.selfModel}</p>
+            <RichText html={question.modelHtml ?? ""} className="mt-1 text-base text-ink" />
+          </div>
+          <fieldset>
+            <legend className="text-sm font-medium text-ink">{labels.selfQuestion}</legend>
+            <div className="mt-2 grid gap-2 sm:grid-cols-2">
+              {choices.map((choice) => {
+                const checked = value === choice.value;
+                return (
+                  <label
+                    key={choice.value}
+                    className={cn(
+                      "flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border-2 px-4 py-3 transition-colors",
+                      checked ? "border-brand-600 bg-brand-50" : "border-line bg-surface hover:border-brand-100",
+                    )}
+                  >
+                    <input
+                      type="radio"
+                      name={question.id}
+                      value={choice.value}
+                      checked={checked}
+                      onChange={() => onChange(choice.value)}
+                      className="size-5 shrink-0 accent-brand-600"
+                    />
+                    <span className="text-base text-ink">{choice.label}</span>
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
+        </>
+      ) : (
+        <Button className="w-full" onClick={() => setRevealed(true)}>
+          <Check className="size-4" aria-hidden />
+          {labels.selfDone}
+        </Button>
+      )}
+    </div>
+  );
 }
 
 function QuestionInput({ question, value, onChange, labels }: QuestionInputProps) {
+  if (question.type === "self_check") {
+    return <SelfCheckInput question={question} value={value} onChange={onChange} labels={labels} />;
+  }
   if (question.type === "short_text" || question.type === "numeric") {
     const numeric = question.type === "numeric";
     return (

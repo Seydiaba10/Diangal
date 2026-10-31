@@ -4,6 +4,7 @@
 // valider par un enseignant.
 
 import { bullets, type CiChapterSpec, keyPoint, practice } from "./blocks";
+import { counted, figure, pic, row, schema, sign } from "../lesson-figures";
 
 export const MATH_CI: CiChapterSpec[] = [
   // ── Palier 1 ──────────────────────────────────────────────────────────────
@@ -15,6 +16,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Devant, derrière, sur, sous",
         body: `<p>Pour dire où se trouve un objet, on utilise des petits mots de position.</p>
+          ${figure(schema("ci-sur-sous", "Une pastèque sur une table et un ballon sous la table."), "La pastèque est <strong>sur</strong> la table, le ballon est <strong>sous</strong> la table.")}${figure(schema("ci-file", "Awa, Modou et Fatou marchent en file vers l’école."), "Les enfants marchent vers l’école : Fatou est <strong>devant</strong> Modou, Awa est <strong>derrière</strong> Modou.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Le cartable est <strong>sur</strong> la table.",
@@ -31,6 +33,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "À droite, à gauche, près, loin",
         body: `<p>Ta main droite et ta main gauche t’aident à te repérer.</p>
+          ${figure(schema("ci-rangee", "Une mangue, un ballon et un cahier sur une étagère."), "Quand je regarde l’étagère, la mangue est <strong>à gauche</strong> du ballon et le cahier <strong>à droite</strong>.")}${figure(schema("ci-pres-loin", "Un garçon et deux ballons, A et B."), "Le ballon A est <strong>près</strong> du garçon, le ballon B est <strong>loin</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Lève ta main <strong>droite</strong>, puis ta main <strong>gauche</strong>.",
@@ -46,6 +49,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Avant, au même niveau, après",
         body: `<p>Dans une file ou sur une ligne, chacun a une place.</p>
+          ${figure(schema("ci-course", "Awa, Modou et Fatou courent vers une ligne d’arrivée."), "Awa et Fatou sont <strong>au même niveau</strong>. Modou arrivera <strong>après</strong> elles.")}
           <h2>Je découvre</h2>
           <p>Dans la file pour entrer en classe : Fatou passe <strong>avant</strong> Ali, Ali passe <strong>après</strong> Fatou. Deux enfants côte à côte sont <strong>au même niveau</strong>.</p>
           ${keyPoint("Avant, après et au même niveau servent à dire l’ordre et la place.")}
@@ -64,6 +68,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Former un ensemble",
         body: `<p>Un <strong>ensemble</strong>, c’est un groupe d’objets qui vont ensemble. On l’entoure d’une ligne fermée.</p>
+          ${figure(schema("ci-ensemble", "Des mangues, des oranges et une banane entourées par une ligne fermée."), "Les fruits sont entourés : ils forment un <strong>ensemble</strong>.")}
           <h2>Je découvre</h2>
           <p>Dans la cour, on entoure les ballons : c’est l’ensemble des ballons. Une mangue n’est pas un ballon : elle n’<strong>appartient pas</strong> à cet ensemble.</p>
           ${keyPoint("Un objet <strong>appartient</strong> à un ensemble s’il est à l’intérieur de la ligne. Sinon, il n’appartient pas à l’ensemble.")}
@@ -75,6 +80,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Peu, beaucoup, rien",
         body: `<p>On peut dire si un ensemble a beaucoup ou peu d’objets, même sans compter.</p>
+          ${figure(schema("ci-bols", "Trois bols : beaucoup de billes, peu de billes, aucune bille."), "Le premier bol a <strong>beaucoup</strong> de billes, le deuxième <strong>peu</strong>, le troisième <strong>rien</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Un sac de riz contient <strong>beaucoup</strong> de grains.",
@@ -90,6 +96,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Plus que, moins que, autant que",
         body: `<p>Pour comparer deux ensembles, on relie chaque objet de l’un à un objet de l’autre.</p>
+          ${figure(schema("ci-comparer", "L’ensemble A a 4 oranges, l’ensemble B en a 2."), "L’ensemble A a <strong>plus</strong> d’oranges que l’ensemble B ; B en a <strong>moins</strong>.")}
           <h2>Je découvre</h2>
           <p>Sidi a 5 bonbons et Rama a 3 bonbons. On relie un bonbon de Sidi à un bonbon de Rama : il reste 2 bonbons à Sidi. Sidi a <strong>plus</strong> de bonbons que Rama. Rama a <strong>moins</strong> de bonbons que Sidi.</p>
           ${keyPoint("Si chaque objet a un partenaire et qu’il n’en reste aucun, les deux ensembles ont <strong>autant</strong> d’objets.")}
@@ -108,6 +115,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Plus long, plus court",
         body: `<p>Pour savoir quel objet est le plus long, on les pose côte à côte, en partant du même point.</p>
+          ${figure(schema("ci-rubans", "Trois rubans A, B et C alignés à gauche."), "Le ruban A est <strong>le plus long</strong>, le ruban B est <strong>le plus court</strong>.")}
           <h2>Je découvre</h2>
           <p>Le bâton de Moussa dépasse celui d’Awa : le bâton de Moussa est <strong>plus long</strong>, celui d’Awa est <strong>plus court</strong>.</p>
           ${keyPoint("Pour comparer deux longueurs, on aligne les objets au départ, puis on regarde lequel dépasse.")}
@@ -119,6 +127,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Plus près, plus loin",
         body: `<p>La distance, c’est le chemin entre deux endroits.</p>
+          ${figure(schema("ci-pres-loin", "Un garçon et deux ballons, A et B."), "Le ballon A est <strong>plus près</strong> du garçon que le ballon B.")}
           <h2>Je découvre</h2>
           <p>La boutique est à côté de la maison : elle est <strong>plus près</strong>. Le marché est au bout du quartier : il est <strong>plus loin</strong>.</p>
           ${keyPoint("Pour comparer deux distances sans instrument, on peut compter ses pas.")}
@@ -130,6 +139,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Plus plein, moins plein",
         body: `<p>Un récipient peut contenir beaucoup ou peu de liquide : c’est sa <strong>contenance</strong>.</p>
+          ${figure(schema("ci-verres", "Trois verres : plein, à moitié, vide."), "Le verre A est <strong>plein</strong>, le verre B est <strong>moins plein</strong>, le verre C est vide.")}
           <h2>Je découvre</h2>
           <p>On remplit un seau avec des verres d’eau : il faut beaucoup de verres. Le seau contient <strong>plus</strong> d’eau que le verre. Le verre contient <strong>moins</strong> d’eau que le seau.</p>
           ${keyPoint("Pour comparer deux contenances, on transvase : on verse le contenu de l’un dans l’autre.")}
@@ -148,6 +158,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Indices et intrus",
         body: `<p>Avant de résoudre un problème, il faut bien regarder. Une image donne des <strong>indices</strong>.</p>
+          ${figure(row(pic("mangue", "mangue"), pic("orange", "orange"), pic("banane", "banane"), pic("crayon", "crayon")), "Le crayon est l’<strong>intrus</strong> : ce n’est pas un fruit.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Sur une image de la classe, je cherche ce qui est utile : les élèves, les tables, le tableau.",
@@ -163,6 +174,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Mettre de l’ordre et continuer un rythme",
         body: `<p>Une histoire en images se lit dans l’ordre : ce qui se passe d’abord, ensuite, enfin.</p>
+          ${figure(schema("ci-rythme", "Rond, carré, rond, carré, qui se répète."), "Rond, carré, rond, carré… : le motif se répète, c’est un <strong>rythme</strong>.")}
           <h2>Je découvre</h2>
           <p>On plante une graine, la plante pousse, puis elle donne une fleur : ces images ont un ordre.</p>
           <p>Un <strong>rythme</strong> se répète : rond, carré, rond, carré… La suite est : rond.</p>
@@ -175,6 +187,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Lire un tableau",
         body: `<p>Un <strong>tableau à double entrée</strong> range des informations en lignes et en colonnes.</p>
+          ${figure(schema("ci-quadrillage", "Un quadrillage avec une mangue dans une case."), "On lit un tableau avec une ligne et une colonne : la mangue est sur la ligne B, dans la colonne 3.")}
           <h2>Je découvre</h2>
           <p>Sur chaque ligne, un enfant : Fatou, Doudou. Dans chaque colonne, un jouet : ballon, poupée, vélo. Une croix dans une case veut dire : « cet enfant a ce jouet ».</p>
           ${keyPoint("Pour lire une case, je suis la ligne avec un doigt et la colonne avec l’autre doigt : ils se rejoignent dans la case.")}
@@ -194,6 +207,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Le cube, le pavé et le cylindre",
         body: `<p>Autour de nous, beaucoup d’objets ont la forme de <strong>solides</strong>.</p>
+          ${figure(schema("ci-solides", "Un cube A, un pavé droit B et un cylindre C."), "A est un <strong>cube</strong>, B un <strong>pavé</strong>, C un <strong>cylindre</strong>.")}${figure(row(pic("de", "un dé : un cube"), pic("livre", "un livre : un pavé")), "Des objets de tous les jours ont la forme de ces solides.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Le <strong>cube</strong> : un dé à jouer. Toutes ses faces sont des carrés pareils.",
@@ -216,6 +230,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Carré, rectangle, triangle et rond",
         body: `<p>Une <strong>figure plane</strong> est toute plate : on peut la dessiner sur une feuille.</p>
+          ${figure(schema("ci-figures", "Un carré A, un rectangle B, un triangle C et un rond D."), "A : un <strong>carré</strong>. B : un <strong>rectangle</strong>. C : un <strong>triangle</strong>. D : un <strong>rond</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Le <strong>carré</strong> a 4 côtés de même longueur.",
@@ -239,6 +254,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Les nombres 1, 2 et 3",
         body: `<p>Un nombre dit combien il y a d’objets.</p>
+          ${figure(row(counted("mangue", 1, "1"), counted("mangue", 2, "2"), counted("mangue", 3, "3")), "1 mangue, 2 mangues, 3 mangues.")}
           <h2>Je découvre</h2>
           ${bullets([
             "<strong>1</strong> (un) : une tête, un nez.",
@@ -254,6 +270,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Les nombres 4 et 5",
         body: `<p>Après 3 vient <strong>4</strong> (quatre), puis <strong>5</strong> (cinq) : les cinq doigts d’une main.</p>
+          ${figure(row(counted("orange", 4, "4"), counted("orange", 5, "5")), "4 oranges, puis 5 oranges : 5, c’est une de plus que 4.")}
           <h2>Je compare</h2>
           <p>5 est plus grand que 4 : on écrit <strong>5 &gt; 4</strong>. 4 est plus petit que 5 : on écrit <strong>4 &lt; 5</strong>.</p>
           ${keyPoint("La pointe du signe montre toujours le plus petit nombre.")}
@@ -265,6 +282,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Le nombre 0",
         body: `<p>Quand il n’y a <strong>rien</strong>, on écrit <strong>0</strong> (zéro).</p>
+          ${figure(row(counted("orange", 2, "2"), counted("orange", 1, "1"), pic("bol", "0")), "Dans le bol, il n’y a rien : <strong>zéro</strong> orange.")}
           <h2>Je découvre</h2>
           <p>Il y avait 2 mangues dans le panier. Awa et Moussa en mangent une chacun : il reste 0 mangue. Le panier est vide.</p>
           ${keyPoint("0 est le plus petit des nombres : 0 &lt; 1 &lt; 2 &lt; 3 &lt; 4 &lt; 5.")}
@@ -283,6 +301,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Les nombres 6, 7 et 8",
         body: `<p>Avec une main entière et quelques doigts de l’autre main, on montre <strong>6</strong>, <strong>7</strong> et <strong>8</strong>.</p>
+          ${figure(row(counted("bonbon", 6, "6"), counted("bonbon", 7, "7"), counted("bonbon", 8, "8")), "6 bonbons, 7 bonbons, 8 bonbons : on ajoute un bonbon à chaque fois.")}
           <h2>Je compose et je décompose</h2>
           ${bullets(["6 = 5 + 1 = 4 + 2 = 3 + 3", "7 = 5 + 2 = 4 + 3 = 6 + 1", "8 = 5 + 3 = 4 + 4 = 6 + 2"])}
           ${keyPoint("Un même nombre peut s’écrire de plusieurs façons avec le signe +.")}
@@ -294,6 +313,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Le nombre 9",
         body: `<p>Après 8 vient <strong>9</strong> (neuf).</p>
+          ${figure(row(counted("ballon", 9, "9")), "9 ballons : un de moins que 10.")}
           <h2>Je compose et je décompose</h2>
           ${bullets(["9 = 5 + 4", "9 = 8 + 1", "9 = 6 + 3"])}
           ${keyPoint("9 &gt; 8 et 9 &lt; 10.")}
@@ -305,6 +325,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Le nombre 10 et la dizaine",
         body: `<p>Avec les doigts de tes deux mains, tu montres <strong>10</strong> (dix).</p>
+          ${figure(schema("ci-dizaine", "Une barre de 10 cubes dans le tableau dizaines et unités."), "10 cubes forment une barre : c’est <strong>une dizaine</strong>.")}
           <h2>Je découvre la dizaine</h2>
           <p>Quand on a 10 bâtonnets, on les attache avec un élastique : c’est <strong>une dizaine</strong>. 10, c’est 1 dizaine et 0 unité.</p>
           ${bullets(["10 = 5 + 5", "10 = 9 + 1", "10 = 8 + 2", "10 = 7 + 3", "10 = 6 + 4"])}
@@ -324,6 +345,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Ajouter : l’addition",
         body: `<p><strong>Ajouter</strong>, c’est mettre ensemble. On écrit le signe <strong>+</strong>.</p>
+          ${figure(row(counted("mangue", 3, "3"), sign("+"), counted("mangue", 2, "2"), sign("="), counted("mangue", 5, "5")), "3 mangues et encore 2 mangues : <strong>3 + 2 = 5</strong>.")}
           <h2>Je découvre</h2>
           <p>Awa a 3 billes. Moussa lui en donne 2. Maintenant, elle a 3 + 2 = <strong>5</strong> billes.</p>
           ${keyPoint("Quand on ajoute, on obtient plus qu’avant.")}
@@ -335,6 +357,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Enlever : la soustraction",
         body: `<p><strong>Enlever</strong>, c’est retirer. On écrit le signe <strong>−</strong>.</p>
+          ${figure(schema("ci-enlever", "Six jetons, dont deux sont barrés."), "6 jetons, on en enlève 2 : <strong>6 − 2 = 4</strong>.")}
           <h2>Je découvre</h2>
           <p>Il y a 7 oranges sur la table. Fatou en prend 3. Il en reste 7 − 3 = <strong>4</strong>.</p>
           ${keyPoint("Quand on enlève, il en reste moins qu’avant.")}
@@ -346,6 +369,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Le double et la moitié",
         body: `<p>Le <strong>double</strong>, c’est deux fois le même nombre. La <strong>moitié</strong>, c’est partager en deux parts égales.</p>
+          ${figure(row(counted("orange", 3, "3"), sign("+"), counted("orange", 3, "3"), sign("="), counted("orange", 6, "6")), "Le <strong>double</strong> de 3, c’est 3 + 3 = 6. La <strong>moitié</strong> de 6, c’est 3.")}
           <h2>Je découvre</h2>
           ${bullets(["Le double de 3, c’est 3 + 3 = 6.", "Le double de 4, c’est 4 + 4 = 8.", "La moitié de 8, c’est 4 : on fait deux tas de 4."])}
           ${keyPoint("La moitié se trouve en partageant en deux tas pareils.")}
@@ -364,6 +388,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Comparer des masses",
         body: `<p>Certains objets sont <strong>lourds</strong> : un sac de riz. D’autres sont <strong>légers</strong> : une plume.</p>
+          ${figure(schema("ci-balance", "Une balance : la pastèque d’un côté, l’orange de l’autre."), "Le plateau de la pastèque descend : la pastèque est <strong>plus lourde</strong> que l’orange.")}
           <h2>Je découvre</h2>
           <p>Sur la balançoire, le côté qui descend porte l’enfant le plus lourd. Si la balançoire reste droite, les deux enfants sont <strong>aussi lourds</strong> l’un que l’autre.</p>
           ${keyPoint("Pour comparer deux masses, je prends un objet dans chaque main, ou j’utilise une balance.")}
@@ -382,6 +407,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Qu’est-ce qu’un problème ?",
         body: `<p>Un <strong>problème de mathématiques</strong> raconte une petite histoire avec des nombres et pose une question.</p>
+          ${figure(row(pic("eleve-fille", "Awa", 90), counted("bonbon", 3, "3"), sign("+"), counted("bonbon", 2, "2")), "Awa a 3 bonbons. Modou lui en donne 2. Combien en a-t-elle ? Il faut chercher : c’est un <strong>problème</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "« Moussa a 4 billes, il en gagne 3. Combien en a-t-il maintenant ? » : c’est un problème de mathématiques.",
@@ -393,6 +419,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Les données et la question",
         body: `<p>Dans un problème, les <strong>données</strong> sont les informations utiles : souvent des nombres. La <strong>question</strong> dit ce qu’il faut chercher.</p>
+          ${figure(row(pic("eleve-garcon", "Modou", 90), counted("mangue", 4, "4 mangues")), "Modou a 4 mangues : c’est une <strong>donnée</strong>. « Combien en a-t-il ? » : c’est la <strong>question</strong>.")}
           <h2>Je découvre</h2>
           <p>« Fatou a 5 mangues. Elle en donne 2 à sa sœur. Combien lui en reste-t-il ? »</p>
           ${bullets(["Les données : 5 mangues, 2 mangues données.", "La question : combien lui en reste-t-il ?"])}
@@ -411,6 +438,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Lignes ouvertes et lignes fermées",
         body: `<p>Une ligne <strong>fermée</strong> se rejoint : on ne peut pas sortir sans la traverser. Une ligne <strong>ouverte</strong> a deux bouts.</p>
+          ${figure(schema("ci-lignes", "Quatre lignes A, B, C et D."), "A et C sont des lignes <strong>fermées</strong>. B et D sont des lignes <strong>ouvertes</strong>.")}
           <h2>Je découvre</h2>
           <p>La clôture autour de la maison est une ligne fermée. La maison est à l’<strong>intérieur</strong>, la rue est à l’<strong>extérieur</strong>, et la clôture est la <strong>frontière</strong>.</p>
           ${keyPoint("Une ligne fermée sépare l’intérieur de l’extérieur.")}
@@ -422,6 +450,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Le quadrillage",
         body: `<p>Un <strong>quadrillage</strong> est fait de lignes qui se croisent. Les petits carrés s’appellent des <strong>cases</strong> ; là où les lignes se croisent, ce sont des <strong>nœuds</strong>.</p>
+          ${figure(schema("ci-quadrillage", "Un quadrillage de 3 lignes et 4 colonnes avec une mangue."), "La mangue est dans la case <strong>B,3</strong> : ligne B, colonne 3.")}
           <h2>Je découvre</h2>
           <p>Sur un quadrillage, on avance d’une case vers le haut, le bas, la droite ou la gauche.</p>
           ${keyPoint("Pour décrire un déplacement, je compte les cases et je dis la direction.")}
@@ -430,6 +459,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Tracer un itinéraire",
         body: `<p>Un <strong>itinéraire</strong> est un chemin pour aller d’un point de départ à un point d’arrivée.</p>
+          ${figure(schema("ci-itineraire", "Un chemin rouge sur un quadrillage, jusqu’à l’école."), "Le chemin rouge part de la case C,1 et arrive à l’école, dans la case A,4 : c’est un <strong>itinéraire</strong>.")}
           <h2>Je découvre</h2>
           <p>Pour aller de la maison à l’école, Ali passe devant la boutique, puis tourne à droite après la mosquée. La boutique et la mosquée sont des <strong>repères</strong>.</p>
           ${keyPoint("Un bon itinéraire donne le départ, l’arrivée et des repères dans l’ordre.")}
@@ -445,6 +475,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "De 11 à 15",
         body: `<p>Après 10, on continue avec 1 dizaine et quelques unités.</p>
+          ${figure(schema("ci-treize", "Une barre de dix cubes et 3 cubes."), "13, c’est <strong>1 dizaine et 3 unités</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "11 = 10 + 1 (onze)",
@@ -462,6 +493,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "De 16 à 20",
         body: `<p>On continue : <strong>16</strong> (seize), <strong>17</strong> (dix-sept), <strong>18</strong> (dix-huit), <strong>19</strong> (dix-neuf), <strong>20</strong> (vingt).</p>
+          ${figure(schema("ci-dix-sept", "Une barre de dix cubes et 7 cubes."), "17, c’est <strong>1 dizaine et 7 unités</strong>.")}
           <h2>Je découvre</h2>
           ${bullets(["17 = 10 + 7", "19 = 10 + 9", "20 = 10 + 10 : deux dizaines"])}
           ${keyPoint("20, c’est 2 dizaines et 0 unité.")}
@@ -480,6 +512,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Additions et soustractions jusqu’à 20",
         body: `<p>On utilise les dizaines pour calculer plus vite.</p>
+          ${figure(schema("ci-treize", "Une barre de dix cubes et 3 cubes."), "10 + 3 = 13 et 13 − 3 = 10.")}
           <h2>Je découvre</h2>
           ${bullets(["8 + 5 : je fais d’abord 8 + 2 = 10, puis 10 + 3 = 13.", "15 − 5 = 10", "18 − 3 = 15"])}
           ${keyPoint("Pour ajouter, je complète d’abord jusqu’à 10.")}
@@ -491,6 +524,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Ajouter 10, doubles et moitiés",
         body: `<p>Ajouter <strong>10</strong> à un nombre plus petit que 10, c’est facile : on ajoute une dizaine.</p>
+          ${figure(schema("ci-dix-sept", "Une barre de dix cubes et 7 cubes."), "7 + 10 = 17 : on ajoute une barre de dix.")}
           <h2>Je découvre</h2>
           ${bullets(["10 + 4 = 14", "10 + 7 = 17", "Le double de 6, c’est 12.", "La moitié de 14, c’est 7."])}
           ${keyPoint("Le double de 10, c’est 20. La moitié de 20, c’est 10.")}
@@ -509,6 +543,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "C’est long ou c’est court ?",
         body: `<p>Certaines activités durent longtemps, d’autres très peu de temps.</p>
+          ${figure(row(pic("brosse-a-dents", "se brosser les dents : court"), pic("ecole", "une journée de classe : long")), "Se brosser les dents dure <strong>peu</strong> de temps ; une journée de classe dure <strong>longtemps</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Se laver les mains, c’est <strong>court</strong>.",
@@ -521,6 +556,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Matin, midi, soir",
         body: `<p>La journée a des moments : le <strong>matin</strong>, <strong>midi</strong>, l’<strong>après-midi</strong> et le <strong>soir</strong>.</p>
+          ${figure(schema("ci-soleil-journee", "Le soleil le matin, à midi et le soir."), "Le soleil se lève le <strong>matin</strong>, il est haut à <strong>midi</strong> et se couche le <strong>soir</strong>.")}
           <h2>Je découvre</h2>
           ${bullets([
             "Le matin, je me réveille et je vais à l’école.",
@@ -533,6 +569,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Les jours de la semaine",
         body: `<p>Une semaine a <strong>7 jours</strong> : lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche.</p>
+          ${figure("<table><tr><td>lundi</td><td>mardi</td><td>mercredi</td><td>jeudi</td><td>vendredi</td><td>samedi</td><td>dimanche</td></tr></table>", "Les 7 jours de la semaine, dans l’ordre.")}
           <h2>Je découvre</h2>
           <p>Après dimanche, une nouvelle semaine commence avec lundi.</p>
           ${keyPoint("Hier, c’est le jour d’avant. Demain, c’est le jour d’après.")}
@@ -551,6 +588,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "Les données utiles",
         body: `<p>Un problème peut contenir des informations qui ne servent pas. Il faut trouver les <strong>données utiles</strong>.</p>
+          ${figure(row(pic("eleve-fille", "Fatou", 90), counted("orange", 5, "5 oranges"), pic("ballon", "1 ballon")), "Fatou a 5 oranges et 1 ballon. Pour compter ses fruits, le ballon ne sert à rien : c’est une donnée <strong>inutile</strong>.")}
           <h2>Je découvre</h2>
           <p>« Ali a 7 ans. Il a 6 cahiers et sa sœur lui en donne 4. Combien de cahiers a-t-il ? »</p>
           ${bullets(["Utile : 6 cahiers et 4 cahiers.", "Inutile ici : l’âge d’Ali."])}
@@ -560,6 +598,7 @@ export const MATH_CI: CiChapterSpec[] = [
       {
         title: "La question et la réponse",
         body: `<p>Une fois la question trouvée, je calcule, puis j’écris une phrase réponse.</p>
+          ${figure(row(counted("mangue", 4, "4"), sign("−"), counted("mangue", 1, "1"), sign("="), counted("mangue", 3, "3")), "« Combien de mangues reste-t-il ? » Réponse : « Il reste 3 mangues. »")}
           <h2>Je découvre</h2>
           <p>« Il y a 12 élèves dans la cour. 5 rentrent en classe. Combien en reste-t-il dans la cour ? »</p>
           <p>Je calcule : 12 − 5 = 7. Je réponds : <strong>Il reste 7 élèves dans la cour.</strong></p>

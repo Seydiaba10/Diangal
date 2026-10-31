@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90" width="160" height="90">
+  <defs><linearGradient id="y" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe14a"/><stop offset="1" stop-color="#f2b600"/></linearGradient><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2b2b"/><stop offset="1" stop-color="#111"/></linearGradient></defs>
+  <ellipse cx="80" cy="84" rx="74" ry="8" fill="#000" opacity=".12"/>
+  <path d="M8 52Q8 40 20 38L42 16H108L132 38Q152 40 154 54V64H8Z" fill="url(#y)" stroke="#7a5a00" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="8" y="52" width="146" height="14" fill="url(#b)"/>
+  <path d="M48 22H74V38H32ZM80 22H104L120 38H80Z" fill="#cfeaf8" stroke="#7a5a00"/>
+  <rect x="62" y="6" width="34" height="11" rx="2" fill="#fff" stroke="#2b2b2b"/>
+  <text x="79" y="15" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#2b2b2b">TAXI</text>
+  <circle cx="38" cy="68" r="13" fill="#2b2b2b"/><circle cx="38" cy="68" r="5.9" fill="#b8bec6"/><circle cx="124" cy="68" r="13" fill="#2b2b2b"/><circle cx="124" cy="68" r="5.9" fill="#b8bec6"/>
+</svg>

@@ -1,123 +1,44 @@
 import "server-only";
 
-// Exercices corrigés du CM1 : une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
-// relire par des enseignants). Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
+// Exercices corrigés du CM1 : en maths, une série par leçon du cahier de l’école (maths/) ; ailleurs,
+// une série par chapitre, écrite par DIANGAL d’après les leçons (à faire
+// relire par des enseignants), complétée par les questions illustrées de cm1/enrich.ts.
+// Corrigés inclus : ce fichier ne doit jamais atteindre le navigateur.
 
 import { CHAPTERS_CM1 } from "../curriculum-cm1";
 import { buildExerciseSeries, type ExerciseSeries } from "../exercise-series";
+import { withExtras } from "../illustrated-questions";
+import { EXTRA_CM1 } from "./enrich";
+import { FIGURES_CM1, LINES_CM1, SOLIDS_CM1, SYMMETRY_CM1 } from "./maths/geometrie";
+import { AREAS_CM1, BUDGET_CM1, CAPACITIES_CM1, LENGTHS_CM1, TIMES_CM1, VOLUMES_CM1 } from "./maths/mesure";
+import { ADD_SUB_CM1, BIG_CM1, DECIMAL_OPS_CM1, DECIMALS_CM1, DIVISIBILITY_CM1, DIVISION_CM1, FRACTION_CALC_CM1, FRACTIONS_CM1, MULT_CM1 } from "./maths/nombres";
+import { CHARTS_CM1, METHOD_CM1, UNDERSTAND_CM1 } from "./maths/problemes";
 
 const SERIES: ExerciseSeries[] = [
-  // ── Mathématiques ──────────────────────────────────────────────────────────
-  { subject: "MATH", chapter: "Les grands nombres", questions: [
-    { num: "Écris en chiffres : deux millions trente mille.", answer: 2030000, why: "2 000 000 + 30 000." },
-    { num: "Complète : 999 999 + 1 = …", answer: 1000000, why: "Un million." },
-    { qcm: "Le plus grand nombre est…", choices: ["405 000", "450 000", "*1 005 000"], why: "Il a 7 chiffres, les autres 6." },
-  ] },
-  { subject: "MATH", chapter: "Les caractères de divisibilité", questions: [
-    { vf: "1 254 est divisible par 3.", answer: true, why: "1 + 2 + 5 + 4 = 12, divisible par 3." },
-    { qcm: "Lequel est divisible par 9 ?", choices: ["*3 456", "3 455", "3 457"], why: "3 + 4 + 5 + 6 = 18." },
-    { qcm: "Un nombre qui finit par 0 est divisible par…", choices: ["3", "*10", "9"], why: "Et aussi par 2 et par 5." },
-  ] },
-  { subject: "MATH", chapter: "L’addition et la soustraction", questions: [
-    { num: "Calcule 125 450 + 87 600.", answer: 213050, why: "125 450 + 87 600 = 213 050 F." },
-    { num: "Calcule 300 000 − 145 875.", answer: 154125, why: "Vérification : 154 125 + 145 875 = 300 000." },
-    { qcm: "On soustrait pour trouver…", choices: ["un total", "*un reste ou un écart", "un produit"], why: "L’addition donne un total." },
-  ] },
-  { subject: "MATH", chapter: "La multiplication", questions: [
-    { num: "Calcule 324 × 46.", answer: 14904, why: "324 × 6 = 1 944 ; 324 × 40 = 12 960 ; total 14 904." },
-    { num: "Calcule 125 × 100.", answer: 12500, why: "On ajoute deux zéros." },
-    { num: "125 tables à 18 500 F : quel est le prix total (en F) ?", answer: 2312500, why: "18 500 × 125 = 2 312 500 F." },
-  ] },
-  { subject: "MATH", chapter: "La division", questions: [
-    { num: "Calcule 1 872 ÷ 24.", answer: 78, why: "24 × 78 = 1 872." },
-    { num: "Combien de plateaux de 30 œufs remplit-on avec 1 000 œufs ?", answer: 33, why: "30 × 33 = 990 ; il reste 10 œufs." },
-    { num: "Combien d’œufs restent ?", answer: 10, why: "1 000 − 990 = 10." },
-  ] },
-  { subject: "MATH", chapter: "Les nombres décimaux", questions: [
-    { qcm: "Le plus grand nombre est…", choices: ["3,75", "*3,8", "3,705"], why: "8 dixièmes &gt; 7 dixièmes." },
-    { qcm: "7 m 8 cm s’écrit…", choices: ["7,8 m", "*7,08 m", "78 m"], why: "8 cm = 0,08 m." },
-    { vf: "2,5 = 2,50.", answer: true, why: "Le zéro final ne change rien." },
-  ] },
-  { subject: "MATH", chapter: "Opérations sur les nombres décimaux", questions: [
-    { num: "Calcule 25,4 + 3,75.", answer: 29.15, why: "25,40 + 3,75 = 29,15." },
-    { num: "Calcule 15 − 6,8.", answer: 8.2, why: "15,0 − 6,8 = 8,2." },
-    { num: "Un litre de lait coûte 750 F. Combien coûtent 2,5 L (en F) ?", answer: 1875, why: "750 × 2,5 = 1 875 F." },
-  ] },
-  { subject: "MATH", chapter: "Les fractions", questions: [
-    { qcm: "La fraction simplifiée de 10/15 est…", choices: ["5/10", "*2/3", "1/5"], why: "On divise par 5." },
-    { qcm: "45/100 s’écrit…", choices: ["4,5", "*0,45", "45"], why: "45 centièmes." },
-    { qcm: "La plus grande fraction est…", choices: ["3/7", "*5/7", "4/7"], why: "Même dénominateur : plus grand numérateur." },
-  ] },
-  { subject: "MATH", chapter: "Calculer avec les fractions", questions: [
-    { qcm: "3/10 + 4/10 =", choices: ["7/20", "*7/10", "12/10"], why: "On additionne les numérateurs." },
-    { num: "Combien valent les 3/4 de 800 F ?", answer: 600, why: "800 ÷ 4 = 200 ; 200 × 3 = 600 F." },
-    { num: "Awa a dépensé les 2/3 de 1 500 F. Combien a-t-elle dépensé (en F) ?", answer: 1000, why: "1 500 ÷ 3 = 500 ; 500 × 2 = 1 000 F." },
-  ] },
-  { subject: "MATH", chapter: "Droites et angles", questions: [
-    { qcm: "Deux droites qui forment un angle droit sont…", choices: ["parallèles", "*perpendiculaires", "confondues"], why: "C’est la définition." },
-    { qcm: "Un angle plus grand qu’un angle droit est…", choices: ["aigu", "*obtus", "nul"], why: "Obtus = plus ouvert." },
-    { vf: "Deux droites parallèles se coupent toujours.", answer: false, why: "Elles ne se coupent jamais." },
-  ] },
-  { subject: "MATH", chapter: "Les figures planes", questions: [
-    { qcm: "Un quadrilatère aux côtés opposés parallèles est…", choices: ["un trapèze", "*un parallélogramme", "un triangle"], why: "C’est sa définition." },
-    { qcm: "Pour tracer un cercle, j’utilise…", choices: ["l’équerre", "*le compas", "le rapporteur"], why: "On pique au centre." },
-    { num: "Combien d’angles droits a un rectangle ?", answer: 4, why: "Quatre angles droits." },
-  ] },
-  { subject: "MATH", chapter: "Les solides", questions: [
-    { num: "Combien d’arêtes a un cube ?", answer: 12, why: "12 arêtes de même longueur." },
-    { num: "Combien de sommets a un pavé droit ?", answer: 8, why: "Comme le cube." },
-    { qcm: "Les faces d’un pavé droit sont…", choices: ["des disques", "*des rectangles", "des triangles"], why: "Six rectangles." },
-  ] },
-  { subject: "MATH", chapter: "Symétrie et translation", questions: [
-    { qcm: "Une translation…", choices: ["fait tourner la figure", "*fait glisser la figure", "agrandit la figure"], why: "Sans la tourner ni la déformer." },
-    { vf: "La symétrie conserve les dimensions d’une figure.", answer: true, why: "Les deux figures se superposent." },
-    { num: "Combien d’axes de symétrie a un carré ?", answer: 4, why: "Deux médianes et deux diagonales." },
-  ] },
-  { subject: "MATH", chapter: "Longueurs et périmètres", questions: [
-    { num: "Convertis 2,5 km en mètres.", answer: 2500, why: "1 km = 1 000 m." },
-    { num: "Calcule le périmètre (en m) d’une table ronde de 1,2 m de diamètre (π ≈ 3,14).", answer: 3.768, why: "1,2 × 3,14 = 3,768 m." },
-    { num: "Un arbre tous les 5 m le long d’une allée de 50 m (aux deux bouts aussi) : combien d’arbres ?", answer: 11, why: "50 ÷ 5 = 10 intervalles, donc 11 arbres." },
-  ] },
-  { subject: "MATH", chapter: "Capacités, masses et angles", questions: [
-    { num: "Convertis 3,5 L en centilitres.", answer: 350, why: "1 L = 100 cL." },
-    { num: "Une boîte pleine pèse 1,2 kg, vide 200 g. Quelle est la masse nette (en g) ?", answer: 1000, why: "1 200 − 200 = 1 000 g." },
-    { num: "Combien de degrés mesure un angle droit ?", answer: 90, why: "90°." },
-  ] },
-  { subject: "MATH", chapter: "Les aires", questions: [
-    { num: "Calcule l’aire (en cm²) d’un triangle de base 8 cm et de hauteur 5 cm.", answer: 20, why: "8 × 5 ÷ 2 = 20 cm²." },
-    { num: "Calcule l’aire (en m²) d’un jardin de 15 m sur 12 m.", answer: 180, why: "15 × 12 = 180 m²." },
-    { num: "Combien de dm² y a-t-il dans 1 m² ?", answer: 100, why: "1 m² = 100 dm²." },
-  ] },
-  { subject: "MATH", chapter: "Les volumes", questions: [
-    { num: "Combien de litres contient un aquarium de 50 cm × 30 cm × 20 cm ?", answer: 30, why: "30 000 cm³ = 30 dm³ = 30 L." },
-    { num: "Combien pèsent 5 litres d’eau (en kg) ?", answer: 5, why: "1 L d’eau pèse 1 kg." },
-    { num: "Combien de dm³ y a-t-il dans 1 m³ ?", answer: 1000, why: "1 m³ = 1 000 dm³." },
-  ] },
-  { subject: "MATH", chapter: "Durées et mouvements uniformes", questions: [
-    { qcm: "2 h 45 min + 1 h 30 min =", choices: ["3 h 15 min", "*4 h 15 min", "4 h 75 min"], why: "75 min = 1 h 15 min." },
-    { qcm: "Départ 6 h 50, arrivée 9 h 20 : le voyage a duré…", choices: ["2 h 70 min", "*2 h 30 min", "3 h 30 min"], why: "De 6 h 50 à 9 h 20." },
-    { num: "Un vélo roule à 15 km/h pendant 2 h. Quelle distance (en km) ?", answer: 30, why: "15 × 2 = 30 km." },
-  ] },
-  { subject: "MATH", chapter: "Budget, prix et partages", questions: [
-    { num: "Une famille gagne 150 000 F et dépense 132 500 F. Combien économise-t-elle (en F) ?", answer: 17500, why: "150 000 − 132 500 = 17 500 F." },
-    { num: "5 000 F entre Awa et Fatou ; Awa reçoit 1 000 F de plus. Combien reçoit Fatou (en F) ?", answer: 2000, why: "(5 000 − 1 000) ÷ 2 = 2 000 F." },
-    { num: "Combien reçoit Awa (en F) ?", answer: 3000, why: "2 000 + 1 000 = 3 000 F." },
-  ] },
-  { subject: "MATH", chapter: "Comprendre l’énoncé d’un problème", questions: [
-    { num: "12 sacs de sucre à 25 000 F : quel est le prix d’achat (en F) ?", answer: 300000, why: "12 × 25 000 = 300 000 F." },
-    { num: "Avec 6 000 F de transport, quel est le prix de revient (en F) ?", answer: 306000, why: "300 000 + 6 000 = 306 000 F." },
-    { vf: "Une donnée inutile doit être utilisée dans le calcul.", answer: false, why: "On la laisse de côté." },
-  ] },
-  { subject: "MATH", chapter: "Tableaux, schémas et graphiques", questions: [
-    { qcm: "Sur une facture, le montant d’une ligne est…", choices: ["*quantité × prix unitaire", "quantité + prix", "prix ÷ quantité"], why: "Puis on additionne les montants." },
-    { qcm: "Pour comparer les notes de plusieurs élèves, on utilise…", choices: ["*un diagramme en bâtons", "un patron", "un compas"], why: "Les bâtons se comparent facilement." },
-    { vf: "Il faut lire le titre et les unités d’un graphique.", answer: true, why: "Sinon on se trompe." },
-  ] },
-  { subject: "MATH", chapter: "Démarches de résolution", questions: [
-    { num: "Après avoir dépensé 1 250 F, il me reste 750 F. Combien avais-je (en F) ?", answer: 2000, why: "Démarche régressive : 750 + 1 250." },
-    { qcm: "Dans la démarche régressive, on remplace une soustraction par…", choices: ["une division", "*une addition", "une multiplication"], why: "C’est l’opération inverse." },
-    { num: "Calcule 4 × 1 500.", answer: 6000, why: "4 × 1 500 = 6 000." },
-  ] },
+  // ── Mathématiques (une série par leçon du cahier de l'école : maths/) ──
+  ...BIG_CM1,
+  ...DIVISIBILITY_CM1,
+  ...ADD_SUB_CM1,
+  ...MULT_CM1,
+  ...DIVISION_CM1,
+  ...DECIMALS_CM1,
+  ...DECIMAL_OPS_CM1,
+  ...FRACTIONS_CM1,
+  ...FRACTION_CALC_CM1,
+  ...LINES_CM1,
+  ...FIGURES_CM1,
+  ...SOLIDS_CM1,
+  ...SYMMETRY_CM1,
+  ...LENGTHS_CM1,
+  ...CAPACITIES_CM1,
+  ...AREAS_CM1,
+  ...VOLUMES_CM1,
+  ...TIMES_CM1,
+  ...BUDGET_CM1,
+  ...UNDERSTAND_CM1,
+  ...CHARTS_CM1,
+  ...METHOD_CM1,
+
   // ── Français ───────────────────────────────────────────────────────────────
   { subject: "FR", chapter: "Lire et comprendre des textes variés", questions: [
     { qcm: "Un texte qui donne des informations sur un animal est…", choices: ["un récit", "*un texte documentaire", "un dialogue"], why: "Il informe." },
@@ -272,7 +193,7 @@ const SERIES: ExerciseSeries[] = [
   ] },
 ];
 
-const built = buildExerciseSeries("CM1", CHAPTERS_CM1, SERIES);
+const built = buildExerciseSeries("CM1", CHAPTERS_CM1, withExtras(SERIES, EXTRA_CM1));
 
 export const QUESTIONS_CM1 = built.questions;
 export const ANSWER_KEYS_CM1 = built.keys;
