@@ -1839,13 +1839,14 @@
     "enrollTitle": "Activez votre application d’authentification",
     "enrollBody": "Scannez ce QR code avec Google Authenticator, Microsoft Authenticator ou une application similaire, puis entrez le code à 6 chiffres qu’elle affiche.",
     "qrAlt": "QR code à scanner avec l’application d’authentification",
-    "secret": "Pas de caméra ? Saisissez cette clé dans l’application : {secret}",
+    "secretLabel": "Pas de caméra ? Saisissez cette clé dans l’application, type « basé sur l’heure » :",
     "challengeBody": "Entrez le code à 6 chiffres affiché par votre application d’authentification.",
+    "enrollIntro": "Pour activer la double vérification, affichez votre QR code puis scannez-le avec votre application d’authentification. Une fois votre application activée, seul le code à 6 chiffres vous sera demandé.",
+    "showQr": "Afficher le QR code",
+    "enrollError": "Le QR code n’a pas pu être créé. Réessayez dans un instant.",
     "codeLabel": "Code à 6 chiffres",
     "submit": "Vérifier",
-    "error": "Code incorrect ou expiré. Entrez le code affiché en ce moment.",
-    "resumeBody": "Vous avez déjà scanné le QR code : entrez le code à 6 chiffres affiché en ce moment par votre application.",
-    "newQr": "Afficher un nouveau QR code"
+    "error": "Code incorrect ou expiré. Entrez le code affiché en ce moment."
   },
   "tutoring": {
     "students": {

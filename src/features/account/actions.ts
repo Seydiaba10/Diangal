@@ -176,15 +176,49 @@ export async function signInWithSocialAction(provider: SocialProvider, space: Lo
   redirect(data.url);
 }
 
-/** Double authentification de l'admin (TOTP) : la session passe en aal2, exigée par la RLS admin. */
-export async function verifyMfaAction(factorId: string, formData: FormData) {
+/** QR code de la double authentification de l'admin, montré une seule fois (la clé n'est jamais enregistrée). */
+export type MfaEnrollmentState =
+  | { status: "idle" }
+  | { status: "ready"; factorId: string; qrCode: string; secret: string }
+  | { status: "error" };
+
+/**
+ * Crée le QR code (TOTP) de l'admin. Toujours dans une action, jamais au rendu de la page : avec le
+ * prérendu partiel, la page peut être rendue plusieurs fois par visite, et chaque enrôlement remplace
+ * le précédent (le QR affiché ne correspondait plus à celui gardé par Supabase).
+ */
+export async function startMfaEnrollmentAction(): Promise<MfaEnrollmentState> {
+  const identity = await requireIdentity();
+  if (identity.role !== "admin") redirect(ROLE_HOME[identity.role]);
+  if (identity.aal === "aal2") redirect("/admin");
+  const supabase = await createSupabaseServerClient();
+  const { data: factors } = await supabase.auth.mfa.listFactors();
+  // Une application déjà validée : la page demande son code, on n'en ajoute pas une autre ici.
+  if (factors?.totp.some((f) => f.status === "verified")) return { status: "error" };
+  // Enrôlements jamais terminés : remplacés (leur clé n'est plus affichable).
+  for (const stale of factors?.all.filter((f) => f.factor_type === "totp" && f.status !== "verified") ?? []) {
+    await supabase.auth.mfa.unenroll({ factorId: stale.id });
+  }
+  const { data, error } = await supabase.auth.mfa.enroll({ factorType: "totp", friendlyName: "DIANGAL admin" });
+  if (error || !data) return { status: "error" };
+  return { status: "ready", factorId: data.id, qrCode: data.totp.qr_code, secret: data.totp.secret };
+}
+
+export interface MfaVerifyState {
+  error: boolean;
+}
+
+/**
+ * Double authentification de l'admin (TOTP) : la session passe en aal2, exigée par la RLS admin.
+ * Code refusé : la page reste telle quelle (QR code compris), on peut retaper le code.
+ */
+export async function verifyMfaAction(factorId: string, _state: MfaVerifyState, formData: FormData): Promise<MfaVerifyState> {
   const code = String(formData.get("code") ?? "").replace(/\s/g, "");
   const next = safeNext(formData.get("next"));
-  const retry = `/connexion/securite?${new URLSearchParams({ erreur: "code", ...(next ? { next } : {}) })}`;
-  if (!/^\d{6}$/.test(code)) redirect(retry);
+  if (!/^\d{6}$/.test(code)) return { error: true };
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.mfa.challengeAndVerify({ factorId, code });
-  if (error) redirect(retry);
+  if (error) return { error: true };
   redirect(next?.startsWith("/admin") ? next : "/admin");
 }
 
