@@ -2642,55 +2642,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      // ── Connexion par code PIN (migration 20261106000001, écrit à la main en attendant la génération) ──
-      auth_guard_status: {
-        Args: { p_key: string }
-        Returns: { locked: boolean; retry_after: number; needs_recovery: boolean; failures: number }[]
-      }
-      auth_guard_fail: {
-        Args: { p_key: string }
-        Returns: { locked: boolean; retry_after: number; needs_recovery: boolean; failures: number }[]
-      }
-      auth_guard_success: { Args: { p_key: string }; Returns: undefined }
-      auth_guard_clear: { Args: { p_key: string }; Returns: undefined }
-      auth_log_event: {
-        Args: { p_user: string | null; p_kind: string; p_subject?: string | null; p_ip?: string | null; p_device?: string | null }
-        Returns: undefined
-      }
+      abandon_attempt: { Args: { p_attempt: string }; Returns: undefined }
       admin_auth_events: {
         Args: { p_limit?: number }
         Returns: {
-          id: number
           created_at: string
+          device: string
+          first_name: string
+          id: number
+          ip_prefix: string
           kind: string
-          user_id: string | null
-          first_name: string | null
-          role: string | null
-          subject: string | null
-          ip_prefix: string | null
-          device: string | null
+          role: string
+          subject: string
+          user_id: string
         }[]
       }
-      mark_pin_set: { Args: { p_user: string; p_kind: string; p_version?: number }; Returns: undefined }
-      get_pin_credential: { Args: { p_user: string }; Returns: { kind: string; pepper_version: number; set_at: string }[] }
-      get_my_pin_status: { Args: never; Returns: string | null }
-      verify_user_password: { Args: { p_user: string; p_password: string }; Returns: boolean }
-      mark_reauth: { Args: { p_user: string; p_session: string }; Returns: undefined }
-      revoke_user_sessions: { Args: { p_user: string }; Returns: number }
-      authorize_child_pin_change: { Args: { p_student: string }; Returns: undefined }
-      register_managed_child_v2: { Args: { p_parent: string; p_child: string }; Returns: string }
-      child_login_parent: { Args: { p_student: string }; Returns: string | null }
-      register_family_device: { Args: { p_token_hash: string; p_label: string }; Returns: string }
-      get_my_family_devices: {
-        Args: never
-        Returns: { id: string; label: string; created_at: string; last_used_at: string }[]
-      }
-      revoke_family_device: { Args: { p_id: string }; Returns: undefined }
-      family_device_children: {
-        Args: { p_token_hash: string }
-        Returns: { parent_id: string; parent_first_name: string; student_id: string; first_name: string; avatar_key: string | null }[]
-      }
-      abandon_attempt: { Args: { p_attempt: string }; Returns: undefined }
       admin_content_tracking: {
         Args: never
         Returns: {
@@ -2756,8 +2722,43 @@ export type Database = {
         }
         Returns: Json
       }
+      auth_guard_clear: { Args: { p_key: string }; Returns: undefined }
+      auth_guard_fail: {
+        Args: { p_key: string }
+        Returns: {
+          failures: number
+          locked: boolean
+          needs_recovery: boolean
+          retry_after: number
+        }[]
+      }
+      auth_guard_status: {
+        Args: { p_key: string }
+        Returns: {
+          failures: number
+          locked: boolean
+          needs_recovery: boolean
+          retry_after: number
+        }[]
+      }
+      auth_guard_success: { Args: { p_key: string }; Returns: undefined }
+      auth_log_event: {
+        Args: {
+          p_device?: string
+          p_ip?: string
+          p_kind: string
+          p_subject?: string
+          p_user: string
+        }
+        Returns: undefined
+      }
+      authorize_child_pin_change: {
+        Args: { p_student: string }
+        Returns: undefined
+      }
       cancel_account_deletion_request: { Args: never; Returns: undefined }
       cancel_tutor_session: { Args: { p_session: string }; Returns: undefined }
+      child_login_parent: { Args: { p_student: string }; Returns: string }
       claim_referral: { Args: { p_code: string }; Returns: string }
       complete_lesson: { Args: { p_lesson: string }; Returns: undefined }
       confirm_parent_link: { Args: { p_parent: string }; Returns: undefined }
@@ -2798,6 +2799,16 @@ export type Database = {
       end_tutor_link: {
         Args: { p_student: string; p_tutor: string }
         Returns: undefined
+      }
+      family_device_children: {
+        Args: { p_token_hash: string }
+        Returns: {
+          avatar_key: string
+          first_name: string
+          parent_first_name: string
+          parent_id: string
+          student_id: string
+        }[]
       }
       get_account_deletion_status: {
         Args: { p_target?: string }
@@ -2855,6 +2866,15 @@ export type Database = {
       }
       get_my_consent_request: { Args: never; Returns: Json }
       get_my_family_code: { Args: never; Returns: string }
+      get_my_family_devices: {
+        Args: never
+        Returns: {
+          created_at: string
+          id: string
+          label: string
+          last_used_at: string
+        }[]
+      }
       get_my_open_attempts: {
         Args: never
         Returns: {
@@ -2867,6 +2887,7 @@ export type Database = {
           total: number
         }[]
       }
+      get_my_pin_status: { Args: never; Returns: string }
       get_my_referral: { Args: never; Returns: Json }
       get_pending_parent_links: {
         Args: never
@@ -2877,6 +2898,14 @@ export type Database = {
           parent_id: string
         }[]
       }
+      get_pin_credential: {
+        Args: { p_user: string }
+        Returns: {
+          kind: string
+          pepper_version: number
+          set_at: string
+        }[]
+      }
       get_student_dashboard: { Args: { p_student: string }; Returns: Json }
       get_tutor_profile: { Args: { p_tutor: string }; Returns: Json }
       get_tutor_student: { Args: { p_student: string }; Returns: Json }
@@ -2884,6 +2913,14 @@ export type Database = {
       invite_student_by_code: { Args: { p_code: string }; Returns: Json }
       is_account_anonymized: { Args: { p_target: string }; Returns: boolean }
       link_child_by_code: { Args: { p_code: string }; Returns: undefined }
+      mark_pin_set: {
+        Args: { p_kind: string; p_user: string; p_version?: number }
+        Returns: undefined
+      }
+      mark_reauth: {
+        Args: { p_session: string; p_user: string }
+        Returns: undefined
+      }
       promote_student: {
         Args: { p_series?: string; p_student: string }
         Returns: Json
@@ -2892,8 +2929,16 @@ export type Database = {
         Args: { p_version: string }
         Returns: undefined
       }
+      register_family_device: {
+        Args: { p_label: string; p_token_hash: string }
+        Returns: string
+      }
       register_managed_child: {
         Args: { p_child: string; p_parent: string; p_pin: string }
+        Returns: string
+      }
+      register_managed_child_v2: {
+        Args: { p_child: string; p_parent: string }
         Returns: string
       }
       request_account_deletion: { Args: never; Returns: string }
@@ -2909,6 +2954,8 @@ export type Database = {
         }
         Returns: undefined
       }
+      revoke_family_device: { Args: { p_id: string }; Returns: undefined }
+      revoke_user_sessions: { Args: { p_user: string }; Returns: number }
       save_attempt_answers: {
         Args: { p_answers: Json; p_attempt: string }
         Returns: undefined
@@ -2988,6 +3035,10 @@ export type Database = {
       verify_child_pin: {
         Args: { p_code: string; p_pin: string; p_student: string }
         Returns: string
+      }
+      verify_user_password: {
+        Args: { p_password: string; p_user: string }
+        Returns: boolean
       }
     }
     Enums: {

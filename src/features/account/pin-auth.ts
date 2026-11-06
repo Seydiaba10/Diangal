@@ -100,9 +100,10 @@ export async function progressiveDelay(failures: number) {
 /** Écrit dans le journal des connexions (identifiant masqué, adresse IP tronquée). Ne bloque jamais. */
 export async function logAuthEvent(userId: string | null, kind: AuthEventKind, subject: string | null, meta: RequestMeta) {
   const { error } = await createSupabaseAdminClient().rpc("auth_log_event", {
-    p_user: userId,
+    // Compte inconnu : null, accepté par la fonction SQL (les types générés ne le disent pas).
+    p_user: userId as string,
     p_kind: kind,
-    p_subject: subject,
+    p_subject: subject ?? undefined,
     p_ip: meta.ipPrefix,
     p_device: meta.device,
   });
