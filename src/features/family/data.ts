@@ -6,7 +6,33 @@ import { mockState } from "@/mocks/progress-store";
 import { DEMO_SECOND_CHILD, DEMO_STUDENT_ID } from "@/mocks/users";
 import { mockStudent } from "@/mocks/student-3e";
 import type { AvatarKey, ChildLoginInfo, FamilyCoverage } from "@/types/domain";
-import { fetchChildLogins, fetchFamilyChildren, fetchFamilyCode, fetchFamilyCoverage } from "./supabase";
+import { createHash } from "node:crypto";
+import { familyDeviceToken } from "@/features/account/pin-auth";
+import { DEMO_PARENT } from "@/mocks/users";
+import { fetchChildLogins, fetchDeviceChildren, fetchFamilyChildren, fetchFamilyCode, fetchFamilyCoverage, fetchFamilyDevices } from "./supabase";
+
+export interface FamilyDevice {
+  id: string;
+  label: string;
+  createdAt: string;
+  lastUsedAt: string;
+}
+
+/** Profils des enfants affichés sur cet appareil (appareil de la famille), ou null. */
+export async function getDeviceChildrenForLogin(): Promise<{ parentFirstName: string; children: { id: string; firstName: string; avatarKey: AvatarKey }[] } | null> {
+  await connection();
+  const token = await familyDeviceToken();
+  if (!token) return null;
+  if (isSupabaseConfigured()) return fetchDeviceChildren(createHash("sha256").update(token).digest("hex"));
+  return { parentFirstName: DEMO_PARENT.firstName, children: [{ id: DEMO_STUDENT_ID, firstName: mockStudent.firstName, avatarKey: mockStudent.avatarKey }] };
+}
+
+/** Appareils de la famille du parent connecté (démo : cet appareil s'il a été ajouté). */
+export const getFamilyDevices = cache(async (): Promise<FamilyDevice[]> => {
+  await connection();
+  if (isSupabaseConfigured()) return fetchFamilyDevices();
+  return (await familyDeviceToken()) ? [{ id: "demo-appareil", label: "Ce téléphone (démo)", createdAt: new Date().toISOString(), lastUsedAt: new Date().toISOString() }] : [];
+});
 
 // Démo : code famille fixe, Awa a un code PIN (1234). Supabase : code famille et PIN en base (schéma privé).
 

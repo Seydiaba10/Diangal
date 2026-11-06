@@ -5,8 +5,9 @@ import { cookies } from "next/headers";
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { normalizeReferralCode } from "@/features/referrals/presets";
-import { isSupabaseConfigured, phoneCountries } from "@/lib/env";
+import { isPinLoginEnabled, isSupabaseConfigured, phoneCountries } from "@/lib/env";
 import { isLevelCode } from "@/lib/levels";
+import { passwordProblem } from "@/lib/password-rules";
 import { isAllowedPhone } from "@/lib/phone";
 import { safeInternalPath } from "@/lib/safe-path";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -15,6 +16,7 @@ import { DEMO_PARENT, DEMO_STUDENT_LINK_CODE } from "@/mocks/users";
 import type { AppRole, SubjectCode } from "@/types/domain";
 import { DEMO_ROLE_COOKIE } from "./data";
 import { getEnabledSocialProviders, type SocialProvider } from "./oauth";
+import { clearDeviceCookies } from "./pin-auth";
 import {
   emailRedirect,
   parseChannel,
@@ -64,10 +66,14 @@ export async function requestLoginCodeAction(formData: FormData) {
   const space = parseSpace(formData.get("espace"));
   const raw = String(formData.get("identifiant") ?? "").trim();
   const next = safeNext(formData.get("next"));
-  const back: (erreur: string) => never = (erreur) => redirect(`${LOGIN_PATH[space]}?${new URLSearchParams({ mode: channel, erreur })}`);
+  // « Code PIN oublié » : même envoi de code, puis choix d'un nouveau code PIN.
+  const forPin = formData.get("but") === "pin";
+  const purpose: Record<string, string> = forPin ? { but: "pin" } : {};
+  const back: (erreur: string) => never = (erreur) =>
+    redirect(forPin ? `/connexion/pin-oublie?${new URLSearchParams({ erreur })}` : `${LOGIN_PATH[space]}?${new URLSearchParams({ mode: channel, erreur })}`);
 
   if (!isSupabaseConfigured()) {
-    const params = new URLSearchParams({ identifiant: raw, canal: channel, espace: space, role: parseRole(formData.get("role")) });
+    const params = new URLSearchParams({ identifiant: raw, canal: channel, espace: space, role: parseRole(formData.get("role")), ...purpose });
     redirect(`/connexion/code?${params}`);
   }
 
@@ -95,7 +101,7 @@ export async function requestLoginCodeAction(formData: FormData) {
     const { error } = await supabase.auth.signInWithOtp({ phone: identifiant, options: { shouldCreateUser: false } });
     failed(error);
   }
-  redirect(`/connexion/code?${new URLSearchParams({ identifiant: identifiant!, canal: channel, espace: space, ...(next ? { next } : {}) })}`);
+  redirect(`/connexion/code?${new URLSearchParams({ identifiant: identifiant!, canal: channel, espace: space, ...purpose, ...(next ? { next } : {}) })}`);
 }
 
 /** Étape 2 : vérification du code, ouverture de la session, page d'accueil du rôle. */
@@ -105,16 +111,17 @@ export async function verifyLoginCodeAction(formData: FormData) {
   const canal = parseChannel(formData.get("canal"));
   const space = parseSpace(formData.get("espace"));
   const next = safeNext(formData.get("next"));
+  const forPin = formData.get("but") === "pin";
   const retry: (role?: AppRole) => never = (role) =>
     redirect(
-      `/connexion/code?${new URLSearchParams({ identifiant, canal, espace: space, erreur: "code", ...(role ? { role } : {}), ...(next ? { next } : {}) })}`,
+      `/connexion/code?${new URLSearchParams({ identifiant, canal, espace: space, erreur: "code", ...(forPin ? { but: "pin" } : {}), ...(role ? { role } : {}), ...(next ? { next } : {}) })}`,
     );
 
   if (!isSupabaseConfigured()) {
     const role = parseRole(formData.get("role"));
     if (code !== DEMO_OTP) retry(role);
     await setDemoRole(role);
-    redirect(ROLE_HOME[role]);
+    redirect(forPin ? "/connexion/code-pin?raison=recuperation" : ROLE_HOME[role]);
   }
 
   if (!/^\d{6}$/.test(code)) retry();
@@ -132,6 +139,8 @@ export async function verifyLoginCodeAction(formData: FormData) {
   await completePendingSignup(supabase, data.user!, role);
   // L'admin doit encore passer la double authentification avant d'entrer.
   if (role === "admin") redirect(`/connexion/securite${next ? `?${new URLSearchParams({ next })}` : ""}`);
+  // « Code PIN oublié » : numéro vérifié, il reste à choisir le nouveau code PIN.
+  if (forPin && canal !== "email") redirect("/connexion/code-pin?raison=recuperation");
   // « next » n'est suivi que s'il ne mène pas vers l'espace d'un autre rôle.
   const otherSpace = Object.values(ROLE_HOME).some((home) => home !== ROLE_HOME[role] && next?.startsWith(home));
   redirect(next && !otherSpace ? next : ROLE_HOME[role]);
@@ -143,6 +152,7 @@ export async function resendLoginCodeAction(formData: FormData) {
   const canal = parseChannel(formData.get("canal"));
   const space = parseSpace(formData.get("espace"));
   const next = safeNext(formData.get("next"));
+  const purpose: Record<string, string> = formData.get("but") === "pin" ? { but: "pin" } : {};
   if (isSupabaseConfigured()) {
     const supabase = await createSupabaseServerClient();
     if (canal === "email") {
@@ -155,7 +165,7 @@ export async function resendLoginCodeAction(formData: FormData) {
       await supabase.auth.signInWithOtp({ phone: identifiant, options: { shouldCreateUser: false } });
     }
   }
-  redirect(`/connexion/code?${new URLSearchParams({ identifiant, canal, espace: space, renvoye: "1", ...(next ? { next } : {}) })}`);
+  redirect(`/connexion/code?${new URLSearchParams({ identifiant, canal, espace: space, renvoye: "1", ...purpose, ...(next ? { next } : {}) })}`);
 }
 
 /**
@@ -235,6 +245,8 @@ export async function signOutAction() {
     await supabase.auth.signOut();
   }
   (await cookies()).delete(DEMO_ROLE_COOKIE);
+  // Mode de l'appareil et date d'activité oubliés ; l'appareil de la famille reste reconnu.
+  await clearDeviceCookies();
   redirect("/");
 }
 
@@ -260,9 +272,11 @@ export interface SignupInput {
   /** Code de parrainage (facultatif). */
   referralCode: string;
   acceptTerms: boolean;
+  /** Répétiteur, connexion par code PIN ouverte : mot de passe choisi à l'inscription. */
+  password?: string;
 }
 
-export type SignupError = "invalid" | "limit" | "sms" | "whatsapp" | "send" | "profile" | "code";
+export type SignupError = "invalid" | "limit" | "sms" | "whatsapp" | "send" | "profile" | "code" | "password";
 
 function cleanSignup(input: SignupInput) {
   const role = parseRole(input.role);
@@ -298,6 +312,9 @@ function extrasOf(input: SignupInput): SignupExtras {
 export async function requestSignupCodeAction(input: SignupInput): Promise<{ error?: SignupError }> {
   const clean = cleanSignup(input);
   if (!clean) return { error: "invalid" };
+  // Répétiteur (connexion par code PIN ouverte) : e-mail + mot de passe, vérification par code e-mail.
+  const withPassword = isPinLoginEnabled() && clean.role === "tutor" && clean.email !== null;
+  if (withPassword && passwordProblem(input.password ?? "")) return { error: "password" };
   if (!isSupabaseConfigured()) return {};
   const phoneChannel: PhoneChannel = input.method === "whatsapp" ? "whatsapp" : "sms";
   if (clean.phone && !phoneChannelReady(phoneChannel)) return { error: phoneChannel };
@@ -316,12 +333,19 @@ export async function requestSignupCodeAction(input: SignupInput): Promise<{ err
   }
   const supabase = await createSupabaseServerClient();
   if (clean.phone) await rememberOtpChannel(clean.phone, phoneChannel);
-  const { error } = await supabase.auth.signInWithOtp(
-    clean.email
-      ? { email: clean.email, options: { shouldCreateUser: true, data: metadata, emailRedirectTo: emailRedirect(null) } }
-      : { phone: clean.phone!, options: { shouldCreateUser: true, data: metadata } },
-  );
+  const { error } = withPassword
+    ? await supabase.auth.signUp({
+        email: clean.email!,
+        password: input.password!,
+        options: { data: metadata, emailRedirectTo: emailRedirect(null, "repetiteur") },
+      })
+    : await supabase.auth.signInWithOtp(
+        clean.email
+          ? { email: clean.email, options: { shouldCreateUser: true, data: metadata, emailRedirectTo: emailRedirect(null) } }
+          : { phone: clean.phone!, options: { shouldCreateUser: true, data: metadata } },
+      );
   if (!error) return {};
+  if (error.code === "weak_password") return { error: "password" };
   if (error.message.toLowerCase().includes("database error")) return { error: "profile" };
   const key = sendErrorKey(error);
   return { error: key === "unknown" ? "send" : key };
@@ -330,26 +354,33 @@ export async function requestSignupCodeAction(input: SignupInput): Promise<{ err
 /** Code d'inscription vérifié : session ouverte, consentements enregistrés, compléments du profil. */
 export async function completeSignupAction(input: SignupInput & { code: string }): Promise<{ error: SignupError } | void> {
   const code = input.code.replace(/\s/g, "");
+  // Connexion par code PIN : un numéro vérifié choisit ensuite son code PIN (élève et parent).
+  const choosePin = (role: AppRole) => isPinLoginEnabled() && input.method !== "email" && (role === "parent" || role === "student");
+
   if (!isSupabaseConfigured()) {
     if (code !== DEMO_OTP) return { error: "code" };
     const role = parseRole(input.role);
     if (role === "admin" || !input.firstName.trim()) return { error: "invalid" };
     await setDemoRole(role);
-    redirect(ROLE_HOME[role]);
+    redirect(choosePin(role) ? "/connexion/code-pin?raison=inscription" : ROLE_HOME[role]);
   }
 
   const clean = cleanSignup(input);
   if (!clean) return { error: "invalid" };
   if (!/^\d{6}$/.test(code)) return { error: "code" };
   const supabase = await createSupabaseServerClient();
-  const { data, error } = clean.email
+  let { data, error } = clean.email
     ? await supabase.auth.verifyOtp({ email: clean.email, token: code, type: "email" })
     : await supabase.auth.verifyOtp({ phone: clean.phone!, token: code, type: "sms" });
+  // Inscription avec mot de passe (répétiteur) : code de confirmation d'inscription.
+  if (error && clean.email && isPinLoginEnabled() && clean.role === "tutor") {
+    ({ data, error } = await supabase.auth.verifyOtp({ email: clean.email, token: code, type: "signup" }));
+  }
   if (error || !data.user) return { error: "code" };
 
   const role = (await roleOf(data.user.id)) ?? clean.role;
   await completePendingSignup(supabase, data.user, role);
-  redirect(ROLE_HOME[role]);
+  redirect(choosePin(role) ? "/connexion/code-pin?raison=inscription" : ROLE_HOME[role]);
 }
 
 // ── Validation parentale et liens parent-enfant ──────────────────────────────

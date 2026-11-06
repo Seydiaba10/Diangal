@@ -943,6 +943,221 @@
       "sentToSms": "Si un compte DIANGAL utilise le {to}, un code à 6 chiffres vient d’être envoyé par SMS.",
       "noCode": "Rien reçu après quelques minutes ? Vérifiez l’identifiant, ou",
       "signUpLink": "créez votre compte"
+    },
+    "panel": {
+      "headline": "Les cours et les progrès de vos enfants, <mark>du CI à la Terminale</mark>.",
+      "sub": "Selon les programmes du Sénégal, pour préparer le CFEE, le BFEM et le Bac.",
+      "iAm": "Je suis",
+      "noAds": "Sans publicité ni traceur.",
+      "profiles": {
+        "eleve": "Élève",
+        "parent": "Parent",
+        "repetiteur": "Répétiteur"
+      },
+      "photoAlt": {
+        "eleve": "Photo : un garçon et une fille, élèves, cartable au dos",
+        "parent": "Photo : un homme et une femme, parents",
+        "repetiteur": "Photo : un homme et une femme, répétiteurs, un livre à la main"
+      }
+    },
+    "pin": {
+      "login": {
+        "title": "Heureux de vous <mark>revoir</mark>",
+        "titleTu": "Content de te <mark>revoir</mark>",
+        "subtitle": "Votre numéro et votre code PIN suffisent : aucun code à attendre.",
+        "subtitleTu": "Ton numéro et ton code PIN suffisent : aucun code à attendre.",
+        "iAm": "Je suis",
+        "phone": "Votre numéro de téléphone",
+        "phoneTu": "Ton numéro de téléphone",
+        "dialCode": "Indicatif du pays",
+        "pin": "Code PIN",
+        "forgot": "Code PIN oublié ?",
+        "shared": "Appareil partagé ou public :",
+        "sharedHint": "ne pas rester connecté",
+        "submit": "Se connecter",
+        "or": "ou",
+        "createAccount": "Créer un compte",
+        "child": "Votre enfant n’a pas de téléphone ?",
+        "childTu": "Un frère ou une sœur sans téléphone ?",
+        "childLink": "Connexion enfant",
+        "legacy": "Compte créé avec un email ?",
+        "legacyLink": "Recevoir un code par email",
+        "demoHint": "Démo : n’importe quel numéro, code PIN 246813."
+      },
+      "errors": {
+        "phone": "Numéro invalide : vérifiez l’indicatif et le numéro.",
+        "identifiants": "Numéro ou code PIN incorrect. Pas encore de code PIN ? Touchez « Code PIN oublié » pour en créer un.",
+        "bloque": "Trop d’essais avec un code PIN incorrect. Par sécurité, réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+        "recuperation": "Trop d’essais avec un code PIN incorrect : pour débloquer votre compte, recevez un code sur votre téléphone.",
+        "recover": "Code PIN oublié ? Recevoir un code",
+        "limit": "Trop de connexions en même temps. Réessayez dans quelques minutes.",
+        "profil": "Votre profil est introuvable. Écrivez au support DIANGAL."
+      },
+      "info": {
+        "session-expiree": "Vous avez été déconnecté après 15 minutes sans activité (appareil partagé).",
+        "session-enfant": "La session de l’enfant s’est fermée après 30 minutes sans activité.",
+        "deconnecte": "Vous êtes déconnecté de cet appareil.",
+        "compte-supprime": "Votre compte a été supprimé. Merci d’avoir utilisé DIANGAL."
+      },
+      "channels": {
+        "legend": "Recevoir votre code par",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "recommended": "Recommandé",
+        "whatsappHint": "Le plus rapide, avec internet.",
+        "smsHint": "Sans internet, si ce numéro n’a pas WhatsApp."
+      },
+      "forgot": {
+        "metaTitle": "Code PIN oublié",
+        "back": "Retour",
+        "title": "Code PIN <mark>oublié</mark> ?",
+        "subtitle": "Nous envoyons un code à votre numéro pour vérifier que c’est bien vous. Ensuite, vous choisirez un nouveau code PIN.",
+        "phone": "Votre numéro de téléphone",
+        "dialCode": "Indicatif du pays",
+        "submit": "Recevoir mon code",
+        "note": "C’est le seul cas, avec l’inscription et le changement de numéro, où un message vous est envoyé.",
+        "delai": "Le délai pour choisir votre code PIN est passé : demandez un nouveau code.",
+        "closed": "La récupération par WhatsApp ou par SMS n’est pas encore ouverte."
+      },
+      "create": {
+        "metaTitle": "Votre code PIN",
+        "title": "Choisissez votre <mark>code PIN</mark>",
+        "titleReset": "Votre nouveau <mark>code PIN</mark>",
+        "subtitle": "Il remplace le code par message pour toutes vos connexions. Il n’est jamais enregistré en clair.",
+        "verified": "Votre numéro est vérifié.",
+        "pin": "Code PIN",
+        "confirm": "Retapez le code PIN",
+        "rules": {
+          "easy": "6 chiffres faciles à retenir pour vous",
+          "sequence": "Pas de suite simple : 123456, 000000, 121212",
+          "personal": "Pas votre date de naissance ni la fin de votre numéro",
+          "secret": "Ne le donnez à personne, même à vos enfants"
+        },
+        "device": "Sur cet appareil",
+        "personal": "C’est mon téléphone",
+        "personalHint": "Vous restez connecté : pas de code à chaque visite.",
+        "shared": "Appareil partagé ou public",
+        "sharedHint": "Déconnexion à la fermeture et après 15 minutes sans activité.",
+        "submit": "Créer mon code PIN",
+        "submitReset": "Enregistrer mon code PIN",
+        "resetNote": "Par sécurité, vos autres appareils seront déconnectés. Les profils de vos enfants ne changent pas.",
+        "errors": {
+          "format": "Le code PIN doit avoir 6 chiffres.",
+          "repeat": "Évitez un même chiffre répété : choisissez un code moins facile à deviner.",
+          "sequence": "Évitez les suites comme 123456 : choisissez un code moins facile à deviner.",
+          "pattern": "Évitez les motifs répétés comme 121212 : choisissez un code moins facile à deviner.",
+          "common": "Ce code est trop connu : choisissez-en un autre.",
+          "phone": "Évitez la fin de votre numéro : choisissez un autre code.",
+          "different": "Les deux codes ne sont pas identiques.",
+          "enregistrement": "Le code PIN n’a pas pu être enregistré. Réessayez."
+        },
+        "done": {
+          "titleSignup": "Bienvenue sur <mark>DIANGAL</mark> !",
+          "titleReset": "Code PIN <mark>modifié</mark>",
+          "signup": "Votre compte est créé et votre code PIN est enregistré.",
+          "checks": {
+            "phone": "Numéro vérifié",
+            "pin": "Code PIN créé",
+            "stay": "Sur ce téléphone, vous restez connecté : pas de code à chaque visite",
+            "shared": "Appareil partagé : déconnexion à la fermeture et après 15 minutes sans activité"
+          },
+          "reset": "Votre nouveau code PIN est enregistré. Vos autres appareils ont été déconnectés.",
+          "notYou": "Ce n’était pas vous ? Refaites « Code PIN oublié » depuis votre téléphone : l’autre appareil sera déconnecté.",
+          "addChild": "Ajouter un enfant",
+          "start": "Accéder à mon espace",
+          "childHint": "Ajoutez votre enfant : avec son code élève s’il a un compte, ou en créant son profil s’il n’a pas de téléphone."
+        }
+      },
+      "session": {
+        "metaTitle": "Confirmer votre code PIN",
+        "title": "Rebonjour, <mark>{name}</mark>",
+        "titleNoName": "Confirmez votre <mark>code PIN</mark>",
+        "subtitle": "Pour votre sécurité, confirmez que c’est bien vous. Votre code PIN suffit.",
+        "pin": "Votre code PIN",
+        "submit": "Continuer",
+        "notMe": "Ce n’est pas moi : se déconnecter",
+        "why": "Demandé après 30 jours sans visite.",
+        "forgot": "Code PIN oublié ?",
+        "errors": {
+          "identifiants": "Code PIN incorrect.",
+          "bloque": "Trop d’essais : touchez « Code PIN oublié » pour recevoir un code."
+        }
+      },
+      "sharedBanner": {
+        "text": "Appareil partagé : vous serez déconnecté à la fermeture du navigateur et après 15 minutes sans activité.",
+        "signOut": "Se déconnecter maintenant"
+      }
+    },
+    "password": {
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "show": "Afficher le mot de passe",
+      "hide": "Masquer le mot de passe",
+      "forgot": "Mot de passe oublié ?",
+      "shared": "Appareil partagé ou public :",
+      "sharedHint": "ne pas rester connecté",
+      "demoHint": "Démo : n’importe quelle adresse, mot de passe Diangal2026.",
+      "rules": "10 caractères au moins, avec des lettres et des chiffres.",
+      "strength": {
+        "0": "Trop faible",
+        "1": "Faible",
+        "2": "Correct",
+        "3": "Solide",
+        "4": "Très solide"
+      },
+      "login": {
+        "title": "Heureux de vous <mark>revoir</mark>",
+        "subtitle": "Répétiteurs : votre e-mail et votre mot de passe.",
+        "iAm": "Je suis",
+        "submit": "Se connecter",
+        "noAccount": "Pas encore de compte ?",
+        "signUp": "Devenir répétiteur",
+        "family": "Élève ou parent ?",
+        "familyLink": "Connexion élèves et parents",
+        "legacy": "Pas encore de mot de passe ?",
+        "legacyLink": "Recevoir un code par email"
+      },
+      "admin": {
+        "metaTitle": "Administration",
+        "title": "Espace <mark>administration</mark>",
+        "subtitle": "Accès réservé.",
+        "submit": "Continuer",
+        "next": "Étape suivante : le code de votre application d’authentification."
+      },
+      "errors": {
+        "identifiants": "Adresse e-mail ou mot de passe incorrect.",
+        "bloque": "Trop d’essais. Par sécurité, réessayez dans {minutes, plural, one {# minute} other {# minutes}}, ou utilisez « Mot de passe oublié ».",
+        "recuperation": "Trop d’essais : choisissez un nouveau mot de passe avec « Mot de passe oublié ».",
+        "limit": "Trop de connexions en même temps. Réessayez dans quelques minutes.",
+        "non-verifie": "Votre adresse e-mail n’est pas encore vérifiée : entrez le code reçu à l’inscription, ou réinscrivez-vous."
+      },
+      "reset": {
+        "metaTitle": "Mot de passe oublié",
+        "back": "Retour",
+        "title": "Mot de passe <mark>oublié</mark> ?",
+        "subtitle": "Indiquez votre adresse e-mail : nous vous enverrons un code pour en choisir un nouveau.",
+        "send": "Recevoir un code",
+        "newTitle": "Nouveau <mark>mot de passe</mark>",
+        "sent": "Si un compte utilise {email}, un code vient d’y être envoyé. Regardez aussi dans les courriers indésirables.",
+        "code": "Code reçu par e-mail",
+        "newPassword": "Nouveau mot de passe",
+        "confirm": "Retapez le mot de passe",
+        "demoHint": "Démo : le code est 123456.",
+        "submit": "Changer mon mot de passe",
+        "others": "Vos autres appareils seront déconnectés.",
+        "errors": {
+          "email": "Entrez une adresse e-mail valide.",
+          "limit": "Trop de demandes. Réessayez dans quelques minutes.",
+          "code": "Ce code n’est pas le bon ou il a expiré. Vérifiez-le ou demandez-en un nouveau.",
+          "short": "Le mot de passe doit avoir 10 caractères au moins.",
+          "letters": "Le mot de passe doit contenir des lettres.",
+          "digits": "Le mot de passe doit contenir au moins un chiffre.",
+          "long": "Le mot de passe est trop long (128 caractères au plus).",
+          "different": "Les deux mots de passe ne sont pas identiques.",
+          "weak": "Ce mot de passe est trop connu : choisissez-en un autre.",
+          "enregistrement": "Le mot de passe n’a pas pu être enregistré. Réessayez."
+        }
+      }
     }
   },
   "signup": {
@@ -995,7 +1210,9 @@
       "subjects": "Matières enseignées",
       "parentPhone": "Numéro de téléphone de ton parent",
       "dialCode": "Indicatif du pays",
-      "referralCode": "Code de parrainage (facultatif)"
+      "referralCode": "Code de parrainage (facultatif)",
+      "password": "Mot de passe",
+      "passwordConfirm": "Retapez le mot de passe"
     },
     "hints": {
       "whatsapp": "Le code arrivera dans WhatsApp.",
@@ -1008,7 +1225,9 @@
       "codeExpiry": "Le code est valable 10 minutes.",
       "linkSent": "Nous avons envoyé un email à {to}. Ouvre-le sur cet appareil et touche le lien : ton compte sera créé automatiquement. S’il contient un code à 6 chiffres, saisis-le ici.",
       "sms": "Le code arrivera par SMS, même sans internet.",
-      "referralCode": "Si quelqu’un t’a invité, son code est déjà rempli. Il ne gagne rien tant qu’aucun abonnement n’est payé."
+      "referralCode": "Si quelqu’un t’a invité, son code est déjà rempli. Il ne gagne rien tant qu’aucun abonnement n’est payé.",
+      "password": "10 caractères au moins, avec des lettres et des chiffres. Les mots de passe trop connus sont refusés.",
+      "childWithoutPhone": "Votre enfant n’a pas de téléphone ? Choisissez « Parent » : vous créerez son profil juste après."
     },
     "minor": {
       "title": "Validation par un parent",
@@ -1038,7 +1257,15 @@
       "sms": "L’envoi par SMS n’est pas encore ouvert : utilise ton adresse email.",
       "whatsapp": "L’envoi sur WhatsApp n’est pas encore ouvert : utilise ton adresse email.",
       "send": "Le code n’a pas pu être envoyé. Vérifie l’adresse et réessaie.",
-      "profile": "Le compte n’a pas pu être créé. Vérifie ta classe et ta date de naissance."
+      "profile": "Le compte n’a pas pu être créé. Vérifie ta classe et ta date de naissance.",
+      "passwordWeak": "Ce mot de passe ne convient pas : 10 caractères au moins, avec des lettres et des chiffres, et pas un mot de passe trop connu.",
+      "passwordRules": {
+        "short": "Le mot de passe doit avoir 10 caractères au moins.",
+        "letters": "Le mot de passe doit contenir des lettres.",
+        "digits": "Le mot de passe doit contenir au moins un chiffre.",
+        "long": "Le mot de passe est trop long (128 caractères au plus)."
+      },
+      "passwordDifferent": "Les deux mots de passe ne sont pas identiques."
     },
     "sendCode": "Recevoir le code"
   },
@@ -2207,7 +2434,12 @@
       "pin": "Le code PIN doit faire 4 à 6 chiffres, saisi deux fois à l’identique.",
       "enfant": "Cet enfant n’est pas relié à votre compte.",
       "profil": "Vérifiez le prénom, le nom, la classe et la date de naissance.",
-      "creation": "Le profil n’a pas pu être créé. Réessayez plus tard."
+      "creation": "Le profil n’a pas pu être créé. Réessayez plus tard.",
+      "reauth": "Votre code PIN n’est pas le bon : rien n’a été changé.",
+      "bloque": "Trop d’essais avec votre code PIN. Réessayez plus tard ou utilisez « Code PIN oublié ».",
+      "pinSimple": "Ce code PIN est trop facile à deviner (suite, chiffres répétés) : choisissez-en un autre.",
+      "pinDifferent": "Les deux codes PIN de l’enfant ne sont pas identiques.",
+      "appareil": "Cet appareil n’a pas pu être ajouté (10 appareils au plus). Retirez-en un, puis réessayez."
     },
     "codeTitle": "Code famille",
     "codeHint": "À donner à vos enfants : il remplace l’email ou le téléphone.",
@@ -2239,9 +2471,45 @@
       "lastName": "Nom",
       "level": "Classe",
       "birthDate": "Date de naissance",
-      "birthDateHint": "Sert seulement à adapter l’espace à son âge : elle n’est jamais affichée."
+      "birthDateHint": "Sert seulement à adapter l’espace à son âge : elle n’est jamais affichée.",
+      "avatar": "Son personnage",
+      "avatarChoice": "Personnage {n}",
+      "avatarHint": "Pas de photo : votre enfant est représenté par un personnage.",
+      "showHere": "Afficher cet enfant sur ce téléphone.",
+      "showHereHint": "Il choisira son prénom puis tapera son code, sans code famille."
     },
-    "create": "Créer le profil"
+    "create": "Créer le profil",
+    "subtitleV2": "Les profils et les codes PIN de vos enfants, et les appareils où ils se connectent.",
+    "demoV2": "Mode démo : rien n’est enregistré. Votre code PIN et celui des enfants : 246813.",
+    "createdV2": "Le profil de {name} est créé : sur un appareil de la famille, il choisit son prénom puis tape son code PIN.",
+    "pinSavedV2": "Code PIN enregistré. L’enfant a été déconnecté de tous les appareils et le blocage est levé.",
+    "codeHintV2": "Seulement pour un appareil qui n’affiche pas encore vos enfants.",
+    "codeHowV2": "Sur un autre appareil, votre enfant ouvre « Connexion enfant », tape ce code, choisit son prénom puis son code PIN.",
+    "newHintV2": "Pour un enfant sans téléphone ni email : vous validez son inscription et choisissez son code PIN.",
+    "pinV2Hint": "6 chiffres, faciles à retenir pour l’enfant. Évitez 123456 ou 000000.",
+    "parentPin": "Pour confirmer, votre code PIN",
+    "parentPinHint": "C’est une opération sensible : nous vérifions que c’est bien vous.",
+    "pinChangeNote": "{name} sera déconnecté de tous les appareils et le blocage sera levé.",
+    "devices": {
+      "title": "Appareils de la famille",
+      "hint": "Sur ces appareils, les profils de vos enfants s’affichent sans code famille.",
+      "none": "Aucun appareil pour l’instant.",
+      "dates": "Ajouté le {added} · utilisé le {used}",
+      "remove": "Retirer",
+      "addTitle": "Afficher mes enfants sur ce téléphone",
+      "addHint": "À faire sur le téléphone ou l’ordinateur que vos enfants utilisent.",
+      "add": "Ajouter cet appareil",
+      "added": "Cet appareil affiche désormais les profils de vos enfants.",
+      "removed": "Appareil retiré : il n’affiche plus les profils de vos enfants.",
+      "kinds": {
+        "android": "Téléphone Android",
+        "ios": "iPhone ou iPad",
+        "windows": "Ordinateur Windows",
+        "mac": "Ordinateur Mac",
+        "linux": "Ordinateur Linux",
+        "other": "Appareil"
+      }
+    }
   },
   "childLogin": {
     "title": "Connexion enfant",
@@ -2263,6 +2531,20 @@
       "pin": "Code PIN incorrect. Réessaie.",
       "bloque": "Trop d’erreurs : attends 15 minutes ou demande à ton parent de changer ton code PIN.",
       "session": "La connexion n’a pas marché. Réessaie dans un moment."
+    },
+    "v2": {
+      "codeTitle": "Connexion <mark>enfant</mark>",
+      "codeSubtitle": "Tape le code famille donné par ton parent.",
+      "whoTitle": "Qui <mark>es-tu</mark> ?",
+      "deviceOf": "Téléphone de la famille de {name}. Touche ton prénom.",
+      "touchName": "Touche ton prénom.",
+      "parentSpace": "Espace parent",
+      "parentSpaceHint": "{name}, avec son code PIN",
+      "otherFamily": "Autre famille ?",
+      "otherFamilyLink": "Entrer un code famille",
+      "hello": "Bonjour <mark>{name}</mark> !",
+      "typePin": "Tape ton code PIN.",
+      "forgot": "Tu as oublié ton code ? Demande à ton parent de le changer."
     }
   },
   "readAloud": {

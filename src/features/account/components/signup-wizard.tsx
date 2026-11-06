@@ -2,6 +2,7 @@
 
 import { ArrowLeft, ArrowRight, BookOpen, CircleAlert, GraduationCap, Info, Mail, MessageCircle, Smartphone, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useTransition, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
@@ -9,15 +10,19 @@ import { DialCodeSelect } from "@/components/ui/dial-code-select";
 import { CycleDot } from "@/components/ui/level-badge";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/cn";
+import { passwordProblem } from "@/lib/password-rules";
 import { CYCLE_STYLES, CYCLES, SERIES_BY_LEVEL, type LevelCode } from "@/lib/levels";
 import { DEFAULT_COUNTRY, parsePhone, type DialCountry } from "@/lib/phone";
 import type { AppRole, SubjectCode } from "@/types/domain";
 import { completeSignupAction, requestSignupCodeAction, type SignupError, type SignupInput } from "../actions";
+import { PROFILE_PHOTOS } from "../profile-photos";
 import { INPUT_CLASS } from "./auth-card";
 
 type SignupRole = Exclude<AppRole, "admin">;
 
 const SUBJECTS: SubjectCode[] = ["MATH", "FR", "ANG", "HG", "SVT", "PC", "EC", "LV2"];
+
+const ROLE_PHOTO = { student: PROFILE_PHOTOS.eleve, parent: PROFILE_PHOTOS.parent, tutor: PROFILE_PHOTOS.repetiteur } as const;
 
 const ROLE_OPTIONS: { role: SignupRole; icon: typeof Users }[] = [
   { role: "student", icon: GraduationCap },
@@ -29,6 +34,7 @@ const ROLE_OPTIONS: { role: SignupRole; icon: typeof Users }[] = [
 const STEPS = ["role", "profile", "details", "consent", "identifier", "code"] as const;
 
 const ERROR_KEYS: Record<SignupError, string> = {
+  password: "passwordWeak",
   invalid: "generic",
   limit: "limit",
   sms: "sms",
@@ -66,6 +72,8 @@ export function SignupWizard({
   countries,
   emailCode,
   demo,
+  pinMode = false,
+  photoAlts,
 }: {
   initialRole: SignupRole | null;
   /** Code de parrainage reçu dans le lien d'invitation (?parrain=). */
@@ -79,6 +87,10 @@ export function SignupWizard({
   /** L'email contient un code à 6 chiffres ; sinon, un lien à ouvrir sur l'appareil. */
   emailCode: boolean;
   demo: boolean;
+  /** Connexion par code PIN : téléphone pour élèves et parents, e-mail + mot de passe pour les répétiteurs. */
+  pinMode?: boolean;
+  /** Descriptions des photos des profils (étape « Qui es-tu ? »). */
+  photoAlts?: Record<SignupRole, string>;
 }) {
   const t = useTranslations("signup");
   const tLevels = useTranslations("levels");
@@ -87,12 +99,20 @@ export function SignupWizard({
   const [step, setStep] = useState(initialRole ? 1 : 0);
   const [role, setRole] = useState<SignupRole>(initialRole ?? "student");
   // Moyens ouverts, du plus courant au Sénégal au plus universel : seuls ceux qui sont branchés.
-  const methods: SignupInput["method"][] = [
-    ...(whatsappEnabled ? (["whatsapp"] as const) : []),
-    ...(smsEnabled ? (["phone"] as const) : []),
-    "email",
-  ];
-  const [method, setMethod] = useState<SignupInput["method"]>(methods[0]!);
+  const phoneMethods: SignupInput["method"][] = [...(whatsappEnabled ? (["whatsapp"] as const) : []), ...(smsEnabled ? (["phone"] as const) : [])];
+  // Connexion par code PIN : le répétiteur s'inscrit par e-mail, l'élève et le parent par téléphone.
+  const methods: SignupInput["method"][] = pinMode
+    ? role === "tutor"
+      ? ["email"]
+      : phoneMethods.length
+        ? phoneMethods
+        : ["email"]
+    : [...phoneMethods, "email"];
+  const [chosenMethod, setMethod] = useState<SignupInput["method"]>(methods[0]!);
+  const method = methods.includes(chosenMethod) ? chosenMethod : methods[0]!;
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const withPassword = pinMode && role === "tutor";
   const [identifier, setIdentifier] = useState("");
   const [dialCode, setDialCode] = useState(DEFAULT_COUNTRY.dial);
   const [parentDialCode, setParentDialCode] = useState(DEFAULT_COUNTRY.dial);
@@ -132,6 +152,7 @@ export function SignupWizard({
     parentPhone: minor ? parentPhone : "",
     referralCode: role === "tutor" ? "" : referralCode,
     acceptTerms,
+    password: withPassword ? password : "",
   });
 
   const validate = (): string | null => {
@@ -152,6 +173,11 @@ export function SignupWizard({
       case "identifier":
         if (method !== "email" && !parsePhone(identifier, dialCode, countries)) return t("errors.phone");
         if (method === "email" && !/^\S+@\S+\.\S+$/.test(identifier)) return t("errors.email");
+        if (withPassword) {
+          const problem = passwordProblem(password);
+          if (problem) return t(`errors.passwordRules.${problem}`);
+          if (password !== passwordConfirm) return t("errors.passwordDifferent");
+        }
         return null;
       case "code":
         return /^\d{6}$/.test(code.replace(/\s/g, "")) ? null : t("errors.code");
@@ -213,7 +239,40 @@ export function SignupWizard({
       >
         <h2 className="text-lg font-semibold text-ink">{t(`titles.${current}`)}</h2>
 
-        {current === "role" ? (
+        {current === "role" && pinMode ? (
+          <fieldset className="space-y-2.5">
+            <legend className="sr-only">{t("titles.role")}</legend>
+            {ROLE_OPTIONS.map(({ role: option }) => (
+              <label
+                key={option}
+                className={cn(
+                  "relative flex cursor-pointer items-center gap-3 rounded-[20px] border-[1.5px] py-2.5 pl-2 pr-3.5 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-600",
+                  role === option ? "border-[2.5px] border-brand-600 bg-cycle-middle-soft" : "border-line bg-surface hover:border-brand-100",
+                )}
+              >
+                <input type="radio" name="role" value={option} checked={role === option} onChange={() => setRole(option)} className="sr-only" />
+                <Image
+                  src={ROLE_PHOTO[option]}
+                  alt={photoAlts?.[option] ?? ""}
+                  width={199}
+                  height={149}
+                  loading="eager"
+                  className="h-24 w-32 shrink-0 rounded-xl object-cover object-[center_30%]"
+                />
+                <span className="min-w-0">
+                  <span className="block text-lg font-bold text-brand-800">{t(`roles.${option}.title`)}</span>
+                  <span className="block text-sm leading-snug text-ink-muted">{t(`roles.${option}.body`)}</span>
+                </span>
+              </label>
+            ))}
+            <p className="flex gap-2 rounded-xl bg-brand-50 p-3 text-sm text-brand-800">
+              <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
+              {t("hints.childWithoutPhone")}
+            </p>
+          </fieldset>
+        ) : null}
+
+        {current === "role" && !pinMode ? (
           <fieldset className="space-y-3">
             <legend className="sr-only">{t("titles.role")}</legend>
             {ROLE_OPTIONS.map(({ role: option, icon: Icon }) => (
@@ -475,6 +534,32 @@ export function SignupWizard({
                 />
               </Field>
             )}
+            {withPassword ? (
+              <>
+                <Field id="mdp" label={t("fields.password")} hint={t("hints.password")}>
+                  <input
+                    id="mdp"
+                    type="password"
+                    autoComplete="new-password"
+                    maxLength={128}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </Field>
+                <Field id="mdp2" label={t("fields.passwordConfirm")}>
+                  <input
+                    id="mdp2"
+                    type="password"
+                    autoComplete="new-password"
+                    maxLength={128}
+                    value={passwordConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </Field>
+              </>
+            ) : null}
           </>
         ) : null}
 

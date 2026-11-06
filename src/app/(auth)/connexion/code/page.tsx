@@ -36,6 +36,8 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
   const role = first(params.role) || (space === "repetiteur" ? "tutor" : "student");
   const next = first(params.next);
   const error = first(params.erreur) === "code";
+  // « Code PIN oublié » : après le code, choix d'un nouveau code PIN.
+  const forPin = first(params.but) === "pin";
   const demo = !isSupabaseConfigured();
   // Tant que les emails n'ont pas de code (offre gratuite Supabase), on se connecte par le lien.
   const linkMode = !demo && canal === "email" && !emailHasCode();
@@ -48,6 +50,7 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
       <input type="hidden" name="espace" value={space} />
       {demo ? <input type="hidden" name="role" value={role} /> : null}
       {next ? <input type="hidden" name="next" value={next} /> : null}
+      {forPin ? <input type="hidden" name="but" value="pin" /> : null}
     </>
   );
 
@@ -105,7 +108,10 @@ async function CodeForm({ searchParams }: { searchParams: PageProps<"/connexion/
         </Button>
       </form>
       <div className="mt-4 flex items-center justify-between gap-3 text-sm">
-        <Link href={`${LOGIN_PATH[space]}?${new URLSearchParams({ mode: canal, ...(next ? { next } : {}) })}`} className="font-medium text-brand-700 hover:underline">
+        <Link
+          href={forPin ? "/connexion/pin-oublie" : `${LOGIN_PATH[space]}?${new URLSearchParams({ mode: canal, ...(next ? { next } : {}) })}`}
+          className="font-medium text-brand-700 hover:underline"
+        >
           {canal === "email" ? t("changeEmail") : t("changeNumber")}
         </Link>
         <form action={resendLoginCodeAction}>

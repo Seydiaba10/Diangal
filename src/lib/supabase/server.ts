@@ -3,6 +3,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { connection } from "next/server";
+import { DEVICE_COOKIE, isSupabaseAuthCookie, parseDeviceMode, sessionCookieOptions } from "@/features/account/device-cookies";
 import { publicEnv } from "@/lib/env";
 import type { Database } from "@/types/database";
 
@@ -21,8 +22,12 @@ export async function createSupabaseServerClient() {
         return cookieStore.getAll();
       },
       setAll(cookiesToSet) {
+        // Appareil partagé ou session d'enfant : les cookies de session disparaissent à la fermeture.
+        const mode = parseDeviceMode(cookieStore.get(DEVICE_COOKIE)?.value);
         try {
-          for (const { name, value, options } of cookiesToSet) cookieStore.set(name, value, options);
+          for (const { name, value, options } of cookiesToSet) {
+            cookieStore.set(name, value, isSupabaseAuthCookie(name) ? sessionCookieOptions(options, mode) : options);
+          }
         } catch {
           // Appel depuis un Server Component : le rafraîchissement de session est assuré par proxy.ts.
         }

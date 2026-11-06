@@ -6,7 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AuthCard } from "@/features/account/components/auth-card";
 import { SignupWizard } from "@/features/account/components/signup-wizard";
 import { formatReferralCode, normalizeReferralCode } from "@/features/referrals/presets";
-import { emailHasCode, isSmsEnabled, isSupabaseConfigured, isWhatsAppEnabled, phoneCountries } from "@/lib/env";
+import { profileLabels } from "@/features/account/profile-labels";
+import { emailHasCode, isPinLoginEnabled, isSmsEnabled, isSupabaseConfigured, isWhatsAppEnabled, phoneCountries } from "@/lib/env";
 
 export async function generateMetadata() {
   const t = await getTranslations("signup");
@@ -17,7 +18,8 @@ async function Wizard({ searchParams }: { searchParams: PageProps<"/inscription"
   const { role, parrain } = await searchParams;
   const initialRole = role === "student" || role === "parent" || role === "tutor" ? role : null;
   const referralCode = normalizeReferralCode(parrain);
-  const messages = await getMessages();
+  const [messages, labels] = await Promise.all([getMessages(), profileLabels()]);
+  const pinMode = isPinLoginEnabled();
   return (
     <NextIntlClientProvider messages={{ signup: messages.signup, levels: messages.levels, cycles: messages.cycles, subjects: messages.subjects }}>
       <SignupWizard
@@ -28,6 +30,8 @@ async function Wizard({ searchParams }: { searchParams: PageProps<"/inscription"
         countries={phoneCountries()}
         emailCode={emailHasCode()}
         demo={!isSupabaseConfigured()}
+        pinMode={pinMode}
+        photoAlts={pinMode ? { student: labels.alts.eleve, parent: labels.alts.parent, tutor: labels.alts.repetiteur } : undefined}
       />
     </NextIntlClientProvider>
   );

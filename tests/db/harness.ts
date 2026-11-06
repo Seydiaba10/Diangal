@@ -18,6 +18,13 @@ const SUPABASE_STUBS = `
     email text,
     phone text,
     raw_user_meta_data jsonb not null default '{}'::jsonb,
+    encrypted_password text not null default '',
+    deleted_at timestamptz,
+    created_at timestamptz not null default now()
+  );
+  create table auth.sessions (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid not null references auth.users on delete cascade,
     created_at timestamptz not null default now()
   );
   create function auth.jwt() returns jsonb language sql stable as $$
@@ -52,6 +59,8 @@ export interface Actor {
   aal?: "aal1" | "aal2";
   /** Heure de la dernière connexion (secondes), claim « amr » du JWT. Par défaut : maintenant. */
   loginAt?: number;
+  /** Session Supabase (claim « session_id »), pour la nouvelle vérification du code PIN. */
+  sessionId?: string;
 }
 
 export const ANON: Actor = { id: null, role: null };
@@ -60,7 +69,9 @@ export const ANON: Actor = { id: null, role: null };
 export async function as<T>(db: PGlite, actor: Actor, fn: (tx: Transaction) => Promise<T>): Promise<T> {
   return db.transaction(async (tx) => {
     const amr = [{ method: "otp", timestamp: actor.loginAt ?? Math.floor(Date.now() / 1000) }];
-    const claims = actor.id ? { sub: actor.id, role: "authenticated", user_role: actor.role, aal: actor.aal ?? "aal1", amr } : {};
+    const claims = actor.id
+      ? { sub: actor.id, role: "authenticated", user_role: actor.role, aal: actor.aal ?? "aal1", amr, ...(actor.sessionId ? { session_id: actor.sessionId } : {}) }
+      : {};
     await tx.query("select set_config('request.jwt.claims', $1, true)", [JSON.stringify(claims)]);
     await tx.exec(`set local role ${actor.id ? "authenticated" : "anon"}`);
     return fn(tx);

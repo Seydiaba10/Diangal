@@ -1,0 +1,51 @@
+<!doctype html>
+<!-- Email « mot de passe oublié » (modèle « Reset Password » de Supabase Auth) : le code à 6 chiffres pour
+     choisir un nouveau mot de passe (répétiteurs et administrateur). Appliqué en ligne par scripts/configure-email.mjs. -->
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nouveau mot de passe DIANGAL</title>
+  </head>
+  <body style="margin:0;padding:0;background:#f5f7f9;font-family:Arial,Helvetica,sans-serif;color:#101828">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7f9;padding:24px 12px">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:#ffffff;border:1px solid #eaecef;border-radius:16px;overflow:hidden">
+            <tr>
+              <td style="height:6px;background:#00853f;width:33%"></td>
+              <td style="height:6px;background:#fdef42;width:34%"></td>
+              <td style="height:6px;background:#e31b23;width:33%"></td>
+            </tr>
+            <tr>
+              <td colspan="3" style="padding:28px 24px 8px">
+                <p style="margin:0;font-size:20px;font-weight:bold;color:#00853f;letter-spacing:1px">DIANGAL</p>
+                <h1 style="margin:16px 0 8px;font-size:22px;line-height:28px">Mot de passe oublié</h1>
+                <p style="margin:0;font-size:16px;line-height:24px">Voici le code à saisir sur DIANGAL pour choisir un nouveau mot de passe :</p>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" align="center" style="padding:16px 24px">
+                <p style="margin:0;display:inline-block;padding:14px 22px;background:#e6f3ec;border-radius:12px;font-family:'Courier New',Courier,monospace;font-size:34px;font-weight:bold;letter-spacing:8px;color:#101828">{{ .Token }}</p>
+                <p style="margin:12px 0 0;font-size:14px;line-height:20px;color:#475467">Valable 10 minutes, une seule fois.</p>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" style="padding:8px 24px 0">
+                <p style="margin:0;font-size:14px;line-height:20px;color:#475467">Ou bien, sur le téléphone où la demande a été faite :</p>
+                <p style="margin:12px 0 0"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 20px;background:#00853f;border-radius:12px;color:#ffffff;font-size:16px;font-weight:bold;text-decoration:none">Choisir un nouveau mot de passe</a></p>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" style="padding:24px">
+                <p style="margin:0;padding:12px 14px;background:#fffaeb;border-radius:12px;font-size:14px;line-height:20px">Ce code ne doit être donné à personne : l’équipe DIANGAL ne le demande jamais.</p>
+                <p style="margin:16px 0 0;font-size:13px;line-height:19px;color:#667085">Demande inconnue ? Ce message peut être ignoré : sans le code, le mot de passe ne change pas.</p>
+              </td>
+            </tr>
+          </table>
+          <p style="margin:16px 0 0;font-size:12px;color:#667085">DIANGAL · Réviser du CI à la Terminale</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

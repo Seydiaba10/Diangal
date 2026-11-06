@@ -2639,6 +2639,54 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      // ── Connexion par code PIN (migration 20261106000001, écrit à la main en attendant la génération) ──
+      auth_guard_status: {
+        Args: { p_key: string }
+        Returns: { locked: boolean; retry_after: number; needs_recovery: boolean; failures: number }[]
+      }
+      auth_guard_fail: {
+        Args: { p_key: string }
+        Returns: { locked: boolean; retry_after: number; needs_recovery: boolean; failures: number }[]
+      }
+      auth_guard_success: { Args: { p_key: string }; Returns: undefined }
+      auth_guard_clear: { Args: { p_key: string }; Returns: undefined }
+      auth_log_event: {
+        Args: { p_user: string | null; p_kind: string; p_subject?: string | null; p_ip?: string | null; p_device?: string | null }
+        Returns: undefined
+      }
+      admin_auth_events: {
+        Args: { p_limit?: number }
+        Returns: {
+          id: number
+          created_at: string
+          kind: string
+          user_id: string | null
+          first_name: string | null
+          role: string | null
+          subject: string | null
+          ip_prefix: string | null
+          device: string | null
+        }[]
+      }
+      mark_pin_set: { Args: { p_user: string; p_kind: string; p_version?: number }; Returns: undefined }
+      get_pin_credential: { Args: { p_user: string }; Returns: { kind: string; pepper_version: number; set_at: string }[] }
+      get_my_pin_status: { Args: never; Returns: string | null }
+      verify_user_password: { Args: { p_user: string; p_password: string }; Returns: boolean }
+      mark_reauth: { Args: { p_user: string; p_session: string }; Returns: undefined }
+      revoke_user_sessions: { Args: { p_user: string }; Returns: number }
+      authorize_child_pin_change: { Args: { p_student: string }; Returns: undefined }
+      register_managed_child_v2: { Args: { p_parent: string; p_child: string }; Returns: string }
+      child_login_parent: { Args: { p_student: string }; Returns: string | null }
+      register_family_device: { Args: { p_token_hash: string; p_label: string }; Returns: string }
+      get_my_family_devices: {
+        Args: never
+        Returns: { id: string; label: string; created_at: string; last_used_at: string }[]
+      }
+      revoke_family_device: { Args: { p_id: string }; Returns: undefined }
+      family_device_children: {
+        Args: { p_token_hash: string }
+        Returns: { parent_id: string; parent_first_name: string; student_id: string; first_name: string; avatar_key: string | null }[]
+      }
       abandon_attempt: { Args: { p_attempt: string }; Returns: undefined }
       admin_content_tracking: {
         Args: never

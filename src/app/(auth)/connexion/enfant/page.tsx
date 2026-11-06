@@ -8,7 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { StudentAvatar } from "@/components/ui/student-avatar";
 import { AuthCard } from "@/features/account/components/auth-card";
 import { childLookupAction, childSignInAction } from "@/features/family/actions";
+import { ChildLoginV2 } from "@/features/family/components/child-login-v2";
 import { getFamilyChildrenForLogin, normalizeFamilyCode } from "@/features/family/data";
+import { isPinLoginEnabled } from "@/lib/env";
 
 type SearchParams = PageProps<"/connexion/enfant">["searchParams"];
 
@@ -119,8 +121,15 @@ async function ChildLogin({ searchParams }: { searchParams: SearchParams }) {
   );
 }
 
-/** Connexion d'un enfant sans email ni téléphone : code famille, prénom, puis code PIN. */
+/** Connexion d'un enfant sans email ni téléphone : code famille (ou appareil de la famille), prénom, puis code PIN. */
 export default async function ChildLoginPage({ searchParams }: PageProps<"/connexion/enfant">) {
+  if (isPinLoginEnabled()) {
+    return (
+      <Suspense fallback={<Skeleton className="h-72" />}>
+        <ChildLoginV2 searchParams={searchParams} />
+      </Suspense>
+    );
+  }
   const t = await getTranslations("childLogin");
   return (
     <AuthCard title={t("title")} subtitle={t("subtitle")} centered>

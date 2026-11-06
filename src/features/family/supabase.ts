@@ -43,6 +43,27 @@ export async function fetchChildLogins(): Promise<ChildLoginInfo[]> {
   return data.map((c) => ({ studentId: c.student_id, hasPin: true, locked: c.locked }));
 }
 
+/** Profils affichés sur un appareil de la famille (empreinte du jeton). Clé secrète : avant toute session. */
+export async function fetchDeviceChildren(
+  tokenHash: string,
+): Promise<{ parentFirstName: string; children: { id: string; firstName: string; avatarKey: AvatarKey }[] } | null> {
+  const { data, error } = await createSupabaseAdminClient().rpc("family_device_children", { p_token_hash: tokenHash });
+  if (error) throw new Error(`appareil de la famille : ${error.message}`);
+  if (!data.length) return null;
+  return {
+    parentFirstName: data[0]!.parent_first_name,
+    children: data.map((c) => ({ id: c.student_id, firstName: c.first_name, avatarKey: (c.avatar_key ?? "awa") as AvatarKey })),
+  };
+}
+
+/** Appareils de la famille du parent connecté. */
+export async function fetchFamilyDevices(): Promise<{ id: string; label: string; createdAt: string; lastUsedAt: string }[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("get_my_family_devices");
+  if (error) throw new Error(`appareils de la famille : ${error.message}`);
+  return data.map((d) => ({ id: d.id, label: d.label, createdAt: d.created_at, lastUsedAt: d.last_used_at }));
+}
+
 /** Enfants proposés pour un code famille (prénom et avatar seulement). */
 export async function fetchFamilyChildren(code: string): Promise<{ id: string; firstName: string; avatarKey: AvatarKey }[]> {
   const { data, error } = await createSupabaseAdminClient().rpc("get_family_children", { p_code: code });

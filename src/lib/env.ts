@@ -45,6 +45,14 @@ export function emailHasCode(): boolean {
 }
 
 /**
+ * Connexion par numéro + code PIN (et e-mail + mot de passe pour les répétiteurs). Tant que l'interrupteur
+ * est coupé, l'ancienne connexion par code reçu à chaque fois reste la seule proposée.
+ */
+export function isPinLoginEnabled(): boolean {
+  return process.env.DIANGAL_PIN_LOGIN === "true";
+}
+
+/**
  * L'application fonctionne sur les données de démonstration (src/mocks) tant que
  * DIANGAL_DATA_SOURCE ne vaut pas « supabase ». Les clés peuvent donc être renseignées
  * avant que la couche de données soit branchée, sans activer la vraie session.
