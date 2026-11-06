@@ -9,7 +9,7 @@ import { richMark } from "@/features/account/components/highlight";
 import { PinBoxes } from "@/features/account/components/pin-boxes";
 import { confirmSessionPinAction, notMeAction } from "@/features/account/pin-actions";
 import { getAuthIdentity } from "@/features/account/session";
-import { maskPhone } from "@/lib/phone";
+import { maskEmail, maskPhone } from "@/lib/phone";
 import { isPinLoginEnabled, isSupabaseConfigured } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -31,7 +31,8 @@ async function SessionForm({ searchParams }: { searchParams: PageProps<"/connexi
       const supabase = await createSupabaseServerClient();
       const { data } = await supabase.from("profiles").select("first_name").eq("id", identity.userId).maybeSingle();
       name = data?.first_name ?? "";
-      phone = identity.phone ? maskPhone(identity.phone) : "";
+      // Le numéro (principal), sinon l’e-mail du compte, masqués.
+      phone = identity.phone ? maskPhone(identity.phone) : identity.email ? maskEmail(identity.email) : "";
     }
   }
   const error = first(params.erreur);

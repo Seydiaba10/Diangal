@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 import { LOGIN_PATH, parseSpace, ROLE_HOME } from "@/features/account/roles";
 import { completePendingSignup } from "@/features/account/signup";
+import { isPinLoginEnabled } from "@/lib/env";
 import { safeInternalPath } from "@/lib/safe-path";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -37,7 +38,14 @@ export async function GET(request: NextRequest) {
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
   if (!profile) redirect(`${login}?mode=email&erreur=profil`);
   await completePendingSignup(supabase, user, profile.role);
+  // Lien de l'e-mail ajouté dans « Mon compte » : l'adresse confirmée est recopiée dans le profil.
+  if (next?.startsWith("/compte")) await supabase.rpc("sync_my_contact");
 
   if (profile.role === "admin") redirect("/connexion/securite");
+  // Connexion par code PIN : un élève ou un parent arrivé par le lien de l'e-mail sans code PIN le choisit maintenant.
+  if (!next && isPinLoginEnabled() && (profile.role === "student" || profile.role === "parent")) {
+    const { data: pinSetAt } = await supabase.rpc("get_my_pin_status");
+    if (!pinSetAt) redirect("/connexion/code-pin?raison=inscription");
+  }
   redirect(next ?? ROLE_HOME[profile.role]);
 }

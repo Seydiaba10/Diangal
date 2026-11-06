@@ -79,6 +79,12 @@ export function isAllowedPhone(e164: string, countries: readonly DialCountry[]):
   return parsePhone(e164, DEFAULT_COUNTRY.dial, countries) === e164;
 }
 
+/** Adresse e-mail masquée pour l'affichage et le journal : « mariama@gmail.com » → « ma•••@gmail.com ». */
+export function maskEmail(email: string): string {
+  const [name = "", domain = ""] = email.split("@");
+  return `${name.slice(0, 2)}•••@${domain}`;
+}
+
 /** Numéro masqué pour l'affichage : « +221 77 ••• •• 67 ». */
 export function maskPhone(e164: string): string {
   const country = [...DIAL_COUNTRIES].sort((a, b) => b.dial.length - a.dial.length).find((c) => e164.startsWith(`+${c.dial}`));

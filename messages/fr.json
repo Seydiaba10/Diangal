@@ -971,9 +971,16 @@
         "child": "Votre enfant n’a pas de téléphone ?",
         "childTu": "Un frère ou une sœur sans téléphone ?",
         "childLink": "Connexion enfant",
-        "legacy": "Compte créé avec un email ?",
-        "legacyLink": "Recevoir un code par email",
-        "demoHint": "Démo : n’importe quel numéro, code PIN 246813."
+        "demoHint": "Démo : n’importe quel numéro, code PIN 246813.",
+        "back": "Retour",
+        "subtitleEmail": "Avec votre adresse e-mail et votre code PIN : le même code PIN qu’avec votre numéro.",
+        "subtitleEmailTu": "Avec ton adresse e-mail et ton code PIN : le même code PIN qu’avec ton numéro.",
+        "email": "Votre adresse e-mail",
+        "emailTu": "Ton adresse e-mail",
+        "useEmail": "Se connecter avec mon e-mail",
+        "usePhone": "Se connecter avec mon numéro",
+        "emailOptional": "L’e-mail est facultatif. Le numéro de téléphone reste la façon principale de se connecter.",
+        "demoHintEmail": "Démo : n’importe quelle adresse, code PIN 246813."
       },
       "errors": {
         "phone": "Numéro invalide : vérifiez l’indicatif et le numéro.",
@@ -982,7 +989,10 @@
         "recuperation": "Trop d’essais avec un code PIN incorrect : pour débloquer votre compte, recevez un code sur votre téléphone.",
         "recover": "Code PIN oublié ? Recevoir un code",
         "limit": "Trop de connexions en même temps. Réessayez dans quelques minutes.",
-        "profil": "Votre profil est introuvable. Écrivez au support DIANGAL."
+        "profil": "Votre profil est introuvable. Écrivez au support DIANGAL.",
+        "email": "Adresse e-mail invalide : vérifiez-la.",
+        "identifiantsEmail": "E-mail ou code PIN incorrect. Pas encore de code PIN ? Touchez « Code PIN oublié » pour en créer un.",
+        "recuperationEmail": "Trop d’essais avec un code PIN incorrect : pour débloquer votre compte, recevez un code par e-mail."
       },
       "info": {
         "session-expiree": "Vous avez été déconnecté après 15 minutes sans activité (appareil partagé).",
@@ -1006,16 +1016,21 @@
         "phone": "Votre numéro de téléphone",
         "dialCode": "Indicatif du pays",
         "submit": "Recevoir mon code",
-        "note": "C’est le seul cas, avec l’inscription et le changement de numéro, où un message vous est envoyé.",
+        "note": "C’est le seul cas, avec l’inscription et le changement de numéro ou d’e-mail, où un code vous est envoyé.",
         "delai": "Le délai pour choisir votre code PIN est passé : demandez un nouveau code.",
-        "closed": "La récupération par WhatsApp ou par SMS n’est pas encore ouverte."
+        "closed": "La récupération par WhatsApp ou par SMS n’est pas encore ouverte.",
+        "subtitleEmail": "Indiquez l’adresse e-mail de votre compte : nous y envoyons un code, gratuitement. Ensuite, vous choisirez un nouveau code PIN.",
+        "email": "Votre adresse e-mail",
+        "useEmail": "Je me connecte avec mon e-mail",
+        "usePhone": "Recevoir plutôt le code sur mon numéro",
+        "noteEmail": "Même réponse que l’adresse ait un compte ou non : personne ne peut savoir qui est inscrit."
       },
       "create": {
         "metaTitle": "Votre code PIN",
         "title": "Choisissez votre <mark>code PIN</mark>",
         "titleReset": "Votre nouveau <mark>code PIN</mark>",
         "subtitle": "Il remplace le code par message pour toutes vos connexions. Il n’est jamais enregistré en clair.",
-        "verified": "Votre numéro est vérifié.",
+        "verified": "C’est vérifié : votre numéro (ou votre e-mail) est bien à vous.",
         "pin": "Code PIN",
         "confirm": "Retapez le code PIN",
         "rules": {
@@ -1050,13 +1065,15 @@
             "phone": "Numéro vérifié",
             "pin": "Code PIN créé",
             "stay": "Sur ce téléphone, vous restez connecté : pas de code à chaque visite",
-            "shared": "Appareil partagé : déconnexion à la fermeture et après 15 minutes sans activité"
+            "shared": "Appareil partagé : déconnexion à la fermeture et après 15 minutes sans activité",
+            "email": "E-mail vérifié"
           },
           "reset": "Votre nouveau code PIN est enregistré. Vos autres appareils ont été déconnectés.",
           "notYou": "Ce n’était pas vous ? Refaites « Code PIN oublié » depuis votre téléphone : l’autre appareil sera déconnecté.",
           "addChild": "Ajouter un enfant",
           "start": "Accéder à mon espace",
-          "childHint": "Ajoutez votre enfant : avec son code élève s’il a un compte, ou en créant son profil s’il n’a pas de téléphone."
+          "childHint": "Ajoutez votre enfant : avec son code élève s’il a un compte, ou en créant son profil s’il n’a pas de téléphone.",
+          "addEmail": "Facultatif : <link>ajoutez une adresse e-mail</link> pour vous connecter aussi avec elle et recevoir gratuitement un code si vous oubliez votre code PIN."
         }
       },
       "session": {
@@ -1218,7 +1235,9 @@
       "sms": "Le code arrivera par SMS, même sans internet.",
       "referralCode": "Si quelqu’un t’a invité, son code est déjà rempli. Il ne gagne rien tant qu’aucun abonnement n’est payé.",
       "password": "10 caractères au moins, avec des lettres et des chiffres. Les mots de passe trop connus sont refusés.",
-      "childWithoutPhone": "Votre enfant n’a pas de téléphone ? Choisissez « Parent » : vous créerez son profil juste après."
+      "childWithoutPhone": "Votre enfant n’a pas de téléphone ? Choisissez « Parent » : vous créerez son profil juste après.",
+      "phoneAdvised": "Le numéro de téléphone reste conseillé : vous pourrez l’ajouter ensuite dans Mon compte.",
+      "phoneAdvisedTu": "Le numéro de téléphone reste conseillé : tu pourras l’ajouter ensuite dans Mon compte."
     },
     "minor": {
       "title": "Validation par un parent",
@@ -1258,7 +1277,9 @@
       },
       "passwordDifferent": "Les deux mots de passe ne sont pas identiques."
     },
-    "sendCode": "Recevoir le code"
+    "sendCode": "Recevoir le code",
+    "useEmail": "Pas de téléphone ? S’inscrire avec un e-mail",
+    "usePhone": "M’inscrire plutôt avec mon numéro"
   },
   "consent": {
     "title": "Validation parentale",
@@ -2601,6 +2622,27 @@
       "title": "Supprimer le compte",
       "subtitle": "{tu, select, true {Tes données personnelles seront effacées. Si tu es mineur, ton parent devra donner son accord.} other {Vos données personnelles seront effacées. Le compte d’un enfant mineur se supprime depuis sa page.}}",
       "cta": "Supprimer le compte"
+    },
+    "email": {
+      "addTitle": "Ajouter une adresse e-mail (facultatif)",
+      "title": "Adresse e-mail",
+      "subtitle": "{tu, select, true {Pour te connecter aussi avec ton e-mail et ton code PIN, et recevoir gratuitement un code si tu oublies ton code PIN.} other {Pour vous connecter aussi avec votre e-mail et votre code PIN, et recevoir gratuitement un code si vous oubliez votre code PIN.}}",
+      "current": "{tu, select, true {Ton adresse e-mail est confirmée : elle sert aussi à te connecter.} other {Votre adresse e-mail est confirmée : elle sert aussi à vous connecter.}}",
+      "label": "Adresse e-mail",
+      "hint": "{tu, select, true {Tu recevras un code à 6 chiffres (ou un lien) pour confirmer cette adresse.} other {Vous recevrez un code à 6 chiffres (ou un lien) pour confirmer cette adresse.}}",
+      "send": "Recevoir le code",
+      "sent": "Code envoyé par e-mail à {to}.",
+      "codeLabel": "Code reçu",
+      "verify": "Confirmer l’adresse",
+      "wrongCode": "{tu, select, true {Ce code n’est pas le bon ou il a expiré. Réessaie.} other {Ce code n’est pas le bon ou il a expiré. Réessayez.}}",
+      "linkSent": "{tu, select, true {Nous avons envoyé un e-mail à {to}. Ouvre-le sur cet appareil et touche le lien pour confirmer ton adresse.} other {Nous avons envoyé un e-mail à {to}. Ouvrez-le sur cet appareil et touchez le lien pour confirmer votre adresse.}}",
+      "notices": {
+        "ajoute": "{tu, select, true {Ton adresse e-mail est confirmée : tu peux maintenant te connecter avec.} other {Votre adresse e-mail est confirmée : vous pouvez maintenant vous connecter avec.}}",
+        "demo": "Mode démo : aucune adresse n’est enregistrée.",
+        "adresse": "{tu, select, true {Adresse e-mail invalide : vérifie-la.} other {Adresse e-mail invalide : vérifiez-la.}}",
+        "envoi": "{tu, select, true {Cette adresse ne peut pas être ajoutée. Vérifie-la ou utilise-en une autre.} other {Cette adresse ne peut pas être ajoutée. Vérifiez-la ou utilisez-en une autre.}}",
+        "limite": "{tu, select, true {Trop de codes demandés. Réessaie dans quelques minutes.} other {Trop de codes demandés. Réessayez dans quelques minutes.}}"
+      }
     }
   },
   "accountDeletion": {

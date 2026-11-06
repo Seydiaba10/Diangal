@@ -16,15 +16,18 @@ function pepper(): string {
 }
 
 /**
- * Mot de passe Supabase dérivé d'un code PIN. subject = le numéro E.164 du compte (« +221771234567 »)
- * ou « child:<identifiant> » pour un enfant sans téléphone : le même code donne un mot de passe différent
- * pour chaque compte.
+ * Mot de passe Supabase dérivé d'un code PIN. subject = « user:<identifiant du compte> » (élève, parent : le même
+ * code PIN sert avec le numéro ou avec l'e-mail, et survit à un changement de numéro) ou « child:<identifiant> »
+ * pour un enfant sans téléphone : le même code donne un mot de passe différent pour chaque compte.
  */
 export function derivePinPassword(subject: string, pin: string, version: number = PIN_PEPPER_VERSION): string {
   // Le suffixe garantit majuscule, minuscule, chiffre et symbole, quelles que soient les règles de mot
   // de passe réglées dans Supabase pour les répétiteurs.
   return `${createHmac("sha256", pepper()).update(`diangal-pin:v${version}:${subject}:${pin}`).digest("base64url")}:Pin1`;
 }
+
+/** Sujet de dérivation d'un élève ou d'un parent : son compte, quel que soit l'identifiant tapé (numéro ou e-mail). */
+export const accountPinSubject = (userId: string) => `user:${userId}`;
 
 /** Sujet de dérivation d'un enfant sans téléphone. */
 export const childPinSubject = (studentId: string) => `child:${studentId}`;

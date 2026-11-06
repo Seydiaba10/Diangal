@@ -59,6 +59,9 @@ async function roleOf(userId: string): Promise<AppRole | null> {
 
 // ── Connexion ───────────────────────────────────────────────────────────────
 
+/** Après « Code PIN oublié » : choix du nouveau code PIN. */
+const PIN_RESET_PATH = "/connexion/code-pin?raison=recuperation";
+
 /** Étape 1 : envoi du code (Supabase Auth, compte existant uniquement). */
 export async function requestLoginCodeAction(formData: FormData) {
   const channel = parseChannel(formData.get("mode"));
@@ -70,7 +73,11 @@ export async function requestLoginCodeAction(formData: FormData) {
   const forPin = formData.get("but") === "pin";
   const purpose: Record<string, string> = forPin ? { but: "pin" } : {};
   const back: (erreur: string) => never = (erreur) =>
-    redirect(forPin ? `/connexion/pin-oublie?${new URLSearchParams({ erreur })}` : `${LOGIN_PATH[space]}?${new URLSearchParams({ mode: channel, erreur })}`);
+    redirect(
+      forPin
+        ? `/connexion/pin-oublie?${new URLSearchParams({ ...(email ? { mode: "email" } : {}), erreur })}`
+        : `${LOGIN_PATH[space]}?${new URLSearchParams({ mode: channel, erreur })}`,
+    );
 
   if (!isSupabaseConfigured()) {
     const params = new URLSearchParams({ identifiant: raw, canal: channel, espace: space, role: parseRole(formData.get("role")), ...purpose });
@@ -87,9 +94,10 @@ export async function requestLoginCodeAction(formData: FormData) {
   if (email) {
     identifiant = raw.toLowerCase();
     if (!EMAIL.test(identifiant)) back("email");
+    // « Code PIN oublié » par e-mail : le lien de l'e-mail (s'il n'y a pas de code) mène aussi au nouveau code PIN.
     const { error } = await supabase.auth.signInWithOtp({
       email: identifiant,
-      options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(next, space) },
+      options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(forPin ? PIN_RESET_PATH : next, space) },
     });
     failed(error);
   } else {
@@ -139,8 +147,8 @@ export async function verifyLoginCodeAction(formData: FormData) {
   await completePendingSignup(supabase, data.user!, role);
   // L'admin doit encore passer la double authentification avant d'entrer.
   if (role === "admin") redirect(`/connexion/securite${next ? `?${new URLSearchParams({ next })}` : ""}`);
-  // « Code PIN oublié » : numéro vérifié, il reste à choisir le nouveau code PIN.
-  if (forPin && canal !== "email") redirect("/connexion/code-pin?raison=recuperation");
+  // « Code PIN oublié » : numéro ou e-mail vérifié, il reste à choisir le nouveau code PIN (élèves et parents).
+  if (forPin && (role === "student" || role === "parent")) redirect(PIN_RESET_PATH);
   // « next » n'est suivi que s'il ne mène pas vers l'espace d'un autre rôle.
   const otherSpace = Object.values(ROLE_HOME).some((home) => home !== ROLE_HOME[role] && next?.startsWith(home));
   redirect(next && !otherSpace ? next : ROLE_HOME[role]);
@@ -158,7 +166,7 @@ export async function resendLoginCodeAction(formData: FormData) {
     if (canal === "email") {
       await supabase.auth.signInWithOtp({
         email: identifiant,
-        options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(next, space) },
+        options: { shouldCreateUser: false, emailRedirectTo: emailRedirect(purpose.but ? PIN_RESET_PATH : next, space) },
       });
     } else if (phoneChannelReady(canal) && isAllowedPhone(identifiant, phoneCountries())) {
       await rememberOtpChannel(identifiant, canal);
@@ -355,7 +363,8 @@ export async function requestSignupCodeAction(input: SignupInput): Promise<{ err
 export async function completeSignupAction(input: SignupInput & { code: string }): Promise<{ error: SignupError } | void> {
   const code = input.code.replace(/\s/g, "");
   // Connexion par code PIN : un numéro vérifié choisit ensuite son code PIN (élève et parent).
-  const choosePin = (role: AppRole) => isPinLoginEnabled() && input.method !== "email" && (role === "parent" || role === "student");
+  // Élève ou parent : un code PIN après le code reçu, que l'inscription soit par numéro ou par e-mail.
+  const choosePin = (role: AppRole) => isPinLoginEnabled() && (role === "parent" || role === "student");
 
   if (!isSupabaseConfigured()) {
     if (code !== DEMO_OTP) return { error: "code" };

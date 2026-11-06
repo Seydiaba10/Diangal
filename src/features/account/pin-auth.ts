@@ -1,8 +1,8 @@
 import "server-only";
 
 import { cookies } from "next/headers";
-import { maskPhone } from "@/lib/phone";
-import { childPinSubject, derivePinPassword, PIN_PEPPER_VERSION } from "@/lib/pin";
+import { maskEmail, maskPhone } from "@/lib/phone";
+import { accountPinSubject, childPinSubject, derivePinPassword, PIN_PEPPER_VERSION } from "@/lib/pin";
 import type { RequestMeta } from "@/lib/request-meta";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -50,6 +50,8 @@ const OPEN: GuardState = { locked: false, retryAfter: 0, needsRecovery: false, f
 
 export const phoneKey = (phone: string) => `phone:${phone}`;
 export const emailKey = (email: string) => `email:${email.toLowerCase()}`;
+/** Le compte lui-même : les erreurs avec son numéro et avec son e-mail s'additionnent. */
+export const userKey = (userId: string) => `user:${userId}`;
 export const childKey = (studentId: string) => `child:${studentId}`;
 export const ipKey = (ip: string) => `ip:${ip}`;
 
@@ -111,12 +113,15 @@ export async function logAuthEvent(userId: string | null, kind: AuthEventKind, s
 }
 
 export const maskedPhone = (phone: string) => maskPhone(phone);
+/** Identifiant masqué pour le journal : le numéro s'il y en a un, sinon l'e-mail. */
+export const maskedContact = (phone: string | null, email: string | null) => (phone ? maskPhone(phone) : email ? maskEmail(email) : null);
 
-/** Mot de passe Supabase d'un compte à numéro, avec la version de clé en cours. */
-export const phonePassword = (phone: string, pin: string) => derivePinPassword(phone, pin, PIN_PEPPER_VERSION);
+/** Mot de passe Supabase d'un élève ou d'un parent (même code PIN avec le numéro ou l'e-mail), clé en cours. */
+export const accountPassword = (userId: string, pin: string) => derivePinPassword(accountPinSubject(userId), pin, PIN_PEPPER_VERSION);
 /** Mot de passe Supabase d'un enfant sans téléphone. */
 export const childPassword = (studentId: string, pin: string) => derivePinPassword(childPinSubject(studentId), pin, PIN_PEPPER_VERSION);
 
+/** kind « phone » : code PIN d'un compte (élève, parent), qu'il se connecte par numéro ou par e-mail. */
 export async function markPinSet(userId: string, kind: "phone" | "child") {
   const { error } = await createSupabaseAdminClient().rpc("mark_pin_set", { p_user: userId, p_kind: kind, p_version: PIN_PEPPER_VERSION });
   if (error) throw new Error(`code PIN non noté : ${error.message}`);
@@ -133,24 +138,25 @@ export async function verifyCurrentPin(pin: string, meta: RequestMeta): Promise<
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims;
   const phone = typeof claims?.phone === "string" && claims.phone ? `+${claims.phone.replace(/^\+/, "")}` : null;
+  const email = typeof claims?.email === "string" && claims.email ? claims.email : null;
   const userId = claims?.sub;
   const sessionId = typeof claims?.session_id === "string" ? claims.session_id : null;
-  if (!userId || !phone || !sessionId) return "no-pin";
+  if (!userId || !sessionId || (!phone && !email)) return "no-pin";
 
-  const key = phoneKey(phone);
+  const key = userKey(userId);
   const before = await guardStatus(key, ipKey(meta.ip));
   if (before.locked) return "locked";
   const admin = createSupabaseAdminClient();
-  const { data: ok } = await admin.rpc("verify_user_password", { p_user: userId, p_password: phonePassword(phone, pin) });
+  const { data: ok } = await admin.rpc("verify_user_password", { p_user: userId, p_password: accountPassword(userId, pin) });
   if (!ok) {
     const after = await guardFail(key, ipKey(meta.ip));
-    await logAuthEvent(userId, "reauth_failure", maskedPhone(phone), meta);
+    await logAuthEvent(userId, "reauth_failure", maskedContact(phone, email), meta);
     await progressiveDelay(after.failures);
     return after.locked ? "locked" : "invalid";
   }
   await guardSuccess(key);
   await admin.rpc("mark_reauth", { p_user: userId, p_session: sessionId });
-  await logAuthEvent(userId, "reauth", maskedPhone(phone), meta);
+  await logAuthEvent(userId, "reauth", maskedContact(phone, email), meta);
   return "ok";
 }
 

@@ -11,10 +11,10 @@ export async function generateMetadata() {
   return { title: t("metaTitle.famille") };
 }
 
-/** Choix du formulaire : numéro + code PIN, ou code par email (comptes créés avec un email). */
+/** Choix du formulaire : numéro + code PIN (ou, au choix, e-mail + code PIN) ; sans code PIN, code par e-mail. */
 async function LoginChoice({ searchParams }: { searchParams: PageProps<"/connexion">["searchParams"] }) {
   const params = await searchParams;
-  if (isPinLoginEnabled() && params.mode !== "email") return <PinLoginForm searchParams={searchParams} />;
+  if (isPinLoginEnabled()) return <PinLoginForm searchParams={searchParams} channel={params.mode === "email" ? "email" : "phone"} />;
   const t = await getTranslations("auth.login");
   return (
     <AuthCard title={t("title")} subtitle={t("subtitle.famille")} centered>

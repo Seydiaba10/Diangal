@@ -29,14 +29,22 @@ const ERRORS = ["format", "repeat", "sequence", "pattern", "common", "phone", "d
 type Search = PageProps<"/connexion/code-pin">["searchParams"];
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
 
-/** Rôle et prénom du compte connecté (démo : rôle du cookie). */
-async function currentAccount(): Promise<{ role: AppRole; firstName: string | null } | null> {
+interface Account {
+  role: AppRole;
+  firstName: string | null;
+  /** Identifiants vérifiés du compte : le numéro (principal) et l'e-mail (facultatif). */
+  phone: string | null;
+  email: string | null;
+}
+
+/** Rôle et identifiants du compte connecté (démo : rôle du cookie, compte à numéro). */
+async function currentAccount(): Promise<Account | null> {
   if (!isSupabaseConfigured()) {
     const role = ((await cookies()).get(DEMO_ROLE_COOKIE)?.value ?? "parent") as AppRole;
-    return { role, firstName: null };
+    return { role, firstName: null, phone: "+221770000000", email: null };
   }
   const identity = await getAuthIdentity();
-  return identity ? { role: identity.role, firstName: null } : null;
+  return identity ? { role: identity.role, firstName: null, phone: identity.phone, email: identity.email } : null;
 }
 
 async function Done({ reason }: { reason: PinReason }) {
@@ -73,7 +81,7 @@ async function Done({ reason }: { reason: PinReason }) {
       <h1 className="text-[27px] font-bold leading-tight text-brand-800 lg:text-[34px]">{t.rich("titleSignup", richMark)}</h1>
       <p className="text-[15px] text-ink-muted">{t("signup")}</p>
       <ul className="space-y-2 text-[13px] text-success-700">
-        {(["phone", "pin", shared ? "shared" : "stay"] as const).map((key) => (
+        {([account!.phone ? "phone" : "email", "pin", shared ? "shared" : "stay"] as const).map((key) => (
           <li key={key} className="flex items-start gap-1.5">
             <CircleCheck className="mt-px size-4 shrink-0" aria-hidden />
             {t(`checks.${key}`)}
@@ -96,6 +104,17 @@ async function Done({ reason }: { reason: PinReason }) {
           {t("start")}
         </Link>
       )}
+      {account!.phone && !account!.email ? (
+        <p className="text-center text-sm leading-normal text-ink-muted">
+          {t.rich("addEmail", {
+            link: (chunks) => (
+              <Link href="/compte#email-titre" className="font-semibold text-brand-700 underline">
+                {chunks}
+              </Link>
+            ),
+          })}
+        </p>
+      ) : null}
     </div>
   );
 }

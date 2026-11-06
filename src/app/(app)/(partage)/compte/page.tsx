@@ -9,13 +9,13 @@ import { INPUT_CLASS } from "@/components/ui/form";
 import { Notice } from "@/components/ui/notice";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { addPhoneAction, verifyPhoneAction } from "@/features/account/account-actions";
+import { addEmailAction, addPhoneAction, verifyEmailAction, verifyPhoneAction } from "@/features/account/account-actions";
 import { signOutAction } from "@/features/account/actions";
 import { getAccountOverview } from "@/features/account/data";
 import { cn } from "@/lib/cn";
 import { isSmsEnabled, isSupabaseConfigured, isWhatsAppEnabled, phoneCountries } from "@/lib/env";
 import { NAV } from "@/lib/navigation";
-import { maskPhone } from "@/lib/phone";
+import { maskEmail, maskPhone } from "@/lib/phone";
 
 export async function generateMetadata() {
   const t = await getTranslations("pages");
@@ -31,6 +31,14 @@ const PHONE_NOTICES = {
   limite: "error",
 } as const;
 
+const EMAIL_NOTICES = {
+  ajoute: "success",
+  demo: "info",
+  adresse: "error",
+  envoi: "error",
+  limite: "error",
+} as const;
+
 async function AccountContent({ searchParams }: { searchParams: PageProps<"/compte">["searchParams"] }) {
   const [params, account, t] = await Promise.all([searchParams, getAccountOverview(), getTranslations("account")]);
   const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
@@ -39,11 +47,17 @@ async function AccountContent({ searchParams }: { searchParams: PageProps<"/comp
   const tu = account.role === "student" ? "true" : "false";
   const phoneOpen = !isSupabaseConfigured() || isWhatsAppEnabled() || isSmsEnabled();
   const notice = phoneStep in PHONE_NOTICES ? (phoneStep as keyof typeof PHONE_NOTICES) : null;
+  const emailStep = first(params.email);
+  const pendingEmail = first(params.adresse);
+  const emailNotice = emailStep in EMAIL_NOTICES ? (emailStep as keyof typeof EMAIL_NOTICES) : null;
+  // E-mail facultatif : pour les élèves et les parents (le répétiteur s'inscrit déjà avec son e-mail).
+  const emailSection = account.role === "student" || account.role === "parent";
   const profileHref = NAV[account.role].profileHref;
 
   return (
     <div className="space-y-5">
       {notice ? <Notice tone={PHONE_NOTICES[notice]}>{t(`phone.notices.${notice}`, { tu })}</Notice> : null}
+      {emailNotice ? <Notice tone={EMAIL_NOTICES[emailNotice]}>{t(`email.notices.${emailNotice}`, { tu })}</Notice> : null}
 
       <SectionCard id="identite-titre" title={t("identity.title")} subtitle={t("identity.subtitle", { tu })}>
         <dl className="divide-y divide-line text-sm">
@@ -130,6 +144,51 @@ async function AccountContent({ searchParams }: { searchParams: PageProps<"/comp
           </form>
         )}
       </SectionCard>
+
+      {emailSection ? (
+        <SectionCard id="email-titre" title={account.email ? t("email.title") : t("email.addTitle")} subtitle={t("email.subtitle", { tu })}>
+          {account.email ? (
+            <p className="text-sm text-ink">{t("email.current", { tu })}</p>
+          ) : emailStep === "code" && pendingEmail ? (
+            <form action={verifyEmailAction} className="space-y-3">
+              <input type="hidden" name="adresse" value={pendingEmail} />
+              <p className="text-sm text-ink">{t("email.sent", { to: maskEmail(pendingEmail) })}</p>
+              <label htmlFor="code-email" className="block text-sm font-medium text-ink">
+                {t("email.codeLabel")}
+              </label>
+              <input
+                id="code-email"
+                name="code"
+                required
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="[0-9 ]{6,7}"
+                maxLength={7}
+                aria-invalid={first(params.erreur) === "code" || undefined}
+                className={cn(INPUT_CLASS, "text-center text-xl font-semibold tracking-[0.4em]")}
+              />
+              {first(params.erreur) === "code" ? <Notice tone="error">{t("email.wrongCode", { tu })}</Notice> : null}
+              <Button type="submit" size="sm">
+                {t("email.verify")}
+              </Button>
+            </form>
+          ) : emailStep === "lien" && pendingEmail ? (
+            <Notice tone="info">{t("email.linkSent", { tu, to: maskEmail(pendingEmail) })}</Notice>
+          ) : (
+            <form action={addEmailAction} className="space-y-3">
+              <label htmlFor="nouvel-email" className="block text-sm font-medium text-ink">
+                {t("email.label")}
+              </label>
+              <input id="nouvel-email" name="email" type="email" inputMode="email" required autoComplete="email" placeholder="exemple@gmail.com" className={INPUT_CLASS} />
+              <p className="text-xs text-ink-muted">{t("email.hint", { tu })}</p>
+              <Button type="submit" variant="outline" size="sm">
+                <Mail className="size-4" aria-hidden />
+                {t("email.send")}
+              </Button>
+            </form>
+          )}
+        </SectionCard>
+      ) : null}
 
       <SectionCard id="session-titre" title={t("session.title")} subtitle={t("session.subtitle", { tu })}>
         <form action={signOutAction}>

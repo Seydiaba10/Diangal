@@ -100,14 +100,10 @@ export function SignupWizard({
   const [role, setRole] = useState<SignupRole>(initialRole ?? "student");
   // Moyens ouverts, du plus courant au Sénégal au plus universel : seuls ceux qui sont branchés.
   const phoneMethods: SignupInput["method"][] = [...(whatsappEnabled ? (["whatsapp"] as const) : []), ...(smsEnabled ? (["phone"] as const) : [])];
-  // Connexion par code PIN : le répétiteur s'inscrit par e-mail, l'élève et le parent par téléphone.
-  const methods: SignupInput["method"][] = pinMode
-    ? role === "tutor"
-      ? ["email"]
-      : phoneMethods.length
-        ? phoneMethods
-        : ["email"]
-    : [...phoneMethods, "email"];
+  // Connexion par code PIN : le répétiteur s'inscrit par e-mail ; l'élève et le parent par téléphone, ou au
+  // choix par e-mail (lien discret : le numéro reste le moyen principal).
+  const methods: SignupInput["method"][] = pinMode && role === "tutor" ? ["email"] : [...phoneMethods, "email"];
+  const emailAlt = pinMode && role !== "tutor" && phoneMethods.length > 0;
   const [chosenMethod, setMethod] = useState<SignupInput["method"]>(methods[0]!);
   const method = methods.includes(chosenMethod) ? chosenMethod : methods[0]!;
   const [password, setPassword] = useState("");
@@ -477,9 +473,9 @@ export function SignupWizard({
 
         {current === "identifier" ? (
           <>
-            {methods.length > 1 ? (
+            {(emailAlt ? (method === "email" ? [] : phoneMethods) : methods).length > 1 ? (
               <div className="flex gap-1 rounded-xl bg-canvas p-1">
-                {methods.map((m) => (
+                {(emailAlt ? phoneMethods : methods).map((m) => (
                   <button
                     key={m}
                     type="button"
@@ -504,7 +500,7 @@ export function SignupWizard({
                   </button>
                 ))}
               </div>
-            ) : (
+            ) : emailAlt ? null : (
               <p className="text-sm text-ink-muted">{t("hints.emailOnly")}</p>
             )}
             {method !== "email" ? (
@@ -534,6 +530,25 @@ export function SignupWizard({
                 />
               </Field>
             )}
+            {emailAlt && method === "email" ? (
+              <p className="flex items-start gap-2 rounded-xl bg-brand-50 p-3 text-sm text-brand-800">
+                <Smartphone className="mt-0.5 size-4 shrink-0" aria-hidden />
+                {t(role === "student" ? "hints.phoneAdvisedTu" : "hints.phoneAdvised")}
+              </p>
+            ) : null}
+            {emailAlt ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setMethod(method === "email" ? phoneMethods[0]! : "email");
+                  setIdentifier("");
+                }}
+                className="flex min-h-11 w-full items-center justify-center gap-2 text-sm font-semibold text-brand-700"
+              >
+                {method === "email" ? <Smartphone className="size-4" aria-hidden /> : <Mail className="size-4" aria-hidden />}
+                {t(method === "email" ? "usePhone" : "useEmail")}
+              </button>
+            ) : null}
             {withPassword ? (
               <>
                 <Field id="mdp" label={t("fields.password")} hint={t("hints.password")}>

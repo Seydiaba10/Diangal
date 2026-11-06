@@ -15,8 +15,10 @@ import { DEMO_PIN, type PinReason } from "./pin-constants";
 import { DEVICE_COOKIE, parseDeviceMode, SEEN_COOKIE, type DeviceMode } from "./device-cookies";
 import { readPhone } from "./otp";
 import {
+  accountPassword,
   applyDeviceMode,
   clearDeviceCookies,
+  emailKey,
   guardClear,
   guardFail,
   guardStatus,
@@ -24,10 +26,10 @@ import {
   ipKey,
   logAuthEvent,
   markPinSet,
-  maskedPhone,
+  maskedContact,
   phoneKey,
-  phonePassword,
   progressiveDelay,
+  userKey,
   verifyCurrentPin,
 } from "./pin-auth";
 import { ROLE_HOME, ROLES } from "./roles";
@@ -63,26 +65,36 @@ function homeFor(role: AppRole, next: string | null) {
   return next && !otherSpace ? next : ROLE_HOME[role];
 }
 
-/** Compte qui porte ce numéro, pour le journal seulement (jamais montré au visiteur). */
-async function accountOfPhone(phone: string): Promise<string | null> {
-  const { data } = await createSupabaseAdminClient().from("profiles").select("id").eq("phone", phone).is("deleted_at", null).maybeSingle();
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/** Adresse technique d'un enfant sans téléphone : jamais un identifiant de connexion. */
+const TECHNICAL_EMAIL = "@enfant.diangal.invalid";
+/** Compte fictif : un identifiant inconnu fait le même essai (voué à l'échec) qu'un compte réel. */
+const NO_ACCOUNT = "00000000-0000-0000-0000-000000000000";
+
+/** Élève ou parent qui porte ce numéro ou cet e-mail (jamais montré au visiteur). */
+async function accountOf(identifier: { phone: string } | { email: string }): Promise<string | null> {
+  const query = createSupabaseAdminClient().from("profiles").select("id").is("deleted_at", null).in("role", ["student", "parent"]);
+  const { data } = await ("phone" in identifier ? query.eq("phone", identifier.phone) : query.eq("email", identifier.email)).maybeSingle();
   return data?.id ?? null;
 }
 
 /**
- * Connexion par numéro + code PIN : aucun message envoyé. Blocage progressif par numéro et par adresse IP,
- * réponse identique que le numéro ait un compte ou non.
+ * Connexion par numéro (ou, au choix, e-mail) + code PIN : aucun message envoyé. Blocage progressif par
+ * identifiant, par compte et par adresse IP ; réponse identique que l'identifiant ait un compte ou non.
  */
 export async function signInWithPinAction(formData: FormData) {
   requirePinLogin();
+  const byEmail = formData.get("canal") === "email";
   const pin = cleanPin(formData.get("pin"));
   const shared = formData.get("partage") === "on";
   const next = safeInternalPath(formData.get("next"));
   const back: (erreur: string, extra?: Record<string, string>) => never = (erreur, extra = {}) =>
-    redirect(`/connexion?${new URLSearchParams({ erreur, ...extra, ...(next ? { next } : {}) })}`);
+    redirect(`/connexion?${new URLSearchParams({ ...(byEmail ? { mode: "email" } : {}), erreur, ...extra, ...(next ? { next } : {}) })}`);
 
-  const phone = readPhone(String(formData.get("identifiant") ?? ""), formData.get("pays"));
-  if (!phone) back("phone");
+  const raw = String(formData.get("identifiant") ?? "");
+  const email = byEmail ? raw.trim().toLowerCase() : null;
+  const phone = byEmail ? null : readPhone(raw, formData.get("pays"));
+  if (byEmail ? !EMAIL.test(email!) || email!.endsWith(TECHNICAL_EMAIL) : !phone) back(byEmail ? "email" : "phone");
   if (!isPinFormat(pin)) back("identifiants");
 
   if (!isSupabaseConfigured()) {
@@ -94,25 +106,29 @@ export async function signInWithPinAction(formData: FormData) {
   }
 
   const meta = await getRequestMeta();
-  const keys = [phoneKey(phone!), ipKey(meta.ip)];
+  const userId = await accountOf(phone ? { phone } : { email: email! });
+  const idKey = phone ? phoneKey(phone) : emailKey(email!);
+  const keys = [idKey, ipKey(meta.ip), ...(userId ? [userKey(userId)] : [])];
   const before = await guardStatus(...keys);
   if (before.needsRecovery) back("recuperation");
   if (before.locked) back("bloque", { attente: String(before.retryAfter) });
 
   const gateway = await createSupabaseAuthGateway(meta.ip, shared ? "partage" : "perso");
-  const { data, error } = await gateway.auth.signInWithPassword({ phone: phone!, password: phonePassword(phone!, pin) });
+  const password = accountPassword(userId ?? NO_ACCOUNT, pin);
+  const { data, error } = await gateway.auth.signInWithPassword(phone ? { phone, password } : { email: email!, password });
   if (error?.status === 429) back("limit");
   if (error || !data.user) {
     const after = await guardFail(...keys);
-    await logAuthEvent(await accountOfPhone(phone!), after.locked ? "pin_locked" : "pin_failure", maskedPhone(phone!), meta);
+    await logAuthEvent(userId, after.locked ? "pin_locked" : "pin_failure", maskedContact(phone, email), meta);
     await progressiveDelay(after.failures);
     if (after.needsRecovery) back("recuperation");
     if (after.locked) back("bloque", { attente: String(after.retryAfter) });
     back("identifiants");
   }
 
-  await guardSuccess(keys[0]!);
-  await logAuthEvent(data.user!.id, "pin_login", maskedPhone(phone!), meta);
+  await guardSuccess(idKey);
+  await guardSuccess(userKey(data.user!.id));
+  await logAuthEvent(data.user!.id, "pin_login", maskedContact(phone, email), meta);
   await applyDeviceMode(shared ? "partage" : "perso", true);
   const { data: profile } = await createSupabaseAdminClient().from("profiles").select("role").eq("id", data.user!.id).maybeSingle();
   if (!profile?.role || profile.role === "admin") back("profil");
@@ -150,19 +166,23 @@ export async function setPinAction(formData: FormData) {
   }
 
   const identity = await requireIdentity();
-  if (!identity.phone) redirect(ROLE_HOME[identity.role]);
+  // Élèves et parents seulement, avec un numéro ou un e-mail (les enfants ont leur propre code PIN).
+  const familyAccount = identity.role === "student" || identity.role === "parent";
+  if (!familyAccount || identity.email?.endsWith(TECHNICAL_EMAIL) || (!identity.phone && !identity.email)) redirect(ROLE_HOME[identity.role]);
   const problem = pinProblem(pin, identity.phone);
   if (problem) back(problem);
   if (pin !== confirm) back("different");
-  if ((await secondsSinceLogin()) > FRESH_LOGIN_SECONDS) redirect("/connexion/pin-oublie?erreur=delai");
+  if ((await secondsSinceLogin()) > FRESH_LOGIN_SECONDS) redirect(`/connexion/pin-oublie?${new URLSearchParams({ ...(identity.phone ? {} : { mode: "email" }), erreur: "delai" })}`);
 
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.auth.updateUser({ password: phonePassword(identity.phone!, pin) });
+  const { error } = await supabase.auth.updateUser({ password: accountPassword(identity.userId, pin) });
   // Même code que l'ancien après « Code PIN oublié » : rien à changer.
   if (error && error.code !== "same_password") back("enregistrement");
   await markPinSet(identity.userId, "phone");
-  await guardClear(phoneKey(identity.phone!));
-  await logAuthEvent(identity.userId, reason === "inscription" ? "pin_set" : "pin_reset", maskedPhone(identity.phone!), await getRequestMeta());
+  await guardClear(userKey(identity.userId));
+  if (identity.phone) await guardClear(phoneKey(identity.phone));
+  if (identity.email) await guardClear(emailKey(identity.email));
+  await logAuthEvent(identity.userId, reason === "inscription" ? "pin_set" : "pin_reset", maskedContact(identity.phone, identity.email), await getRequestMeta());
   if (reason === "recuperation") await supabase.auth.signOut({ scope: "others" });
   const current = parseDeviceMode((await cookies()).get(DEVICE_COOKIE)?.value);
   await applyDeviceMode(reason === "inscription" ? mode : current, true);

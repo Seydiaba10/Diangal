@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { isSupabaseConfigured, phoneCountries } from "@/lib/env";
+import { emailHasCode, isSupabaseConfigured, phoneCountries } from "@/lib/env";
 import { isAllowedPhone } from "@/lib/phone";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -11,7 +11,7 @@ import { emailRedirect, firstPhoneChannel, readPhone, rememberOtpChannel, sendEr
 import { requireIdentity } from "./session";
 import { fetchDeletionStatus } from "./supabase";
 
-// « Mon compte » : ajout d'un numéro (code de vérification) et suppression du compte.
+// « Mon compte » : ajout d'un numéro ou d'une adresse e-mail (code de vérification) et suppression du compte.
 // Toute vérification d'accès est refaite en base (RPC) : ce fichier n'ouvre aucun droit.
 
 const TECHNICAL_EMAIL = "@enfant.diangal.invalid";
@@ -52,6 +52,46 @@ export async function verifyPhoneAction(formData: FormData) {
   if (error) redirect(retry);
   await supabase.rpc("sync_my_contact");
   redirect("/compte?telephone=ajoute");
+}
+
+// ── Adresse e-mail (facultative, le numéro reste principal) ─────────────────
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Ajout d'une adresse e-mail à un compte qui n'en a pas : Supabase Auth envoie un code (ou un lien) à cette
+ * adresse. Ensuite, elle sert à se connecter avec le même code PIN et à recevoir un code gratuit en cas d'oubli.
+ */
+export async function addEmailAction(formData: FormData) {
+  if (!isSupabaseConfigured()) redirect("/compte?email=demo#email-titre");
+  const identity = await requireIdentity();
+  // Une adresse existe déjà (ou adresse technique d'un enfant) : rien à ajouter ici.
+  if (identity.email) redirect("/compte#email-titre");
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  if (!EMAIL.test(email) || email.endsWith(TECHNICAL_EMAIL)) redirect("/compte?email=adresse#email-titre");
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.auth.updateUser({ email }, { emailRedirectTo: emailRedirect("/compte?email=ajoute") });
+  // Adresse déjà prise ou envoi impossible : même message, sans dire si l'adresse a un compte.
+  if (error) redirect(`/compte?email=${sendErrorKey(error) === "limit" ? "limite" : "envoi"}#email-titre`);
+  redirect(`/compte?${new URLSearchParams({ email: emailHasCode() ? "code" : "lien", adresse: email })}#email-titre`);
+}
+
+/** Code reçu à la nouvelle adresse : elle devient un identifiant de connexion du compte. */
+export async function verifyEmailAction(formData: FormData) {
+  if (!isSupabaseConfigured()) redirect("/compte?email=demo#email-titre");
+  await requireIdentity();
+  const email = String(formData.get("adresse") ?? "").trim().toLowerCase();
+  const code = String(formData.get("code") ?? "").replace(/\s/g, "");
+  if (!EMAIL.test(email)) redirect("/compte?email=adresse#email-titre");
+  const retry = `/compte?${new URLSearchParams({ email: "code", adresse: email, erreur: "code" })}#email-titre`;
+  if (!/^\d{6}$/.test(code)) redirect(retry);
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.auth.verifyOtp({ email, token: code, type: "email_change" });
+  if (error) redirect(retry);
+  await supabase.rpc("sync_my_contact");
+  redirect("/compte?email=ajoute#email-titre");
 }
 
 // ── Suppression du compte ───────────────────────────────────────────────────

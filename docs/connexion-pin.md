@@ -1,7 +1,7 @@
 # Connexion par numéro et code PIN
 
 Refonte de la connexion validée par le porteur du projet le 06/11/2026 (dossier « Refonte de la connexion
-DIANGAL », décisions 1 à 11). Codée sur la branche `refonte-connexion-pin`, derrière l'interrupteur
+DIANGAL », décisions 1 à 11 ; décision 12, e-mail facultatif, validée le même soir). Codée sur la branche `refonte-connexion-pin`, derrière l'interrupteur
 `DIANGAL_PIN_LOGIN`. Le code et la migration `20261106000001` sont **en ligne depuis le 06/11/2026, mais
 éteints** : l'interrupteur n'est pas défini sur Vercel, l'ancienne connexion reste la seule active, et les pages
 et actions de la nouvelle connexion répondent « introuvable » ou sont refusées. Rien ne s'active tant que les
@@ -11,18 +11,36 @@ et actions de la nouvelle connexion répondent « introuvable » ou sont refusé
 
 | Qui | Avant | Avec `DIANGAL_PIN_LOGIN=true` |
 |---|---|---|
-| Élève avec téléphone, parent | code reçu à chaque connexion | un seul code à l'inscription, puis **numéro + code PIN** (6 chiffres), sans message |
+| Élève avec téléphone, parent | code reçu à chaque connexion | un seul code à l'inscription, puis **numéro + code PIN** (6 chiffres), sans message ; **au choix, e-mail + le même code PIN** |
 | Enfant sans téléphone | code famille, prénom, PIN de 4 à 6 chiffres | sur un **appareil de la famille** : prénom puis code PIN (6 chiffres) ; ailleurs : code famille |
 | Répétiteur | code reçu par email | **e-mail + mot de passe** (10 caractères, lettres et chiffres), vérification et récupération par code email |
 | Admin | code email + TOTP | même compte : **e-mail + mot de passe** sur `/connexion/admin` (non liée), puis le TOTP actuel |
 
-Les comptes créés avec un email gardent l'ancienne connexion par code (« Recevoir un code par email »)
-pendant la transition.
+Les comptes créés avec un email, sans code PIN, en choisissent un par « Code PIN oublié », avec un code reçu par
+e-mail (le message d'erreur le dit).
+
+## E-mail facultatif (décision 12)
+
+Le numéro reste le moyen principal : il est proposé d'abord partout ; l'e-mail est un lien discret.
+
+- **Inscription** (`signup-wizard.tsx`) : numéro par WhatsApp ou SMS, ou « Pas de téléphone ? S'inscrire avec un
+  e-mail » (code ou lien par e-mail). Ensuite, le même choix du code PIN (`completeSignupAction`).
+- **Connexion** : `/connexion` (numéro) ou `/connexion?mode=email` : e-mail + le même code PIN
+  (`signInWithPinAction`, champ `canal`).
+- **Code PIN oublié** : `/connexion/pin-oublie?mode=email` : code (ou lien) par e-mail, gratuit, puis nouveau
+  code PIN. Le lien de l'e-mail mène aussi au choix du code PIN (`/auth/confirmation`).
+- **Mon compte** : « Ajouter une adresse e-mail (facultatif) », vérifiée par un code (`email_change`) ou un lien.
+  Le choix de la maquette d'afficher « à mar•••@gmail.com » sur la page « Code PIN oublié » par numéro n'est pas
+  repris : il révélerait l'adresse liée à un numéro à quiconque le tape.
+- **Blocage** : par identifiant tapé (`phone:` ou `email:`), par compte (`user:<uuid>`, les erreurs avec le numéro
+  et avec l'e-mail s'additionnent) et par adresse IP. Même réponse qu'un identifiant ait un compte ou non.
+- Il faut des emails avec code (Resend et un domaine) pour que cela marche au-delà des membres de l'équipe.
 
 ## Le code PIN n'est jamais stocké
 
 - `lib/pin.ts` : mot de passe Supabase = `HMAC-SHA-256(DIANGAL_PIN_PEPPER, "diangal-pin:v1:<sujet>:<PIN>")`
-  en base64url + `:Pin1`. Sujet = numéro E.164 (élève, parent) ou `child:<uuid>` (enfant).
+  en base64url + `:Pin1`. Sujet = `user:<uuid>` (élève, parent : le compte, donc le même code PIN avec le numéro
+  ou l'e-mail, et après un changement de numéro) ou `child:<uuid>` (enfant).
 - Supabase Auth hache ce mot de passe (bcrypt) et le vérifie (`signInWithPassword`). Sans la clé du serveur,
   essayer les 1 000 000 de codes directement auprès de Supabase est impossible.
 - `private.pin_credentials` ne garde que la date et la version de la clé.

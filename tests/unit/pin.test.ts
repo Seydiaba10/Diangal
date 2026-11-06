@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { derivePinPassword } from "@/lib/pin";
+import { accountPinSubject, childPinSubject, derivePinPassword } from "@/lib/pin";
 import { cleanPin, pinProblem } from "@/lib/pin-rules";
 
 describe("règles du code PIN", () => {
@@ -52,5 +52,15 @@ describe("mot de passe dérivé du code PIN", () => {
     expect(derivePinPassword("+221771234567", "472915", 2)).not.toBe(a);
     vi.stubEnv("DIANGAL_PIN_PEPPER", "y".repeat(40));
     expect(derivePinPassword("+221771234567", "472915")).not.toBe(a);
+  });
+
+  it("un élève ou un parent a un seul code PIN, qu'il se connecte avec son numéro ou son e-mail", () => {
+    vi.stubEnv("DIANGAL_PIN_PEPPER", "x".repeat(40));
+    const id = "6f1c2a3b-0000-4000-8000-000000000001";
+    // Sujet = le compte, jamais l'identifiant tapé : changer de numéro ou ajouter un e-mail ne change rien.
+    expect(accountPinSubject(id)).toBe(`user:${id}`);
+    expect(derivePinPassword(accountPinSubject(id), "472915")).toBe(derivePinPassword(`user:${id}`, "472915"));
+    // Un enfant sans téléphone et un compte de même identifiant ne partagent jamais de mot de passe.
+    expect(derivePinPassword(accountPinSubject(id), "472915")).not.toBe(derivePinPassword(childPinSubject(id), "472915"));
   });
 });

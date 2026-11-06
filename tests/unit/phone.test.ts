@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { countriesFor, DIAL_COUNTRIES, isAllowedPhone, maskPhone, parsePhone } from "@/lib/phone";
+import { countriesFor, DIAL_COUNTRIES, isAllowedPhone, maskEmail, maskPhone, parsePhone } from "@/lib/phone";
 
 describe("parsePhone", () => {
   it("lit un numéro sénégalais sous toutes ses formes", () => {
@@ -33,5 +33,10 @@ describe("parsePhone", () => {
   it("masque un numéro pour l'affichage", () => {
     expect(maskPhone("+221771234567")).toBe("+221 77 ••• •• 67");
     expect(maskPhone("+33612345678")).toBe("+33 61 ••• •• 78");
+  });
+
+  it("masque une adresse e-mail pour l'affichage et le journal", () => {
+    expect(maskEmail("mariama.ndiaye@gmail.com")).toBe("ma•••@gmail.com");
+    expect(maskEmail("a@orange.sn")).toBe("a•••@orange.sn");
   });
 });
