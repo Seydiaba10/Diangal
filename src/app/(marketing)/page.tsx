@@ -2,7 +2,6 @@ import {
   ArrowRight,
   BadgeCheck,
   BookOpen,
-  CircleCheck,
   Download,
   GraduationCap,
   HandCoins,
@@ -69,13 +68,13 @@ export default async function LandingPage() {
 
   return (
     <>
-      {/* ── Hero clair : le texte à gauche, la photo « révision du soir » à droite dans un cadre ── */}
+      {/* ── Hero clair : le texte à gauche, la photo « révision du soir » à droite, entière, en grand ── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 to-cream">
         <MarketingHeader />
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-10 sm:pb-20 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-14">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-10 sm:pb-20 lg:grid-cols-[0.72fr_1fr] lg:pt-14">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-3.5 py-1.5 text-sm font-semibold text-brand-800 shadow-sm ring-1 ring-brand-100">
-              <BadgeCheck className="size-4 text-brand-700" aria-hidden />
+            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-3.5 py-1.5 text-sm font-semibold text-balance text-brand-800 shadow-sm ring-1 ring-brand-100">
+              <GraduationCap className="size-4 shrink-0 text-brand-700" aria-hidden />
               {t("hero.eyebrow")}
             </p>
             <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight text-ink sm:text-5xl">{t("hero.title")}</h1>
@@ -89,41 +88,18 @@ export default async function LandingPage() {
                 {t("hero.ctaParent")}
               </ButtonLink>
             </div>
-            <ul className="mt-7 flex flex-wrap gap-2 text-sm text-ink">
-              {(["free", "offline", "mobileMoney"] as const).map((key) => (
-                <li key={key} className="flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 ring-1 ring-line">
-                  <CircleCheck className="size-4 shrink-0 text-success-500" aria-hidden />
-                  {t(`hero.trust.${key}`)}
-                </li>
-              ))}
-            </ul>
           </div>
 
-          {/* Une maman aide ses enfants à réviser le soir, DIANGAL ouvert sur la tablette. */}
-          <div className="relative">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-surface shadow-xl ring-8 ring-surface">
-              <Image
-                src="/landing/revision-du-soir.jpg"
-                alt={t("hero.imageAlt")}
-                fill
-                priority
-                sizes="(min-width: 1024px) 560px, 100vw"
-                className="object-cover object-[40%_center]"
-              />
-            </div>
-            <div className="absolute -bottom-5 left-4 flex items-center gap-3 rounded-2xl bg-surface px-4 py-3 shadow-lg ring-1 ring-line sm:left-6">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-success-50 text-success-700">
-                <CircleCheck className="size-5" aria-hidden />
-              </span>
-              <span className="text-sm">
-                <span className="block font-semibold text-ink">{t("hero.card.title")}</span>
-                <span className="block text-ink-muted">{t("hero.card.body")}</span>
-              </span>
-            </div>
-            <p className="absolute -top-4 right-4 hidden items-center gap-2 rounded-full bg-surface px-3.5 py-2 text-sm font-semibold text-ink shadow-lg ring-1 ring-line sm:inline-flex">
-              <WifiOff className="size-4 text-brand-700" aria-hidden />
-              {t("hero.offlineBadge")}
-            </p>
+          {/* Une maman aide ses enfants à réviser le soir, DIANGAL ouvert sur la tablette : photo entière (16/9, 1680 × 944). */}
+          <div className="relative aspect-[1680/944] overflow-hidden rounded-3xl bg-surface shadow-xl ring-8 ring-surface">
+            <Image
+              src="/landing/revision-du-soir.jpg"
+              alt={t("hero.imageAlt")}
+              fill
+              priority
+              sizes="(min-width: 1152px) 640px, (min-width: 1024px) 56vw, 100vw"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>

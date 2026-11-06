@@ -5,7 +5,7 @@ import "server-only";
 
 import { isFreeChapter } from "@/lib/free-tier";
 import { slugify } from "@/lib/slug";
-import type { Assessment, Chapter, SubjectCode } from "@/types/domain";
+import type { Assessment, Chapter, ExamType, SubjectCode } from "@/types/domain";
 import type { MockAnswerKey } from "./answer-keys-3e";
 import type { MockQuestion } from "./assessments-3e";
 
@@ -14,12 +14,14 @@ import type { MockQuestion } from "./assessments-3e";
  * Vrai / faux, nombre ou mot attendu : champ answer. why : la correction expliquée.
  * pts : barème de la question (2 points par défaut), comme « (1,5 pt) » dans un sujet d'examen.
  * fig : dessin affiché sous la question (SVG de mocks/drawings.ts).
+ * self : travail fait sur la feuille (production d'écrits…) ; l'élève compare avec le corrigé (why), puis s'évalue.
  */
 export type ExerciseSpec = (
   | { qcm: string; choices: string[]; why: string }
   | { vf: string; answer: boolean; why: string }
   | { num: string; answer: number; why: string }
   | { text: string; answer: string; accept?: string[]; why: string }
+  | { self: string; why: string }
 ) & { pts?: number; fig?: string };
 
 export interface ExerciseSeries {
@@ -47,6 +49,11 @@ function toQuestion(id: string, spec: ExerciseSpec, where: string): { question: 
   const points = spec.pts ?? POINTS;
   const prompt = (text: string) => p(text) + (spec.fig ?? "");
   const option = (label: string, i: number) => ({ id: `${id}-${String.fromCharCode(97 + i)}`, labelHtml: label.replace(/^\*/, "") });
+  if ("self" in spec) {
+    // Corrigé montré à l'élève avant qu'il s'évalue : il peut contenir des listes (déjà en HTML).
+    const modelHtml = spec.why.startsWith("<") ? spec.why : p(spec.why);
+    return { question: { id, type: "self_check", points, promptHtml: prompt(spec.self), options: [], modelHtml, explanationHtml: modelHtml }, key: {} };
+  }
   if ("qcm" in spec) {
     const options = spec.choices.map(option);
     const correct = spec.choices.findIndex((c) => c.startsWith("*"));
@@ -134,14 +141,31 @@ export interface MockExamSpec {
   subject: SubjectCode;
   title: string;
   durationMin: number;
-  parts: { chapter: string; questions: ExerciseSpec[] }[];
+  /**
+   * chapter : chapitre du programme (absent si la classe n'a pas cette matière, ex. éducation artistique).
+   * stem : énoncé commun affiché au-dessus de chaque question (texte à lire, situation, consigne, barème).
+   */
+  parts: { chapter?: string; stem?: string; questions: ExerciseSpec[] }[];
+  /** Série visée au Bac (« S2 ») : chapitres de cette série, sujet proposé à ses seuls élèves. */
+  series?: string;
+}
+
+/** Examen visé et origine affichée d'un lot de sujets blancs (par défaut : le BFEM). */
+export interface MockExamOrigin {
+  examType: ExamType;
+  source: string;
 }
 
 /**
  * Sujets blancs (kind « mock_exam ») : questions, corrigés et chapitre de chaque question (pour les
  * points faibles). Présentés comme des sujets DIANGAL, jamais comme des sujets officiels.
  */
-export function buildMockExams(levelCode: string, chapters: Chapter[], specs: MockExamSpec[]) {
+export function buildMockExams(
+  levelCode: string,
+  chapters: Chapter[],
+  specs: MockExamSpec[],
+  origin: MockExamOrigin = { examType: "BFEM", source: "Sujet blanc rédigé par DIANGAL d’après le programme de 3e" },
+) {
   const questions: Record<string, MockQuestion> = {};
   const keys: Record<string, MockAnswerKey> = {};
   const questionChapters: Record<string, string> = {};
@@ -150,29 +174,31 @@ export function buildMockExams(levelCode: string, chapters: Chapter[], specs: Mo
   const assessments: Assessment[] = specs.map((spec) => {
     let n = 0;
     const questionIds = spec.parts.flatMap((part) => {
-      const chapter = findChapter(chapters, spec.subject, part.chapter, null, `${where} ${spec.id}`);
+      const chapter = part.chapter ? findChapter(chapters, spec.subject, part.chapter, spec.series ?? null, `${where} ${spec.id}`) : null;
       return part.questions.map((q) => {
         n += 1;
         const id = `${spec.id}--q${n}`;
         const { question, key } = toQuestion(id, q, `${where} ${spec.id}`);
-        questions[id] = question;
+        questions[id] = part.stem ? { ...question, stemHtml: part.stem } : question;
         keys[id] = key;
-        questionChapters[id] = chapter.id;
+        if (chapter) questionChapters[id] = chapter.id;
         return id;
       });
     });
     return {
       id: spec.id,
       kind: "mock_exam",
+      examType: origin.examType,
       title: spec.title,
       subjectCode: spec.subject,
       levelCode,
+      ...(spec.series ? { seriesCode: spec.series } : {}),
       chapterId: null,
       durationS: spec.durationMin * 60,
       // Sujet « découverte » : ouvert à tous tant que les sujets blancs ne sont pas plus nombreux.
       isPremium: false,
       questionIds,
-      sources: [{ title: "Sujet blanc rédigé par DIANGAL d’après le programme de 3e", kind: "diangal" }],
+      sources: [{ title: origin.source, kind: "diangal" }],
       correctionSource: "Corrigé rédigé par DIANGAL, à faire relire par un enseignant",
     };
   });

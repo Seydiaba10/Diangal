@@ -5,6 +5,7 @@ import "server-only";
 import { ANSWER_KEYS_1RE } from "./1re/exercises";
 import { ANSWER_KEYS_2NDE } from "./2nde/exercises";
 import { ANSWER_KEYS_BFEM_BLANCS } from "./3e/bfem-blancs";
+import { ANSWER_KEYS_CFEE_BLANCS } from "./cm2/cfee";
 import { ANSWER_KEYS_3E_SERIES } from "./3e/exercises";
 import { ANSWER_KEYS_4E } from "./4e/exercises";
 import { ANSWER_KEYS_5E } from "./5e/exercises";
@@ -16,6 +17,7 @@ import { ANSWER_KEYS_CI } from "./ci/exercises";
 import { ANSWER_KEYS_CM1 } from "./cm1/exercises";
 import { ANSWER_KEYS_CM2 } from "./cm2/exercises";
 import { ANSWER_KEYS_CP } from "./cp/exercises";
+import { ANSWER_KEYS_BAC_BLANCS } from "./tle/bac-blancs";
 import { ANSWER_KEYS_TLE_SERIES } from "./tle/exercises";
 
 export const CATALOG_ANSWER_KEYS: Record<string, MockAnswerKey> = {
@@ -31,9 +33,11 @@ export const CATALOG_ANSWER_KEYS: Record<string, MockAnswerKey> = {
   ...ANSWER_KEYS,
   ...ANSWER_KEYS_3E_SERIES,
   ...ANSWER_KEYS_BFEM_BLANCS,
+  ...ANSWER_KEYS_CFEE_BLANCS,
   ...ANSWER_KEYS_2NDE,
   ...ANSWER_KEYS_1RE,
   ...ANSWER_KEYS_TLE_SERIES,
+  ...ANSWER_KEYS_BAC_BLANCS,
 };
 
 export type { MockAnswerKey };

@@ -3,6 +3,7 @@ import { cache } from "react";
 import { requireIdentity } from "@/features/account/session";
 import { chapterHref, findChapterById, getChapters, getPrerenderedChapterIds, getSubjects } from "@/features/curriculum/data";
 import { isSupabaseConfigured } from "@/lib/env";
+import messages from "../../../messages/fr.json";
 import { BEST_SCORES, CATALOG_ASSESSMENTS, CATALOG_QUESTIONS, QUESTION_CHAPTERS } from "@/mocks/assessments";
 import { mockState, type MockAttempt } from "@/mocks/progress-store";
 import type {
@@ -70,7 +71,7 @@ function mockInfo(a: Assessment): AssessmentInfo {
     subjectCode: a.subjectCode,
     levelCode: a.levelCode,
     chapterId: a.chapterId,
-    examType: a.kind === "mock_exam" ? "BFEM" : null,
+    examType: a.examType ?? (a.kind === "mock_exam" ? "BFEM" : null),
     examYear: null,
     durationS: a.durationS,
     isPremium: a.isPremium,
@@ -146,8 +147,9 @@ const getBestScores = cache(async (studentId?: string): Promise<Map<string, numb
   return best;
 });
 
+/** Matière sans programme dans la classe (arabe, éducation artistique au CM2) : son nom vient des textes de l'interface. */
 function fallbackSubject(code: SubjectCode, levelCode: string): Subject {
-  return { code, slug: code.toLowerCase(), name: code, coefficient: 1, levelCode };
+  return { code, slug: code.toLowerCase(), name: messages.subjects[code] ?? code, coefficient: 1, levelCode };
 }
 
 async function toSummaries(infos: AssessmentInfo[], withBestScore: boolean): Promise<AssessmentSummary[]> {

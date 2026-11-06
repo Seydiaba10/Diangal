@@ -94,6 +94,8 @@
   --color-subject-philo-soft: #eef2ff;
   --color-subject-eps: #4d7c0f;
   --color-subject-eps-soft: #f7fee7;
+  --color-subject-art: #c2410c;
+  --color-subject-art-soft: #fff7ed;
   --color-subject-esvs: #a21caf;
   --color-subject-esvs-soft: #fdf4ff;
   --color-subject-ar: #0369a1;
@@ -251,6 +253,14 @@
   .rich-text blockquote p + p {
     font-size: 0.875rem;
     color: var(--color-ink-muted);
+  }
+  /* Texte modèle d'un corrigé (production d'écrits) : tous les paragraphes se lisent de la même façon. */
+  .rich-text .model-text {
+    border-left: 4px solid var(--color-line);
+    padding-left: 1rem;
+  }
+  .rich-text .model-text p + p {
+    margin-top: 0.625rem;
   }
   .rich-text li + li {
     margin-top: 0.375rem;
@@ -1908,6 +1918,12 @@
   .rich-text .dg-pic {
     max-width: 100%;
     height: auto;
+  }
+  /* Texte en arabe (épreuve facultative du CFEE) : de droite à gauche, assez grand pour lire les voyelles. */
+  .rich-text [lang="ar"] {
+    display: block;
+    font-size: 1.2em;
+    line-height: 2;
   }
   /* Longue rangée de formes : elle défile seule dans son cadre, jamais la page. */
   .dg-scroll {

@@ -1,6 +1,6 @@
 import type { OfficialPaper } from "@/types/domain";
 
-// Sujets et corrigés officiels du Bac (PDF de l'Office du Bac) : choix selon la série et rangement
+// Sujets et corrigés officiels (PDF de l'Office du Bac, copies du CFEE) : choix selon la série et rangement
 // par session puis par matière. Fonctions pures, partagées par la démo et Supabase.
 
 /** Page de l'Office du Bac qui publie les épreuves et corrigés. */
@@ -35,24 +35,33 @@ export interface OfficialPaperSession {
 /** Dans une matière : 1er groupe d'abord, sujet normal avant remplacement, épreuve avant corrigé. */
 const rank = (p: OfficialPaper) => (p.group ?? 1) * 4 + (p.replacement ? 2 : 0) + (p.kind === "corrige" ? 1 : 0);
 
-function bySubject(papers: OfficialPaper[]): OfficialPaperSubject[] {
-  const labels = [...new Set(papers.map((p) => p.subjectLabel))].sort((a, b) => a.localeCompare(b, "fr"));
+/** Les examens blancs du CFEE viennent après les vrais sujets de la session. */
+const BLANC_PREFIX = "Examen blanc";
+const isBlancLabel = (label: string) => label.startsWith(BLANC_PREFIX);
+
+function bySubject(papers: OfficialPaper[], byPart = false): OfficialPaperSubject[] {
+  const labels = [...new Set(papers.map((p) => p.subjectLabel))].sort(
+    (a, b) => Number(isBlancLabel(a)) - Number(isBlancLabel(b)) || a.localeCompare(b, "fr"),
+  );
+  const series = (a: OfficialPaper, b: OfficialPaper) => (a.seriesLabel ?? "").localeCompare(b.seriesLabel ?? "");
   return labels.map((label) => ({
     label,
     papers: papers
       .filter((p) => p.subjectLabel === label)
-      .sort((a, b) => rank(a) - rank(b) || (a.seriesLabel ?? "").localeCompare(b.seriesLabel ?? "")),
+      // CFEE : chaque partie suivie de son corrigé. Bac : 1er groupe, puis 2e groupe.
+      .sort((a, b) => (byPart ? series(a, b) || rank(a) - rank(b) : rank(a) - rank(b) || series(a, b))),
   }));
 }
 
 /**
  * Par session (la plus récente d'abord), puis par matière : les épreuves de la série d'abord,
- * les épreuves communes (langues, série non précisée) à part.
+ * les épreuves communes (langues, série non précisée) à part. Sans série (CFEE) : tout à la suite.
  */
-export function groupOfficialPapers(papers: OfficialPaper[], series: string): OfficialPaperSession[] {
+export function groupOfficialPapers(papers: OfficialPaper[], series: string | null): OfficialPaperSession[] {
   const years = [...new Set(papers.map((p) => p.year))].sort((a, b) => b - a);
   return years.map((year) => {
     const ofYear = papers.filter((p) => p.year === year);
+    if (series === null) return { year, count: ofYear.length, subjects: bySubject(ofYear, true), others: [], othersCount: 0 };
     const mine = ofYear.filter((p) => p.seriesCodes.includes(series));
     const others = ofYear.filter((p) => !p.seriesCodes.includes(series));
     return { year, count: ofYear.length, subjects: bySubject(mine), others: bySubject(others), othersCount: others.length };

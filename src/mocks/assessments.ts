@@ -11,6 +11,7 @@ import { ASSESSMENTS_6E, QUESTION_CHAPTERS_6E, QUESTIONS_6E } from "./6e/exercis
 import { ASSESSMENTS_1RE, QUESTION_CHAPTERS_1RE, QUESTIONS_1RE } from "./1re/exercises";
 import { ASSESSMENTS_2NDE, QUESTION_CHAPTERS_2NDE, QUESTIONS_2NDE } from "./2nde/exercises";
 import { ASSESSMENTS_BFEM_BLANCS, QUESTION_CHAPTERS_BFEM_BLANCS, QUESTIONS_BFEM_BLANCS } from "./3e/bfem-blancs";
+import { ASSESSMENTS_CFEE_BLANCS, QUESTION_CHAPTERS_CFEE_BLANCS, QUESTIONS_CFEE_BLANCS } from "./cm2/cfee";
 import { ASSESSMENTS_3E_SERIES, QUESTION_CHAPTERS_3E_SERIES, QUESTIONS_3E_SERIES } from "./3e/exercises";
 import { ASSESSMENTS_3E, BEST_SCORES, MOCK_QUESTIONS, type MockQuestion } from "./assessments-3e";
 import { ASSESSMENTS_CE1, QUESTION_CHAPTERS_CE1, QUESTIONS_CE1 } from "./ce1/exercises";
@@ -20,6 +21,7 @@ import { ASSESSMENTS_CM1, QUESTION_CHAPTERS_CM1, QUESTIONS_CM1 } from "./cm1/exe
 import { ASSESSMENTS_CM2, QUESTION_CHAPTERS_CM2, QUESTIONS_CM2 } from "./cm2/exercises";
 import { ASSESSMENTS_CP, QUESTION_CHAPTERS_CP, QUESTIONS_CP } from "./cp/exercises";
 import { CATALOG_CHAPTERS } from "./curriculum";
+import { ASSESSMENTS_BAC_BLANCS, QUESTION_CHAPTERS_BAC_BLANCS, QUESTIONS_BAC_BLANCS } from "./tle/bac-blancs";
 import { ASSESSMENTS_TLE_SERIES, QUESTION_CHAPTERS_TLE_SERIES, QUESTIONS_TLE_SERIES } from "./tle/exercises";
 
 const chapterNumber = new Map(CATALOG_CHAPTERS.map((c) => [c.id, c.number]));
@@ -44,9 +46,11 @@ export const CATALOG_ASSESSMENTS: Assessment[] = [
   ...ASSESSMENTS_3E,
   ...ASSESSMENTS_3E_SERIES,
   ...ASSESSMENTS_BFEM_BLANCS,
+  ...ASSESSMENTS_CFEE_BLANCS,
   ...ASSESSMENTS_2NDE,
   ...ASSESSMENTS_1RE,
   ...ASSESSMENTS_TLE_SERIES,
+  ...ASSESSMENTS_BAC_BLANCS,
 ].map(withFreeTier);
 
 export const CATALOG_QUESTIONS: Record<string, MockQuestion> = {
@@ -62,9 +66,11 @@ export const CATALOG_QUESTIONS: Record<string, MockQuestion> = {
   ...MOCK_QUESTIONS,
   ...QUESTIONS_3E_SERIES,
   ...QUESTIONS_BFEM_BLANCS,
+  ...QUESTIONS_CFEE_BLANCS,
   ...QUESTIONS_2NDE,
   ...QUESTIONS_1RE,
   ...QUESTIONS_TLE_SERIES,
+  ...QUESTIONS_BAC_BLANCS,
 };
 
 /** Chapitre de chaque question : celui de son évaluation (3e) ou de sa série d'exercices. */
@@ -83,9 +89,11 @@ export const QUESTION_CHAPTERS: Record<string, string> = {
   ...QUESTION_CHAPTERS_4E,
   ...QUESTION_CHAPTERS_3E_SERIES,
   ...QUESTION_CHAPTERS_BFEM_BLANCS,
+  ...QUESTION_CHAPTERS_CFEE_BLANCS,
   ...QUESTION_CHAPTERS_2NDE,
   ...QUESTION_CHAPTERS_1RE,
   ...QUESTION_CHAPTERS_TLE_SERIES,
+  ...QUESTION_CHAPTERS_BAC_BLANCS,
 };
 
 export { BEST_SCORES };

@@ -34,6 +34,11 @@ export function formatScoreValue(score: number | null): string {
   return score === null ? "–" : scoreFormat.format(score);
 }
 
+/** Taille d'un fichier en Ko → « 850 Ko » ou « 1,2 Mo » (espace insécable). */
+export function formatFileSize(kb: number): string {
+  return kb < 1000 ? `${integerFormat.format(kb)} Ko` : `${scoreFormat.format(kb / 1024)} Mo`;
+}
+
 /** 4.8 → « 4,8 » (notes des répétiteurs, etc.). */
 export function formatDecimal(value: number): string {
   return scoreFormat.format(value);

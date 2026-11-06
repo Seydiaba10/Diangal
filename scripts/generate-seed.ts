@@ -8,6 +8,7 @@ import { CATALOG_CHAPTERS, CATALOG_LESSON_BODIES, CATALOG_SUBJECTS, chapterSourc
 import { EXAM_SESSIONS } from "../src/mocks/exams";
 import { genericLessonBody } from "../src/mocks/lesson-content";
 import { OFFICIAL_PAPERS, OFFICIAL_PAPERS_CHECKED_ON } from "../src/mocks/official-papers";
+import { OFFICIAL_PAPERS_CFEE, OFFICIAL_PAPERS_CFEE_CHECKED_ON } from "../src/mocks/official-papers-cfee";
 import { MOCK_PLANS } from "../src/mocks/plans";
 
 const q = (value: string | null | undefined) => (value == null ? "null" : `'${value.replace(/'/g, "''")}'`);
@@ -171,7 +172,7 @@ for (const a of CATALOG_ASSESSMENTS) {
     `insert into public.assessments (slug, kind, title, level_id, series_id, subject_id, chapter_id, exam_type, duration_s, is_premium, status, verification, sources, correction_source, shuffle_options, intro_html, workbook) values (` +
       `${q(a.id)}, ${q(a.kind)}, ${q(a.title)}, (select id from public.levels where code = ${q(a.levelCode)}), ${seriesRef(a.seriesCode)}, ` +
       `(select id from public.subjects where code = ${q(a.subjectCode)}), ${a.chapterId ? chapterRef(a.chapterId) : "null"}, ` +
-      `${a.kind === "mock_exam" ? "'BFEM'" : "null"}, ${a.durationS ?? "null"}, ${a.isPremium}, 'published', ` +
+      `${a.kind === "mock_exam" ? q(a.examType ?? "BFEM") : "null"}, ${a.durationS ?? "null"}, ${a.isPremium}, 'published', ` +
       `${q(a.verification ?? "unverified")}, ${q(JSON.stringify(a.sources ?? []))}::jsonb, ${q(a.correctionSource ?? null)}, ` +
       `${a.shuffleOptions !== false}, ${html(a.introHtml ?? "")}, ${workbook});`,
   );
@@ -201,6 +202,13 @@ out.push(
   `insert into public.official_papers (year, kind, exam_group, replacement, subject_code, subject_label, series_label, series_codes, title, url, source_page, checked_on) values\n${OFFICIAL_PAPERS.map(
     (p) =>
       `  (${p.year}, ${q(p.kind)}, ${p.group ?? "null"}, ${p.replacement}, ${q(p.subjectCode)}, ${q(p.subjectLabel)}, ${q(p.seriesLabel)}, ${textArray(p.seriesCodes)}, ${q(p.title)}, ${q(p.url)}, ${q(p.sourcePage)}, ${q(OFFICIAL_PAPERS_CHECKED_ON)})`,
+  ).join(",\n")};`,
+);
+// Sujets et corrigés du CFEE : copies hébergées dans le Storage (seau content-free), avec leur provenance.
+out.push(
+  `insert into public.official_papers (exam_type, year, kind, subject_code, subject_label, series_label, title, url, source_page, source_name, file_kb, checked_on) values\n${OFFICIAL_PAPERS_CFEE.map(
+    (p) =>
+      `  ('CFEE', ${p.year}, ${q(p.kind)}, ${q(p.subjectCode)}, ${q(p.subjectLabel)}, ${q(p.seriesLabel)}, ${q(p.title)}, ${q(p.url)}, ${q(p.sourcePage)}, ${q(p.sourceName)}, ${p.fileKb}, ${q(OFFICIAL_PAPERS_CFEE_CHECKED_ON)})`,
   ).join(",\n")};`,
 );
 // Formules Famille (créées inactives par la migration) : ouvertes dans la démo et les tests.
