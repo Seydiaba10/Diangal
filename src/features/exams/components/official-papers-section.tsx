@@ -2,21 +2,25 @@ import { ChevronDown, ExternalLink, FileCheck2, FileText, ShieldCheck } from "lu
 import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { SectionCard } from "@/components/ui/section-card";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatFileSize } from "@/lib/format";
 import type { OfficialPaper } from "@/types/domain";
+import type { OfficialPaperExam } from "../data";
 import { groupOfficialPapers, OFFICIAL_PAPERS_PAGE, type OfficialPaperSubject } from "../official-papers";
 
 /**
- * Sujets et corrigés officiels du Bac (PDF de l'Office du Bac), par session et par matière :
- * ceux de la série d'abord, les langues et épreuves sans série précisée repliées. Chaque lien
- * ouvre le document sur le site officiel : DIANGAL n'en garde aucune copie.
+ * Sujets et corrigés officiels, par session et par matière.
+ * Bac : PDF de l'Office du Bac, ceux de la série d'abord, les langues et épreuves sans série précisée
+ * repliées ; chaque lien ouvre le document sur le site officiel, DIANGAL n'en garde aucune copie.
+ * CFEE : copies hébergées par DIANGAL (plus de site officiel où les lire), avec leur taille.
  */
 export async function OfficialPapersSection({
+  exam = "BAC",
   papers,
   series,
   total,
   checkedOn,
 }: {
+  exam?: OfficialPaperExam;
   /** Documents de la série choisie et épreuves communes. */
   papers: OfficialPaper[];
   series: string | null;
@@ -25,7 +29,9 @@ export async function OfficialPapersSection({
   checkedOn: string;
 }) {
   const t = await getTranslations("examsPage.official");
-  const sessions = series ? groupOfficialPapers(papers, series) : [];
+  const isCfee = exam === "CFEE";
+  const sessions = isCfee ? groupOfficialPapers(papers, null) : series ? groupOfficialPapers(papers, series) : [];
+  const date = formatDate(checkedOn);
 
   const subjectList = (subjects: OfficialPaperSubject[]) => (
     <div className="space-y-4">
@@ -38,13 +44,14 @@ export async function OfficialPapersSection({
               const details = [paper.seriesLabel ?? t("unknownSeries"), paper.group ? t(paper.group === 1 ? "group1" : "group2") : null].filter(
                 Boolean,
               );
+              const label = `${subject.label}, ${kind}, ${details.join(", ")}`;
               return (
                 <li key={paper.id}>
                   <a
                     href={paper.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={t("open", { label: `${subject.label}, ${kind}, ${details.join(", ")}` })}
+                    aria-label={isCfee ? t("cfee.open", { label, size: formatFileSize(paper.fileKb ?? 1) }) : t("open", { label })}
                     className="flex min-h-11 flex-wrap items-center gap-x-2 gap-y-1 rounded-lg px-2 py-1.5 text-sm text-ink transition-colors hover:bg-canvas"
                   >
                     {paper.kind === "corrige" ? (
@@ -55,7 +62,8 @@ export async function OfficialPapersSection({
                     <span className="font-medium">{kind}</span>
                     <span className="text-ink-muted">{details.join(" · ")}</span>
                     {paper.replacement ? <Badge tone="idle">{t("replacement")}</Badge> : null}
-                    <ExternalLink className="ml-auto size-3.5 shrink-0 text-ink-subtle" aria-hidden />
+                    {paper.fileKb ? <span className="ml-auto text-xs text-ink-muted">{formatFileSize(paper.fileKb)}</span> : null}
+                    <ExternalLink className={paper.fileKb ? "size-3.5 shrink-0 text-ink-subtle" : "ml-auto size-3.5 shrink-0 text-ink-subtle"} aria-hidden />
                   </a>
                 </li>
               );
@@ -67,8 +75,8 @@ export async function OfficialPapersSection({
   );
 
   return (
-    <SectionCard id="officiels-titre" title={t("title")} subtitle={t("subtitle")}>
-      {!series ? (
+    <SectionCard id="officiels-titre" title={t("title")} subtitle={isCfee ? t("cfee.subtitle") : t("subtitle")}>
+      {!isCfee && !series ? (
         <p className="text-sm text-ink-muted">{t("chooseSeries", { count: total })}</p>
       ) : sessions.length === 0 ? (
         <p className="text-sm text-ink-muted">{t("empty")}</p>
@@ -101,12 +109,16 @@ export async function OfficialPapersSection({
       )}
       <p className="mt-4 flex gap-2 text-xs text-ink-muted">
         <ShieldCheck className="mt-0.5 size-4 shrink-0 text-success-700" aria-hidden />
-        <span>
-          {t("source", { date: formatDate(checkedOn) })}{" "}
-          <a href={OFFICIAL_PAPERS_PAGE} target="_blank" rel="noopener noreferrer" className="font-medium text-brand-700 underline">
-            {t("sourceLink")}
-          </a>
-        </span>
+        {isCfee ? (
+          <span>{t("cfee.source", { date })}</span>
+        ) : (
+          <span>
+            {t("source", { date })}{" "}
+            <a href={OFFICIAL_PAPERS_PAGE} target="_blank" rel="noopener noreferrer" className="font-medium text-brand-700 underline">
+              {t("sourceLink")}
+            </a>
+          </span>
+        )}
       </p>
     </SectionCard>
   );

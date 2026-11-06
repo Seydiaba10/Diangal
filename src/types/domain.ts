@@ -12,6 +12,7 @@ export type SubjectCode =
   | "LV2"
   | "PHILO"
   | "EPS"
+  | "ART"
   /** Éducation à la science et à la vie sociale (élémentaire : histoire, géographie, sciences, vivre ensemble). */
   | "ESVS"
   | "AR"
@@ -225,6 +226,8 @@ export interface Assessment {
   questionIds: string[];
   /** Série (lycée) d'un sujet de Bac. */
   seriesCode?: string | null;
+  /** Sujet blanc : l'examen qu'il prépare. */
+  examType?: ExamType;
   /** Sujet d'examen : vérification, sources et origine du corrigé. */
   verification?: ContentVerification;
   sources?: ContentSource[];
@@ -654,6 +657,10 @@ export interface OfficialPaperData {
   title: string;
   url: string;
   sourcePage: string;
+  /** CFEE : origine du document (les liens du Bac viennent tous de l'Office du Bac). */
+  sourceName?: string;
+  /** CFEE : taille du PDF hébergé, affichée avant l'ouverture. */
+  fileKb?: number | null;
 }
 
 export interface OfficialPaper extends OfficialPaperData {

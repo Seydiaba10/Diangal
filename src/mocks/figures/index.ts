@@ -6,6 +6,7 @@
 
 import { SCHEMAS_CE1 } from "./ce1";
 import { SCHEMAS_CE2 } from "./ce2";
+import { SCHEMAS_CFEE } from "./cfee";
 import { SCHEMAS_CI } from "./ci";
 import { SCHEMAS_CM1 } from "./cm1";
 import { SCHEMAS_CM2 } from "./cm2";
@@ -19,7 +20,7 @@ import { SCHEMAS_4E } from "./4e";
 import { SCHEMAS_5E } from "./5e";
 import { SCHEMAS_6E } from "./6e";
 
-export const SCHEMAS: Record<string, string> = { ...SCHEMAS_CI, ...SCHEMAS_CP, ...SCHEMAS_CE1, ...SCHEMAS_CE2, ...SCHEMAS_CM1, ...SCHEMAS_CM2, ...SCHEMAS_SENEGAL, ...SCHEMAS_6E, ...SCHEMAS_5E, ...SCHEMAS_4E, ...SCHEMAS_3E, ...SCHEMAS_2NDE, ...SCHEMAS_1RE, ...SCHEMAS_TLE };
+export const SCHEMAS: Record<string, string> = { ...SCHEMAS_CI, ...SCHEMAS_CP, ...SCHEMAS_CE1, ...SCHEMAS_CE2, ...SCHEMAS_CM1, ...SCHEMAS_CM2, ...SCHEMAS_CFEE, ...SCHEMAS_SENEGAL, ...SCHEMAS_6E, ...SCHEMAS_5E, ...SCHEMAS_4E, ...SCHEMAS_3E, ...SCHEMAS_2NDE, ...SCHEMAS_1RE, ...SCHEMAS_TLE };
 
 /** Largeur et hauteur d'un schéma (attributs de son <svg>). */
 export function schemaSize(id: string): [number, number] {

@@ -11,6 +11,7 @@ import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { selectAllRows } from "@/lib/supabase/rows";
 import { EXAM_SESSIONS } from "@/mocks/exams";
 import { OFFICIAL_PAPERS, OFFICIAL_PAPERS_CHECKED_ON } from "@/mocks/official-papers";
+import { OFFICIAL_PAPERS_CFEE, OFFICIAL_PAPERS_CFEE_CHECKED_ON } from "@/mocks/official-papers-cfee";
 import { mockState } from "@/mocks/progress-store";
 import type {
   AssessmentSummary,
@@ -154,8 +155,14 @@ export async function getAllExamPaperIds() {
   return ids.length ? ids : [{ id: "_" }];
 }
 
-/** Sujets et corrigés officiels du Bac (liens vers les PDF de l'Office du Bac) : contenu public, mis en cache. */
-async function loadOfficialPapers(): Promise<{ papers: OfficialPaper[]; checkedOn: string }> {
+/** Examens qui ont des sujets officiels en PDF. */
+export type OfficialPaperExam = "BAC" | "CFEE";
+
+/**
+ * Sujets et corrigés officiels : liens vers l'Office du Bac, ou PDF du CFEE hébergés dans le Storage.
+ * Contenu public, mis en cache.
+ */
+async function loadOfficialPapers(exam: OfficialPaperExam): Promise<{ papers: OfficialPaper[]; checkedOn: string }> {
   "use cache";
   cacheLife("hours");
   cacheTag("official-papers");
@@ -163,8 +170,10 @@ async function loadOfficialPapers(): Promise<{ papers: OfficialPaper[]; checkedO
   const data = await selectAllRows("sujets officiels", (from, to) =>
     supabase
       .from("official_papers")
-      .select("id, year, kind, exam_group, replacement, subject_code, subject_label, series_label, series_codes, title, url, source_page, checked_on")
-      .eq("exam_type", "BAC")
+      .select(
+        "id, year, kind, exam_group, replacement, subject_code, subject_label, series_label, series_codes, title, url, source_page, source_name, file_kb, checked_on",
+      )
+      .eq("exam_type", exam)
       .order("year", { ascending: false })
       .order("title")
       .order("id")
@@ -184,6 +193,8 @@ async function loadOfficialPapers(): Promise<{ papers: OfficialPaper[]; checkedO
       title: p.title,
       url: p.url,
       sourcePage: p.source_page,
+      sourceName: p.source_name,
+      fileKb: p.file_kb,
     })),
     checkedOn: data.reduce((latest, p) => (p.checked_on > latest ? p.checked_on : latest), ""),
   };
@@ -198,10 +209,17 @@ export interface OfficialPapersView {
   checkedOn: string;
 }
 
-/** Sujets et corrigés officiels du Bac pour une série (et les épreuves communes). */
-export async function getOfficialPapers(series: string | null): Promise<OfficialPapersView> {
-  const { papers, checkedOn } = isSupabaseConfigured()
-    ? await loadOfficialPapers()
-    : { papers: OFFICIAL_PAPERS.map((p, i) => ({ ...p, id: `officiel-${i + 1}` })), checkedOn: OFFICIAL_PAPERS_CHECKED_ON };
+/** Démo : mêmes données ; les PDF du CFEE se lisent dans public/annales/cfee (dossier local, hors du dépôt). */
+function mockOfficialPapers(exam: OfficialPaperExam): { papers: OfficialPaper[]; checkedOn: string } {
+  if (exam === "BAC") return { papers: OFFICIAL_PAPERS.map((p, i) => ({ ...p, id: `officiel-${i + 1}` })), checkedOn: OFFICIAL_PAPERS_CHECKED_ON };
+  return {
+    papers: OFFICIAL_PAPERS_CFEE.map((p, i) => ({ ...p, id: `officiel-cfee-${i + 1}`, url: p.url.replace(/^.*\/annales\/cfee\//, "/annales/cfee/") })),
+    checkedOn: OFFICIAL_PAPERS_CFEE_CHECKED_ON,
+  };
+}
+
+/** Sujets et corrigés officiels d'un examen ; au Bac, ceux d'une série (et les épreuves communes). */
+export async function getOfficialPapers(exam: OfficialPaperExam, series: string | null): Promise<OfficialPapersView> {
+  const { papers, checkedOn } = isSupabaseConfigured() ? await loadOfficialPapers(exam) : mockOfficialPapers(exam);
   return { papers: officialPapersFor(papers, series), total: papers.length, checkedOn };
 }

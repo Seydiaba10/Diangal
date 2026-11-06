@@ -55,8 +55,8 @@ async function ExamsContent({ searchParams }: { searchParams: SearchParams }) {
     getExamPapers(exam, series),
     getMockExams(exam, series),
     getExamHistory(exam),
-    // Bac : sujets et corrigés officiels en PDF (liens vers le site de l'Office du Bac).
-    exam === "BAC" ? getOfficialPapers(series) : Promise.resolve(null),
+    // Sujets et corrigés officiels en PDF : liens vers l'Office du Bac, copies hébergées pour le CFEE.
+    exam === "BAC" || exam === "CFEE" ? getOfficialPapers(exam, series) : Promise.resolve(null),
     getOpenAttempts(),
   ]);
   // Sujets blancs commencés : « En cours » et « Reprendre » (le chrono continue).
@@ -102,7 +102,13 @@ async function ExamsContent({ searchParams }: { searchParams: SearchParams }) {
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-5">
           {official ? (
-            <OfficialPapersSection papers={official.papers} series={series} total={official.total} checkedOn={official.checkedOn} />
+            <OfficialPapersSection
+              exam={exam === "CFEE" ? "CFEE" : "BAC"}
+              papers={official.papers}
+              series={series}
+              total={official.total}
+              checkedOn={official.checkedOn}
+            />
           ) : null}
 
           <section aria-labelledby="blancs-titre">

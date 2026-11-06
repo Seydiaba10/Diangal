@@ -42,6 +42,7 @@
     "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "pdf-lib": "1.17.1",
     "pdfjs-dist": "4.10.38",
     "serwist": "9.5.13",
     "tailwindcss": "^4",

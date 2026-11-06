@@ -1182,6 +1182,7 @@ export type Database = {
           created_at: string
           exam_group: number | null
           exam_type: Database["public"]["Enums"]["exam_type"]
+          file_kb: number | null
           id: string
           is_published: boolean
           kind: string
@@ -1201,6 +1202,7 @@ export type Database = {
           created_at?: string
           exam_group?: number | null
           exam_type?: Database["public"]["Enums"]["exam_type"]
+          file_kb?: number | null
           id?: string
           is_published?: boolean
           kind: string
@@ -1220,6 +1222,7 @@ export type Database = {
           created_at?: string
           exam_group?: number | null
           exam_type?: Database["public"]["Enums"]["exam_type"]
+          file_kb?: number | null
           id?: string
           is_published?: boolean
           kind?: string

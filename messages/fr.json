@@ -144,6 +144,7 @@
     "LV2": "Langue vivante 2",
     "PHILO": "Philosophie",
     "EPS": "EPS",
+    "ART": "Éducation artistique",
     "ESVS": "Science et vie sociale",
     "AR": "Arabe",
     "ER": "Éducation religieuse",
@@ -540,18 +541,8 @@
       "subtitle": "Des cours clairs par chapitre, des exercices corrigés, des contrôles chronométrés et des répétiteurs vérifiés pour préparer le CFEE, le BFEM et le Bac.",
       "ctaStudent": "Commencer gratuitement",
       "ctaParent": "Je suis parent",
-      "trust": {
-        "free": "3 chapitres gratuits par matière",
-        "offline": "Fonctionne hors ligne",
-        "mobileMoney": "Paiement Wave et Orange Money"
-      },
       "imageAlt": "Le soir à la maison, une maman sénégalaise aide ses trois enfants à réviser ; le plus jeune montre DIANGAL sur une tablette.",
-      "offlineBadge": "Même sans internet, on révise",
-      "eyebrow": "Programmes officiels du Sénégal, du CI à la Terminale",
-      "card": {
-        "title": "Exercices corrigés",
-        "body": "Note sur 20 et corrigé détaillé tout de suite"
-      }
+      "eyebrow": "Plateforme de soutien scolaire, du CI à la Terminale"
     },
     "features": {
       "title": "Tout pour réussir son année",
@@ -1350,7 +1341,12 @@
       "sourceLink": "Voir tous les sujets sur le site de l’Office du Bac",
       "unknownSeries": "Série non précisée",
       "others": "Langues vivantes et épreuves sans série précisée ({count, plural, one {# document} other {# documents}})",
-      "noSeriesPapers": "Pas d’épreuve propre à ta série pour cette session : regarde les épreuves communes ci-dessous."
+      "noSeriesPapers": "Pas d’épreuve propre à ta série pour cette session : regarde les épreuves communes ci-dessous.",
+      "cfee": {
+        "subtitle": "Les sujets du CFEE de 2013 à 2025, des corrigés et les examens blancs du ministère. C’est gratuit : regarde la taille du fichier avant de l’ouvrir.",
+        "open": "{label} : PDF de {size}, s’ouvre dans un nouvel onglet",
+        "source": "Copies de documents du ministère de l’Éducation nationale (Direction des Examens et Concours, ancien site examen.sn), récupérées sur le site epreuvesetcorriges.com. DIANGAL a contrôlé l’année et l’origine de chaque document le {date}, sans confirmation du ministère. Il manque les sessions 2020 et 2021. Pour la session 2026, seuls des corrigés sont disponibles : ils reprennent les énoncés."
+      }
     }
   },
   "progressPage": {

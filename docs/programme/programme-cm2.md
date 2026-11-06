@@ -21,5 +21,4 @@ Relevé fait le 17/10/2026. Le CM2 forme, avec le CM1, l’**étape 3** du Curri
 ## À faire
 
 - trouver le guide pédagogique officiel de l’étape 3 (Direction de l’enseignement élémentaire) pour valider le français et l’ESVS ;
-- arabe, éducation religieuse, EPS et éducation artistique : non couverts ;
-- sujets blancs du CFEE.
+- arabe, éducation religieuse, EPS et éducation artistique : pas de leçons (sujets blancs d’éducation artistique et d’épreuve facultative d’arabe seulement, voir `cfee-sujets-blancs.md`).
