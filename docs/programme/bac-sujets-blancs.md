@@ -58,7 +58,7 @@ Au Bac, le français propose trois sujets au choix. DIANGAL en fait trois sujets
 
 ## Limites et suite
 
-- Ces sujets sont seulement dans le dépôt local, la démo et le seed. Ils ne sont pas dans la base en ligne. Pour les publier, il faut comparer le seed de `main` et le nouveau seed (lots rejouables, comme le 01/11/2026).
+- Ces sujets sont en ligne depuis le 06/11/2026 (lots rejouables calculés par comparaison des seeds, comme le 01/11/2026), vérifiés sur le site avec un élève de Terminale S2 temporaire.
 - Rien n’est encore prévu pour plusieurs séries :
   - G, T1, T2 et S3 : épreuves techniques ;
   - S1 : mathématiques, sciences physiques et SVT ;

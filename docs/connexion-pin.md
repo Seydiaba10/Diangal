@@ -2,7 +2,10 @@
 
 Refonte de la connexion validée par le porteur du projet le 06/11/2026 (dossier « Refonte de la connexion
 DIANGAL », décisions 1 à 11). Codée sur la branche `refonte-connexion-pin`, derrière l'interrupteur
-`DIANGAL_PIN_LOGIN`. **Rien n'est en ligne** tant que les étapes « Mise en ligne » ne sont pas faites.
+`DIANGAL_PIN_LOGIN`. Le code et la migration `20261106000001` sont **en ligne depuis le 06/11/2026, mais
+éteints** : l'interrupteur n'est pas défini sur Vercel, l'ancienne connexion reste la seule active, et les pages
+et actions de la nouvelle connexion répondent « introuvable » ou sont refusées. Rien ne s'active tant que les
+étapes « Mise en ligne » ci-dessous ne sont pas faites.
 
 ## Ce qui change
 

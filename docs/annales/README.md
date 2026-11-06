@@ -66,3 +66,5 @@ Manquent : les sessions 2020 et 2021, les corrigés de 2018, 2022, 2023 et 2024.
 ### Mettre en ligne
 
 Dans cet ordre, pour que le site ne lise jamais une colonne absente : appliquer la migration, envoyer les fichiers (`--upload`), insérer les lignes, déployer.
+
+Fait le 06/11/2026 : migration appliquée, 166 fichiers envoyés, 166 lignes insérées, site déployé, liens vérifiés sur le site avec un élève de CM2 temporaire.
