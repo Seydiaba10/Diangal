@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { isSupabaseConfigured } from "@/lib/env";
+import { isSupabaseConfigured, isPinLoginEnabled } from "@/lib/env";
 import { cleanPin, isPinFormat, pinProblem } from "@/lib/pin-rules";
 import { getRequestMeta } from "@/lib/request-meta";
 import { safeInternalPath } from "@/lib/safe-path";
@@ -32,6 +32,11 @@ import {
 } from "./pin-auth";
 import { ROLE_HOME, ROLES } from "./roles";
 import { requireIdentity } from "./session";
+
+/** Connexion PIN éteinte (DIANGAL_PIN_LOGIN) : ces actions sont refusées. */
+function requirePinLogin() {
+  if (!isPinLoginEnabled()) throw new Error("Connexion par code PIN désactivée.");
+}
 
 /** Une session ouverte par un code reçu sert à choisir le code PIN pendant 15 minutes. */
 const FRESH_LOGIN_SECONDS = 15 * 60;
@@ -69,6 +74,7 @@ async function accountOfPhone(phone: string): Promise<string | null> {
  * réponse identique que le numéro ait un compte ou non.
  */
 export async function signInWithPinAction(formData: FormData) {
+  requirePinLogin();
   const pin = cleanPin(formData.get("pin"));
   const shared = formData.get("partage") === "on";
   const next = safeInternalPath(formData.get("next"));
@@ -127,6 +133,7 @@ async function secondsSinceLogin(): Promise<number> {
  * (les autres appareils sont alors déconnectés). Le code devient le mot de passe dérivé du compte.
  */
 export async function setPinAction(formData: FormData) {
+  requirePinLogin();
   const reason = parseReason(formData.get("raison"));
   const pin = cleanPin(formData.get("pin"));
   const confirm = cleanPin(formData.get("pinConfirm"));
@@ -167,6 +174,7 @@ export async function setPinAction(formData: FormData) {
  * et sans message. Trop d'erreurs : blocage, puis « Code PIN oublié ».
  */
 export async function confirmSessionPinAction(formData: FormData) {
+  requirePinLogin();
   const pin = cleanPin(formData.get("pin"));
   const next = safeInternalPath(formData.get("next"));
   const back: (erreur: string, extra?: Record<string, string>) => never = (erreur, extra = {}) =>
@@ -208,6 +216,7 @@ async function signOutEverywhereHere() {
 
 /** « Ce n'est pas moi » sur la page du code PIN redemandé : fermeture de la session de cet appareil. */
 export async function notMeAction() {
+  requirePinLogin();
   await signOutEverywhereHere();
   (await cookies()).delete(DEMO_ROLE_COOKIE);
   redirect("/connexion?info=deconnecte");

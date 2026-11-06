@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Notice } from "@/components/ui/notice";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,7 +17,7 @@ import { setPinAction } from "@/features/account/pin-actions";
 import type { PinReason } from "@/features/account/pin-constants";
 import { ROLE_HOME } from "@/features/account/roles";
 import { getAuthIdentity } from "@/features/account/session";
-import { isSupabaseConfigured } from "@/lib/env";
+import { isPinLoginEnabled, isSupabaseConfigured } from "@/lib/env";
 import type { AppRole } from "@/types/domain";
 
 export async function generateMetadata() {
@@ -185,6 +185,8 @@ async function PinForm({ searchParams }: { searchParams: Search }) {
 
 /** Choix du code PIN, juste après un code reçu par message (inscription ou « Code PIN oublié »). */
 export default function ChoosePinPage({ searchParams }: PageProps<"/connexion/code-pin">) {
+  // Connexion PIN éteinte : la page n'existe pas.
+  if (!isPinLoginEnabled()) notFound();
   return (
     <Suspense fallback={<Skeleton className="h-96" />}>
       <PinForm searchParams={searchParams} />

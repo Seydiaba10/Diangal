@@ -1,5 +1,6 @@
 import { ArrowLeft, CircleAlert } from "lucide-react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { siWhatsapp } from "simple-icons";
 import { Suspense } from "react";
@@ -11,7 +12,7 @@ import { AuthCard, PILL_BUTTON, PILL_INPUT } from "@/features/account/components
 import { ChannelChoice } from "@/features/account/components/channel-choice";
 import { richMark } from "@/features/account/components/highlight";
 import type { PhoneChannel } from "@/features/account/otp";
-import { isSmsEnabled, isSupabaseConfigured, isWhatsAppEnabled, phoneCountries } from "@/lib/env";
+import { isPinLoginEnabled, isSmsEnabled, isSupabaseConfigured, isWhatsAppEnabled, phoneCountries } from "@/lib/env";
 
 export async function generateMetadata() {
   const t = await getTranslations("auth.pin.forgot");
@@ -62,6 +63,8 @@ async function ForgotForm({ searchParams }: { searchParams: PageProps<"/connexio
 
 /** « Code PIN oublié » : un code reçu sur le téléphone, puis un nouveau code PIN. */
 export default async function ForgotPinPage({ searchParams }: PageProps<"/connexion/pin-oublie">) {
+  // Connexion PIN éteinte : la page n'existe pas.
+  if (!isPinLoginEnabled()) notFound();
   const t = await getTranslations("auth.pin.forgot");
   return (
     <div className="space-y-4">

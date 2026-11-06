@@ -1,5 +1,6 @@
 import { CircleAlert, LogOut } from "lucide-react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,7 +10,7 @@ import { PinBoxes } from "@/features/account/components/pin-boxes";
 import { confirmSessionPinAction, notMeAction } from "@/features/account/pin-actions";
 import { getAuthIdentity } from "@/features/account/session";
 import { maskPhone } from "@/lib/phone";
-import { isSupabaseConfigured } from "@/lib/env";
+import { isPinLoginEnabled, isSupabaseConfigured } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function generateMetadata() {
@@ -84,6 +85,8 @@ async function SessionForm({ searchParams }: { searchParams: PageProps<"/connexi
 
 /** Code PIN redemandé après 30 jours sans visite sur son téléphone : sans message, sans nouvelle session. */
 export default function SessionPinPage({ searchParams }: PageProps<"/connexion/session">) {
+  // Connexion PIN éteinte : la page n'existe pas.
+  if (!isPinLoginEnabled()) notFound();
   return (
     <Suspense fallback={<Skeleton className="h-80" />}>
       <SessionForm searchParams={searchParams} />

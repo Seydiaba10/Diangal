@@ -23,7 +23,7 @@ import {
 } from "@/features/account/pin-auth";
 import { DEMO_PIN } from "@/features/account/pin-constants";
 import { requireIdentity } from "@/features/account/session";
-import { isSupabaseConfigured } from "@/lib/env";
+import { isSupabaseConfigured, isPinLoginEnabled } from "@/lib/env";
 import { isLevelCode } from "@/lib/levels";
 import { cleanPin, isPinFormat, pinProblem } from "@/lib/pin-rules";
 import { getRequestMeta } from "@/lib/request-meta";
@@ -31,6 +31,11 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseAuthGateway } from "@/lib/supabase/auth-gateway";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { normalizeFamilyCode } from "./data";
+
+/** Connexion PIN éteinte (DIANGAL_PIN_LOGIN) : ces actions sont refusées. */
+function requirePinLogin() {
+  if (!isPinLoginEnabled()) throw new Error("Connexion par code PIN désactivée.");
+}
 
 // Enfants sans téléphone, connexion par code PIN (interrupteur DIANGAL_PIN_LOGIN) : le code PIN de l'enfant
 // devient le mot de passe dérivé de son compte, vérifié par Supabase Auth. Le parent confirme chaque
@@ -86,6 +91,7 @@ async function registerThisDevice(): Promise<boolean> {
 
 /** Le parent donne ou change le code PIN d'un enfant relié : l'enfant est déconnecté partout, blocage levé. */
 export async function setChildPinV2Action(studentId: string, formData: FormData) {
+  requirePinLogin();
   await requireRole("parent");
   const read = readChildPin(formData);
   if ("error" in read) redirect(`${FAMILY_PATH}?erreur=${read.error}#enfants-titre`);
@@ -110,6 +116,7 @@ export async function setChildPinV2Action(studentId: string, formData: FormData)
  * utilisée pour écrire), relié au parent, validation parentale, code PIN, personnage illustré.
  */
 export async function createChildProfileV2Action(formData: FormData) {
+  requirePinLogin();
   await requireRole("parent");
   const firstName = field(formData, "firstName", 40);
   const lastName = field(formData, "lastName", 40);
@@ -153,6 +160,7 @@ export async function createChildProfileV2Action(formData: FormData) {
 
 /** Cet appareil devient un appareil de la famille (code PIN du parent confirmé). */
 export async function addFamilyDeviceAction(formData: FormData) {
+  requirePinLogin();
   await requireRole("parent");
   await confirmParent(formData, "appareils-titre");
   if (!(await registerThisDevice())) redirect(`${FAMILY_PATH}?erreur=appareil#appareils-titre`);
@@ -160,6 +168,7 @@ export async function addFamilyDeviceAction(formData: FormData) {
 }
 
 export async function removeFamilyDeviceAction(deviceId: string) {
+  requirePinLogin();
   await requireRole("parent");
   if (isSupabaseConfigured()) {
     const supabase = await createSupabaseServerClient();
@@ -176,6 +185,7 @@ export async function removeFamilyDeviceAction(deviceId: string) {
  * Session « enfant » : sans durée, fermée après 30 minutes sans activité.
  */
 export async function childPinSignInAction(familyCode: string | null, studentId: string, formData: FormData) {
+  requirePinLogin();
   const code = familyCode ? normalizeFamilyCode(familyCode) : null;
   const pin = cleanPin(formData.get("pin"));
   const back: (erreur: string) => never = (erreur) =>

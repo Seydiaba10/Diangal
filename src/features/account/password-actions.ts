@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { isSupabaseConfigured } from "@/lib/env";
+import { isSupabaseConfigured, isPinLoginEnabled } from "@/lib/env";
 import { passwordProblem } from "@/lib/password-rules";
 import { getRequestMeta } from "@/lib/request-meta";
 import { safeInternalPath } from "@/lib/safe-path";
@@ -14,6 +14,11 @@ import { DEMO_ROLE_COOKIE } from "./data";
 import { emailRedirect } from "./otp";
 import { applyDeviceMode, emailKey, guardClear, guardFail, guardStatus, guardSuccess, ipKey, logAuthEvent, progressiveDelay } from "./pin-auth";
 import { ROLE_HOME } from "./roles";
+
+/** Connexion PIN éteinte (DIANGAL_PIN_LOGIN) : ces actions sont refusées. */
+function requirePinLogin() {
+  if (!isPinLoginEnabled()) throw new Error("Connexion par code PIN désactivée.");
+}
 
 // Répétiteurs et administrateur : e-mail + mot de passe (interrupteur DIANGAL_PIN_LOGIN). Jamais de SMS ni
 // de WhatsApp. Récupération par un code envoyé par e-mail. L'admin passe ensuite sa double authentification.
@@ -44,6 +49,7 @@ function landing(role: AppRole, next: string | null): string {
 
 /** Connexion par e-mail + mot de passe ; même réponse que le compte existe ou non, blocage progressif. */
 export async function signInWithPasswordAction(formData: FormData) {
+  requirePinLogin();
   const space = parseSpace(formData.get("espace"));
   const email = readEmail(formData);
   const password = String(formData.get("password") ?? "").slice(0, 200);
@@ -91,6 +97,7 @@ export async function signInWithPasswordAction(formData: FormData) {
 
 /** Mot de passe oublié, étape 1 : code envoyé par e-mail (réponse identique que l'adresse existe ou non). */
 export async function requestPasswordResetAction(formData: FormData) {
+  requirePinLogin();
   const space = parseSpace(formData.get("espace"));
   const email = readEmail(formData);
   const base = `/connexion/mot-de-passe?espace=${space}`;
@@ -105,6 +112,7 @@ export async function requestPasswordResetAction(formData: FormData) {
 
 /** Mot de passe oublié, étape 2 : code reçu + nouveau mot de passe ; les autres appareils sont déconnectés. */
 export async function resetPasswordAction(formData: FormData) {
+  requirePinLogin();
   const space = parseSpace(formData.get("espace"));
   const email = readEmail(formData);
   const code = String(formData.get("code") ?? "").replace(/\s/g, "");
