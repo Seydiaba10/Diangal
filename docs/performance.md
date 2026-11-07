@@ -1,8 +1,22 @@
 # Performance sur téléphone lent et mauvais réseau
 
-Audit et optimisations du 07/11/2026 (branche `performance`). Pour chaque point : **déjà fait**, **fait le 07/11**,
-ou **laissé de côté** (avec la raison). Rien n'est en ligne tant que la branche n'est pas fusionnée et la migration
-`20261107000001_web_vitals.sql` appliquée.
+Audit et optimisations du 07/11/2026. Pour chaque point : **déjà fait**, **fait le 07/11**, ou **laissé de côté**
+(avec la raison). **En ligne depuis le 07/11/2026** : migration `20261107000001_web_vitals.sql` appliquée, `main` déployé.
+
+## Résultat mesuré après la mise en ligne
+
+| Mesure | Avant | Après |
+|---|---|---|
+| Page qui lit la base (`/api/hors-ligne/chapitres/…`), médiane de 8 requêtes | 2,0 s | **0,56 s** |
+| Même page, serveur qui démarre (première requête) | 6,1 s | **4,3 s** |
+| Région des fonctions (`x-vercel-id`) | `iad1` (Washington) | **`dub1` (Dublin)** |
+| Dessins, photos, icônes de `public/` (`Cache-Control`) | `max-age=0` | **1 jour, puis 7 jours en arrière-plan** |
+| LCP des pages publiques (téléphone lent simulé) | 2,4 à 2,7 s | 2,7 à 3,5 s selon la mesure |
+
+- **Pages des élèves et des parents** : environ 3,5 fois plus rapides à répondre.
+- **Pages publiques** : aucun gain attendu (elles étaient déjà servies prêtes depuis Paris). Le seul changement est
+  l'outil de mesure (+4 Ko de JavaScript, environ 0,03 s en 3G). Une même page varie de 2,6 à 3,5 s d'une mesure
+  simulée à l'autre : les mesures réelles des utilisateurs (carte de l'accueil admin) feront foi.
 
 ## Mesure de départ (site en ligne, 07/11/2026)
 
@@ -106,7 +120,7 @@ Téléphone lent simulé : réseau « Fast 3G » de Chrome (562 ms de latence, 1
 
 ## Ce qui reste à faire
 
-- Appliquer la migration `20261107000001_web_vitals.sql`, fusionner la branche, puis relancer la mesure.
+- Dans une semaine, lire la carte « Vitesse réelle des pages » de l'accueil admin : ce sont les vrais chiffres.
 - Pour gagner encore : réduire le JavaScript commun (environ 220 Ko). Il faudra mesurer composant par composant.
 - Plus tard : recréer le projet Supabase à Paris (prévu avant le lancement), et passer alors les fonctions Vercel
   à Paris (`cdg1`).
