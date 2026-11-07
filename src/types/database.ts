@@ -2705,6 +2705,17 @@ export type Database = {
         Args: { p_enabled: boolean; p_scenario: string }
         Returns: Json
       }
+      admin_web_vitals: {
+        Args: { p_days?: number }
+        Returns: {
+          good_pct: number
+          metric: string
+          p75: number
+          page: string
+          samples: number
+          slow_network_pct: number
+        }[]
+      }
       answer_account_deletion_request: {
         Args: { p_approve: boolean; p_student: string }
         Returns: undefined
@@ -2929,6 +2940,7 @@ export type Database = {
         Args: { p_version: string }
         Returns: undefined
       }
+      record_web_vitals: { Args: { p_rows: Json }; Returns: number }
       register_family_device: {
         Args: { p_label: string; p_token_hash: string }
         Returns: string

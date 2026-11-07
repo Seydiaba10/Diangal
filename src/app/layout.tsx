@@ -2,6 +2,7 @@ import { SerwistProvider } from "@serwist/turbopack/react";
 import type { Metadata, Viewport } from "next";
 import { Lexend, Playwrite_FR_Trad } from "next/font/google";
 import { getTranslations } from "next-intl/server";
+import { WebVitals } from "@/components/layout/web-vitals";
 import { DEFAULT_LOCALE } from "@/i18n/request";
 import "./globals.css";
 
@@ -42,6 +43,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang={DEFAULT_LOCALE} className={`${lexend.variable} ${cursive.variable}`}>
       <body className="min-h-dvh">
+        {/* Vitesse réelle des pages, envoyée au site lui-même (aucun service tiers). */}
+        <WebVitals />
         {/* Service worker désactivé en développement pour éviter les pages servies depuis le cache. */}
         <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"}>
           {children}

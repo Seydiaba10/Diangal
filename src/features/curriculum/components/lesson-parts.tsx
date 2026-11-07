@@ -1,7 +1,6 @@
 import { CircleCheck, FileText, Headphones, PlayCircle } from "lucide-react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Button } from "@/components/ui/button";
 import { ReadAloud } from "@/components/ui/read-aloud";
 import { RichText } from "@/components/ui/rich-text";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,8 +9,8 @@ import { PaywallCard } from "@/features/payments/components/paywall-card";
 import { formatBytes, formatDuration } from "@/lib/format";
 import { hasReadAloud } from "@/lib/levels";
 import type { Chapter, Lesson, LessonResourceKind } from "@/types/domain";
-import { markLessonCompletedAction } from "../actions";
 import { getChapterProgress, getLessonBody } from "../data";
+import { MarkLessonDone } from "./mark-lesson-done";
 
 const RESOURCE_ICONS: Record<LessonResourceKind, typeof FileText> = {
   pdf: FileText,
@@ -94,12 +93,7 @@ export async function LessonBody({ chapter, lesson }: { chapter: Chapter; lesson
           {t("done")}
         </p>
       ) : (
-        <form action={markLessonCompletedAction.bind(null, lesson.id)}>
-          <Button type="submit" variant="outline" className="w-full">
-            <CircleCheck className="size-5" aria-hidden />
-            {t("markDone")}
-          </Button>
-        </form>
+        <MarkLessonDone lessonId={lesson.id} labels={{ markDone: t("markDone"), done: t("done"), error: t("markDoneError") }} />
       )}
     </>
   );

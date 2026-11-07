@@ -17,8 +17,10 @@ export async function getEnabledSocialProviders(): Promise<Partial<Record<Social
   cacheTag("auth-settings");
   if (!isSupabaseConfigured()) return {};
   try {
+    // 5 secondes au plus : sur un réseau lent, la page de connexion s'affiche quand même (réseaux grisés).
     const response = await fetch(`${publicEnv.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/settings`, {
       headers: { apikey: publicEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY! },
+      signal: AbortSignal.timeout(5_000),
     });
     if (!response.ok) return {};
     const external = ((await response.json()) as { external?: Record<string, boolean> }).external ?? {};

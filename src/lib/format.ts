@@ -44,6 +44,11 @@ export function formatDecimal(value: number): string {
   return scoreFormat.format(value);
 }
 
+/** Durée mesurée (vitesse des pages) : 850 → « 850 ms » ; 2430 → « 2,4 s ». */
+export function formatMilliseconds(ms: number): string {
+  return ms < 1000 ? `${Math.round(ms)} ms` : `${scoreFormat.format(Math.round(ms / 100) / 10)} s`;
+}
+
 /** 13.45 → « 13,5/20 ». */
 export function formatScore(score: number | null): string {
   return score === null ? "–" : `${formatScoreValue(score)}/20`;

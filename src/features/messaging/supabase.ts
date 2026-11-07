@@ -65,7 +65,10 @@ export async function fetchConversations(userId: string, role: AppRole): Promise
   return data.map((c) => toSummary(c, names, headlines, userId, role));
 }
 
-/** Conversation complète (membre ou observateur). Marque la conversation comme lue. */
+/** Messages affichés d'une conversation : les plus récents. */
+const MESSAGES_SHOWN = 200;
+
+/** Conversation (ses 200 derniers messages), pour un membre ou un observateur. Marque la conversation comme lue. */
 export async function fetchConversation(conversationId: string, userId: string, role: AppRole) {
   if (!/^[0-9a-f-]{36}$/i.test(conversationId)) return null;
   const supabase = await createSupabaseServerClient();
@@ -83,24 +86,26 @@ export async function fetchConversation(conversationId: string, userId: string, 
       .select("id, sender_id, body, created_at")
       .eq("conversation_id", conversationId)
       .is("deleted_at", null)
-      .order("created_at"),
+      // Les 200 derniers messages seulement : une longue conversation reste légère sur un réseau lent.
+      .order("created_at", { ascending: false })
+      .limit(MESSAGES_SHOWN),
   ]);
   if (!row) return null;
 
   const members = row.conversation_members;
+  // Noms, titres et « conversation lue » en même temps (requêtes indépendantes).
   const [names, headlines] = await Promise.all([
     namesOf(supabase, members.map((m) => m.user_id)),
     role === "tutor" ? Promise.resolve(new Map<string, string>()) : headlinesOf(supabase, [row.tutor_id]),
+    supabase
+      .from("conversation_members")
+      .update({ last_read_at: new Date().toISOString() })
+      .eq("conversation_id", conversationId)
+      .eq("user_id", userId),
   ]);
   const roleOf = new Map(members.map((m) => [m.user_id, ROLE_OF_MEMBER[m.member_role] ?? "student"]));
 
-  await supabase
-    .from("conversation_members")
-    .update({ last_read_at: new Date().toISOString() })
-    .eq("conversation_id", conversationId)
-    .eq("user_id", userId);
-
-  const chat: ChatMessage[] = (messages ?? []).map((m) => ({
+  const chat: ChatMessage[] = [...(messages ?? [])].reverse().map((m) => ({
     id: m.id,
     senderName: names.get(m.sender_id) ?? "",
     senderRole: roleOf.get(m.sender_id) ?? "student",

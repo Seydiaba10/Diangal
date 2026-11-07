@@ -38,6 +38,12 @@ export function parsePaydunyaCallback(form: URLSearchParams): { hash: string | n
   return { hash: form.get("data[hash]"), token: form.get("data[invoice][token]") };
 }
 
+/**
+ * Au-delà de 15 secondes, PayDunya est considéré comme injoignable : l'appel est abandonné et l'utilisateur voit
+ * « Le service de paiement ne répond pas » au lieu d'attendre sans fin sur un réseau lent.
+ */
+const TIMEOUT_MS = 15_000;
+
 export function createPaydunyaProvider(config: PaydunyaConfig, fetcher: typeof fetch = fetch): PaymentProvider {
   const headers = {
     "Content-Type": "application/json",
@@ -54,6 +60,7 @@ export function createPaydunyaProvider(config: PaydunyaConfig, fetcher: typeof f
       if (!Number.isInteger(request.amountFcfa) || request.amountFcfa <= 0) throw new Error("invalid_amount");
       const response = await fetcher(`${base}/checkout-invoice/create`, {
         method: "POST",
+        signal: AbortSignal.timeout(TIMEOUT_MS),
         headers,
         body: JSON.stringify({
           invoice: { total_amount: request.amountFcfa, description: request.description },
@@ -70,7 +77,7 @@ export function createPaydunyaProvider(config: PaydunyaConfig, fetcher: typeof f
     },
 
     async getStatus(providerRef: string): Promise<ProviderPaymentStatus> {
-      const response = await fetcher(`${base}/checkout-invoice/confirm/${encodeURIComponent(providerRef)}`, { headers });
+      const response = await fetcher(`${base}/checkout-invoice/confirm/${encodeURIComponent(providerRef)}`, { headers, signal: AbortSignal.timeout(TIMEOUT_MS) });
       const json = (await response.json()) as {
         response_code?: string;
         status?: string;

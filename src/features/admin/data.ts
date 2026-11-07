@@ -31,6 +31,7 @@ import type {
   PublishStatus,
   ReportRow,
   SubjectCode,
+  WebVitalRow,
 } from "@/types/domain";
 import {
   fetchAdminAssessment,
@@ -39,6 +40,7 @@ import {
   fetchAdminProgram,
   fetchAdminPrograms,
   fetchAdminStats,
+  fetchWebVitals,
   fetchAdminUsers,
   fetchAuditLog,
   fetchContentTracking,
@@ -52,6 +54,12 @@ import {
 // Démo : chiffres fictifs. Supabase : lectures sous RLS admin (rôle admin + double authentification).
 
 const CHANNELS: PaymentChannel[] = ["wave", "orange_money", "free_money", "card"];
+
+/** Vitesse réelle mesurée chez les utilisateurs (rien en démo : aucune visite réelle). */
+export const getWebVitals = cache(async (): Promise<WebVitalRow[]> => {
+  await connection();
+  return isSupabaseConfigured() ? fetchWebVitals() : [];
+});
 
 export const getAdminStats = cache(async (): Promise<AdminStats> => {
   await connection();

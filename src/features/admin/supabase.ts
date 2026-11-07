@@ -18,6 +18,8 @@ import type {
   PublishStatus,
   QuestionType,
   ReportRow,
+  WebVitalMetric,
+  WebVitalRow,
 } from "@/types/domain";
 
 // Espace admin sur Supabase : toutes les lectures passent par la RLS « private.is_admin() »
@@ -25,6 +27,21 @@ import type {
 
 const CHANNELS: PaymentChannel[] = ["wave", "orange_money", "free_money", "card"];
 const DAY_MS = 86_400_000;
+
+/** Vitesse réelle des pages sur les 7 derniers jours (RPC admin_web_vitals : admin en double authentification). */
+export async function fetchWebVitals(days = 7): Promise<WebVitalRow[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("admin_web_vitals", { p_days: days });
+  if (error) throw new Error(`vitesse des pages : ${error.message}`);
+  return data.map((r) => ({
+    metric: r.metric as WebVitalMetric,
+    page: r.page,
+    samples: Number(r.samples),
+    p75: Number(r.p75),
+    goodPct: Number(r.good_pct),
+    slowNetworkPct: Number(r.slow_network_pct),
+  }));
+}
 
 export async function fetchAdminStats(): Promise<AdminStats> {
   const supabase = await createSupabaseServerClient();

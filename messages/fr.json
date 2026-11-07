@@ -225,7 +225,8 @@
     "done": "Leçon terminée",
     "previous": "Précédente",
     "next": "Suivante",
-    "practice": "Faire les exercices du chapitre"
+    "practice": "Faire les exercices du chapitre",
+    "markDoneError": "Ta progression n’a pas pu être enregistrée. Vérifie ta connexion, puis réessaie."
   },
   "paywall": {
     "title": "Contenu Premium",
@@ -1784,7 +1785,27 @@
     "tasksTutors": "{count, plural, =0 {Aucun dossier de répétiteur} one {# dossier de répétiteur à vérifier} other {# dossiers de répétiteurs à vérifier}}",
     "tasksReports": "{count, plural, =0 {Aucun signalement ouvert} one {# signalement à traiter} other {# signalements à traiter}}",
     "tasksContent": "Leçons de 3e à rédiger",
-    "mfaNote": "Espace protégé : en production, l’accès admin exige la double authentification."
+    "mfaNote": "Espace protégé : en production, l’accès admin exige la double authentification.",
+    "vitals": {
+      "title": "Vitesse réelle des pages",
+      "subtitle": "Mesurée sur les téléphones des utilisateurs, ces 7 derniers jours. Chaque valeur est celle que 75 % des visites ne dépassent pas.",
+      "empty": "Pas encore de mesure : elles arrivent avec les visites (aucune en mode démo).",
+      "metrics": {
+        "LCP": "Affichage du contenu principal (LCP)",
+        "INP": "Réaction aux touchers (INP)",
+        "CLS": "Stabilité de la page (CLS)",
+        "FCP": "Premier affichage (FCP)",
+        "TTFB": "Réponse du serveur (TTFB)"
+      },
+      "ratings": {
+        "good": "Bon",
+        "needs-improvement": "À améliorer",
+        "poor": "Mauvais"
+      },
+      "samples": "{count, plural, one {# mesure} other {# mesures}}, {good} % bonnes",
+      "slowNetwork": "{pct} % des mesures viennent d’un réseau lent (2G ou 3G).",
+      "slowestTitle": "Pages les plus lentes à afficher (LCP)"
+    }
   },
   "adminContent": {
     "title": "Contenus",

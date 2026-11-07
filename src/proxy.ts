@@ -109,5 +109,5 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   // Ni fichiers statiques, ni images, ni service worker, ni webhooks de paiement (signés à part).
-  matcher: ["/((?!_next/static|_next/image|serwist|icons|landing|api/webhooks|favicon|manifest.webmanifest|.*\\.(?:png|svg|jpg|webp|ico)$).*)"],
+  matcher: ["/((?!_next/static|_next/image|serwist|icons|landing|api/webhooks|api/vitals|favicon|manifest.webmanifest|.*\\.(?:png|svg|jpg|webp|ico)$).*)"],
 };

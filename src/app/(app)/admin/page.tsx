@@ -9,6 +9,7 @@ import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatCard } from "@/components/ui/stat-card";
 import { BarChart } from "@/features/admin/components/bar-chart";
+import { WebVitalsCard } from "@/features/admin/components/web-vitals-card";
 import { getAdminStats } from "@/features/admin/data";
 import { formatFCFA } from "@/lib/format";
 
@@ -92,6 +93,10 @@ export default async function AdminHomePage() {
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
       <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
         <AdminHome />
+      </Suspense>
+      {/* Vitesse réelle des pages chez les utilisateurs (chargée à part : la page s'affiche sans l'attendre). */}
+      <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
+        <WebVitalsCard />
       </Suspense>
     </PageContainer>
   );

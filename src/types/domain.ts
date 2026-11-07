@@ -696,6 +696,18 @@ export interface TutorReviewItem {
   documents: TutorDocument[];
 }
 
+/** Vitesse réelle d'une page (ou de tout le site, page « * ») : 75e centile d'une mesure Core Web Vitals. */
+export type WebVitalMetric = "LCP" | "INP" | "CLS" | "FCP" | "TTFB";
+export interface WebVitalRow {
+  metric: WebVitalMetric;
+  page: string;
+  samples: number;
+  /** Millisecondes, sauf CLS (sans unité). */
+  p75: number;
+  goodPct: number;
+  slowNetworkPct: number;
+}
+
 export interface AdminStats {
   students: number;
   parents: number;
