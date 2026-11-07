@@ -55,10 +55,19 @@ import {
 
 const CHANNELS: PaymentChannel[] = ["wave", "orange_money", "free_money", "card"];
 
-/** Vitesse réelle mesurée chez les utilisateurs (rien en démo : aucune visite réelle). */
+/**
+ * Vitesse réelle mesurée chez les utilisateurs (rien en démo : aucune visite réelle). Une erreur de lecture ne casse
+ * jamais l'accueil de l'admin : la carte affiche alors « pas encore de mesure ».
+ */
 export const getWebVitals = cache(async (): Promise<WebVitalRow[]> => {
   await connection();
-  return isSupabaseConfigured() ? fetchWebVitals() : [];
+  if (!isSupabaseConfigured()) return [];
+  try {
+    return await fetchWebVitals();
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    return [];
+  }
 });
 
 export const getAdminStats = cache(async (): Promise<AdminStats> => {
